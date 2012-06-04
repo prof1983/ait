@@ -2,7 +2,7 @@
 @Abstract(Пул (источник) работы с OWL элементами)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(06.03.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Prototype: org.mindswap.pellet.KnowledgeBase
@@ -12,12 +12,12 @@ Prototype: org.mindswap.pellet.KnowledgeBase
 0.0.0.4 - 04.07.2007
 0.0.0.3 - 21.06.2007 - Переименовал AIOwlPool -> AIWSOwlPool
 }
-unit AiOwlPoolIntf;
+unit AOwlPoolIntf;
 
 interface
 
 uses
-  AiCollection, AiEntityIntf, AiOwlClassIntf;
+  ACollection, AEntityIntf, AOwlClassIntf;
 
 type
   IAiOwlPool = interface
@@ -26,7 +26,7 @@ type
     //function GetAllEquivalentProperties(prop: IATermAppl): IJavaSet;
     //function GetAllSames(name: IATermAppl): IJavaSet;
     //function GetAntisymmetricProperties(): IJavaSet;
-    function GetClasses(): IAiCollection;
+    function GetClasses(): IACollection;
     //function GetComplements(c: IATermAppl): IJavaSet;
     //function GetDataProperties(): IJavaSet;
     //function GetDataPropertyValues(r, x: IATermAppl; datatype: IPelletDatatype): IJavaList;
@@ -85,87 +85,87 @@ type
 
 ////    function RunQuery(const queryStr: WideString): IPelletQueryResults;
 
-    function AddAnnotationProperty(p: IAIEntity): WordBool;
-    procedure AddAntisymmetricProperty(p: IAIEntity);
-    procedure AddClass(c: IAIEntity);
-    procedure AddComplementClass(c1, c2: IAIEntity);
-    procedure AddDataPropertyValue(p, s, o: IAIEntity);
-    procedure AddDataRange(const DatatypeUri: WideString; Values: IAICollection);
-    procedure AddDatatype(p: IAIEntity);
+    function AddAnnotationProperty(p: IAEntity): WordBool;
+    procedure AddAntisymmetricProperty(p: IAEntity);
+    procedure AddClass(c: IAEntity);
+    procedure AddComplementClass(c1, c2: IAEntity);
+    procedure AddDataPropertyValue(p, s, o: IAEntity);
+    procedure AddDataRange(const DatatypeUri: WideString; Values: IACollection);
+    procedure AddDatatype(p: IAEntity);
     //function AddDatatypeA(DataType: IPelletDatatype): WideString;
     //procedure AddDatatypeB(const DataTypeUrl: WideString; Datatype: IPelletDatatype);
-    function AddDatatypeProperty(p: IAIEntity): WordBool;
-    procedure AddDifferent(i1, i2: IAIEntity);
-    procedure AddDisjointClass(c1, c2: IAIEntity);
-    procedure AddDisjointClasses(classes: IAICollection);
-    procedure AddDisjointProperty(p1, p2: IAIEntity);
-    procedure AddDomain(p, c: IAIEntity);
-    procedure AddEquivalentProperty(p1, p2: IAIEntity);
-    procedure AddFunctionalProperty(p: IAIEntity);
+    function AddDatatypeProperty(p: IAEntity): WordBool;
+    procedure AddDifferent(i1, i2: IAEntity);
+    procedure AddDisjointClass(c1, c2: IAEntity);
+    procedure AddDisjointClasses(classes: IACollection);
+    procedure AddDisjointProperty(p1, p2: IAEntity);
+    procedure AddDomain(p, c: IAEntity);
+    procedure AddEquivalentProperty(p1, p2: IAEntity);
+    procedure AddFunctionalProperty(p: IAEntity);
     //function AddIndividual(i: IAIEntity): IPelletIndividual;
-    procedure AddInverseFunctionalProperty(p: IAIEntity);
-    procedure AddInverseProperty(p1, p2: IAIEntity);
-    procedure AddIrreflexiveProperty(p: IAIEntity);
-    function AddNegatedPropertyValue(p, s, o: IAIEntity): Boolean;
-    function AddObjectProperty(p: IAIEntity): Boolean;
-    procedure AddObjectPropertyValue(p, s, o: IAIEntity);
-    procedure AddOntologyProperty(p: IAIEntity);
-    function AddProperty(p: IAIEntity): Boolean;
-    function AddPropertyValue(p, s, o: IAIEntity): Boolean;
-    procedure AddRange(p, c: IAIEntity);
-    procedure AddReflexiveProperty(p: IAIEntity);
+    procedure AddInverseFunctionalProperty(p: IAEntity);
+    procedure AddInverseProperty(p1, p2: IAEntity);
+    procedure AddIrreflexiveProperty(p: IAEntity);
+    function AddNegatedPropertyValue(p, s, o: IAEntity): Boolean;
+    function AddObjectProperty(p: IAEntity): Boolean;
+    procedure AddObjectPropertyValue(p, s, o: IAEntity);
+    procedure AddOntologyProperty(p: IAEntity);
+    function AddProperty(p: IAEntity): Boolean;
+    function AddPropertyValue(p, s, o: IAEntity): Boolean;
+    procedure AddRange(p, c: IAEntity);
+    procedure AddReflexiveProperty(p: IAEntity);
     //procedure AddRule(rule: IPelletRule);
-    procedure AddSame(i1, i2: IAIEntity);
-    procedure AddSameClass(c1, c2: IAIEntity);
-    procedure AddSameProperty(p1, p2: IAIEntity);
-    procedure AddSubClass(sub, sup: IAIEntity);
-    procedure AddSubProperty(sub, sup: IAIEntity);
-    procedure AddSymmetricProperty(p: IAIEntity);
-    procedure AddTransitiveProperty(p: IAIEntity);
-    procedure AddType(i, c: IAIEntity);
+    procedure AddSame(i1, i2: IAEntity);
+    procedure AddSameClass(c1, c2: IAEntity);
+    procedure AddSameProperty(p1, p2: IAEntity);
+    procedure AddSubClass(sub, sup: IAEntity);
+    procedure AddSubProperty(sub, sup: IAEntity);
+    procedure AddSymmetricProperty(p: IAEntity);
+    procedure AddTransitiveProperty(p: IAEntity);
+    procedure AddType(i, c: IAEntity);
 
-    function HasDomain(p, c: IAIEntity): Boolean;
-    function HasInstance(d: IAIEntity): Boolean;
-    function HasKnownPropertyValue(s, p, o: IAIEntity): Boolean;
-    function HasPropertyValue(s, p, o: IAIEntity): Boolean;
-    function HasRange(p, c: IAIEntity): Boolean;
+    function HasDomain(p, c: IAEntity): Boolean;
+    function HasInstance(d: IAEntity): Boolean;
+    function HasKnownPropertyValue(s, p, o: IAEntity): Boolean;
+    function HasPropertyValue(s, p, o: IAEntity): Boolean;
+    function HasRange(p, c: IAEntity): Boolean;
 
-    function IsABoxProperty(p: IAIEntity): Boolean;
-    function IsAnnotationProperty(p: IAIEntity): Boolean;
-    function IsAntisymmetricProperty(p: IAIEntity): Boolean;
-    function IsClass(c: IAIEntity): Boolean;
-    function IsComplement(c1, c2: IAIEntity): Boolean;
-    function IsDatatype(p: IAIEntity): Boolean;
-    function IsDatatypeProperty(p: IAIEntity): Boolean;
-    function IsDifferentFrom(t1, t2: IAIEntity): Boolean;
-    function IsDisjoint(c1, c2: IAIEntity): Boolean;
-    function IsDisjointClass(c1, c2: IAIEntity): Boolean;
-    function IsDisjointProperty(r1, r2: IAIEntity): Boolean;
-    function IsEquivalentClass(c1, c2: IAIEntity): Boolean;
-    function IsEquivalentProperty(p1, p2: IAIEntity): Boolean;
-    function IsFunctionalProperty(p: IAIEntity): Boolean;
-    function IsIndividual(ind: IAIEntity): Boolean;
-    function IsInverse(r1, r2: IAIEntity): Boolean;
-    function IsInverseFunctionalProperty(p: IAIEntity): Boolean;
-    function IsIrreflexiveProperty(p: IAIEntity): Boolean;
-    function IsKnownType(x, c: IAIEntity): Boolean;
-    function IsObjectProperty(p: IAIEntity): Boolean;
-    function IsOntologyProperty(p: IAIEntity): Boolean;
-    function IsProperty(p: IAIEntity): Boolean;
-    function IsReflexiveProperty(p: IAIEntity): Boolean;
-    function IsSameAs(t1, t2: IAIEntity): Boolean;
-    function IsSatisfiable(c: IAIEntity): Boolean;
-    function IsSubClassOf(c1, c2: IAIEntity): Boolean;
-    function IsSubPropertyOf(sub, sup: IAIEntity): Boolean;
-    function IsSubTypeOf(d1, d2: IAIEntity): Boolean;
-    function IsSymmetricProperty(p: IAIEntity): Boolean;
-    function IsTransitiveProperty(r: IAIEntity): Boolean;
-    function IsType(x, c: IAIEntity): Boolean;
+    function IsABoxProperty(p: IAEntity): Boolean;
+    function IsAnnotationProperty(p: IAEntity): Boolean;
+    function IsAntisymmetricProperty(p: IAEntity): Boolean;
+    function IsClass(c: IAEntity): Boolean;
+    function IsComplement(c1, c2: IAEntity): Boolean;
+    function IsDatatype(p: IAEntity): Boolean;
+    function IsDatatypeProperty(p: IAEntity): Boolean;
+    function IsDifferentFrom(t1, t2: IAEntity): Boolean;
+    function IsDisjoint(c1, c2: IAEntity): Boolean;
+    function IsDisjointClass(c1, c2: IAEntity): Boolean;
+    function IsDisjointProperty(r1, r2: IAEntity): Boolean;
+    function IsEquivalentClass(c1, c2: IAEntity): Boolean;
+    function IsEquivalentProperty(p1, p2: IAEntity): Boolean;
+    function IsFunctionalProperty(p: IAEntity): Boolean;
+    function IsIndividual(ind: IAEntity): Boolean;
+    function IsInverse(r1, r2: IAEntity): Boolean;
+    function IsInverseFunctionalProperty(p: IAEntity): Boolean;
+    function IsIrreflexiveProperty(p: IAEntity): Boolean;
+    function IsKnownType(x, c: IAEntity): Boolean;
+    function IsObjectProperty(p: IAEntity): Boolean;
+    function IsOntologyProperty(p: IAEntity): Boolean;
+    function IsProperty(p: IAEntity): Boolean;
+    function IsReflexiveProperty(p: IAEntity): Boolean;
+    function IsSameAs(t1, t2: IAEntity): Boolean;
+    function IsSatisfiable(c: IAEntity): Boolean;
+    function IsSubClassOf(c1, c2: IAEntity): Boolean;
+    function IsSubPropertyOf(sub, sup: IAEntity): Boolean;
+    function IsSubTypeOf(d1, d2: IAEntity): Boolean;
+    function IsSymmetricProperty(p: IAEntity): Boolean;
+    function IsTransitiveProperty(r: IAEntity): Boolean;
+    function IsType(x, c: IAEntity): Boolean;
     // ...
-    procedure LoadDatatype(p: IAIEntity);
-    function RemoveObjectPropertyValue(p, i1, i2: IAIEntity): Boolean;
-    procedure RemoveType(ind, c: IAIEntity);
-    procedure RemoveIndividual(c: IAIEntity);
+    procedure LoadDatatype(p: IAEntity);
+    function RemoveObjectPropertyValue(p, i1, i2: IAEntity): Boolean;
+    procedure RemoveType(ind, c: IAEntity);
+    procedure RemoveIndividual(c: IAEntity);
 
     //procedure SetRules(rules: IJavaSet);
 

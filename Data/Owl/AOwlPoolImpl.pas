@@ -2,7 +2,7 @@
 @Abstract(Пул (источник) работы с OWL элементами)
 @Author(Prof1983 prof183@ya.ru)
 @Created(12.05.2006)
-@LastMod(06.03.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Prototype: Pellet.KnowledgeBase
@@ -12,14 +12,17 @@ Prototype: Pellet.KnowledgeBase
 История версий:
 0.0.0.2 - 31.05.2007 - Переделал TAIWSID на TAIID
 }
-unit AiOwlPoolImpl;
+unit AOwlPoolImpl;
+
+// TODO: Remove Ai* uses
 
 interface
 
 uses
-  ABase,
-  AiBase, AiBaseTypes, AiConsts, AiCollection, AiCollectionEntity, AiEntityIntf, AiLogingObject,
-  AiOntologyIndividual, AiOwlClassIntf, AiOwlClassImpl, AiOwlPoolIntf, AiPoolIntf;
+  ABase, ACollection, AEntityIntf,
+  AOwlClassIntf, AOwlClassImpl, AOwlPoolIntf,
+  AiConsts, AiLogingObject,
+  AiOntologyIndividual, AiPoolIntf;
 
 type
   // Пул (источник) работы с OWL элементами
@@ -67,145 +70,145 @@ type
     FValueID: TAId; // VALUEFUN: IAFun;
     FVarID: TAId; //VARFUN: IAFun;
   public // Идентификаторы сущностей-типов
-    FAnnotationPropertyTypeID: TAIID;
-    FAntisymmetricPropertyTypeID: TAIID;
+    FAnnotationPropertyTypeID: TAId;
+    FAntisymmetricPropertyTypeID: TAId;
     // Идентификатор типа класс
-    FClassTypeID: TAIID;
-    FDatatypeTypeID: TAIID;
-    FDatatypePropertyTypeID: TAIID;
-    FDifferentTypeID: TAIID;
-    FDisjointClassTypeID: TAIID;
-    FDisjointPropertyTypeID: TAIID;
-    FDomainTypeID: TAIID;
-    FEquivalentPropertyTypeID: TAIID;
-    FObjectPropertyTypeID: TAIID;
-    FOntologyPropertyID: TAIID;
-    FPropertyTypeID: TAIID;
-    FPropertyValueTypeID: TAIID;
-    FReflexivePropertyTypeID: TAIID;
+    FClassTypeID: TAId;
+    FDatatypeTypeID: TAId;
+    FDatatypePropertyTypeID: TAId;
+    FDifferentTypeID: TAId;
+    FDisjointClassTypeID: TAId;
+    FDisjointPropertyTypeID: TAId;
+    FDomainTypeID: TAId;
+    FEquivalentPropertyTypeID: TAId;
+    FObjectPropertyTypeID: TAId;
+    FOntologyPropertyID: TAId;
+    FPropertyTypeID: TAId;
+    FPropertyValueTypeID: TAId;
+    FReflexivePropertyTypeID: TAId;
   public
-    function GetClasses: IAICollection;
+    function GetClasses: IACollection;
   public //from org.mindswap.pellet.utils.ATermUtils
     // Проверяет тип сущности. Тип сущности должен быть ValueID
-    function IsNominal(Entity: IAIEntity): Boolean;
+    function IsNominal(Entity: IAEntity): Boolean;
     // Дедает проверку иерархии классов. (IsNormal)
-    function IsOneOf(Entity: IAIEntity): Boolean;
+    function IsOneOf(Entity: IAEntity): Boolean;
   public
-    function AddAnnotationProperty(p: IAIEntity): WordBool;
-    procedure AddAntisymmetricProperty(p: IAIEntity);
-    procedure AddClass(c: IAIEntity);
-    procedure AddComplementClass(c1, c2: IAIEntity);
-    procedure AddDataPropertyValue(p, s, o: IAIEntity);
-    procedure AddDataRange(const DatatypeUri: WideString; Values: IAICollection);
-    procedure AddDatatype(p: IAIEntity);
+    function AddAnnotationProperty(p: IAEntity): WordBool;
+    procedure AddAntisymmetricProperty(p: IAEntity);
+    procedure AddClass(c: IAEntity);
+    procedure AddComplementClass(c1, c2: IAEntity);
+    procedure AddDataPropertyValue(p, s, o: IAEntity);
+    procedure AddDataRange(const DatatypeUri: WideString; Values: IACollection);
+    procedure AddDatatype(p: IAEntity);
     //function AddDatatypeA(DataType: IPelletDatatype): WideString;
     //procedure AddDatatypeB(const DataTypeUrl: WideString; Datatype: IPelletDatatype);
-    function AddDatatypeProperty(p: IAIEntity): WordBool;
-    procedure AddDifferent(i1, i2: IAIEntity);
-    procedure AddDisjointClass(c1, c2: IAIEntity);
-    procedure AddDisjointClasses(classes: IAICollection);
-    procedure AddDisjointProperty(p1, p2: IAIEntity);
-    procedure AddDomain(p, c: IAIEntity);
-    procedure AddEquivalentProperty(p1, p2: IAIEntity);
-    procedure AddFunctionalProperty(p: IAIEntity);
+    function AddDatatypeProperty(p: IAEntity): WordBool;
+    procedure AddDifferent(i1, i2: IAEntity);
+    procedure AddDisjointClass(c1, c2: IAEntity);
+    procedure AddDisjointClasses(classes: IACollection);
+    procedure AddDisjointProperty(p1, p2: IAEntity);
+    procedure AddDomain(p, c: IAEntity);
+    procedure AddEquivalentProperty(p1, p2: IAEntity);
+    procedure AddFunctionalProperty(p: IAEntity);
 //    function AddIndividual(i: IAIEntity): IAIWSIndividual;
-    procedure AddInverseFunctionalProperty(p: IAIEntity);
-    procedure AddInverseProperty(p1, p2: IAIEntity);
-    procedure AddIrreflexiveProperty(p: IAIEntity);
-    function AddNegatedPropertyValue(p, s, o: IAIEntity): Boolean;
-    function AddObjectProperty(p: IAIEntity): Boolean;
-    procedure AddObjectPropertyValue(p, s, o: IAIEntity);
-    procedure AddOntologyProperty(p: IAIEntity);
-    function AddProperty(p: IAIEntity): Boolean;
-    function AddPropertyValue(p, s, o: IAIEntity): Boolean;
-    procedure AddRange(p, c: IAIEntity);
-    procedure AddReflexiveProperty(p: IAIEntity);
+    procedure AddInverseFunctionalProperty(p: IAEntity);
+    procedure AddInverseProperty(p1, p2: IAEntity);
+    procedure AddIrreflexiveProperty(p: IAEntity);
+    function AddNegatedPropertyValue(p, s, o: IAEntity): Boolean;
+    function AddObjectProperty(p: IAEntity): Boolean;
+    procedure AddObjectPropertyValue(p, s, o: IAEntity);
+    procedure AddOntologyProperty(p: IAEntity);
+    function AddProperty(p: IAEntity): Boolean;
+    function AddPropertyValue(p, s, o: IAEntity): Boolean;
+    procedure AddRange(p, c: IAEntity);
+    procedure AddReflexiveProperty(p: IAEntity);
     //procedure AddRule(rule: IPelletRule);
-    procedure AddSame(i1, i2: IAIEntity);
-    procedure AddSameClass(c1, c2: IAIEntity);
-    procedure AddSameProperty(p1, p2: IAIEntity);
-    procedure AddSubClass(sub, sup: IAIEntity);
-    procedure AddSubProperty(sub, sup: IAIEntity);
-    procedure AddSymmetricProperty(p: IAIEntity);
-    procedure AddTransitiveProperty(p: IAIEntity);
-    procedure AddType(i, c: IAIEntity);
+    procedure AddSame(i1, i2: IAEntity);
+    procedure AddSameClass(c1, c2: IAEntity);
+    procedure AddSameProperty(p1, p2: IAEntity);
+    procedure AddSubClass(sub, sup: IAEntity);
+    procedure AddSubProperty(sub, sup: IAEntity);
+    procedure AddSymmetricProperty(p: IAEntity);
+    procedure AddTransitiveProperty(p: IAEntity);
+    procedure AddType(i, c: IAEntity);
 
-    function HasDomain(p, c: IAIEntity): Boolean;
-    function HasInstance(d: IAIEntity): Boolean;
-    function HasKnownPropertyValue(s, p, o: IAIEntity): Boolean;
-    function HasPropertyValue(s, p, o: IAIEntity): Boolean;
-    function HasRange(p, c: IAIEntity): Boolean;
+    function HasDomain(p, c: IAEntity): Boolean;
+    function HasInstance(d: IAEntity): Boolean;
+    function HasKnownPropertyValue(s, p, o: IAEntity): Boolean;
+    function HasPropertyValue(s, p, o: IAEntity): Boolean;
+    function HasRange(p, c: IAEntity): Boolean;
 
-    function IsABoxProperty(p: IAIEntity): Boolean;
-    function IsAnnotationProperty(p: TAIID): Boolean; overload;
-    function IsAnnotationProperty(p: IAIEntity): Boolean; overload;
-    function IsAntisymmetricProperty(p: IAIEntity): Boolean;
-    function IsClass(c: IAIEntity): Boolean;
-    function IsComplement(c1, c2: IAIEntity): Boolean;
-    function IsDatatype(p: IAIEntity): Boolean;
-    function IsDatatypeProperty(p: IAIEntity): Boolean;
-    function IsDifferentFrom(t1, t2: IAIEntity): Boolean;
-    function IsDisjoint(c1, c2: IAIEntity): Boolean;
-    function IsDisjointClass(c1, c2: IAIEntity): Boolean;
-    function IsDisjointProperty(r1, r2: IAIEntity): Boolean;
-    function IsEquivalentClass(c1, c2: IAIEntity): Boolean;
-    function IsEquivalentProperty(p1, p2: IAIEntity): Boolean;
-    function IsFunctionalProperty(p: IAIEntity): Boolean;
-    function IsIndividual(ind: IAIEntity): Boolean;
-    function IsInverse(r1, r2: IAIEntity): Boolean;
-    function IsInverseFunctionalProperty(p: IAIEntity): Boolean;
-    function IsIrreflexiveProperty(p: IAIEntity): Boolean;
-    function IsKnownType(x, c: IAIEntity): Boolean;
-    function IsObjectProperty(p: IAIEntity): Boolean;
-    function IsOntologyProperty(p: IAIEntity): Boolean;
-    function IsProperty(p: IAIEntity): Boolean;
-    function IsReflexiveProperty(p: IAIEntity): Boolean;
-    function IsSameAs(t1, t2: IAIEntity): Boolean;
-    function IsSatisfiable(c: IAIEntity): Boolean;
-    function IsSubClassOf(c1, c2: IAIEntity): Boolean;
-    function IsSubPropertyOf(sub, sup: IAIEntity): Boolean;
-    function IsSubTypeOf(d1, d2: IAIEntity): Boolean;
-    function IsSymmetricProperty(p: IAIEntity): Boolean;
-    function IsTransitiveProperty(r: IAIEntity): Boolean;
-    function IsType(x, c: IAIEntity): Boolean;
+    function IsABoxProperty(p: IAEntity): Boolean;
+    function IsAnnotationProperty(p: TAId): Boolean; overload;
+    function IsAnnotationProperty(p: IAEntity): Boolean; overload;
+    function IsAntisymmetricProperty(p: IAEntity): Boolean;
+    function IsClass(c: IAEntity): Boolean;
+    function IsComplement(c1, c2: IAEntity): Boolean;
+    function IsDatatype(p: IAEntity): Boolean;
+    function IsDatatypeProperty(p: IAEntity): Boolean;
+    function IsDifferentFrom(t1, t2: IAEntity): Boolean;
+    function IsDisjoint(c1, c2: IAEntity): Boolean;
+    function IsDisjointClass(c1, c2: IAEntity): Boolean;
+    function IsDisjointProperty(r1, r2: IAEntity): Boolean;
+    function IsEquivalentClass(c1, c2: IAEntity): Boolean;
+    function IsEquivalentProperty(p1, p2: IAEntity): Boolean;
+    function IsFunctionalProperty(p: IAEntity): Boolean;
+    function IsIndividual(ind: IAEntity): Boolean;
+    function IsInverse(r1, r2: IAEntity): Boolean;
+    function IsInverseFunctionalProperty(p: IAEntity): Boolean;
+    function IsIrreflexiveProperty(p: IAEntity): Boolean;
+    function IsKnownType(x, c: IAEntity): Boolean;
+    function IsObjectProperty(p: IAEntity): Boolean;
+    function IsOntologyProperty(p: IAEntity): Boolean;
+    function IsProperty(p: IAEntity): Boolean;
+    function IsReflexiveProperty(p: IAEntity): Boolean;
+    function IsSameAs(t1, t2: IAEntity): Boolean;
+    function IsSatisfiable(c: IAEntity): Boolean;
+    function IsSubClassOf(c1, c2: IAEntity): Boolean;
+    function IsSubPropertyOf(sub, sup: IAEntity): Boolean;
+    function IsSubTypeOf(d1, d2: IAEntity): Boolean;
+    function IsSymmetricProperty(p: IAEntity): Boolean;
+    function IsTransitiveProperty(r: IAEntity): Boolean;
+    function IsType(x, c: IAEntity): Boolean;
     // ...
-    procedure LoadDatatype(p: IAIEntity);
-    function RemoveObjectPropertyValue(p, i1, i2: IAIEntity): Boolean;
-    procedure RemoveType(ind, c: IAIEntity);
-    procedure RemoveIndividual(c: IAIEntity);
+    procedure LoadDatatype(p: IAEntity);
+    function RemoveObjectPropertyValue(p, i1, i2: IAEntity): Boolean;
+    procedure RemoveType(ind, c: IAEntity);
+    procedure RemoveIndividual(c: IAEntity);
 
     //procedure SetRules(rules: IJavaSet);
   public
-    function NewAnnotationProperty(): IAIEntity;
-    function NewAntisymmetricProperty(): IAIEntity;
+    function NewAnnotationProperty(): IAEntity;
+    function NewAntisymmetricProperty(): IAEntity;
     function NewClass(Name: WideString): IAIOwlClass;
     //procedure NewComplementClass(c1, c2: IAIEntity);
     //procedure NewDataPropertyValue(p, s, o: IAIEntity);
     //procedure NewDataRange(const DatatypeUri: WideString; Values: IAIEntityList);
-    function NewDatatype: IAIEntity;
+    function NewDatatype: IAEntity;
     //function AddDatatypeA(DataType: IPelletDatatype): WideString;
     //procedure AddDatatypeB(const DataTypeUrl: WideString; Datatype: IPelletDatatype);
-    function NewDatatypeProperty: IAIEntity;
+    function NewDatatypeProperty: IAEntity;
     //procedure NewDifferent(i1, i2: IAIEntity);
     //procedure NewDisjointClass(c1, c2: IAIEntity);
     //procedure NewDisjointClasses(classes: IAIEntityList);
     //procedure NewDisjointProperty(p1, p2: IAIEntity);
     //procedure NewDomain(p, c: IAIEntity);
     //procedure NewEquivalentProperty(p1, p2: IAIEntity);
-    function NewFunctionalProperty: IAIEntity;
+    function NewFunctionalProperty: IAEntity;
     function NewIndividual: IAIOntologyIndividual;
     function NewIndividual2(const Name: APascalString): IAIOntologyIndividual;
-    function NewInverseFunctionalProperty: IAIEntity;
+    function NewInverseFunctionalProperty: IAEntity;
     //procedure NewInverseProperty(p1, p2: IAIEntity);
-    function NewIrreflexiveProperty(): IAIEntity;
+    function NewIrreflexiveProperty(): IAEntity;
     //function NewNegatedPropertyValue(p, s, o: IAIEntity): Boolean;
-    function NewObjectProperty(): IAIEntity;
+    function NewObjectProperty(): IAEntity;
     //procedure NewObjectPropertyValue(p, s, o: IAIEntity);
-    function NewOntologyProperty(): IAIEntity;
-    function NewProperty(Name: WideString): IAIEntity;
+    function NewOntologyProperty(): IAEntity;
+    function NewProperty(Name: WideString): IAEntity;
     //function NewPropertyValue(p, s, o: IAIEntity): Boolean;
     //procedure NewRange(p, c: IAIEntity);
-    function NewReflexiveProperty(): IAIEntity;
+    function NewReflexiveProperty(): IAEntity;
     //procedure AddRule(rule: IPelletRule);
     //procedure NewSame(i1, i2: IAIEntity);
     //procedure NewSameClass(c1, c2: IAIEntity);
@@ -217,18 +220,18 @@ type
     //procedure NewType(i, c: IAIEntity);
   public // from PelletATermUtils
     //function AddAnnotationRole(r: IAIEntity): IAIWSRole;
-    class function IsComplexClass(c: IAIEntity): Boolean;
+    class function IsComplexClass(c: IAEntity): Boolean;
   public // Идентификаторы основных объектов для работы с OWL
     // from org.mindswap.pellet.ABox
     //** Верхний индивид
-    TopIndividualID: TAIID; //TOP_IND: IPelletIndividual;
+    TopIndividualID: TAId; //TOP_IND: IPelletIndividual;
     //** Нижний индивид
-    BottomIndividualID: TAIID; //BOTTOM_IND: IPelletIndividual;
-    DummyIndividualID: TAIID; //DUMMY_IND: IPelletIndividual;
+    BottomIndividualID: TAId; //BOTTOM_IND: IPelletIndividual;
+    DummyIndividualID: TAId; //DUMMY_IND: IPelletIndividual;
   public
     procedure Close();
     //** Открыть
-    function Open(): TAiError;
+    function Open(): AError;
   public
     //** Режим отладки
     property IsDebug: Boolean read FIsDebug write FIsDebug;
@@ -257,7 +260,7 @@ implementation
 
 { TAIOwlPool }
 
-function TAIOwlPool.AddAnnotationProperty(p: IAIEntity): WordBool;
+function TAIOwlPool.AddAnnotationProperty(p: IAEntity): WordBool;
 begin
   Result := False;
   // TODO -oProf: Make
@@ -267,13 +270,13 @@ begin
   //Result := Assigned(AddAnnotationRole(p));
 end;
 
-procedure TAIOwlPool.AddAntisymmetricProperty(p: IAIEntity);
+procedure TAIOwlPool.AddAntisymmetricProperty(p: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddClass(c: IAIEntity);
+procedure TAIOwlPool.AddClass(c: IAEntity);
 begin
   if IsComplexClass(c) then Exit;
 
@@ -293,124 +296,124 @@ begin
 	}
 end;
 
-procedure TAIOwlPool.AddComplementClass(c1, c2: IAIEntity);
+procedure TAIOwlPool.AddComplementClass(c1, c2: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddDataPropertyValue(p, s, o: IAIEntity);
+procedure TAIOwlPool.AddDataPropertyValue(p, s, o: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddDataRange(const DatatypeUri: WideString; Values: IAICollection);
+procedure TAIOwlPool.AddDataRange(const DatatypeUri: WideString; Values: IACollection);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddDatatype(p: IAIEntity);
+procedure TAIOwlPool.AddDatatype(p: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.AddDatatypeProperty(p: IAIEntity): WordBool;
-begin
-  Result := False;
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddDifferent(i1, i2: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddDisjointClass(c1, c2: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddDisjointClasses(classes: IAICollection);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddDisjointProperty(p1, p2: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddDomain(p, c: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddEquivalentProperty(p1, p2: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddFunctionalProperty(p: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddInverseFunctionalProperty(p: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddInverseProperty(p1, p2: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-procedure TAIOwlPool.AddIrreflexiveProperty(p: IAIEntity);
-begin
-  // TODO -oProf: Make
-  // ...
-end;
-
-function TAIOwlPool.AddNegatedPropertyValue(p, s, o: IAIEntity): Boolean;
+function TAIOwlPool.AddDatatypeProperty(p: IAEntity): WordBool;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.AddObjectProperty(p: IAIEntity): Boolean;
+procedure TAIOwlPool.AddDifferent(i1, i2: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddDisjointClass(c1, c2: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddDisjointClasses(classes: IACollection);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddDisjointProperty(p1, p2: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddDomain(p, c: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddEquivalentProperty(p1, p2: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddFunctionalProperty(p: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddInverseFunctionalProperty(p: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddInverseProperty(p1, p2: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddIrreflexiveProperty(p: IAEntity);
+begin
+  // TODO -oProf: Make
+  // ...
+end;
+
+function TAIOwlPool.AddNegatedPropertyValue(p, s, o: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddObjectPropertyValue(p, s, o: IAIEntity);
+function TAIOwlPool.AddObjectProperty(p: IAEntity): Boolean;
+begin
+  Result := False;
+  // TODO -oProf: Make
+  // ...
+end;
+
+procedure TAIOwlPool.AddObjectPropertyValue(p, s, o: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddOntologyProperty(p: IAIEntity);
+procedure TAIOwlPool.AddOntologyProperty(p: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.AddProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.AddProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
@@ -421,44 +424,44 @@ begin
 //  Result := FPool.AddEntity(p);
 end;
 
-function TAIOwlPool.AddPropertyValue(p, s, o: IAIEntity): Boolean;
+function TAIOwlPool.AddPropertyValue(p, s, o: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddRange(p, c: IAIEntity);
+procedure TAIOwlPool.AddRange(p, c: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddReflexiveProperty(p: IAIEntity);
+procedure TAIOwlPool.AddReflexiveProperty(p: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddSame(i1, i2: IAIEntity);
+procedure TAIOwlPool.AddSame(i1, i2: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddSameClass(c1, c2: IAIEntity);
+procedure TAIOwlPool.AddSameClass(c1, c2: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddSameProperty(p1, p2: IAIEntity);
+procedure TAIOwlPool.AddSameProperty(p1, p2: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddSubClass(sub, sup: IAIEntity);
+procedure TAIOwlPool.AddSubClass(sub, sup: IAEntity);
 begin
   if sub = sup then Exit;
   {if IsOneOf(sub) then
@@ -470,25 +473,25 @@ begin
   // ...
 end;
 
-procedure TAIOwlPool.AddSubProperty(sub, sup: IAIEntity);
+procedure TAIOwlPool.AddSubProperty(sub, sup: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddSymmetricProperty(p: IAIEntity);
+procedure TAIOwlPool.AddSymmetricProperty(p: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddTransitiveProperty(p: IAIEntity);
+procedure TAIOwlPool.AddTransitiveProperty(p: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.AddType(i, c: IAIEntity);
+procedure TAIOwlPool.AddType(i, c: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
@@ -503,7 +506,7 @@ begin
   end;
 end;
 
-function TAIOwlPool.GetClasses({Ontology: TAIID}): IAICollection;
+function TAIOwlPool.GetClasses({Ontology: TAIID}): IACollection;
 begin
   if not(Assigned(FPool)) then
   begin
@@ -519,84 +522,84 @@ begin
   end;
 end;
 
-function TAIOwlPool.HasDomain(p, c: IAIEntity): Boolean;
+function TAIOwlPool.HasDomain(p, c: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.HasInstance(d: IAIEntity): Boolean;
+function TAIOwlPool.HasInstance(d: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.HasKnownPropertyValue(s, p, o: IAIEntity): Boolean;
+function TAIOwlPool.HasKnownPropertyValue(s, p, o: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.HasPropertyValue(s, p, o: IAIEntity): Boolean;
+function TAIOwlPool.HasPropertyValue(s, p, o: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.HasRange(p, c: IAIEntity): Boolean;
+function TAIOwlPool.HasRange(p, c: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsABoxProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsABoxProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsAnnotationProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsAnnotationProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   if not(Assigned(p)) then Exit;
   Result := (p.EntityType = FAnnotationPropertyTypeID);
 end;
 
-function TAIOwlPool.IsAnnotationProperty(p: TAIID): Boolean;
+function TAIOwlPool.IsAnnotationProperty(p: TAId): Boolean;
 begin
   Result := False;
   if not(Assigned(FPool)) then Exit;
   Result := (FPool.GetEntityValueType(p) = FAnnotationPropertyTypeID);
 end;
 
-function TAIOwlPool.IsAntisymmetricProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsAntisymmetricProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   if not(Assigned(p)) then Exit;
   Result := (p.EntityType = FAntisymmetricPropertyTypeID);
 end;
 
-function TAIOwlPool.IsClass(c: IAIEntity): Boolean;
+function TAIOwlPool.IsClass(c: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsComplement(c1, c2: IAIEntity): Boolean;
+function TAIOwlPool.IsComplement(c1, c2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-class function TAIOwlPool.IsComplexClass(c: IAIEntity): Boolean;
+class function TAIOwlPool.IsComplexClass(c: IAEntity): Boolean;
 //var
 //  classEntity: IAIEntity;
 begin
@@ -615,105 +618,105 @@ begin
     *)
 end;
 
-function TAIOwlPool.IsDatatype(p: IAIEntity): Boolean;
+function TAIOwlPool.IsDatatype(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsDatatypeProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsDatatypeProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsDifferentFrom(t1, t2: IAIEntity): Boolean;
+function TAIOwlPool.IsDifferentFrom(t1, t2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsDisjoint(c1, c2: IAIEntity): Boolean;
+function TAIOwlPool.IsDisjoint(c1, c2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsDisjointClass(c1, c2: IAIEntity): Boolean;
+function TAIOwlPool.IsDisjointClass(c1, c2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsDisjointProperty(r1, r2: IAIEntity): Boolean;
+function TAIOwlPool.IsDisjointProperty(r1, r2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsEquivalentClass(c1, c2: IAIEntity): Boolean;
+function TAIOwlPool.IsEquivalentClass(c1, c2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsEquivalentProperty(p1, p2: IAIEntity): Boolean;
+function TAIOwlPool.IsEquivalentProperty(p1, p2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsFunctionalProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsFunctionalProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsIndividual(ind: IAIEntity): Boolean;
+function TAIOwlPool.IsIndividual(ind: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsInverse(r1, r2: IAIEntity): Boolean;
+function TAIOwlPool.IsInverse(r1, r2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsInverseFunctionalProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsInverseFunctionalProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsIrreflexiveProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsIrreflexiveProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsKnownType(x, c: IAIEntity): Boolean;
+function TAIOwlPool.IsKnownType(x, c: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsNominal(Entity: IAIEntity): Boolean;
+function TAIOwlPool.IsNominal(Entity: IAEntity): Boolean;
 begin
   Result := (Entity.EntityType = FValueID);
 
@@ -723,14 +726,14 @@ begin
 	}
 end;
 
-function TAIOwlPool.IsObjectProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsObjectProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsOneOf(Entity: IAIEntity): Boolean;
+function TAIOwlPool.IsOneOf(Entity: IAEntity): Boolean;
 //var
 //  list: IAICollection;
 begin
@@ -765,97 +768,97 @@ begin
 	*)
 end;
 
-function TAIOwlPool.IsOntologyProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsOntologyProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsReflexiveProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsReflexiveProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsSameAs(t1, t2: IAIEntity): Boolean;
+function TAIOwlPool.IsSameAs(t1, t2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsSatisfiable(c: IAIEntity): Boolean;
+function TAIOwlPool.IsSatisfiable(c: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsSubClassOf(c1, c2: IAIEntity): Boolean;
+function TAIOwlPool.IsSubClassOf(c1, c2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsSubPropertyOf(sub, sup: IAIEntity): Boolean;
+function TAIOwlPool.IsSubPropertyOf(sub, sup: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsSubTypeOf(d1, d2: IAIEntity): Boolean;
+function TAIOwlPool.IsSubTypeOf(d1, d2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsSymmetricProperty(p: IAIEntity): Boolean;
+function TAIOwlPool.IsSymmetricProperty(p: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsTransitiveProperty(r: IAIEntity): Boolean;
+function TAIOwlPool.IsTransitiveProperty(r: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.IsType(x, c: IAIEntity): Boolean;
+function TAIOwlPool.IsType(x, c: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.LoadDatatype(p: IAIEntity);
+procedure TAIOwlPool.LoadDatatype(p: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewAnnotationProperty(): IAIEntity;
+function TAIOwlPool.NewAnnotationProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewAntisymmetricProperty(): IAIEntity;
+function TAIOwlPool.NewAntisymmetricProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
@@ -864,7 +867,7 @@ end;
 
 function TAIOwlPool.NewClass(Name: WideString): IAiOwlClass;
 var
-  id: TAIID;
+  id: TAId;
   OwlClass: TAiOwlClass;
 begin
   Result := nil;
@@ -879,28 +882,28 @@ begin
   end;
 end;
 
-function TAIOwlPool.NewDatatype(): IAIEntity;
+function TAIOwlPool.NewDatatype(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewDatatypeProperty(): IAIEntity;
+function TAIOwlPool.NewDatatypeProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewFunctionalProperty(): IAIEntity;
+function TAIOwlPool.NewFunctionalProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewIndividual{(i: IAIEntity)}: IAIOntologyIndividual;
+function TAIOwlPool.NewIndividual{(i: IAEntity)}: IAIOntologyIndividual;
 begin
   Result := nil;
   // ...
@@ -912,35 +915,35 @@ begin
   // ...
 end;
 
-function TAIOwlPool.NewInverseFunctionalProperty(): IAIEntity;
+function TAIOwlPool.NewInverseFunctionalProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewIrreflexiveProperty(): IAIEntity;
+function TAIOwlPool.NewIrreflexiveProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewObjectProperty(): IAIEntity;
+function TAIOwlPool.NewObjectProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewOntologyProperty(): IAIEntity;
+function TAIOwlPool.NewOntologyProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.NewProperty(Name: WideString): IAIEntity;
+function TAIOwlPool.NewProperty(Name: WideString): IAEntity;
 //var
 //  id: TAIID;
 begin
@@ -953,14 +956,14 @@ begin
   //AddProperty(Result);
 end;
 
-function TAIOwlPool.NewReflexiveProperty(): IAIEntity;
+function TAIOwlPool.NewReflexiveProperty(): IAEntity;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.Open(): TAIError;
+function TAIOwlPool.Open(): AError;
 begin
   Result := FPool.Open();
   if Result < 0 then Exit;
@@ -1001,20 +1004,20 @@ begin
   FReflexivePropertyTypeID := FPool.NewEntity(AINullType);
 end;
 
-procedure TAIOwlPool.RemoveIndividual(c: IAIEntity);
+procedure TAIOwlPool.RemoveIndividual(c: IAEntity);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIOwlPool.RemoveObjectPropertyValue(p, i1, i2: IAIEntity): Boolean;
+function TAIOwlPool.RemoveObjectPropertyValue(p, i1, i2: IAEntity): Boolean;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIOwlPool.RemoveType(ind, c: IAIEntity);
+procedure TAIOwlPool.RemoveType(ind, c: IAEntity);
 begin
   // TODO -oProf: Make
   // ...

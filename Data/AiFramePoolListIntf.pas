@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейса IAiPoolList)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(06.03.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 }
 unit AiFramePoolListIntf;
@@ -13,7 +13,7 @@ uses
   AiBase, AiFrame, AiFramePoolIntf;
 
 type
-  IAiPoolList = interface //(IProfEntityList)
+  IAiPoolList = interface
     function GetCount(): Integer; safecall;
     function GetSourceByID(Id: TAiId): IAiFramePool; safecall;
     function GetSourceByIndex(Index: Integer): IAiFramePool; safecall;

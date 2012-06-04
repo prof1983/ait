@@ -2,7 +2,7 @@
 @Abstract(Типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(18.06.2004)
-@LastMod(05.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 A - для записи в файл
@@ -19,7 +19,7 @@ unit AiBase0;
 interface
 
 uses
-  ABaseUtils2, ATypes;
+  ABase, ABaseUtils2, ATypes;
 
 type
   TError = Boolean;
@@ -129,7 +129,8 @@ type
     Use: array of PAIUseB;       {Записи об использовании. 0 - дата/время/юзер создания; 1 - дата/время/юзер последнего использования}
   end;
 
-  TAIError = type UInt32;
+  TAiError = ABase.AError;
+  //TAiError = type UInt32;
 
   TAIFreim30 = record
     Handle: THandle064;

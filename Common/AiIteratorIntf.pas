@@ -2,7 +2,7 @@
 @Abstract(Итератор)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(13.03.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 История версий:
@@ -11,27 +11,15 @@
 }
 unit AiIteratorIntf;
 
+// TODO: Use AEntityIterator.pas
+
 interface
 
 uses
-  AiBase, AiBaseTypes;
+  AIteratorIntf;
 
 type
-  {**
-    Итератор для данных сущности, когда данные в виде коллекции.
-    //Является локальной сущностью.
-    Удаляется автоматически, когда никто не ссылается на эту сущность.
-  }
-  IAiIterator = interface
-      //** Вставить элемент в коллекцию
-    function Insert(Element: TAId): Boolean;
-      //** Пусто?
-    function IsEmpty(): Boolean;
-      //** Следующий элемент коллекции
-    function Next(): TAId;
-      //** Удалить текущий элемент из коллекции
-    function Remote(): Boolean;
-  end;
+  IAiIterator = AIteratorIntf.IAIterator;
 
 implementation
 

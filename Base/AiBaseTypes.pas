@@ -2,7 +2,7 @@
 @Abstract(Базовые типы AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(18.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.Pool
@@ -17,10 +17,10 @@ unit AiBaseTypes;
 interface
 
 uses
-  ATypes;
+  ABase, ATypes;
 
 type //** Ошибка. 0 - OK, >0 - есть информация, <0 - ошибка
-  TAiError = TProfError;
+  TAiError = ABase.AError;
 
 type //** Тип значения данных
   TAiValueType = Integer;

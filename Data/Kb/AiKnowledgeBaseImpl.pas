@@ -2,7 +2,7 @@
 @Abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(14.02.2006)
-@LastMod(18.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Может работать с несколькими источниками знаний. (пока не реализовано)
@@ -25,9 +25,9 @@ uses
   SysUtils,
   AiBaseTypes, AiFrame, AiPoolImpl_20070511, AiPoolListImpl, AiTermIntf,
   {ELSE}
-  AiOwlPoolIntf,
+  AOwlPoolIntf,
   {ENDIF KnowledgeBaseOld}
-  AiBase, AiCollection, AiKnowledgeBaseIntf, AiOwlClassIntf;
+  AiBase, AiCollection, AiKnowledgeBaseIntf, AOwlClassIntf;
 
 type // База Знаний. Работает с фреймами в виде отдельных файлов N.xml
   TAiKnowledgeBase1 = class(TAiFramePool, IAiKnowledgeBase)

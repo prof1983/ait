@@ -2,7 +2,7 @@
 @Abstract(Коллекция)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.05.2007)
-@LastMod(01.06.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 History:
@@ -18,19 +18,13 @@ unit AiCollection;
 interface
 
 uses
-  ABase, AiBase, AiBaseTypes, AiIteratorIntf,
-  AiIterable;
-
-type //** Коллекция
-  IAiCollection = interface
-    //** Создает и возвращает итератор
-    function GetIterator(): IAIIterator;
-
-    property Iterator: IAIIterator read GetIterator;
-  end;
+  ABase, ACollection, AIterableIntf, AIteratorIntf;
 
 type
-  IAiArray = interface(IAiCollection)
+  IAiCollection = IACollection;
+
+type
+  IAiArray = interface(IACollection)
     //** Колличество элементов
     function GetCount(): Integer;
     function Insert(Index: Integer; Element: TAId): Boolean;
@@ -38,11 +32,11 @@ type
   end;
 
 type
-  IAiSet = interface(IAiCollection)
+  IAiSet = interface(IACollection)
   end;
 
 type
-  IAiMap = interface(IAiCollection)
+  IAiMap = interface(IACollection)
     function GetElement(Key: TAId): TAId;
     procedure SetElement(Key, Value: TAId);
     procedure AddElement(Key, Value: TAId);
@@ -66,8 +60,8 @@ type
   end;}
 
 type
-  ACollection = IAiCollection;
-  AIterator = IAiIterator;
+  ACollection = IACollection;
+  AIterator = IAIterator;
 
 type
   {**
@@ -158,7 +152,7 @@ type
   @see	    AbstractCollection
   @since 1.2
   }
-  IJavaCollection = interface(IJavaIterable)
+  IJavaCollection = interface(IAIterable)
     // Query Operations
 
     {**

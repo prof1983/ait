@@ -2,15 +2,13 @@
 @Abstract(Сущность - базовый класс для представления знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.05.2007)
-@LastMod(25.04.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Эта сущность для хранения в ОЗУ в виде объекта.
 Создается для использования. После использования удаляется.
 
 Прототипы:
-  ru.narod.profsoft.common.ProfEntity
-  ru.narod.profsorf.ai.common.aiFrame
   aterm.ATerm
   aterm.ATermAppl
   org.framerd.FDType
@@ -26,22 +24,26 @@ unit AiEntityImpl;
 interface
 
 uses
-  AiBase, AiEntityIntf, AiPoolIntf;
+  ABase, AEntityIntf, AiPoolIntf;
 
 type
-  TAiEntity = class(TInterfacedObject, IAiEntity)
+  TAiEntity = class(TInterfacedObject, IAEntity)
   protected
       //** Идентификатор
-    FEntityID: TAIID;
+    FEntityID: TAId;
       //** Тип сущности
-    FEntityType: TAIID;
+    FEntityType: TAId;
       //** Пул, откуда запрашиваются сущности по идентификатору
     FPool: IAIPool;
-  protected
+  public
+    //** Возвращает идентификатор сущности
+    function GetId(): TAId;
       //** Возвращает идентификатор сущности
-    function GetEntityID(): TAIID;
+    function GetEntityID(): TAId;
       //** Возвращает тип сущности
-    function GetEntityType(): TAIID;
+    function GetEntityType(): TAId;
+    //** Задает тип сущности
+    procedure SetEntityType(Value: TAId);
   public // Конструкторы
     constructor Create();
     constructor Create2(Pool: IAIPool; Id: TAId);
@@ -59,7 +61,7 @@ type
         ru.narod.profsoft.common.ProfEntity.ID
         org.framerd.OID.OID
     }
-    property EntityID: TAIID read GetEntityID;
+    property EntityID: TAId read GetEntityID;
     {**
       Тип сущности. Номера от 0 до 1023 заререзвированы.
       Аналоги:
@@ -67,7 +69,7 @@ type
         org.framerd.FDType.TypeName
         ru.narod.profsoft.common.ProfEntity.EntityType
     }
-    property EntityType: TAIID read GetEntityType;
+    property EntityType: TAId read GetEntityType;
     //** Пул, откуда запрашиваются сущности по идентификатору
     property Pool: IAIPool read FPool write FPool;
   end;
@@ -112,14 +114,24 @@ begin
   FEntityType := Typ;
 end;
 
-function TAiEntity.GetEntityID(): TAIID;
+function TAiEntity.GetEntityId(): TAId;
 begin
-  Result := FEntityID;
+  Result := FEntityId;
 end;
 
-function TAiEntity.GetEntityType(): TAIID;
+function TAiEntity.GetEntityType(): TAId;
 begin
   Result := FEntityType;
+end;
+
+function TAiEntity.GetId(): TAId;
+begin
+  Result := FEntityId;
+end;
+
+procedure TAiEntity.SetEntityType(Value: TAId);
+begin
+  FEntityType := Value;
 end;
 
 function TAiEntity.Update(): Boolean;

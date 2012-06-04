@@ -2,14 +2,15 @@
 @Abstract(Базовые константы и типы для ИР)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(19.03.2008)
-@LastMod(30.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
-
-From ARAssistant
 }
 unit AiBase;
 
 interface
+
+uses
+  ABase;
 
 const
   AMajorVersion = 0;
@@ -32,7 +33,7 @@ type
     Аналог:
       org.framerd.OID.OID
   }
-  TAId = Int64;
+  TAId = ABase.TAId;
   // Идентификатор
   TAiId = TAId;
   TAiId32 = LongWord{UInt32};

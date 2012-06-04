@@ -2,7 +2,7 @@
 @Abstract(Сущность - базовый интерфейс для представления знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.05.2007)
-@LastMod(25.04.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Эта сущность для хранения в ОЗУ в виде объекта.
@@ -26,83 +26,16 @@ unit AiEntityIntf;
 interface
 
 uses
-  AiBase;
+  ABase, AEntityIntf;
 
-type //** Сущность - базовый интерфейс для представления знаний
-  IAiEntity = interface
-    function GetEntityId(): TAId;
-    function GetEntityType(): TAId;
+type
+    //** Сущность - базовый интерфейс для представления знаний
+  IAiEntity = IAEntity;
 
-    property EntityId: TAId read GetEntityId;
-    property EntityType: TAId read GetEntityType;
-  end;
-
-type // Прототип: org.framed.OID
+    // Прототип: org.framed.OID
   IAIWSFrame = interface
     //ID: TAId;
     //Value: TAiEntity;
-  end;
-
-type
-  IAIWSEntities = interface;
-
-  // TODO: IAIWSEntity -> IAIWSFrame
-  //** @abstract(Сущность - базовый интерфейс для представления знаний)
-  IAIWSEntity = interface
-    // Protected методы
-    // ----------------
-
-    {**
-    Возвращает объект работы с вложеными сущностями
-    }
-    function GetEntities(): IAIWSEntities;
-    //** Возвращает тип сущности
-    function GetEntityType(): TAId;
-    //** Возвращает идентификатор сущности
-    function GetID(): TAId;
-    //** Возвращает имя
-    function GetName(): WideString;
-    //** Задать тип сущности
-    procedure SetEntityType(Value: TAId);
-    //** Задать имя
-    procedure SetName(Value: WideString);
-
-    // Properties
-    // ----------
-
-    {**
-      Объект доступа к вложенным сущностям.
-      Может отсутствовать.
-      Аналоги:
-        aterm.ATermAppl.GetArgument
-        org.framerd.FDType.Enumerate
-        org.framerd.FDType.Get
-        ru.narod.profsoft.ai.common.aiFrame.Slots
-    }
-    property Entities: IAIWSEntities read GetEntities;
-    {**
-      Тип сущности. Номера от 0 до 1023 заререзвированы.
-      Аналоги:
-        aterm.ATermAppl.AFun
-        org.framerd.FDType.TypeName
-        ru.narod.profsoft.common.ProfEntity.EntityType
-    }
-    property EntityType: TAId read GetEntityType write SetEntityType;
-    {**
-      Идентификатор. Только для чтения.
-      Идентификатор залается при создании сущности и не меняется.
-      Агалоги:
-        ru.narod.profsoft.common.ProfEntity.ID
-        org.framerd.OID.OID
-    }
-    property ID: TAId read GetId;
-    {**
-      Имя. Имя используется как идентификатор для OWL объектов.
-      Аналоги:
-        aterm.ATerm.Name
-        ru.narod.profsoft.common.ProfEntity.Name
-    }
-    property Name: WideString read GetName write SetName;
   end;
 
   {**
@@ -120,16 +53,16 @@ type
     Если сущность является слотом (вложеной сущностью),
     то идентификатор можно не указывать.
     }
-    function GetByID(ID: TAId): IAIWSEntity;
+    function GetByID(ID: TAId): IAEntity;
     {**
     Возвращает сущность по индексу.
     Индекс сужности указывается от нуля до Count-1 по порядку.
     }
-    function GetByIndex(Index: Integer): IAIWSEntity;
+    function GetByIndex(Index: Integer): IAEntity;
     {**
     Возвращает сущность по имени.
     }
-    function GetByName(Name: WideString): IAIWSEntity;
+    function GetByName(Name: WideString): IAEntity;
     {**
     Возвращает сущность по номеру.
     Номер вложеной сущности задается от 1 и
@@ -152,28 +85,28 @@ type
     Если сущность уже присутствует в списке возвращает False,
     если добавлено успешно возвращает True.
     }
-    function Add(Entity: IAIWSEntity): Boolean; overload;
+    function Add(Entity: IAEntity): Boolean; overload;
 
     //** Удалить сущность из списка
     function Remote(Entity: TAId): Boolean; overload;
     //** Удалить сущность из списка
-    function Remote(Entity: IAIWSEntity): Boolean; overload;
+    function Remote(Entity: IAEntity): Boolean; overload;
 
     {**
     Сущности по идентификатору
     Если сущность является слотом (вложеной сущностью),
     то идентификатор можно не указывать.
     }
-    property ByID[ID: TAId]: IAIWSEntity read GetByID;
+    property ByID[ID: TAId]: IAEntity read GetByID;
     {**
     Сущности по индексу
     Индекс сужности указывается от нуля до Count-1 по порядку.
     }
-    property ByIndex[Index: Integer]: IAIWSEntity read GetByIndex;
+    property ByIndex[Index: Integer]: IAEntity read GetByIndex;
     {**
     Сущности по имени
     }
-    property ByName[Name: WideString]: IAIWSEntity read GetByName;
+    property ByName[Name: WideString]: IAEntity read GetByName;
     {**
     Сущности по номеру
     Номер вложеной сущности задается от 1 и
@@ -184,6 +117,43 @@ type
 //    property ByNumber[Number: Integer]: IAIWSEntity read GetByNumber;
     //** Колличество сущностей
     property Count: Integer read GetCount;
+  end;
+
+  // TODO: IAIWSEntity -> IAIWSFrame
+  //** @abstract(Сущность - базовый интерфейс для представления знаний)
+  IAIWSEntity = interface(IAEntity)
+    // Protected методы
+    // ----------------
+
+    {**
+    Возвращает объект работы с вложеными сущностями
+    }
+    function GetEntities(): IAIWSEntities;
+    //** Возвращает имя
+    function GetName(): WideString;
+    //** Задать имя
+    procedure SetName(Value: WideString);
+
+    // Properties
+    // ----------
+
+    {**
+      Объект доступа к вложенным сущностям.
+      Может отсутствовать.
+      Аналоги:
+        aterm.ATermAppl.GetArgument
+        org.framerd.FDType.Enumerate
+        org.framerd.FDType.Get
+        ru.narod.profsoft.ai.common.aiFrame.Slots
+    }
+    property Entities: IAIWSEntities read GetEntities;
+    {**
+      Имя. Имя используется как идентификатор для OWL объектов.
+      Аналоги:
+        aterm.ATerm.Name
+        ru.narod.profsoft.common.ProfEntity.Name
+    }
+    property Name: WideString read GetName write SetName;
   end;
 
 // -----------------------------------------------------------------------------
