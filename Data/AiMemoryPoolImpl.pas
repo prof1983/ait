@@ -44,6 +44,10 @@ type //** Пул с хранением сущностей в памяти
     function GetEntityByIndex(Index: Integer): IAEntity; override;
       //** Создать новую сущность (заререзвировать идентификатор под сущность)
     function NewEntity(EntityType: TAId): TAId; override;
+    function NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
+    function NewNamedEntityA(EntityType: TAId; Name: WideString): IAINamedEntity;
+    //function NewValueEntity(): IAIValueEntity;
+    function NewType(Name: WideString): TAId;
   public
       //** Закрыть пул (источник)
     procedure Close(); override;
@@ -55,14 +59,7 @@ type //** Пул с хранением сущностей в памяти
     function GetFreeId(): TAId;
   end;
 
-type
-  TAiMemoryPoolA = class(TAIMemoryPool)
-  public
-    function NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
-    function NewNamedEntityA(EntityType: TAId; Name: WideString): IAINamedEntity;
-    //function NewValueEntity(): IAIValueEntity;
-    function NewType(Name: WideString): TAId;
-  end;
+  //TAiMemoryPoolA = TAiMemoryPool;
 
 implementation
 
@@ -182,9 +179,7 @@ begin
   FIsOpened := True;
 end;
 
-{ TAiMemoryPoolA }
-
-function TAiMemoryPoolA.NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
+function TAiMemoryPool.NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
 var
   e: IAEntity;
 begin
@@ -194,7 +189,7 @@ begin
     Result := e.EntityID;
 end;
 
-function TAiMemoryPoolA.NewNamedEntityA(EntityType: TAId; Name: WideString): IAiNamedEntity;
+function TAiMemoryPool.NewNamedEntityA(EntityType: TAId; Name: WideString): IAiNamedEntity;
 begin
   Result := nil;
 
@@ -203,7 +198,7 @@ begin
   //Result.Name := Name;
 end;
 
-function TAiMemoryPoolA.NewType(Name: WideString): TAId;
+function TAiMemoryPool.NewType(Name: WideString): TAId;
 begin
   // Создаем новую именованую сущность
   Result := NewNamedEntity(AINullType, Name);
