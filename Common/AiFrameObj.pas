@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(25.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -16,9 +16,6 @@ uses
   SysUtils,
   ABase, ABaseUtils2, AConfigObj, ALogObj, ATypes, AXmlObj,
   AiBase, AiBaseTypes, AiConnectsObj, AiDataObj, AiTypes;
-
-type
-  AUInt64 = Int64;
 
 type
     // Recovered
@@ -198,7 +195,7 @@ type //** Фрейм
       //** Задаем фрейм в виде XML строки
     procedure SetXml(Value: WideString);
   public
-    constructor Create(Source: AiSource2005 = 0; Id: TAI_Id = 0);
+    constructor Create(Source: AiSource2005 = 0; Id: TAId = 0);
   public
     property Connects: TAiConnectsObject read GetConnects;
       //** Данные
@@ -214,7 +211,7 @@ type //** Фрейм
       //** ID фрейма
     property FreimId: TAId read FId write FId;
       //** Тип фрейма
-    property FreimType: TAI_ID read GetFreimType write SetFreimType;
+    property FreimType: TAId read GetFreimType write SetFreimType;
       //** ID фрейма
     property Id: TAId read Get_FrameID write Set_FrameID;
     //property ID: TAI_ID read FID write FID;
@@ -274,7 +271,7 @@ type // Фрейм
     //function ToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString; AParams: array of const): Integer;
   protected
     function GetDateTimeCreate(): TDateTime;  // Возвращает дату создания
-    function GetID(): TAId;                   // Возвращает Id
+    function GetId(): TAId;                   // Возвращает Id
     function GetInitialized(): Boolean;       // Инициализирован?
     procedure SetDateTimeCreate(Value: TDateTime);
     procedure SetId(Value: TAId);             // Установить Id. Если не инициализирован.
@@ -319,7 +316,7 @@ begin
   FId := 0;
   FInitialized := False;
   //FPool := nil;
-  FSource := nil;
+  FSource := 0;
   FFreimType := 0;
   Result := 0;
 end;
@@ -348,7 +345,7 @@ begin
   Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
 end;
 
-constructor TAiFrameObject.Create(Source: AiSource2005; Id: TAI_Id);
+constructor TAiFrameObject.Create(Source: AiSource2005; Id: TAId);
 begin
   inherited Create;
   FConnects := nil;
@@ -870,7 +867,7 @@ begin
   Result := FDateCreate;
 end;
 
-function TAiFreimObject.GetID(): TAI_ID;
+function TAiFreimObject.GetId(): TAId;
 begin
   Result := FId;
 end;
@@ -943,7 +940,7 @@ begin
   FDateCreate := Value;
 end;
 
-procedure TAiFreimObject.SetId(Value: TAI_Id);
+procedure TAiFreimObject.SetId(Value: TAId);
 begin
   if FInitialized then Exit;
   FId := Value;

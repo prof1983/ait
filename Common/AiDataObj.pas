@@ -2,7 +2,7 @@
 @Abstract(Базовый тип данных для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2005)
-@LastMod(17.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 02.05.2012 - Added from Prof_AI_Base.pas
@@ -13,7 +13,7 @@ interface
 
 uses
   Classes,
-  AStreamObj, ATypes, AXml20060314, AXmlObj,
+  ABase, AStreamObj, ATypes, AXml20060314, AXmlObj,
   AiBase, AiTypes;
 
 type
@@ -59,7 +59,7 @@ type //** @abstract(Базовый тип данных для AI)
     function LoadFromFileN(const FileName: WideString): WordBool; virtual;
     //function LoadFromXml(Xml: IProfNode): Boolean;
     function Read(var A: TArrayByte; Count: UInt64): UInt64; virtual;
-    function ReadId(var Value: TAI_Id): TError; virtual;
+    function ReadId(var Value: TAId): AError; virtual;
     function ReadUInt08(var Value: UInt08): TError; virtual;
     function ReadUInt32(var Value: UInt32): TError; virtual;
     function SaveToFileN(const FileName: WideString): WordBool; virtual;
@@ -68,7 +68,7 @@ type //** @abstract(Базовый тип данных для AI)
     function SetOpened(Value: Boolean): TError;
     function SetType(Value: TAiDataType): TError;
     function Write(A: TArrayByte; Count: UInt64): UInt64; virtual;
-    function WriteId(Value: TAI_Id): TError; virtual;
+    function WriteId(Value: TAId): AError; virtual;
     function WriteUInt08(Value: UInt08): TError; virtual;
     function WriteUInt32(Value: UInt32): TError; virtual;
   public
@@ -346,7 +346,7 @@ begin
   Result := FStream.ReadArray(A, Count);
 end;
 
-function TAiDataObject.ReadId(var Value: TAI_Id): TError;
+function TAiDataObject.ReadId(var Value: TAId): AError;
 var
   V: UInt64;
 begin
@@ -462,7 +462,7 @@ begin
   Result := AStream_Write(FStream, A, Count); //Result := FStream.WriteArray(A, Count);
 end;
 
-function TAiDataObject.WriteId(Value: TAI_Id): TError;
+function TAiDataObject.WriteId(Value: TAId): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteUInt64(Value)

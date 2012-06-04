@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.03.2006)
-@LastMod(04.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 [*] 25.04.2012 - Added Prof_AI.pas (15.05.2005)
@@ -12,7 +12,7 @@ unit AiTypes;
 interface
 
 uses
-  ATypes,
+  ABase, ATypes,
   AiBase;
 
 type
@@ -51,8 +51,7 @@ type
     atUncnown
     );
 
-type
-  TAI_Id = AiBase.TAId;
+  //TAI_Id = AiBase.TAId;
 
 type //** Тип данных
   TAiDataType = (
@@ -129,7 +128,7 @@ type // Тип сообщения
 
 type
   PConnects = ^TConnects;
-  TConnects = array of TAI_ID;
+  TConnects = array of TAId;
 
 type //** @abstract(Тип элемента данных фрейма структуры XML)
   TElementType = (
@@ -189,8 +188,8 @@ type //** Для записи в файл (24 байта)
 
 type //** Для записи в файл (40 байт)
   TAiFreimRecF64 = packed record
-    ID: TAiId;
-    Typ: TAiId;
+    ID: TAId;
+    Typ: TAId;
     DTCreate: TDateTime;
     DataSize: UInt64;
     ConnectCount: UInt64;
@@ -226,7 +225,7 @@ type //** @abstract(Для записи структуры базовых фре
 
 type //** @abstract(Прототип ф-типа. Указывается Id или имя прототипа. Прототип - родительский объект.)
   TPrototype = record
-    ID: TAI_Id;
+    ID: TAId;
     Name: WideString;
   end;
 
@@ -263,13 +262,6 @@ type //** @abstract(Запись для фрема)
   end;
 
 // --- from Prof_AI.pas ---
-
-{
-type
-  TAI_Id = AiBase.TAId;
-  TAI_Id32 = type UInt32;
-  TAI_Id64 = type UInt64;
-}
 
 {Костанты номеров объектов с фиксироваными типами}
 

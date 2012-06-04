@@ -2,7 +2,7 @@
 @Abstract(БЗ фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(17.03.2005)
-@LastMod(16.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 0.0.0.4 - 14.02.2006 - Coments
@@ -59,13 +59,13 @@ type
     function HeaderKBWrite(const Header: TFileProfKBHeader): TError;
   public
     constructor Create;
-    function FreimNew(Typ: TAI_Id): TAI_Id;
-    function FreimRead(Id: TAI_Id; var Rec: TAIFreimRec): TError;
-    function FreimRead64(Id: TAI_Id; var Rec: TAIFreimRecF64): TError;
-    function FreimWrite(Id: TAI_Id; const RecF: TAIFreimRec): Boolean;
-    function FreimWrite64(Id: TAI_Id; const RecF: TAIFreimRecF64): Boolean;
-    function FreimWrite64_2(Id: TAI_Id; const Value: TAiFreimRecF64): TError;
-    function FreimWriteNext(const Rec: TAIFreimRecF64): TError;
+    function FreimNew(Typ: TAId): TAId;
+    function FreimRead(Id: TAId; var Rec: TAiFreimRec): AError;
+    function FreimRead64(Id: TAId; var Rec: TAiFreimRecF64): AError;
+    function FreimWrite(Id: TAId; const RecF: TAiFreimRec): Boolean;
+    function FreimWrite64(Id: TAId; const RecF: TAiFreimRecF64): Boolean;
+    function FreimWrite64_2(Id: TAId; const Value: TAiFreimRecF64): AError;
+    function FreimWriteNext(const Rec: TAiFreimRecF64): AError;
     function GetHeaderKB: TFileProfKBHeader;
     function GetPath: String;
     function HeaderSet(var Header: TFileProfHeader): TError;
@@ -201,7 +201,7 @@ begin
   FHeaderKB.Reserved2 := 0;
 end;
 
-function TFileProfKB.FreimNew(Typ: TAI_Id): TAI_Id;
+function TFileProfKB.FreimNew(Typ: TAId): TAId;
 var
   RecF: TAIFreimRecF64;
 begin
@@ -219,7 +219,7 @@ begin
   end;
 end;
 
-function TFileProfKB.FreimRead(Id: TAI_Id; var Rec: TAIFreimRec): TError;
+function TFileProfKB.FreimRead(Id: TAId; var Rec: TAiFreimRec): AError;
 var
   {A: TArrayByte;}
   {Stream: TFileStream;}
@@ -246,7 +246,7 @@ begin
   Result := 0;
 end;
 
-function TFileProfKB.FreimRead64(Id: TAI_Id; var Rec: TAIFreimRecF64): TError;
+function TFileProfKB.FreimRead64(Id: TAId; var Rec: TAiFreimRecF64): AError;
 var
   {A: TArrayByte;}
   {Stream: TFileStream;}
@@ -273,7 +273,7 @@ begin
   Result := 0;
 end;
 
-function TFileProfKB.FreimWrite(Id: TAI_Id; const RecF: TAIFreimRec): Boolean;
+function TFileProfKB.FreimWrite(Id: TAId; const RecF: TAiFreimRec): Boolean;
 var
   A: TArrayByte;
   Stream: TFileStream;
@@ -285,7 +285,7 @@ begin
   Result := FreimWriteNext(RecF);}
 end;
 
-function TFileProfKB.FreimWrite64(Id: TAI_Id; const RecF: TAIFreimRecF64): Boolean;
+function TFileProfKB.FreimWrite64(Id: TAId; const RecF: TAiFreimRecF64): Boolean;
 var
   A: TArrayByte;
   Stream: TFileStream;
@@ -297,7 +297,7 @@ begin
   Result := FreimWriteNext(RecF);}
 end;
 
-function TFileProfKB.FreimWrite64_2(Id: TAI_Id; const Value: TAiFreimRecF64): TError;
+function TFileProfKB.FreimWrite64_2(Id: TAId; const Value: TAiFreimRecF64): AError;
 begin
   if FreimWrite64(Id, Value) then
     Result := 0
