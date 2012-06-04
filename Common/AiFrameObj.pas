@@ -117,7 +117,15 @@ type //** Фрейм
     procedure DoCreate(); virtual;
   public
       //** Очистить объект
-    function Clear(): WordBool; virtual;
+    function Clear(): AError; virtual;
+      //** Загрузить конфигурации
+    function ConfigureLoad(Config: TConfig; Prefix: String): TError; virtual;
+      //** Загрузить конфигурации
+    function ConfigureLoad1(): Boolean; virtual;
+      //** Сохранить конфигурации
+    function ConfigureSave(Config: TConfig; Prefix: String): TError; virtual;
+      //** Сохранить конфигурации
+    function ConfigureSave1(): Boolean; virtual;
       //** Финализировать. Разорвать связь объекта с источником.
     function Finalize(): TProfError; virtual;
       //** Free
@@ -130,12 +138,21 @@ type //** Фрейм
     function GetDateTimeCreate(): TDateTime;
       //** Возвращает тип фрейма
     function GetFreimType(): TAId;
+      {**
+        Return frame identirier
+        return(frame identifier)
+      }
+    function GetId(): TAId;
       //** Инициализирован?
     function GetInitialized(): Boolean;
       //** Возвращает источник
-    function GetSource(): AiSource2005;
+    function GetSource(): AiSourceObject2005;
+      //** Возвращает тип фрейма
+    function GetType(): TAId;
       //** Возвращает фрейм в виде XML строки
     function GetXml(): WideString; virtual;
+      //** Производит инициализацию с установкой параметров
+    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
       //** Произвести инициализацию. Установить связь с источником.
     function Initialize(): TProfError; virtual;
     {**
@@ -147,8 +164,12 @@ type //** Фрейм
     function LoadFromData(Data: TAiDataObject): TAiError; virtual;
       //** Загрузить из файла
     function LoadFromFile(const AFileName: WideString): TProfError; virtual;
+      //** Load from TAiFreimRecF64 struct
+    function LoadFromRecF64(Rec: TAiFreimRecF64): AError;
+      //** Load from TProfXml object
+    function LoadFromXml(Xml: TProfXml): AError; virtual;
       //** Зарегистрировать тип фрейма в источнике
-    function Regist(): Boolean; virtual;
+    function Regist(): AError; virtual;
     {**
       Save to source
       Сохранить в источник
@@ -156,12 +177,24 @@ type //** Фрейм
     function Save(): TProfError; virtual;
       //** Сохранить в файл
     function SaveToFile(const AFileName: WideString): WordBool; virtual;
+      //** Save to TAiFreimRecF64 struct
+    function SaveToRecF64(var Rec: TAiFreimRecF64): AError;
       //** Сохранить список связей в XML
-    //function SaveToXml(Xml: IXmlNode): WordBool; virtual;
+    function SaveToXml(Xml: TProfXml): AError; virtual;
       //** Задать дату и время создания фрейма
     procedure SetDateTimeCreate(Value: TDateTime);
+      //** Set date and time frame created
+    function SetDateTimeCreate2(Value: TDateTime): AError;
       //** Установить тип
     procedure SetFreimType(Value: TAId);
+      //** Установить Id. Если не инициализирован.
+    function SetId(Value: TAId): AError;
+      //** Инициализировать/Финализировать
+    function SetInitialized(Value: Boolean): AError;
+      //** Установить источник. Только если не инициализирован.
+    function SetSource(Value: AiSource2005): AError;
+      //** Установить тип
+    function SetType(Value: TAId): AError;
       //** Задаем фрейм в виде XML строки
     procedure SetXml(Value: WideString);
   public
@@ -223,56 +256,11 @@ type //** Фрейм
     property Typ: AInt32 read GetTyp;
   end;
 
-// TODO: Rename TAiFrame2005 -> TAiFrameObject2005
-  TAiFrame2005 = class(TAiFrameObject)
-  public
-      // Очистить объект
-    function Clear(): TError; virtual;
-      // Загрузить конфигурации
-    function ConfigureLoad(Config: TConfig; Prefix: String): TError; virtual;
-      // Загрузить конфигурации
-    function ConfigureLoad1(): Boolean; virtual;
-      // Сохранить конфигурации
-    function ConfigureSave(Config: TConfig; Prefix: String): TError; virtual;
-      // Сохранить конфигурации
-    function ConfigureSave1(): Boolean; virtual;
-      // Возвращает дату создания
-    function GetDateTimeCreate(): TDateTime;
-      // Возвращает Id
-    function GetId(): TAI_Id;
-      // Инициализирован?
-    function GetInitialized(): Boolean;
-      // Возвращает источник
-    function GetSource(): AiSourceObject2005;
-      // Возвращает тип фрейма
-    function GetType(): TAI_Id;
-      // Произвести инициализацию с установкой параметров
-    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
-    function LoadFromRecF64(Rec: TAIFreimRecF64): TError;
-    function LoadFromXml(Xml: TProfXml): TError; virtual;
-    //function LoadFromXml(Xml: TMyXml): TError; virtual;
-      // Зарегистрировать тип фрейма в источнике
-    function Regist(): TError; virtual;
-    function SaveToRecF64(var Rec: TAIFreimRecF64): TError;
-    function SaveToXml(Xml: TProfXml): TError; virtual;
-    //function SaveToXml(Xml: TMyXml): TError; virtual;
-    function SetDateTimeCreate(Value: TDateTime): TError;
-      // Установить Id. Если не инициализирован.
-    function SetId(Value: TAI_Id): TError;
-      // Инициализировать/Финализировать
-    function SetInitialized(Value: Boolean): TError;
-      // Установить источник. Только если не инициализирован.
-    function SetSource(Value: AiSource2005): TError;
-      // Установить тип
-    function SetType(Value: TAI_Id): TError;
-  end;
-  TAiFrameObject2005 = TAiFrame2005;
-
-  TAiFrameObject20050819 = TAiFrameObject2005;
-  TAiFrameObject20050911 = TAiFrameObject2005;
+  //TAiFrame2005 = TAiFrameObject;
+  //TAiFrameObject2005 = TAiFrameObject;
 
 type // Фрейм
-  TAiFreimObject = class(TAiFrameObject2005)
+  TAiFreimObject = class(TAiFrameObject)
   protected // IAIFreim
     function Get_Connects(): TAiConnectsObject;
     function Get_DateTimeCreate(): TDateTime;
@@ -315,7 +303,7 @@ uses
 
 { TAiFrameObject }
 
-function TAiFrameObject.Clear(): WordBool;
+function TAiFrameObject.Clear(): AError;
 begin
   if Assigned(FConnects) then
   begin
@@ -331,9 +319,33 @@ begin
   FId := 0;
   FInitialized := False;
   //FPool := nil;
-  //FSource := nil;
+  FSource := nil;
   FFreimType := 0;
-  Result := True;
+  Result := 0;
+end;
+
+function TAiFrameObject.ConfigureLoad(Config: TConfig; Prefix: String): TError;
+begin
+  Result := 1;
+  if not(Assigned(Config)) then Exit;
+  Result := 0;
+end;
+
+function TAiFrameObject.ConfigureLoad1(): Boolean;
+begin
+  Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
+end;
+
+function TAiFrameObject.ConfigureSave(Config: TConfig; Prefix: String): TError;
+begin
+  Result := 1;
+  if not(Assigned(Config)) then Exit;
+  Result := 0;
+end;
+
+function TAiFrameObject.ConfigureSave1(): Boolean;
+begin
+  Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
 end;
 
 constructor TAiFrameObject.Create(Source: AiSource2005; Id: TAI_Id);
@@ -443,14 +455,24 @@ begin
   Result := FFreimType;
 end;
 
+function TAiFrameObject.GetId(): TAId;
+begin
+  Result := FId;
+end;
+
 function TAiFrameObject.GetInitialized(): Boolean;
 begin
   Result := FInitialized;
 end;
 
-function TAiFrameObject.GetSource(): AiSource2005;
+function TAiFrameObject.GetSource(): AiSourceObject2005;
 begin
   Result := FSource;
+end;
+
+function TAiFrameObject.GetType(): TAId;
+begin
+  Result := FFreimType;
 end;
 
 {function TAiFrameObject.GetValue(): IAIValue;
@@ -532,6 +554,15 @@ begin
   Result := nil;
 end;}
 
+function TAiFrameObject.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError;
+begin
+  FConfig := Config;
+  FLog := Log;
+  FPath := Path;
+  FPrefix := Prefix;
+  Result := Initialize;
+end;
+
 function TAiFrameObject.Initialize(): TProfError;
 begin
   Result := 0;
@@ -580,6 +611,38 @@ begin
   Result := -1; //False;
 end;
 
+function TAiFrameObject.LoadFromRecF64(Rec: TAiFreimRecF64): AError;
+begin
+  FId := Rec.Id;
+  FFreimType := Rec.Typ;
+  FDateCreate := Rec.DTCreate;
+  Result := 0;
+end;
+
+function TAiFrameObject.LoadFromXml(Xml: TProfXml): AError;
+begin
+  Result := 1;
+  {
+  if not(Assigned(Xml)) then Exit;
+  Clear;
+  Xml.GetParamValueByNameAsUInt64('Id', FId);
+  Xml.GetParamValueByNameAsDateTime('DateTimeCreate', FDateTimeCreate);
+  Xml.GetParamValueByNameAsUInt64('Type', FType);
+  GetConnects.LoadFromXml(Xml.GetParamByName('Connects'));
+  GetData.LoadFromXml(Xml.GetParamByName('Data'));
+  Result := 0;
+  }
+end;
+{function TAI_Freim.LoadFromXml(Xml: TMyXml): TError;
+begin
+  Clear;
+  FId := cStrToUInt64(Xml.GetParamValueByName('Id'));
+  FDateTimeCreate := cStrToDateTime(Xml.GetParamValueByName('DateTimeCreate'));
+  GetConnects.LoadFromXml(Xml.GetParamByName('Connects'));
+  GetData.LoadFromXml(Xml.GetParamByName('Data'));
+  FType := cStrToUInt64(Xml.GetParamValueByName('Type'));
+  Result := 0;
+end;}
 {function TAIFreim.LoadFromXml(Xml: IXmlNode): WordBool;
 begin
   Result := False;
@@ -593,10 +656,9 @@ begin
   Result := True;
 end;}
 
-function TAiFrameObject.Regist(): Boolean;
+function TAiFrameObject.Regist(): AError;
 begin
-  Result := False;
-  //AddToLog(lgGeneral, ltError, stNotOverrideA);
+  Result := 0;
 end;
 
 function TAiFrameObject.Save(): TProfError;
@@ -615,6 +677,46 @@ begin
   Result := False;
 end;
 
+function TAiFrameObject.SaveToRecF64(var Rec: TAiFreimRecF64): AError;
+begin
+  Rec.Id := FId;
+  Rec.Typ := FFreimType;
+  Rec.DTCreate := FDateCreate;
+  Rec.DataSize := GetData.GetSize;
+  {if GetData.GetType = dtStream then
+    Rec.DataSize := GetData.GetStream.GetSize
+  else
+    Rec.DataSize := 0;}
+  Rec.ConnectCount := GetConnects.GetCountConnects;
+  Result := 0;
+end;
+
+function TAiFrameObject.SaveToXml(Xml: TProfXml): AError;
+begin
+  Result := -1;
+  if not(Assigned(Xml)) then Exit;
+  {
+  GetConnects.SaveToXml(Xml.GetParamByName('Connects'));
+  GetData.SaveToXml(Xml.GetParamByName('Data'));
+  Xml.SetParamValue('DateTimeCreate', cDateTimeToStr(FDateTimeCreate));
+  Xml.SetParamValue('Id', cUInt64ToStr(FId));
+  Xml.SetParamValue('Type', cUInt64ToStr(FType));
+  Result := 0;
+  }
+end;
+(*function TAI_Freim.SaveToXml(Xml: TMyXml): TError;
+begin
+  Result := 1;
+  if not(Assigned(Xml)) then Exit;
+  {with Xml.NewParam('Freim', '') do begin}
+    GetConnects.SaveToXml(Xml.NewParam('Connects', ''));
+    GetData.SaveToXml(Xml.NewParam('Data', ''));
+    Xml.NewParam('DateTimeCreate', cDateTimeToStr(FDateTimeCreate));
+    Xml.NewParam('Id', cUInt64ToStr(FId));
+    Xml.NewParam('Type', cUInt64ToStr(FType));
+  {end;}
+  Result := 0;
+end;*)
 (*function TAiFrameObject.SaveToXml(Xml: IXmlNode): WordBool;
 {var
   con: TAiConnects;}
@@ -636,10 +738,48 @@ begin
   FDateCreate := Value;
 end;
 
+function TAiFrameObject.SetDateTimeCreate2(Value: TDateTime): AError;
+begin
+  Result := 1;
+  if FInitialized then Exit;
+  FDateCreate := Value;
+  Result := 0;
+end;
+
 procedure TAiFrameObject.SetFreimType(Value: TAId);
 begin
   if FInitialized then Exit;
   FFreimType := Value;
+end;
+
+function TAiFrameObject.SetId(Value: TAId): AError;
+begin
+  Result := -1;
+  if FInitialized then Exit;
+  FId := Value;
+  Result := 0;
+end;
+
+function TAiFrameObject.SetInitialized(Value: Boolean): AError;
+begin
+  FInitialized := Value;
+  Result := 0;
+end;
+
+function TAiFrameObject.SetSource(Value: AiSource2005): AError;
+begin
+  Result := -1;
+  if FInitialized then Exit;
+  FSource := Value;
+  Result := 0;
+end;
+
+function TAiFrameObject.SetType(Value: TAId): AError;
+begin
+  Result := -1;
+  if FInitialized then Exit;
+  FFreimType := Value;
+  Result := 0;
 end;
 
 {procedure TAiFrameObject.SetValue(Value: IAIValue);
@@ -708,197 +848,6 @@ end;
 
 procedure TAiFrame2004.Save();
 begin
-end;
-
-{ TAiFrame2005 }
-
-function TAiFrame2005.Clear(): TError;
-begin
-  FConnects.Free;
-  FConnects := nil;
-  FData.Free;
-  FData := nil;
-  FDateCreate := 0;
-  FId := 0;
-  FInitialized := False;
-  FSource := 0;
-  FFreimType := 0;
-  Result := 0;
-end;
-
-function TAiFrame2005.ConfigureLoad(Config: TConfig; Prefix: String): TError;
-begin
-  Result := 1;
-  if not(Assigned(Config)) then Exit;
-  Result := 0;
-end;
-
-function TAiFrame2005.ConfigureLoad1(): Boolean;
-begin
-  Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
-end;
-
-function TAiFrame2005.ConfigureSave(Config: TConfig; Prefix: String): TError;
-begin
-  Result := 1;
-  if not(Assigned(Config)) then Exit;
-  Result := 0;
-end;
-
-function TAiFrame2005.ConfigureSave1(): Boolean;
-begin
-  Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
-end;
-
-function TAiFrame2005.GetDateTimeCreate(): TDateTime;
-begin
-  Result := FDateCreate;
-end;
-
-function TAiFrame2005.GetId(): TAI_Id;
-begin
-  Result := FId;
-end;
-
-function TAiFrame2005.GetInitialized(): Boolean;
-begin
-  Result := FInitialized;
-end;
-
-function TAiFrame2005.GetSource(): AiSourceObject2005;
-begin
-  Result := FSource;
-end;
-
-function TAiFrame2005.GetType(): TAI_Id;
-begin
-  Result := FFreimType;
-end;
-
-function TAiFrame2005.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError;
-begin
-  FConfig := Config;
-  FLog := Log;
-  FPath := Path;
-  FPrefix := Prefix;
-  Result := Initialize;
-end;
-
-function TAiFrame2005.LoadFromRecF64(Rec: TAIFreimRecF64): TError;
-begin
-  FId := Rec.Id;
-  FFreimType := Rec.Typ;
-  FDateCreate := Rec.DTCreate;
-  Result := 0;
-end;
-
-function TAiFrame2005.LoadFromXml(Xml: TProfXml): TError;
-begin
-  Result := 1;
-  {
-  if not(Assigned(Xml)) then Exit;
-  Clear;
-  Xml.GetParamValueByNameAsUInt64('Id', FId);
-  Xml.GetParamValueByNameAsDateTime('DateTimeCreate', FDateTimeCreate);
-  Xml.GetParamValueByNameAsUInt64('Type', FType);
-  GetConnects.LoadFromXml(Xml.GetParamByName('Connects'));
-  GetData.LoadFromXml(Xml.GetParamByName('Data'));
-  Result := 0;
-  }
-end;
-{function TAI_Freim.LoadFromXml(Xml: TMyXml): TError;
-begin
-  Clear;
-  FId := cStrToUInt64(Xml.GetParamValueByName('Id'));
-  FDateTimeCreate := cStrToDateTime(Xml.GetParamValueByName('DateTimeCreate'));
-  GetConnects.LoadFromXml(Xml.GetParamByName('Connects'));
-  GetData.LoadFromXml(Xml.GetParamByName('Data'));
-  FType := cStrToUInt64(Xml.GetParamValueByName('Type'));
-  Result := 0;
-end;}
-
-function TAiFrame2005.Regist(): TError;
-begin
-  Result := 0;
-end;
-
-function TAiFrame2005.SaveToRecF64(var Rec: TAIFreimRecF64): TError;
-begin
-  Rec.Id := FId;
-  Rec.Typ := FFreimType;
-  Rec.DTCreate := FDateCreate;
-  Rec.DataSize := GetData.GetSize;
-  {if GetData.GetType = dtStream then
-    Rec.DataSize := GetData.GetStream.GetSize
-  else
-    Rec.DataSize := 0;}
-  Rec.ConnectCount := GetConnects.GetCountConnects;
-  Result := 0;
-end;
-
-function TAiFrame2005.SaveToXml(Xml: TProfXml): TError;
-begin
-  Result := -1;
-  if not(Assigned(Xml)) then Exit;
-  {
-  GetConnects.SaveToXml(Xml.GetParamByName('Connects'));
-  GetData.SaveToXml(Xml.GetParamByName('Data'));
-  Xml.SetParamValue('DateTimeCreate', cDateTimeToStr(FDateTimeCreate));
-  Xml.SetParamValue('Id', cUInt64ToStr(FId));
-  Xml.SetParamValue('Type', cUInt64ToStr(FType));
-  Result := 0;
-  }
-end;
-(*function TAI_Freim.SaveToXml(Xml: TMyXml): TError;
-begin
-  Result := 1;
-  if not(Assigned(Xml)) then Exit;
-  {with Xml.NewParam('Freim', '') do begin}
-    GetConnects.SaveToXml(Xml.NewParam('Connects', ''));
-    GetData.SaveToXml(Xml.NewParam('Data', ''));
-    Xml.NewParam('DateTimeCreate', cDateTimeToStr(FDateTimeCreate));
-    Xml.NewParam('Id', cUInt64ToStr(FId));
-    Xml.NewParam('Type', cUInt64ToStr(FType));
-  {end;}
-  Result := 0;
-end;*)
-
-function TAiFrame2005.SetDateTimeCreate(Value: TDateTime): TError;
-begin
-  Result := 1;
-  if FInitialized then Exit;
-  FDateCreate := Value;
-  Result := 0;
-end;
-
-function TAiFrame2005.SetId(Value: TAI_Id): TError;
-begin
-  Result := -1;
-  if FInitialized then Exit;
-  FId := Value;
-  Result := 0;
-end;
-
-function TAiFrame2005.SetInitialized(Value: Boolean): TError;
-begin
-  FInitialized := Value;
-  Result := 0;
-end;
-
-function TAiFrame2005.SetSource(Value: AiSource2005): TError;
-begin
-  Result := -1;
-  if FInitialized then Exit;
-  FSource := Value;
-  Result := 0;
-end;
-
-function TAiFrame2005.SetType(Value: TAI_Id): TError;
-begin
-  Result := -1;
-  if FInitialized then Exit;
-  FFreimType := Value;
-  Result := 0;
 end;
 
 { TAiFreimObject }

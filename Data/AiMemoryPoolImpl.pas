@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(06.03.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 История версий:
@@ -15,12 +15,13 @@ unit AiMemoryPoolImpl;
 interface
 
 uses
-  AiBase, AiBaseTypes, AiConsts, AiEntityIntf, AiEntityImpl, AiIteratorIntf, AiNamedEntity, AiPoolImpl;
+  ABase, AEntityIntf, AIteratorIntf,
+  AiConsts, AiEntityImpl, AiNamedEntity, AiPoolImpl;
 
 type //** Пул с хранением сущностей в памяти
   TAiMemoryPool = class(TAiPool)
   private
-    FEntities: array of IAiEntity;
+    FEntities: array of IAEntity;
     FIsOpened: Boolean;
   protected
     {**
@@ -34,18 +35,22 @@ type //** Пул с хранением сущностей в памяти
       Возвращает итератор.
       Служит для перечисления всех сущностей по порядку
     }
-    function GetIterator(): IAIIterator; override;
+    function GetIterator(): IAIterator; override;
   public
-    function GetEntityByIndex(Index: Integer): IAIEntity; //override;
+      {**
+        Return entity by index
+        @return(Entity by index)
+      }
+    function GetEntityByIndex(Index: Integer): IAEntity; override;
       //** Создать новую сущность (заререзвировать идентификатор под сущность)
     function NewEntity(EntityType: TAId): TAId; override;
   public
       //** Закрыть пул (источник)
     procedure Close(); override;
       //** Пул (источник) содержит в себе сущность
-    function Contains(ID: TAIID): Boolean; override;
+    function Contains(ID: TAId): Boolean; override;
       //** Открыть пул (источник)
-    function Open(): TAIError; override;
+    function Open(): AError; override;
   public
     function GetFreeId(): TAId;
   end;
@@ -53,28 +58,35 @@ type //** Пул с хранением сущностей в памяти
 type
   TAiMemoryPoolA = class(TAIMemoryPool)
   public
-    function NewNamedEntity(EntityType: TAIID; Name: WideString): TAIID;
-    function NewNamedEntityA(EntityType: TAIID; Name: WideString): IAINamedEntity;
+    function NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
+    function NewNamedEntityA(EntityType: TAId; Name: WideString): IAINamedEntity;
     //function NewValueEntity(): IAIValueEntity;
-    function NewType(Name: WideString): TAIID;
+    function NewType(Name: WideString): TAId;
   end;
 
 implementation
 
 type //** Итератор для MemoryPool
-  TAiMemoryPoolIterator = class(TInterfacedObject, IAIIterator)
+  TAiMemoryPoolIterator = class(TInterfacedObject, IAIterator)
   private
     FPool: TAIMemoryPool;
   public
+    {**
+      Returns true if the iteration has more elements.
+      In other words, returns true if next would return an element
+      rather than throwing an exception.
+      @return(true if the iterator has more elements)
+    }
+    function HasNext(): Boolean;
     //** Вставить элемент в коллекцию
-    function Insert(Element: TAIID): Boolean;
+    function Insert(Element: TAId): Boolean;
     //** Пусто?
     function IsEmpty(): Boolean;
     //** Удалить текущий элемент из коллекции
-    function Remote(): Boolean;
+    function Remove(): Boolean;
 
     //** Следующий элемент коллекции
-    function Next(): TAIID;
+    function Next(): TAId;
   public
     property Pool: TAIMemoryPool read FPool write FPool;
   end;
@@ -86,7 +98,7 @@ begin
   FIsOpened := False;
 end;
 
-function TAiMemoryPool.Contains(ID: TAIID): Boolean;
+function TAiMemoryPool.Contains(ID: TAId): Boolean;
 var
   i: Integer;
 begin
@@ -104,7 +116,7 @@ begin
   Result := Length(FEntities);
 end;
 
-function TAiMemoryPool.GetEntityByIndex(Index: Integer): IAIEntity;
+function TAiMemoryPool.GetEntityByIndex(Index: Integer): IAEntity;
 begin
   if (Index >= 0) and (Index < Length(FEntities)) then
     Result := FEntities[Index]
@@ -133,7 +145,7 @@ begin
   Result := FIsOpened;
 end;
 
-function TAiMemoryPool.GetIterator(): IAIIterator;
+function TAiMemoryPool.GetIterator(): IAIterator;
 var
   iterator: TAIMemoryPoolIterator;
 begin
@@ -164,7 +176,7 @@ begin
   Result := Id;
 end;
 
-function TAiMemoryPool.Open(): TAIError;
+function TAiMemoryPool.Open(): AError;
 begin
   Result := 0;
   FIsOpened := True;
@@ -172,9 +184,9 @@ end;
 
 { TAiMemoryPoolA }
 
-function TAiMemoryPoolA.NewNamedEntity(EntityType: TAIID; Name: WideString): TAIID;
+function TAiMemoryPoolA.NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
 var
-  e: IAIEntity;
+  e: IAEntity;
 begin
   Result := 0;
   e := NewNamedEntityA(EntityType, Name);
@@ -182,7 +194,7 @@ begin
     Result := e.EntityID;
 end;
 
-function TAiMemoryPoolA.NewNamedEntityA(EntityType: TAIID; Name: WideString): IAINamedEntity;
+function TAiMemoryPoolA.NewNamedEntityA(EntityType: TAId; Name: WideString): IAiNamedEntity;
 begin
   Result := nil;
 
@@ -191,7 +203,7 @@ begin
   //Result.Name := Name;
 end;
 
-function TAiMemoryPoolA.NewType(Name: WideString): TAIID;
+function TAiMemoryPoolA.NewType(Name: WideString): TAId;
 begin
   // Создаем новую именованую сущность
   Result := NewNamedEntity(AINullType, Name);
@@ -199,7 +211,12 @@ end;
 
 { TAiMemoryPoolIterator }
 
-function TAiMemoryPoolIterator.Insert(Element: TAIID): Boolean;
+function TAiMemoryPoolIterator.HasNext(): Boolean;
+begin
+  Result := False;
+end;
+
+function TAiMemoryPoolIterator.Insert(Element: TAId): Boolean;
 begin
   Result := False;
   // ...
@@ -211,13 +228,13 @@ begin
   // ...
 end;
 
-function TAiMemoryPoolIterator.Next(): TAIID;
+function TAiMemoryPoolIterator.Next(): TAId;
 begin
   Result := 0;
   // ...
 end;
 
-function TAiMemoryPoolIterator.Remote(): Boolean;
+function TAiMemoryPoolIterator.Remove(): Boolean;
 begin
   Result := False;
   // ...

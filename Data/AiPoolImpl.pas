@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(26.03.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 Прототип: org.framerd.Pool
@@ -20,7 +20,8 @@ unit AiPoolImpl;
 interface
 
 uses
-  AiBase, AiBaseTypes, AiCollection, AiCollectionImpl, AiConsts, AiEntityIntf, AiIteratorIntf, AiLogingObject, AiPoolIntf;
+  ABase, ACollection, AEntityIntf,
+  AiBaseTypes, AiCollectionImpl, AiConsts, AiEntityIntf, AiIteratorIntf, AiLogingObject, AiPoolIntf;
 
 type //** Источник знаний
   TAiPool = class(TAiLogingObject, IAiPool) //(TInterfacedObject, IAIPool)
@@ -34,7 +35,7 @@ type //** Источник знаний
     Возвращает базовый идентификатор
     (идентификатор с которого будет начинаться отсчет ID для фреймов)
     }
-    function GetBase(): TAIID; virtual;
+    function GetBase(): TAId; virtual;
     //** Возвращает вместимость хранилища
     function GetCapacity(): Int64; virtual;
     {**
@@ -50,32 +51,37 @@ type //** Источник знаний
     }
     function GetIterator(): IAIIterator; virtual;
   public
+      {**
+        Return entity by index
+        @return(Entity by index)
+      }
+    function GetEntityByIndex(Index: Integer): IAEntity; virtual;
     //** Возвращает значение сущности как Boolean
-    function GetEntityValueAsBool(ID: TAIID): Boolean; virtual;
+    function GetEntityValueAsBool(Id: TAId): Boolean; virtual;
     //** Возвращает значение сущности как Integer
-    function GetEntityValueAsInt(ID: TAIID): Integer; virtual;
+    function GetEntityValueAsInt(Id: TAId): Integer; virtual;
     //** Возвращает значение сущности как Float
-    function GetEntityValueAsFloat(ID: TAIID): Double; virtual;
+    function GetEntityValueAsFloat(Id: TAId): Double; virtual;
     //** Возвращает значение сущности как String
-    function GetEntityValueAsString(ID: TAIID): WideString; virtual;
+    function GetEntityValueAsString(Id: TAId): WideString; virtual;
     //** Возвращает значение сущности как DateTime
-    function GetEntityValueAsDateTime(ID: TAIID): TDateTime; virtual;
+    function GetEntityValueAsDateTime(Id: TAId): TDateTime; virtual;
     //** Возвращает значение сущности как Collection
-    function GetEntityValueAsCollection(ID: TAIID): IAICollection; virtual;
+    function GetEntityValueAsCollection(Id: TAId): IACollection; virtual;
     //** Возвращает тип данных сущности
-    function GetEntityValueType(ID: TAIID): TAIValueType; virtual;
+    function GetEntityValueType(Id: TAId): TAiValueType; virtual;
     //** Возвращает тип сущности
-    function GetEntityType(ID: TAIID): TAIID; virtual;
+    function GetEntityType(Id: TAId): TAId; virtual;
     //** Задает значение сущности как Boolean
-    procedure SetEntityValueAsBool(ID: TAIID; Value: Boolean); virtual;
+    procedure SetEntityValueAsBool(Id: TAId; Value: Boolean); virtual;
     //** Задает значение сущности как Integer
-    procedure SetEntityValueAsInt(ID: TAIID; Value: Integer); virtual;
+    procedure SetEntityValueAsInt(Id: TAId; Value: Integer); virtual;
     //** Задает значение сущности как Float
-    procedure SetEntityValueAsFloat(ID: TAIID; Value: Double); virtual;
+    procedure SetEntityValueAsFloat(Id: TAId; Value: Double); virtual;
     //** Задает значение сущности как String
-    procedure SetEntityValueAsString(ID: TAIID; Value: WideString); virtual;
+    procedure SetEntityValueAsString(Id: TAId; Value: WideString); virtual;
     //** Задает значение сущности как DateTime
-    procedure SetEntityValueAsDateTime(ID: TAIID; Value: TDateTime); virtual;
+    procedure SetEntityValueAsDateTime(Id: TAId; Value: TDateTime); virtual;
   public
     //function GetEntityByIndex(Index: Integer): IAIEntity; virtual;
   public
@@ -93,32 +99,32 @@ type //** Источник знаний
     //** Закрыть пул (источник)
     procedure Close(); virtual;
     //** Пул (источник) содержит в себе сущность
-    function Contains(ID: TAIID): Boolean; virtual;
+    function Contains(Id: TAId): Boolean; virtual;
     //** Заблокировать сущность
-    function LockEntity(ID: TAIID): Boolean; virtual;
+    function LockEntity(Id: TAId): Boolean; virtual;
     //** Заблокировать пул (источник)
     function LockPool(): Boolean; virtual;
     // Создать новую сущность (заререзвировать идентификатор под сущность)
     function NewEntity(EntityType: TAId): TAId; virtual;
     //** Открыть пул (источник)
-    function Open(): TAIError; virtual;
+    function Open(): AError; virtual;
     //** Сделать выборку сущностей по запросу
-    function Select(Query: WideString): IAICollection; virtual;
+    function Select(Query: WideString): IACollection; virtual;
     //** Сделать выборку всех сущностей определенного типа
-    function SelectT(TypeID: TAId): IAiCollection; virtual;
+    function SelectT(TypeId: TAId): IACollection; virtual;
     //** Разблокировать сущность
-    procedure UnLockEntity(ID: TAIID); virtual;
+    procedure UnLockEntity(Id: TAId); virtual;
   public
-    function AddElement(ID, Element: TAIID): Boolean;    // ToCollection
-    function InsertElement(ID, Element: TAIID; Index: Integer): Boolean; // To Array
-    function InsertElementIterator(Iterator: IAIIterator; ID, Element: TAIID): Boolean; // To Collection
-    function RemoteElementIterator(Iterator: IAIIterator; ID: TAIID): Boolean;
+    function AddElement(Id, Element: TAId): Boolean;    // ToCollection
+    function InsertElement(Id, Element: TAId; Index: Integer): Boolean; // To Array
+    function InsertElementIterator(Iterator: IAIIterator; Id, Element: TAId): Boolean; // To Collection
+    function RemoteElementIterator(Iterator: IAIIterator; Id: TAId): Boolean;
     //function RemoteElement(ID, Element: TAIID): Boolean; // FromCollection
   public
     procedure AfterConstruction(); override;
   public
     //** Начальный идентификатор для этого пула (источника) фреймов
-    property Base: TAIID read GetBase;
+    property Base: TAId read GetBase;
     //** Вместимость хранилища
     property Capacity: Int64 read GetCapacity;
     {**
@@ -139,7 +145,7 @@ implementation
 
 { TAIPool }
 
-function TAiPool.AddElement(ID, Element: TAIID): Boolean;
+function TAiPool.AddElement(Id, Element: TAId): Boolean;
 begin
   Result := False;
 end;
@@ -155,7 +161,7 @@ procedure TAiPool.Close();
 begin
 end;
 
-function TAiPool.Contains(ID: TAIID): Boolean;
+function TAiPool.Contains(Id: TAId): Boolean;
 begin
   if (FCapacity > 0) then
     Result := (ID >= FBase) and (ID < FBase + FCapacity)
@@ -163,7 +169,7 @@ begin
     Result := False;
 end;
 
-function TAiPool.GetBase(): TAIID;
+function TAiPool.GetBase(): TAId;
 begin
   Result := FBase;
 end;
@@ -183,42 +189,47 @@ begin
   Result := nil;
 end;}
 
-function TAiPool.GetEntityType(ID: TAIID): TAIID;
-begin
-  Result := 0;
-end;
-
-function TAiPool.GetEntityValueAsBool(ID: TAIID): Boolean;
-begin
-  Result := False;
-end;
-
-function TAiPool.GetEntityValueAsCollection(ID: TAIID): IAICollection;
+function TAiPool.GetEntityByIndex(Index: Integer): IAEntity;
 begin
   Result := nil;
 end;
 
-function TAiPool.GetEntityValueAsDateTime(ID: TAIID): TDateTime;
+function TAiPool.GetEntityType(Id: TAId): TAId;
 begin
   Result := 0;
 end;
 
-function TAiPool.GetEntityValueAsFloat(ID: TAIID): Double;
+function TAiPool.GetEntityValueAsBool(Id: TAId): Boolean;
+begin
+  Result := False;
+end;
+
+function TAiPool.GetEntityValueAsCollection(Id: TAId): IACollection;
+begin
+  Result := nil;
+end;
+
+function TAiPool.GetEntityValueAsDateTime(Id: TAId): TDateTime;
 begin
   Result := 0;
 end;
 
-function TAiPool.GetEntityValueAsInt(ID: TAIID): Integer;
+function TAiPool.GetEntityValueAsFloat(Id: TAId): Double;
 begin
   Result := 0;
 end;
 
-function TAiPool.GetEntityValueAsString(ID: TAIID): WideString;
+function TAiPool.GetEntityValueAsInt(Id: TAId): Integer;
+begin
+  Result := 0;
+end;
+
+function TAiPool.GetEntityValueAsString(Id: TAId): WideString;
 begin
   Result := '';
 end;
 
-function TAiPool.GetEntityValueType(ID: TAIID): TAIValueType;
+function TAiPool.GetEntityValueType(Id: TAId): TAiValueType;
 begin
   Result := aivtEmpty;
 end;
@@ -234,12 +245,12 @@ begin
   // ...
 end;
 
-function TAiPool.InsertElement(ID, Element: TAIID; Index: Integer): Boolean;
+function TAiPool.InsertElement(Id, Element: TAId; Index: Integer): Boolean;
 begin
   Result := False;
 end;
 
-function TAiPool.InsertElementIterator(Iterator: IAIIterator; ID, Element: TAIID): Boolean;
+function TAiPool.InsertElementIterator(Iterator: IAIIterator; Id, Element: TAId): Boolean;
 begin
   Result := False;
 end;
@@ -269,7 +280,7 @@ begin
   Result := Assigned(Entity) and (Entity.EntityType = AIStringType);
 end;
 
-function TAiPool.LockEntity(ID: TAIID): Boolean;
+function TAiPool.LockEntity(Id: TAId): Boolean;
 begin
   Result := False;
 end;
@@ -284,7 +295,7 @@ begin
   Result := 0;
 end;
 
-function TAiPool.Open(): TAIError;
+function TAiPool.Open(): AError;
 begin
   Result := -1;
 end;
@@ -294,43 +305,43 @@ begin
   Result := False;
 end;}
 
-function TAiPool.RemoteElementIterator(Iterator: IAIIterator; ID: TAIID): Boolean;
+function TAiPool.RemoteElementIterator(Iterator: IAIIterator; Id: TAId): Boolean;
 begin
   Result := False;
 end;
 
-function TAiPool.Select(Query: WideString): IAICollection;
+function TAiPool.Select(Query: WideString): IACollection;
 begin
   Result := nil;
 end;
 
-function TAiPool.SelectT(TypeId: TAId): IAiCollection;
+function TAiPool.SelectT(TypeId: TAId): IACollection;
 begin
   Result := TAiCollection.Create();
   // ...
 end;
 
-procedure TAiPool.SetEntityValueAsBool(ID: TAIID; Value: Boolean);
+procedure TAiPool.SetEntityValueAsBool(Id: TAId; Value: Boolean);
 begin
 end;
 
-procedure TAiPool.SetEntityValueAsDateTime(ID: TAIID; Value: TDateTime);
+procedure TAiPool.SetEntityValueAsDateTime(Id: TAId; Value: TDateTime);
 begin
 end;
 
-procedure TAiPool.SetEntityValueAsFloat(ID: TAIID; Value: Double);
+procedure TAiPool.SetEntityValueAsFloat(Id: TAId; Value: Double);
 begin
 end;
 
-procedure TAiPool.SetEntityValueAsInt(ID: TAIID; Value: Integer);
+procedure TAiPool.SetEntityValueAsInt(Id: TAId; Value: Integer);
 begin
 end;
 
-procedure TAiPool.SetEntityValueAsString(ID: TAIID; Value: WideString);
+procedure TAiPool.SetEntityValueAsString(Id: TAId; Value: WideString);
 begin
 end;
 
-procedure TAiPool.UnLockEntity(ID: TAIID);
+procedure TAiPool.UnLockEntity(Id: TAId);
 begin
 end;
 
