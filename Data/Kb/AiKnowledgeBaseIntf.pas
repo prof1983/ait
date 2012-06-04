@@ -2,7 +2,7 @@
 @Abstract(Интерфейс для класса базы знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.04.2007)
-@LastMod(22.05.2012)
+@LastMod(04.06.2012)
 @Version(0.5)
 
 База знаний - это объект, который работает с несколькими источниками (пулами) фреймов.
@@ -20,24 +20,19 @@ unit AiKnowledgeBaseIntf;
 interface
 
 uses
-  {$IFDEF KnowledgeBaseOld}
-  AiBase, AiBaseTypes, AiFramePoolIntf, AiTermIntf,
-  {$ENDIF KnowledgeBaseOld}
-  AiCollection;
+  ABase, ACollection,
+  AiFramePoolIntf, AiTermIntf;
 
 type
-  {$IFDEF KnowledgeBaseOld}
   IAiKnowledgeBaseOld = interface(IAiFramePool)
-    function GetTerm(Id: TAiId): IAiTerm; safecall;
-    function GetTermV(Id: TAiId; Version: TAiVersion): IAiTerm; safecall;
+    function GetTerm(Id: TAId): IAiTerm; safecall;
+    function GetTermV(Id: TAId; Version: AVersion): IAiTerm; safecall;
 
-    property Terms[Id: TAiId]: IAiTerm read GetTerm;
-    property TermsV[Id: TAiId; Version: TAiVersion]: IAiTerm read GetTermV;
+    property Terms[Id: TAId]: IAiTerm read GetTerm;
+    property TermsV[Id: TAId; Version: AVersion]: IAiTerm read GetTermV;
   end;
-  //IAiKnowledgeBase2 = IAiKnowledgeBaseOld;
-  {$ENDIF KnowledgeBaseOld}
 
-  IAiKnowledgeBase1 = interface
+  IAiKnowledgeBaseOwl = interface
     {
     function AddAnnotationProperty(p: IATermAppl): WordBool;
     procedure AddAntisymmetricProperty(p: IATermAppl);
@@ -52,13 +47,14 @@ type
     // ...
     }
 
-    function GetClasses(): IAiCollection;
+    function GetClasses(): IACollection;
   end;
+  //IAiKnowledgeBase1 = IAiKnowledgeBaseOwl;
 
   {$IFDEF KnowledgeBaseOld}
-  IAiKnowledgeBase = IAiKnowledgeBaseOld;
+  //IAiKnowledgeBase = IAiKnowledgeBaseOld;
   {$ELSE}
-  IAiKnowledgeBase = IAiKnowledgeBase1;
+  //IAiKnowledgeBase = IAiKnowledgeBaseOwl;
   {$ENDIF KnowledgeBaseOld}
 
 implementation

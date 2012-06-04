@@ -35,7 +35,7 @@ const
   aivtCollection = 7;
 
 type //** Версия
-  TAiVersion = Integer;
+  TAiVersion = ABase.AVersion;
 
 // Процедурные типы ------------------------------------------------------------
 

@@ -15,30 +15,26 @@
 }
 unit AiKnowledgeBaseImpl;
 
-{DEFINE KnowledgeBaseOld}
-
 interface
 
 uses
-  ABase,
-  {IFDEF KnowledgeBaseOld}
   SysUtils,
-  AiBaseTypes, AiFrame, AiPoolImpl_20070511, AiPoolListImpl, AiTermIntf,
-  {ELSE}
-  AOwlPoolIntf,
-  {ENDIF KnowledgeBaseOld}
-  AiBase, AiCollection, AiKnowledgeBaseIntf, AOwlClassIntf;
+  ABase, ACollection, AOwlClassIntf, AOwlPoolIntf,
+  AiFrame, AiKnowledgeBaseIntf, AiPoolImpl_20070511, AiPoolListImpl, AiTermIntf;
 
 type // База Знаний. Работает с фреймами в виде отдельных файлов N.xml
-  TAiKnowledgeBase1 = class(TAiFramePool, IAiKnowledgeBase)
-  private
-    FPools: TAIFramePoolList; // Pools
+  TAiKnowledgeBase = class(TAiFramePool, IAiKnowledgeBaseOld, IAiKnowledgeBaseOwl)
+  protected
+      //** Пул для чтения и записи онтологических (OWL) сущностей
+    FPool: IAiOwlPool;
+      //** Pools
+    FPools: TAIFramePoolList;
     // Путь для расположения файлов N.xml
     //FFilePath: WideString;
 //    function GetFreimStringByID(ID: TAIID): WideString;
   protected
-    function GetTerm(ID: TAIID): IAITerm; safecall;
-    function GetTermV(ID: TAIID; Version: TAIVersion): IAITerm; safecall;
+    function GetTerm(ID: TAId): IAITerm; safecall;
+    function GetTermV(ID: TAId; Version: AVersion): IAITerm; safecall;
     function Get_FrameCount(): Integer; override; safecall;
 //    function Get_FrameData(ID: TAIID): IAIData; override; safecall;
 //    procedure Set_FrameType(ID, Typ: TAIID); override; safecall;
@@ -46,7 +42,7 @@ type // База Знаний. Работает с фреймами в виде 
     procedure DoCreate(); override; safecall;
   public // IAiKnowledgeBase
       // Возвращает список онтологических классов
-    function GetClasses(): IAiCollection;
+    function GetClasses(): IACollection;
   public
     //** Закрываем все пулы
     procedure Close(); override; safecall;
@@ -55,49 +51,31 @@ type // База Знаний. Работает с фреймами в виде 
     // Создать новый класс
     function NewClass(Name: WideString): IAiOwlClass;
     //** Создать новый фрейм
-    function NewFrame(): TAIID; override; safecall;
+    function NewFrame(): TAId; override; safecall;
     //** Создать новый фрейм
     function NewFrameA(): IAIFrame; override; safecall;
     //** Новый фрейм
-    function NewFrameB(Typ: TAIID; ID: TAIID = 0): TAIID; override; safecall;
+    function NewFrameB(Typ: TAId; ID: TAId = 0): TAId; override; safecall;
     //** Открываем все пулы
     function Open(): AError; override; safecall;
     function ToString(): WideString; override; safecall;
   public
     //property FilePath: WideString read FFilePath write FFilePath;
 //    property FreimStringByID[ID: TAIID]: WideString read GetFreimStringByID;
-    // Pools
+      //** Пул для чтения и записи онтологических (OWL) сущностей
+    property Pool: IAiOwlPool read FPool write FPool;
+      //** Pools
     property Pools: TAIFramePoolList read FPools;
   end;
 
-type
-  TAiKnowledgeBaseOwl = class(TInterfacedObject, IAiKnowledgeBase1)
-  private
-    // Пул для чтения и записи онтологических (OWL) сущностей
-    FPool: IAiOwlPool;
-  public // IAiKnowledgeBase
-      // Возвращает список онтологических классов
-    function GetClasses(): IAiCollection;
-  public
-    // Создать новый класс
-    function NewClass(Name: WideString): IAiOwlClass;
-  public
-    // Пул для чтения и записи онтологических (OWL) сущностей
-    property Pool: IAiOwlPool read FPool write FPool;
-  end;
-
-type
-  {$IFDEF KnowledgeBaseOld}
-  TAiKnowledgeBase = TAiKnowledgeBase1;
-  {$ELSE}
-  TAiKnowledgeBase = TAiKnowledgeBaseOwl; // deprecated
-  {$ENDIF KnowledgeBaseOld}
+  //TAiKnowledgeBase1 = TAiKnowledgeBase;
+  //TAiKnowledgeBaseOwl = TAiKnowledgeBase;
 
 implementation
 
-{ TAiKnowledgeBase1 }
+{ TAiKnowledgeBase }
 
-procedure TAiKnowledgeBase1.Close();
+procedure TAiKnowledgeBase.Close();
 var
   i: Integer;
 begin
@@ -109,7 +87,7 @@ begin
   inherited Close();
 end;
 
-procedure TAiKnowledgeBase1.DoCreate();
+procedure TAiKnowledgeBase.DoCreate();
 begin
   inherited DoCreate();
   FName := 'KnowlegeBase';
@@ -118,24 +96,33 @@ begin
   Self.FCapacity := 100000;
 end;
 
-function TAiKnowledgeBase1.GetClasses(): IAiCollection;
+function TAiKnowledgeBase.GetClasses(): IACollection;
 begin
-  Result := nil;
+  if not(Assigned(FPool)) then
+  begin
+    Result := nil;
+    Exit;
+  end;
+  try
+    Result := FPool.GetClasses();
+  except
+    Result := nil;
+  end;
 end;
 
-function TAiKnowledgeBase1.GetTerm(ID: TAIID): IAITerm;
+function TAiKnowledgeBase.GetTerm(ID: TAId): IAITerm;
 begin
   Result := nil;
   // ...
 end;
 
-function TAiKnowledgeBase1.GetTermV(ID: TAIID; Version: TAIVersion): IAITerm;
+function TAiKnowledgeBase.GetTermV(ID: TAId; Version: AVersion): IAITerm;
 begin
   Result := nil;
   // ...
 end;
 
-function TAiKnowledgeBase1.Get_FrameCount(): Integer;
+function TAiKnowledgeBase.Get_FrameCount(): Integer;
 var
   i: Integer;
 begin
@@ -144,7 +131,7 @@ begin
     Result := Result + FPools.PoolByIndex[i].Frames.Count;
 end;
 
-{function TAiKnowlegeBase1.Get_FrameData(ID: TAIID): IAIData;
+{function TAiKnowlegeBase.Get_FrameData(ID: TAIID): IAIData;
 begin
 //  Result := inherited FreimDataGet(Id);
   Result := nil;
@@ -152,7 +139,7 @@ begin
 //  Result := nil;
 end;}
 
-(*function TAiKnowlegeBase1.GetFreimStringByID(ID: TAIID): WideString;
+(*function TAiKnowlegeBase.GetFreimStringByID(ID: TAIID): WideString;
 var
   f: file;
   r: Integer;
@@ -184,7 +171,7 @@ begin
       Result := Result + ws[i];
 end;*)
 
-//function TAiKnowlegeBase1.GetFreimDTCreate(Id: TAIID): TDateTime;
+//function TAiKnowlegeBase.GetFreimDTCreate(Id: TAIID): TDateTime;
 //var
 //  Rec: TAIFreimRecF64;
 //begin
@@ -196,7 +183,7 @@ end;*)
 //  Result := Rec.DTCreate;
 //end;
 
-//function TAiKnowlegeBase1.GetFreimType(Id: TAI_Id): TAI_Id;
+//function TAiKnowlegeBase.GetFreimType(Id: TAI_Id): TAI_Id;
 //var
 //  Rec: TAIFreimRecF64;
 //begin
@@ -208,12 +195,21 @@ end;*)
 //  Result := Rec.Typ;
 //end;
 
-function TAiKnowledgeBase1.NewClass(Name: WideString): IAiOwlClass;
+function TAiKnowledgeBase.NewClass(Name: WideString): IAiOwlClass;
 begin
-  Result := nil;
+  if not(Assigned(FPool)) then
+  begin
+    Result := nil;
+    Exit;
+  end;
+  try
+    Result := FPool.NewClass(Name);
+  except
+    Result := nil;
+  end;
 end;
 
-function TAiKnowledgeBase1.NewFrame(): TAIID;
+function TAiKnowledgeBase.NewFrame(): TAId;
 begin
   Result := 0;
   if FPools.Count > 0 then
@@ -223,7 +219,7 @@ begin
   end;
 end;
 
-function TAiKnowledgeBase1.NewFrameA(): IAIFrame;
+function TAiKnowledgeBase.NewFrameA(): IAIFrame;
 begin
   Result := nil;
   if FPools.Count > 0 then
@@ -233,7 +229,7 @@ begin
   end;
 end;
 
-function TAiKnowledgeBase1.NewFrameB(Typ: TAIID; ID: TAIID = 0): TAIID;
+function TAiKnowledgeBase.NewFrameB(Typ: TAId; ID: TAId = 0): TAId;
 begin
   Result := 0;
   if FPools.Count > 0 then
@@ -243,7 +239,7 @@ begin
   end;
 end;
 
-function TAiKnowledgeBase1.Open(): AError;
+function TAiKnowledgeBase.Open(): AError;
 var
   i: Integer;
   r: Integer;
@@ -258,7 +254,7 @@ begin
   end;
 end;
 
-function TAiKnowledgeBase1.ToString(): WideString;
+function TAiKnowledgeBase.ToString(): WideString;
 var
   i: Integer;
 begin
@@ -267,7 +263,7 @@ begin
   Result := #13#10 + FPools.PoolByIndex[i].Name;
 end;
 
-{procedure TAiKnowlegeBase1.Set_FrameType(Id, Typ: TAIID);
+{procedure TAiKnowlegeBase.Set_FrameType(Id, Typ: TAIID);
 //var
 //  Rec: TAIFreimRecF64;
 begin
@@ -279,35 +275,5 @@ begin
 //  Rec.Typ := Typ;
 //  Result := FF.FreimWrite(Id, Rec);
 end;}
-
-{ TAiKnowledgeBaseOwl }
-
-function TAiKnowledgeBaseOwl.GetClasses(): IAiCollection;
-begin
-  if not(Assigned(FPool)) then
-  begin
-    Result := nil;
-    Exit;
-  end;
-  try
-    Result := FPool.GetClasses();
-  except
-    Result := nil;
-  end;
-end;
-
-function TAiKnowledgeBaseOwl.NewClass(Name: WideString): IAiOwlClass;
-begin
-  if not(Assigned(FPool)) then
-  begin
-    Result := nil;
-    Exit;
-  end;
-  try
-    Result := FPool.NewClass(Name);
-  except
-    Result := nil;
-  end;
-end;
 
 end.
