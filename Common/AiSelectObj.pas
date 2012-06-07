@@ -2,7 +2,7 @@
 @Abstract(Выборка фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(25.04.2012)
+@LastMod(07.06.2012)
 @Version(0.5)
 }
 unit AiSelectObj;
@@ -20,13 +20,13 @@ type //** Выборка фреймов
     FQuery: String;
     FSource: AiSourceObject;
   public
-    function GetFreim(Index: Int32): TAiFreimObject;
+    function GetFreim(Index: Int32): TAiFrameObject;
     function GetItem(Index: Int32): TAId;
   public
     function Count: Int32;
     constructor Create(AQuery: string);
   public
-    property Freims[Index: Int32]: TAiFreimObject read GetFreim;
+    property Freims[Index: Int32]: TAiFrameObject read GetFreim;
     property Items[Index: Int32]: TAId read GetItem;
     property Query: String read FQuery;
     property Source: AiSourceObject read FSource write FSource;
@@ -53,7 +53,7 @@ begin
   FQuery := AQuery;
 end;
 
-function TAiSelectObject.GetFreim(Index: Int32): TAiFreimObject;
+function TAiSelectObject.GetFreim(Index: Int32): TAiFrameObject;
 var
   Id: TAId;
   Source: TAiSourceObject;

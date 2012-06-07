@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2005)
-@LastMod(15.05.2012)
+@LastMod(07.06.2012)
 @Version(0.5)
 
 15.05.2012 - Move functions to AiBaseUtils.pas
@@ -21,8 +21,8 @@ type //** Связи
   TAI_Connects = AiConnectsObj.TAiConnectsObject; //AiConnectsImpl.TAI_Connects;
   TAiConnects = AiConnectsObj.TAiConnectsObject; //TAI_Connects;
 
-type
-  TAiFreim = AiFrameImpl.TAiFreim;
+//type
+  //TAiFreim = AiFrameImpl.TAiFreim;
 
 type //** Фрейм с названием, заголовком и описанием ------------------------------
   TAIFreimNamed = class(TAIFreim)

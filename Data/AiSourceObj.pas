@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(04.06.2012)
+@LastMod(07.06.2012)
 @Version(0.5)
 }
 unit AiSourceObj;
@@ -25,8 +25,8 @@ type // Recovered
   public
     function Count(): AInt32;
     function CountFreim_Get(): AInt;
-    function F(Id: AInt64): TAiFrame2004; deprecated; // Use FreimGet()
-    function FreimGet(Id: AInt32; Created: Boolean = False): TAiFrame2004; virtual;
+    function F(Id: AInt64): TAiFrameObject; deprecated; // Use FreimGet()
+    function FreimGet(Id: AInt32; Created: Boolean = False): TAiFrameObject; virtual;
     function FreimNew(Typ: AInt32): AInt32;
     function FreimSearch54(const Name: string): AInt32;
   end;
@@ -350,12 +350,12 @@ begin
   Result := 0;
 end;
 
-function TAiSource2004.F(Id: AInt64): TAiFrame2004;
+function TAiSource2004.F(Id: AInt64): TAiFrameObject;
 begin
   Result := FreimGet(Id);
 end;
 
-function TAiSource2004.FreimGet(Id: AInt32; Created: Boolean): TAiFrame2004;
+function TAiSource2004.FreimGet(Id: AInt32; Created: Boolean): TAiFrameObject;
 begin
   Result := nil;
 end;

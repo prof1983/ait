@@ -157,7 +157,6 @@ type
     //** Фрейм в виде XML строки
     property Xml: WideString read GetXml write SetXml;
   end;
-  //TAIFrame4 = TAIFrame;
 
 implementation
 
