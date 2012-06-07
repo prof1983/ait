@@ -69,7 +69,7 @@ type //** Фрейм
       //** Префикс для конфигураций и логирования (deprecated)
     FPrefix: String;
       //** Пул (Источник)
-    //FPool: IAIFramePool;
+    FPool: AiPool;
       //** Источник
     FSource: AiSource2005;
       //** Версия фрейма

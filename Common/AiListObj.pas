@@ -10,7 +10,7 @@ unit AiListObj;
 interface
 
 uses
-  ABase, ATypes, AiFrameObj;
+  ABase, ATypes, AiFrameObj, AiPoolUtils;
 
 type
   TAiListObject = class(TAiFrameObject)
@@ -264,8 +264,8 @@ begin
   Result := nil;
   if (Index >= 0) and (Index < Length(FItems)) then
   begin
-    if not(Assigned(FItems[Index].Freim)) and Assigned(FPool) then
-      FItems[Index].Freim := TAIFrame(FPool.Frames.FrameByID[FItems[Index].ID]);
+    if not(Assigned(FItems[Index].Freim)) and (FPool <> 0) then
+      FItems[Index].Freim := Pool_GetFrameById(FPool, FItems[Index].Id);
     Result := FItems[Index].Freim;
   end;
 end;

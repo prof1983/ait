@@ -2,7 +2,7 @@
 @Abstract(Базовые константы и типы для ИР)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(19.03.2008)
-@LastMod(04.06.2012)
+@LastMod(07.06.2012)
 @Version(0.5)
 }
 unit AiBase;
@@ -39,6 +39,7 @@ type
   TAiId32 = LongWord{UInt32};
 
 type
+  AiPool = type AInt;
   AiSourceObject = type Integer; // TAiSourceObject
   // TODO: Delete
   AiSourceObject2005 = type Integer; // TAiSource2005
