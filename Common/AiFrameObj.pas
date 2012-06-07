@@ -21,6 +21,7 @@ type
     // Recovered
   TAiSlot2004 = class
   public
+    function GetAsInt32(): AInt32;
     function GetAsString(): string;
     function GetAsUInt32(): AUInt32;
     function GetAsUInt64(): AUInt64;
@@ -31,6 +32,7 @@ type
     procedure SetAsUInt64(Value: AUInt64);
     procedure SetValueAsString(const Value: APascalString);
   public
+    property AsInt032: AInt32 read GetAsInt32;
     property AsString: string read GetAsString write SetAsString;
     property AsUInt032: AUInt32 read GetAsUInt32 write SetAsUInt32;
     property AsUInt064: AUInt64 read GetAsUInt64 write SetAsUInt64;
@@ -125,6 +127,9 @@ type //** Фрейм
     function ConfigureSave(Config: TConfig; Prefix: String): TError; virtual;
       //** Сохранить конфигурации
     function ConfigureSave1(): Boolean; virtual;
+      {** Adds association connect to frame
+          @return(Assosiation connects count) }
+    function ConnectAdd(Id: TAId): AInt;
       {** Get association identifier (from TAiFrame2004)
           @return(association identifier) }
     function ConnectGet(Index: AInt): AInt64;
@@ -183,6 +188,7 @@ type //** Фрейм
       {** Get slot by name (from TAiFrame2004)
           @return(slot) }
     function P(const Name: APascalString): TAiSlot2004;
+    function P2(const Name, DefValue: APascalString): TAiSlot2004;
       //** Зарегистрировать тип фрейма в источнике
     function Regist(): AError; virtual;
     {**
@@ -315,6 +321,11 @@ end;
 function TAiFrameObject.ConfigureSave1(): Boolean;
 begin
   Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
+end;
+
+function TAiFrameObject.ConnectAdd(Id: TAId): AInt;
+begin
+  Result := 0;
 end;
 
 function TAiFrameObject.ConnectGet(Index: AInt): AInt64;
@@ -660,6 +671,11 @@ begin
   Result := nil;
 end;
 
+function TAiFrameObject.P2(const Name, DefValue: APascalString): TAiSlot2004;
+begin
+  Result := nil;
+end;
+
 function TAiFrameObject.Regist(): AError;
 begin
   Result := 0;
@@ -912,6 +928,11 @@ begin
 end;}
 
 { TAiSlot2004 }
+
+function TAiSlot2004.GetAsInt32(): AInt32;
+begin
+  Result := 0;
+end;
 
 function TAiSlot2004.GetAsString(): string;
 begin

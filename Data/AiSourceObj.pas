@@ -29,6 +29,10 @@ type // Recovered
     function FreimGet(Id: AInt32; Created: Boolean = False): TAiFrameObject; virtual;
     function FreimNew(Typ: AInt32): AInt32;
     function FreimSearch54(const Name: string): AInt32;
+      {** Return identifier of param by type in frame
+          @return(identifier) }
+    function FreimSelectParamByType(Id, ParamTyp: AInt): AInt;
+    function FreimSelectByType(Typ: TAId): TAId;
   end;
 
   //** @abstract(Источник фреймов) // 256
@@ -366,6 +370,16 @@ begin
 end;
 
 function TAiSource2004.FreimSearch54(const Name: string): AInt32;
+begin
+  Result := 0;
+end;
+
+function TAiSource2004.FreimSelectByType(Typ: TAId): TAId;
+begin
+  Result := 0;
+end;
+
+function TAiSource2004.FreimSelectParamByType(Id, ParamTyp: AInt): AInt;
 begin
   Result := 0;
 end;
