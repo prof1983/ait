@@ -2,7 +2,7 @@
 @Abstract(Список заданий)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.03.2006)
-@LastMod(03.05.2012)
+@LastMod(07.06.2012)
 @Version(0.5)
 }
 unit AiTaskListImpl;
@@ -15,7 +15,7 @@ uses
 type //** Список заданий
   TAITaskList = class(TAiFrame)
   private
-    FList: TAIList3;
+    FList: TAiList;
     function GetCount(): Integer;
     function GetItem(Index: Integer): TAiTask;
   protected
@@ -80,7 +80,7 @@ end;
 procedure TAITaskList.DoCreate();
 begin
   inherited DoCreate();
-  FList := TAIList3.Create();
+  FList := TAiList.Create();
 end;
 
 procedure TAITaskList.DoDestroy();

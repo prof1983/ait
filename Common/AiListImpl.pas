@@ -2,7 +2,7 @@
 @Abstract(Список фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.03.2006)
-@LastMod(27.04.2012)
+@LastMod(07.06.2012)
 @Version(0.5)
 }
 unit AiListImpl;
@@ -44,7 +44,7 @@ type //** Список фреймов
       //** Элементы по Id
     property ItemsByID[ID: Integer]: TAIFrame read GetItemByID;
   end;
-  TAIList3 = TAIList;
+  //TAIList3 = TAIList;
 
 implementation
 

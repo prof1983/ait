@@ -24,6 +24,7 @@ type //** Ошибка. 0 - OK, >0 - есть информация, <0 - оши�
 
 type //** Тип значения данных
   TAiValueType = Integer;
+  //TAiValueType = (vtVoid); - from AiInterpretatorBaseTypes.pas
 const
   aivtEmpty      = 0;
   aivtNill       = 1;
