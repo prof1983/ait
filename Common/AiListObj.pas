@@ -2,7 +2,7 @@
 @Abstract(AiList - Список фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.06.2012)
-@LastMod(07.06.2012)
+@LastMod(08.06.2012)
 @Version(0.0)
 }
 unit AiListObj;
@@ -17,9 +17,12 @@ type
   protected
     FItems: array of record
       Id: Integer;
-      Freim: TAiFrame;
+      Freim: TAiFrameObject;
     end;
+  public
     function GetCount(): Integer;
+    function GetCountItems(): UInt32; deprecated; // Use GetCount()
+    function GetItem(Index: UInt32): TAiFrameObject;
     function GetItemByID(ID: Integer): TAIFrame;
     function GetItemByIndex(Index: Integer): TAIFrame;
     function GetItemID(Index: Integer): Integer;
@@ -33,7 +36,7 @@ type
       //** Очистить список
     function Clear(): AError; override;
       //** Удалить
-    function DeleteByIndex(Index: Integer): Boolean;
+    function DeleteByIndex(Index: AInt): AError;
   public
       //** Колличество
     property Count: Integer read GetCount;
@@ -45,15 +48,7 @@ type
     property ItemsByID[ID: Integer]: TAIFrame read GetItemByID;
   end;
 
-  TAiList20050915 = class(TAiListObject)
-  private
-    FItems: array of TAiFrameObject;
-  public
-    function Clear(): TError; override;
-    function GetCountItems(): UInt32;
-    function DeleteByIndex(Index: UInt32): TError;
-    function GetItem(Index: UInt32): TAiFrameObject;
-  end;
+  TAiList20050915 = TAiListObject;
 
   TAiList20050830 = class(TAiList20050915)
   private
@@ -153,39 +148,7 @@ begin
     Result := FItems[Index];
 end;
 
-{ TAiList20050915 }
-
-function TAiList20050915.Clear(): TError;
-begin
-  SetLength(FItems, 0);
-  Result := 0;
-end;
-
-function TAiList20050915.DeleteByIndex(Index: UInt32): TError;
-var
-  I: Int32;
-begin
-  Result := 1;
-  if Index >= UInt32(Length(FItems)) then Exit;
-  for I := Index to High(FItems) - 1 do FItems[I] := FItems[I + 1];
-  SetLength(FItems, High(FItems));
-  Result := 0;
-end;
-
-function TAiList20050915.GetCountItems: UInt32;
-begin
-  Result := Length(FItems);
-end;
-
-function TAiList20050915.GetItem(Index: UInt32): TAiFrameObject;
-begin
-  if Index >= UInt32(Length(FItems)) then
-    Result := nil
-  else
-    Result := FItems[Index];
-end;
-
-{ TAiList }
+{ TAiListObject }
 
 function TAiListObject.Add(Value: TAIFrame): Integer;
 begin
@@ -216,20 +179,34 @@ begin
   Result := 0;
 end;
 
-function TAiListObject.DeleteByIndex(Index: Integer): Boolean;
+function TAiListObject.DeleteByIndex(Index: AInt): AError;
 var
-  I: Integer;
+  I: Int32;
 begin
-  Result := False;
-  if Index >= Length(FItems) then Exit;
-  for I := Index to High(FItems) - 1 do FItems[I] := FItems[I + 1];
+  Result := 1;
+  if Index >= UInt32(Length(FItems)) then Exit;
+  for I := Index to High(FItems) - 1 do
+    FItems[I] := FItems[I + 1];
   SetLength(FItems, High(FItems));
-  Result := True;
+  Result := 0;
 end;
 
 function TAiListObject.GetCount(): Integer;
 begin
   Result := Length(FItems);
+end;
+
+function TAiListObject.GetCountItems(): UInt32;
+begin
+  Result := Length(FItems);
+end;
+
+function TAiListObject.GetItem(Index: UInt32): TAiFrameObject;
+begin
+  if Index >= UInt32(Length(FItems)) then
+    Result := nil
+  else
+    Result := FItems[Index].Freim;
 end;
 
 function TAiListObject.GetItemByID(ID: Integer): TAIFrame;

@@ -2,7 +2,7 @@
 @Abstract(AiPoolUtils)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.06.2012)
-@LastMod(07.06.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 }
 unit AiPoolUtils;
@@ -10,7 +10,7 @@ unit AiPoolUtils;
 interface
 
 uses
-  AiBase, AiFrameObj;
+  AiBase, AiFrameObj, AiFramePoolObj;
 
 {** Return frame by identifier
     @return(frame object) }
@@ -20,13 +20,13 @@ implementation
 
 function Pool_GetFrameById(Pool: AiPool; Id: TAId): TAiFrameObject;
 begin
-  if not(TObject(Pool) is TAiPoolObject) then
+  if not(TObject(Pool) is TAiFramePoolObject) then
   begin
     Result := nil;
     Exit;
   end;
 
-  Result := TAiFrameObject(TAiPoolObject(Pool).Frames.FrameById[Id]);
+  Result := TAiFrameObject(TAiFramePoolObject(Pool).Frames.FrameById[Id]);
 end;
 
 end.

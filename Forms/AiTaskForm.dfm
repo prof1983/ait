@@ -1,9 +1,9 @@
 object FormTask: TFormTask
   Left = 206
   Top = 102
-  Width = 338
-  Height = 302
   Caption = 'FormTask'
+  ClientHeight = 275
+  ClientWidth = 330
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -120,7 +120,6 @@ object FormTask: TFormTask
     Top = 216
     Width = 121
     Height = 21
-    ItemHeight = 13
     TabOrder = 6
     Text = 'Normal'
     Items.Strings = (

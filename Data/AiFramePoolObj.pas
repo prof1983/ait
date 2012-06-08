@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(07.06.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 }
 unit AiFramePoolObj;
@@ -11,14 +11,29 @@ interface
 
 uses
   SysUtils,
-  AConsts2, ATypes,
-  AiBase, AiBaseTypes, AiPoolObj; {AiDataIntf, AiFrame, AiFrameListIntf, AiModuleImpl, AiFramePoolIntf;}
+  ABase, AConsts2, ATypes,
+  AiBase, AiBaseTypes, AiDataObj, AiFrameObj, AiPoolObj;
 
 type
     //** Запись для источника фреймов
   TAiPoolRec = record
     Id: TAId;
     Pool: AiPool;
+  end;
+
+  TAiFrameListObject = class
+  public
+    function GetCount(): Integer;
+    function GetFrameById(Id: TAId): TAiFrameObject;
+    function GetFrameByUri(const Uri: WideString): TAiFrameObject;
+    function GetFrameByGuid(Guid: TGuid): TAiFrameObject;
+  public
+      //** Колличество фреймов
+    property Count: Integer read GetCount;
+      //** Фреймы по ID
+    property FrameById[Id: TAId]: TAiFrameObject read GetFrameById;
+    property FrameByUri[const Uri: WideString]: TAiFrameObject read GetFrameByUri;
+    property FrameByGuid[Guid: TGuid]: TAiFrameObject read GetFrameByGuid;
   end;
 
     //** Базовый класс для источника фреймов
@@ -65,19 +80,9 @@ type
   protected
     function Get_FrameDateTimeCreate(Id: TAId): TDateTime; virtual;
     function Get_ItemId(Index: Integer): TAId; virtual;
-  protected
-    procedure DoCreate(); override; safecall;
   public
     //** Проверяет и создает базовые фреймы AIFreims
     function CheckFreims(): Boolean;
-    //** Финализировать
-    function Finalize(): TProfError; override;
-    //** Освободить объект
-    procedure Free(); override;
-    //** Инициализировать
-    function Initialize(): TProfError; override;
-    //** Загрузить данные из данных фрейма
-    function Load(): TProfError; override;
     function ToString(): WideString; virtual;
   public // IAiFramePool
     //** Закрыть источник
@@ -112,7 +117,7 @@ type
     //** Вместимость хранилища
     property Capacity: Int64 read FCapacity write FCapacity;
     //** Объект работы со списком фреймов
-    property Frames: TAiFrameListObjct read FFrames;
+    property Frames: TAiFrameListObject read FFrames;
     //** Родительские БЗ
     property Parents[Index: Integer]: AiPool read GetParent write SetParent;
     //** ID фреймов родительских БЗ
@@ -186,24 +191,6 @@ begin
   // ...
 end;
 
-procedure TAiFramePoolObject.DoCreate();
-begin
-  inherited DoCreate();
-  FName := 'Source';
-end;
-
-function TAiFramePoolObject.Finalize(): TProfError;
-begin
-  Result := inherited Finalize();
-end;
-
-procedure TAiFramePoolObject.Free();
-begin
-  {FSearch.Free;
-  FSelect.Free;}
-  inherited Free;
-end;
-
 function TAiFramePoolObject.GetBase(): TAIID;
 begin
   Result := FBase;
@@ -214,7 +201,7 @@ begin
   Result := FCapacity;
 end;
 
-function TAiFramePoolObject.GetFrames(): IAIFrameList;
+function TAiFramePoolObject.GetFrames(): TAiFrameListObject;
 begin
   Result := FFrames;
 end;
@@ -224,9 +211,9 @@ begin
   Result := FIsOpened;
 end;
 
-function TAiFramePoolObject.GetParent(Index: Integer): IAIFramePool;
+function TAiFramePoolObject.GetParent(Index: Integer): AiPool;
 begin
-  Result := nil;
+  Result := 0;
   {if Index >= UInt32(Length(FParents)) then
     Result := nil
   else begin
@@ -261,7 +248,7 @@ begin
 
 end;}
 
-function TAiFramePoolObject.Get_FrameByID(ID: TAIID): IAIFrame;
+function TAiFramePoolObject.Get_FrameByID(ID: TAId): TAiFrameObject;
 begin
   Result := nil;
   AddToLog(lgDataBase, ltError, stNotOverride + '"GetFreim"');
@@ -278,7 +265,7 @@ begin
   AddToLog(lgDataBase, ltInformation, stNotOverride + ' "GetFreimConnects"');
 end;}
 
-function TAiFramePoolObject.Get_FrameDataByID(ID: TAIID): IAIData;
+function TAiFramePoolObject.Get_FrameDataByID(ID: TAId): TAiDataObject;
 {var
   Freim: TAI_Freim;}
 begin
@@ -304,23 +291,13 @@ begin
   Inc(FNextFreeFreimID);
 end;
 
-function TAiFramePoolObject.Initialize(): TProfError;
-begin
-  Result := inherited Initialize();
-end;
-
-function TAiFramePoolObject.Load(): TProfError;
-begin
-  LoadFromData(FData);
-end;
-
 function TAiFramePoolObject.LockFrame(x: TAIID): WordBool;
 begin
   Result := False;
   // ...
 end;
 
-function TAiFramePoolObject.LockFrameA(x: IAIFrame): WordBool;
+function TAiFramePoolObject.LockFrameA(x: TAiFrameObject): WordBool;
 begin
   Result := False;
   // ...
@@ -337,7 +314,7 @@ begin
   // ...
 end;
 
-procedure TAiFramePoolObject.MarkModifiedA(x: IAIFrame);
+procedure TAiFramePoolObject.MarkModifiedA(x: TAiFrameObject);
 begin
   // ...
 end;
@@ -347,21 +324,21 @@ begin
   Result := -1;
 end;
 
-procedure TAiFramePoolObject.SetParent(Index: Integer; Value: IAIFramePool);
+procedure TAiFramePoolObject.SetParent(Index: Integer; Value: AiPool);
 begin
   if Index >= Length(FParents) then Exit;
-  FParents[Index].Source := Value;
-  if Assigned(Value) then
-    FParents[Index].ID := Value.FrameID
+  FParents[Index].Pool := Value;
+  {if Assigned(Value) then
+    FParents[Index].Id := Value.FrameID
   else
-    FParents[Index].ID := 0;
+    FParents[Index].Id := 0;}
 end;
 
-procedure TAiFramePoolObject.SetParentID(Index: Integer; Value: TAIID);
+procedure TAiFramePoolObject.SetParentID(Index: Integer; Value: TAId);
 begin
   if Index >= Length(FParents) then Exit;
   FParents[Index].Id := Value;
-  FParents[Index].Source := nil;
+  //FParents[Index].Pool := nil;
 end;
 
 function TAiFramePoolObject.NewFrame(): TAIID;
@@ -370,7 +347,7 @@ begin
   // ...
 end;
 
-function TAiFramePoolObject.NewFrameA(): IAIFrame;
+function TAiFramePoolObject.NewFrameA(): TAiFrameObject;
 begin
   Result := nil;
   // ...
@@ -388,11 +365,11 @@ begin
   //AddToLog(lgDataBase, ltError, stNotOverrideA, ['NewFreimType']);
 end;}
 
-procedure TAiFramePoolObject.Set_FrameByID(ID: TAIID; Value: IAIFrame);
+procedure TAiFramePoolObject.Set_FrameByID(ID: TAIID; Value: TAiFrameObject);
 begin
 end;
 
-procedure TAiFramePoolObject.Set_FrameDataByID(ID: TAIID; Data: IAIData);
+procedure TAiFramePoolObject.Set_FrameDataByID(ID: TAIID; Data: TAiDataObject);
 begin
   // ...
 end;
@@ -401,6 +378,28 @@ function TAiFramePoolObject.ToString(): WideString;
 begin
   Result := 'Base = ' + IntToStr(FBase) + #13#10 +
             'Capacity = ' + IntToStr(FCapacity);
+end;
+
+{ TAiFrameListObject }
+
+function TAiFrameListObject.GetCount(): Integer;
+begin
+  Result := 0;
+end;
+
+function TAiFrameListObject.GetFrameByGuid(Guid: TGuid): TAiFrameObject;
+begin
+  Result := nil;
+end;
+
+function TAiFrameListObject.GetFrameById(Id: TAId): TAiFrameObject;
+begin
+  Result := nil;
+end;
+
+function TAiFrameListObject.GetFrameByUri(const Uri: WideString): TAiFrameObject;
+begin
+  Result := nil;
 end;
 
 end.

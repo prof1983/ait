@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(25.04.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.Pool
@@ -18,7 +18,8 @@ unit AiPoolIntf;
 interface
 
 uses
-  AiBase, AiBaseTypes, AiCollection, AiEntityIntf, AiIteratorIntf;
+  AIteratorIntf,
+  AiBase, AiBaseTypes, AiCollection, AiEntityIntf;
 
 type
   {**
@@ -67,7 +68,7 @@ type
       Возвращает итератор.
       Служит для перечисления всех сущностей по порядку
     }
-    function GetIterator(): IAiIterator;
+    function GetIterator(): IAIterator;
 
     {** Задать значение сущности как Boolean }
     procedure SetEntityValueAsBool(Id: TAId; Value: Boolean);
@@ -154,7 +155,7 @@ type
     Итератор
     Служит для перечисления всех сущностей по порядку
     }
-    property Iterator: IAiIterator read GetIterator;
+    property Iterator: IAIterator read GetIterator;
   end;
 
 type

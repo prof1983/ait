@@ -2,7 +2,7 @@
 @Abstract(AiTask)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.06.2012)
-@LastMod(07.06.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 }
 unit AiTaskObj;
@@ -14,7 +14,7 @@ uses
   AiBase, AiFrameObj, AiMethodsObj;
 
 type
-  TAiTask20050915 = class(TAiFrameObject)
+  TAiTaskObject = class(TAiFrameObject)
   private
     FComent: String;
     FDTStart: TDateTime;
@@ -47,6 +47,8 @@ type
     function SetTimeImplementation(Value: UInt64): TError;
     function SetTitle(Value: String): TError;
   end;
+
+  TAiTask20050915 = TAiTaskObject;
 
   TAiTask20050830 = class(TAiTask20050915)
   private
@@ -538,54 +540,54 @@ begin
   Result := 0;
 end;
 
-{ TAiTask20050915 }
+{ TAiTaskObject }
 
-function TAiTask20050915.GetComent(): String;
+function TAiTaskObject.GetComent(): String;
 begin
   Result := FComent;
 end;
 
-function TAiTask20050915.GetDateTimeEnd(): TDateTime;
+function TAiTaskObject.GetDateTimeEnd(): TDateTime;
 begin
   Result := FDTEnd;
 end;
 
-function TAiTask20050915.GetDateTimeStart(): TDateTime;
+function TAiTaskObject.GetDateTimeStart(): TDateTime;
 begin
   Result := FDTStart;
 end;
 
-function TAiTask20050915.GetMethods(): TAiMethods20050915;
+function TAiTaskObject.GetMethods(): TAiMethods20050915;
 begin
   Result := FMethods;
 end;
 
-function TAiTask20050915.GetName(): String;
+function TAiTaskObject.GetName(): String;
 begin
   Result := FName;
 end;
 
-function TAiTask20050915.GetPriority(): UInt32;
+function TAiTaskObject.GetPriority(): UInt32;
 begin
   Result := FPriority;
 end;
 
-function TAiTask20050915.GetText(): String;
+function TAiTaskObject.GetText(): String;
 begin
   Result := FText;
 end;
 
-function TAiTask20050915.GetTimeImplementation(): UInt64;
+function TAiTaskObject.GetTimeImplementation(): UInt64;
 begin
   Result := FTimeImplementation;
 end;
 
-function TAiTask20050915.GetTitle(): String;
+function TAiTaskObject.GetTitle(): String;
 begin
   Result := FTitle;
 end;
 
-function TAiTask20050915.Initialize(): TError;
+function TAiTaskObject.Initialize(): TError;
 var
   Source: TAiSourceObject2005;
 begin
@@ -601,7 +603,7 @@ begin
   FMethods.Initialize;
 end;
 
-function TAiTask20050915.LoadFromXml(Xml: TProfXml): TError;
+function TAiTaskObject.LoadFromXml(Xml: TProfXml): TError;
 begin
   Result := inherited LoadFromXml(Xml);
   Xml.ReadParamValueByName('Coment', FComent);
@@ -611,55 +613,55 @@ begin
   {...}
 end;
 
-function TAiTask20050915.SetComent(Value: String): TError;
+function TAiTaskObject.SetComent(Value: String): TError;
 begin
   FComent := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetDateTimeEnd(Value: TDateTime): TError;
+function TAiTaskObject.SetDateTimeEnd(Value: TDateTime): TError;
 begin
   FDTEnd := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetDateTimeStart(Value: TDateTime): TError;
+function TAiTaskObject.SetDateTimeStart(Value: TDateTime): TError;
 begin
   FDTStart := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetMethods(Value: TAiMethods20050915): TError;
+function TAiTaskObject.SetMethods(Value: TAiMethods20050915): TError;
 begin
   FMethods := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetName(Value: String): TError;
+function TAiTaskObject.SetName(Value: String): TError;
 begin
   FName := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetPriority(Value: UInt32): TError;
+function TAiTaskObject.SetPriority(Value: UInt32): TError;
 begin
   FPriority := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetText(Value: String): TError;
+function TAiTaskObject.SetText(Value: String): TError;
 begin
   FText := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetTimeImplementation(Value: UInt64): TError;
+function TAiTaskObject.SetTimeImplementation(Value: UInt64): TError;
 begin
   FTimeImplementation := Value;
   Result := 0;
 end;
 
-function TAiTask20050915.SetTitle(Value: String): TError;
+function TAiTaskObject.SetTitle(Value: String): TError;
 begin
   FTitle := Value;
   Result := 0;

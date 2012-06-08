@@ -2,7 +2,7 @@
 @Abstract(Коллекция)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.05.2007)
-@LastMod(04.06.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 History:
@@ -18,7 +18,7 @@ unit AiCollection;
 interface
 
 uses
-  ABase, ACollection, AIterableIntf, AIteratorIntf;
+  ABase, ABaseTypes, ACollectionIntf, AIterableIntf, AIteratorIntf;
 
 type
   IAiCollection = IACollection;
@@ -60,7 +60,6 @@ type
   end;}
 
 type
-  ACollection = IACollection;
   AIterator = IAIterator;
 
 type
@@ -488,14 +487,14 @@ function Collection_GetIterator(Collection: ACollection): AIterator;
 
 implementation
 
-function Collection_GetCount(Collection: IAICollection): AInteger;
+function Collection_GetCount(Collection: ACollection): AInteger;
 begin
   Result := 0;
 end;
 
 function Collection_GetIterator(Collection: ACollection): AIterator;
 begin
-  Result := Collection.GetIterator;
+  Result := IACollection(Collection).GetIterator();
 end;
 
 end.
