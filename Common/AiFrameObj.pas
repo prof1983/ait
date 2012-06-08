@@ -25,7 +25,7 @@ type
     function GetAsString(): string;
     function GetAsUInt32(): AUInt32;
     function GetAsUInt64(): AUInt64;
-    function GetValeAsHandle(): AInt32;
+    function GetValueAsHandle(): AInt32;
     function GetValueAsString(): APascalString;
     procedure SetAsString(const Value: string);
     procedure SetAsUInt32(Value: AUInt32);
@@ -36,7 +36,7 @@ type
     property AsString: string read GetAsString write SetAsString;
     property AsUInt032: AUInt32 read GetAsUInt32 write SetAsUInt32;
     property AsUInt064: AUInt64 read GetAsUInt64 write SetAsUInt64;
-    property ValueAsHandle: AInt32 read GetValeAsHandle;
+    property ValueAsHandle: AInt32 read GetValueAsHandle;
     property ValueAsString: APascalString read GetValueAsString write SetValueAsString;
   end;
 
@@ -949,7 +949,7 @@ begin
   Result := 0;
 end;
 
-function TAiSlot2004.GetValeAsHandle(): AInt32;
+function TAiSlot2004.GetValueAsHandle(): AInt32;
 begin
   Result := 0;
 end;

@@ -2,7 +2,7 @@
 @Abstract(Io)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(03.04.2005)
-@LastMod(15.05.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 0.0.0.6 - 03.04.2005
@@ -90,6 +90,8 @@ procedure ArrayByteToHeader(
   const A: TArrayByte;
   var Header: TFileProfHeader
   );
+
+function IoFileOpen(const FileName: String; Mode: TProfFileOpenMode): THandle;
 
 (*procedure IOFileProfClose( {Закрывает prof-файл}
   HFile: THandle             {in}{Идентификатор файла}
@@ -198,7 +200,18 @@ function _FileProfVersion2ToStr(Ident: UInt032; Version1, Version2: UInt032): St
 begin
   Result := '';
 end;
+*)
 
+function IoFileOpen(const FileName: String; Mode: TProfFileOpenMode): THandle;
+var
+  F: TProfFile;
+begin
+  F := TProfFile.Create();
+  F.Open(FileName, Mode);
+  Result := THandle(F);
+end;
+
+(*
 procedure IOFileProfClose(HFile: THandle);
 var
   I: Int032;

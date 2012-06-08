@@ -45,6 +45,10 @@ type {258}
   end;
 
   TAiSourceFile2004 = class(TAiSource2004)
+  private
+    FSource: TAiSourceFile;
+  public
+    constructor Create(const FileName, Path: string);
   end;
 
   TAiSourceFile20050915 = class(TAiSourceObject2005)
@@ -211,6 +215,14 @@ begin
   if FF.FreimRead64(Id, Rec) <> 0 then Exit;
   Rec.Typ := Typ;
   Result := FF.FreimWrite64(Id, Rec);
+end;
+
+{ TAiSourceFile2004 }
+
+constructor TAiSourceFile2004.Create(const FileName, Path: string);
+begin
+  inherited Create();
+  FSource := TAiSourceFile.Create(FileName, Path);
 end;
 
 { TAiSourceFile20050915 }
