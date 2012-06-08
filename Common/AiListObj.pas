@@ -23,9 +23,9 @@ type
     function GetCount(): Integer;
     function GetCountItems(): UInt32; deprecated; // Use GetCount()
     function GetItem(Index: UInt32): TAiFrameObject;
-    function GetItemByID(ID: Integer): TAIFrame;
-    function GetItemByIndex(Index: Integer): TAIFrame;
-    function GetItemID(Index: Integer): Integer;
+    function GetItemById(Id: TAId): TAiFrameObject;
+    function GetItemByIndex(Index: Integer): TAiFrameObject;
+    function GetItemId(Index: AInt): TAId;
   public
       //** Добавить фрейм в список
     function Add(Value: TAIFrame): Integer;
@@ -41,112 +41,14 @@ type
       //** Колличество
     property Count: Integer read GetCount;
       //** Id элементов
-    property ItemsID[Index: Integer]: Integer read GetItemID;
+    property ItemsId[Index: AInt]: TAId read GetItemId;
       //** Элементы по индексу
-    property ItemsByIndex[Index: Integer]: TAIFrame read GetItemByIndex;
+    property ItemsByIndex[Index: AInt]: TAiFrameObject read GetItemByIndex;
       //** Элементы по Id
-    property ItemsByID[ID: Integer]: TAIFrame read GetItemByID;
-  end;
-
-  TAiList20050915 = TAiListObject;
-
-  TAiList20050830 = class(TAiList20050915)
-  private
-    FItems: array of TAiFrameObject;
-  public
-    function Clear(): TError; override;
-    function GetCountItems(): UInt32;
-    function DeleteByIndex(Index: UInt32): TError;
-    function GetItem(Index: UInt32): TAiFrameObject;
-  end;
-
-  TAiList20050526 = class(TAiList20050830)
-  public
-    function Clear: TError; virtual;
-  end;
-
-  TAiList20050525 = class(TAiList20050526)
-  private
-    FItems: array of TAiFrameObject;
-  public
-    function Clear(): TError; override;
-    function GetCountItems(): UInt32;
-    function DeleteByIndex(Index: UInt32): TError;
-    function GetItem(Index: UInt32): TAiFrameObject;
+    property ItemsById[Id: TAId]: TAiFrameObject read GetItemById;
   end;
 
 implementation
-
-{ TAiList20050525 }
-
-function TAiList20050525.Clear(): TError;
-begin
-  SetLength(FItems, 0);
-  Result := 0;
-end;
-
-function TAiList20050525.DeleteByIndex(Index: UInt32): TError;
-var
-  I: Int32;
-begin
-  Result := 1;
-  if Index >= UInt32(Length(FItems)) then Exit;
-  for I := Index to High(FItems) - 1 do FItems[I] := FItems[I + 1];
-  SetLength(FItems, High(FItems));
-  Result := 0;
-end;
-
-function TAiList20050525.GetCountItems(): UInt32;
-begin
-  Result := Length(FItems);
-end;
-
-function TAiList20050525.GetItem(Index: UInt32): TAiFrameObject;
-begin
-  if Index >= UInt32(Length(FItems)) then
-    Result := nil
-  else
-    Result := FItems[Index];
-end;
-
-{ TAiList20050526 }
-
-function TAiList20050526.Clear(): TError;
-begin
-  Result := 0;
-end;
-
-{ TAiList20050830 }
-
-function TAiList20050830.Clear(): TError;
-begin
-  SetLength(FItems, 0);
-  Result := 0;
-end;
-
-function TAiList20050830.DeleteByIndex(Index: UInt32): TError;
-var
-  I: Int32;
-begin
-  Result := 1;
-  if Index >= UInt32(Length(FItems)) then Exit;
-  for I := Index to High(FItems) - 1 do FItems[I] := FItems[I + 1];
-  SetLength(FItems, High(FItems));
-  Result := 0;
-end;
-
-function TAiList20050830.GetCountItems(): UInt32;
-begin
-  Result := Length(FItems);
-end;
-
-function TAiList20050830.GetItem(Index: UInt32): TAiFrameObject;
-begin
-  if Index >= UInt32(Length(FItems)) then
-    Result := nil
-  else
-    Result := FItems[Index];
-end;
 
 { TAiListObject }
 
@@ -209,7 +111,7 @@ begin
     Result := FItems[Index].Freim;
 end;
 
-function TAiListObject.GetItemByID(ID: Integer): TAIFrame;
+function TAiListObject.GetItemById(Id: TAId): TAiFrameObject;
 var
   I: Integer;
 begin
@@ -236,7 +138,7 @@ begin
   Result := nil;
 end;
 
-function TAiListObject.GetItemByIndex(Index: Integer): TAIFrame;
+function TAiListObject.GetItemByIndex(Index: Integer): TAiFrameObject;
 begin
   Result := nil;
   if (Index >= 0) and (Index < Length(FItems)) then
@@ -247,7 +149,7 @@ begin
   end;
 end;
 
-function TAiListObject.GetItemID(Index: Integer): Integer;
+function TAiListObject.GetItemId(Index: AInt): TAId;
 begin
   if Index >= Length(FItems) then
     Result := 0

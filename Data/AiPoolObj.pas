@@ -20,7 +20,7 @@ unit AiPoolObj;
 interface
 
 uses
-  ABase, ABaseTypes, ACollectionUtils, AEntity, APoolObj,
+  ABase, ABaseTypes, ACollectionUtils, AEntityObj, APoolObj,
   AiBaseTypes, AiIteratorObj;
 
 type //** Источник знаний

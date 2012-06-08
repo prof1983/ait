@@ -28,21 +28,21 @@ type
 
   TAiListTask20050830 = class(TAiListTask20050915)
   private
-    FList: TAiList20050830;
+    FList: TAiListObject;
   public
     function DeleteByIndex(Index: UInt32): AError;
     procedure Free(); override;
-    function GetList(): TAiList20050830;
+    function GetList(): TAiListObject;
     function GetTask(Index: UInt32): TAiTask20050830;
   end;
 
   TAiListTask20050525 = class(TAiListTask20050830)
   private
-    FList: TAiList20050525;
+    FList: TAiListObject;
   public
     function DeleteByIndex(Index: UInt32): AError;
     procedure Free(); override;
-    function GetList(): TAiList20050525;
+    function GetList(): TAiListObject;
     function GetTask(Index: UInt32): TAiTask20050525;
   end;
 
@@ -62,10 +62,10 @@ begin
   inherited Free;
 end;
 
-function TAiListTask20050525.GetList(): TAiList20050525;
+function TAiListTask20050525.GetList(): TAiListObject;
 begin
   if not(Assigned(FList)) then
-    FList := TAiList20050525.Create();
+    FList := TAiListObject.Create();
   Result := FList;
 end;
 
@@ -89,10 +89,10 @@ begin
   inherited Free;
 end;
 
-function TAiListTask20050830.GetList(): TAiList20050830;
+function TAiListTask20050830.GetList(): TAiListObject;
 begin
   if not(Assigned(FList)) then
-    FList := TAiList20050830.Create();
+    FList := TAiListObject.Create();
   Result := FList;
 end;
 
