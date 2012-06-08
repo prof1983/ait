@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(22.05.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -15,13 +15,13 @@ interface
 uses
   SysUtils, XmlIntf,
   AConsts2, ANodeIntf, AObjectImpl, ATypes, AXmlUtils,
-  AiBase, AiBaseTypes, AiDataIntf, AiFrame, AiFramePoolIntf, AiIntf, AiTypes;
+  AiBase, AiBaseTypes, AiConnectsIntf, AiDataIntf, AiFrame, AiFramePoolIntf, {AiIntf,} AiTypes;
 
 type //** Фрейм
   TAIFrame = class(TProfObject, IAIFrame)
   protected
       //** Данные - объект источника. Если источника нет - локальный объект
-    FData: IAIData;
+    FData: IAiData2;
       //** Дата создания
     FDateCreate: TDateTime; //FDateTimeCreate: TDateTime;
       //** Дата изменения
@@ -44,7 +44,7 @@ type //** Фрейм
       //** Префикс для конфигураций и логирования
     FPrefix: String;
       //** Источник
-    FSource: IAiSource2;
+    FSource: AiSource2{IAiSource2};
   protected // From TAiFreim
       // Функция добавления в log (See TProfEntity)
     //FOnAddToLog: TAddToLog;
@@ -53,7 +53,7 @@ type //** Фрейм
   protected // IAiFrame
     function Get_Connects(): IAiConnects; safecall;
     //** Возвращает объект работы с данными
-    function Get_Data(): IAIData; virtual; safecall;
+    function Get_Data(): IAiData2; virtual; safecall;
     //** Возвращает дату создания
     function Get_DateTimeCreate(): TDateTime; safecall;
     //** Возвращает ID фрейма
@@ -65,7 +65,7 @@ type //** Фрейм
     function Get_IsReadOnly(): WordBool; safecall;
     //** Возвращает источник
     function Get_Pool(): IAIFramePool; safecall;
-    function Get_Source2(): IAiSource2; safecall;
+    function Get_Source2(): AiSource2; safecall;
     //** Установыть дату создания
     procedure Set_DateTimeCreate(Value: TDateTime); safecall;
     //** Установить Id. Если не инициализирован.
@@ -86,7 +86,7 @@ type //** Фрейм
       //** Инициализирован?
     function GetInitialized(): Boolean;
       //** Возвращает источник
-    function GetSource(): IAISource2; safecall;
+    function GetSource(): AiSource2; safecall;
       //** Возвращает фрейм в виде XML строки
     function GetXml(): WideString; virtual;
       {**
@@ -97,7 +97,7 @@ type //** Фрейм
       //** Задать дату и время создания фрейма
     procedure SetDateTimeCreate(Value: TDateTime);
       //** Установить источник. Только если не инициализирован.
-    procedure SetSource(Value: IAiSource2);
+    procedure SetSource(Value: AiSource2);
       {**
         Заменяет значение ассоциируемого с фреймом
         The method setValue changes value associated with an OID.
@@ -109,11 +109,11 @@ type //** Фрейм
       //** Очистить объект
     function Clear(): WordBool; virtual; safecall;
       //** Финализировать. Разорвать связь объекта с источником.
-    function Finalize(): TProfError; override; //safecall;
+    function Finalize(): TProfError; override;
       //** Освободить
     procedure Free(); override;
       //** Произвести инициализацию. Установить связь с источником.
-    function Initialize(): TProfError; override; //safecall;
+    function Initialize(): TProfError; override;
       //** Загрузить из источника
     function Load(): TAIError; virtual; safecall;
       //** Загрузить из AIData
@@ -130,7 +130,7 @@ type //** Фрейм
     function SaveToXml(Xml: IXmlNode): WordBool; virtual;
   public
     //** Данные
-    property Data: IAIData read Get_Data;
+    property Data: IAiData2 read Get_Data;
     //** Дата и время создания фрейма
     property DateCreate: TDateTime read GetDateTimeCreate write SetDateTimeCreate;
     //** Дата и время изменения фрейма
@@ -146,9 +146,9 @@ type //** Фрейм
     //** Пул (Источник) фрейма
     property Pool: IAIFramePool read Get_Pool write Set_Pool;
       //** Источник врейма
-    property Source: IAISource2 read GetSource write SetSource;
+    property Source: AiSource2 read GetSource write SetSource;
     //** Источник фрейма
-    property Source2: IAiSource2 read Get_Source2;
+    property Source2: AiSource2 read Get_Source2;
     {**
       Зачитывает или записывает данные из пула.
       An OID also has a value which is loaded on demand.
@@ -173,12 +173,12 @@ type //** Фрейм
     function Get_FrameType(): TAiId; safecall;
     function Get_FreimName(): WideString; safecall;
     function Get_FreimType(): TAIID; safecall;
-    function Get_Source2(): IAiSource2; safecall;
+    function Get_Source2(): AiSource2{IAiSource2}; safecall;
     procedure Set_DateTimeCreate(Value: TDateTime); safecall;
     procedure Set_FrameId(Value: TAiId); safecall;
     procedure Set_FrameType(Value: TAiId); safecall;
     procedure Set_FreimType(Value: TAiId); safecall;
-    procedure Set_Source2(const Value: IAiSource2); safecall;
+    procedure Set_Source2(const Value: AiSource2); safecall;
   protected
       //** Возвращает объект работы со связями
     function GetConnects(): IAiConnects;
@@ -263,17 +263,17 @@ type // Фрейм
     function Get_FrameId(): TAiId; safecall;
     function Get_FrameName(): WideString; safecall;
     function Get_FrameType(): TAiId; safecall;
-    function Get_Source2(): IAiSource2; safecall;
+    function Get_Source2(): AiSource2; safecall;
     procedure Set_FrameId(Value: TAiId); safecall;
     procedure Set_FrameType(Value: TAiId); safecall;
   protected // IAiFreim
     function Get_Connects(): IAiConnects; safecall;
     function Get_FreimName(): WideString; safecall;
     function Get_FreimType(): TAId; safecall;
-    function Get_Source1(): IAiSource1; safecall;
+    function Get_Source1(): AiSource1; safecall;
     procedure Set_DateTimeCreate(Value: TDateTime); safecall;
     procedure Set_FreimType(Value: TAId); safecall;
-    procedure Set_Source1(const Value: IAiSource1); safecall;
+    procedure Set_Source1(const Value: AiSource1); safecall;
     //function AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: string; AParams: array of const): Boolean;
     //function ToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString; AParams: array of const): Integer;
   protected
@@ -289,13 +289,13 @@ type // Фрейм
     function GetId(): TAId;                   // Возвращает Id
     function GetInitialized(): Boolean;       // Инициализирован?
       // Возвращает источник
-    function GetSource(): IAiSource2;
+    function GetSource(): AiSource2;
     function GetXml(): WideString; virtual;
   public
     function Clear(): WordBool; virtual;          // Очистить объект
     //function ConfigureLoad: WordBool; override; // Загрузить конфигурации
     //function ConfigureSave: WordBool; override; // Сохранить конфигурации
-    constructor Create(ASource: IAiSource2 = nil; AId: TAId = 0);
+    constructor Create(ASource: AiSource2 = 0; AId: TAId = 0);
       // Финализировать. Разорвать связь объекта с источником.
     function Finalize(): TProfError; override;
     procedure Free(); override;
@@ -402,7 +402,7 @@ begin
   Result := FInitialized;
 end;
 
-function TAiFrame.GetSource(): IAiSource2;
+function TAiFrame.GetSource(): AiSource2;
 begin
   Result := FSource;
 end;
@@ -446,7 +446,7 @@ begin
   Result := nil{FConnects};
 end;
 
-function TAIFrame.Get_Data(): IAIData;
+function TAIFrame.Get_Data(): IAiData2;
 begin
   {if not(Assigned(FData)) then
   begin
@@ -496,9 +496,9 @@ begin
   Result := FPool;
 end;
 
-function TAIFrame.Get_Source2(): IAiSource2;
+function TAIFrame.Get_Source2(): AiSource2;
 begin
-  Result := nil;
+  Result := 0;
 end;
 
 function TAIFrame.Initialize(): TProfError;
@@ -585,7 +585,7 @@ begin
   FDateCreate := Value;
 end;
 
-procedure TAiFrame.SetSource(Value: IAiSource2);
+procedure TAiFrame.SetSource(Value: AiSource2);
 begin
   if FInitialized then Exit;
   FSource := Value;
@@ -637,7 +637,7 @@ begin
   FDateCreate := 0;
   FId := 0;
   FInitialized := False;
-  FSource := nil;
+  FSource := 0;
   FFrameType := 0;
   Result := True;
 end;
@@ -658,9 +658,9 @@ begin
   FConnects := nil;
   FData := nil;
   FDateCreate := 0;
-  FID := 0; //AID;
+  FID := 0;
   FInitialized := False;
-  FSource := nil; //ASource;
+  FSource := 0;
   FFrameType := 0;
   //if Assigned(Source) and (ID > 0) then Load();
   //DoCreate();
@@ -668,7 +668,7 @@ end;
 
 function TAiFrame2007.Finalize(): TProfError;
 begin
-  if not(Assigned(FSource)) then
+  if (FSource = 0) then
   begin
     FConnects := nil;
     FData := nil;
@@ -816,9 +816,9 @@ begin
   Result := FFrameType;
 end;
 
-function TAiFrame2007.Get_Source2(): IAiSource2;
+function TAiFrame2007.Get_Source2(): AiSource2;
 begin
-  Result := IAISource2(FSource);
+  Result := FSource;
 end;
 
 function TAiFrame2007.Initialize(): TProfError;
@@ -832,7 +832,7 @@ end;
 
 function TAiFrame2007.Load(): Boolean;
 begin
-  Result := Assigned(FSource) and (FID > 0);
+  Result := (FSource <> 0) and (FId > 0);
   if not(Result) then Exit;
   //FDateTimeCreate := FSource.GetFreimDateTimeCreate(FId);
   //if FDateTimeCreate = 0 then FDateTimeCreate := dtNow;
@@ -973,9 +973,9 @@ begin
   FFrameType := Value;
 end;
 
-procedure TAiFrame2007.Set_Source2(const Value: IAiSource2);
+procedure TAiFrame2007.Set_Source2(const Value: AiSource2);
 begin
-  FSource := IAISource2(Value);
+  FSource := Value;
 end;
 
 {function TAIFreim.AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: string; AParams: array of const): Boolean;
@@ -1007,12 +1007,12 @@ begin
   FDateCreate := 0;
   FId := 0;
   FInitialized := False;
-  FSource := nil;
+  FSource := 0;
   FFrameType := 0;
   Result := True;
 end;
 
-constructor TAIFreim.Create(ASource: IAiSource2 = nil; AId: TAId = 0);
+constructor TAIFreim.Create(ASource: AiSource2 = 0; AId: TAId = 0);
 begin
   inherited Create();
   FConnects := nil;
@@ -1039,7 +1039,7 @@ end;
 
 function TAIFreim.Finalize(): TProfError;
 begin
-  if not(Assigned(FSource)) then
+  if (FSource = 0) then
   begin
     if Assigned(FConnects) then
     begin
@@ -1064,7 +1064,7 @@ begin
   inherited Free();
 end;
 
-function TAIFreim.GetID(): TAI_ID;
+function TAIFreim.GetID(): TAId;
 begin
   Result := FId;
 end;
@@ -1074,7 +1074,7 @@ begin
   Result := FInitialized;
 end;
 
-function TAIFreim.GetSource(): IAiSource2;
+function TAIFreim.GetSource(): AiSource2;
 begin
   Result := FSource;
 end;
@@ -1143,19 +1143,19 @@ begin
   Result := Self.FName;
 end;
 
-function TAIFreim.Get_FreimType: TAI_Id;
+function TAIFreim.Get_FreimType(): TAId;
 begin
   Result := FFrameType;
 end;
 
-function TAIFreim.Get_Source1(): IAiSource1;
+function TAIFreim.Get_Source1(): AiSource1;
 begin
   Result := FSource;
 end;
 
-function TAIFreim.Get_Source2(): IAiSource2;
+function TAIFreim.Get_Source2(): AiSource2;
 begin
-  Result := nil;
+  Result := FSource;
 end;
 
 function TAIFreim.Initialize(): TProfError;
@@ -1254,7 +1254,7 @@ begin
   FDateCreate := Value;
 end;
 
-procedure TAIFreim.SetId(Value: TAI_Id);
+procedure TAIFreim.SetId(Value: TAId);
 begin
   if FInitialized then Exit;
   FId := Value;
@@ -1290,12 +1290,12 @@ begin
   Self.FFrameType := Value;
 end;
 
-procedure TAIFreim.Set_FreimType(Value: TAI_Id);
+procedure TAIFreim.Set_FreimType(Value: TAId);
 begin
   FFrameType := Value;
 end;
 
-procedure TAIFreim.Set_Source1(const Value: IAiSource1);
+procedure TAIFreim.Set_Source1(const Value: AiSource1);
 begin
   //FSource := IAiSource1(Value);
 end;

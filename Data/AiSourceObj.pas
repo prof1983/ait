@@ -206,7 +206,7 @@ type // Recovered
   end;
   TAiSource2005 = TAiSourceObject2005;
 
-  TAiSourceObject20050819 = class(TAiSourceObject2005{TAiFrameObject2005})
+  TAiSourceObject20050819 = class(TAiSourceObject2005)
   private
     FOpened: Boolean;
   public
@@ -257,9 +257,20 @@ type // Recovered
     function SetFreimType(Id, Value: TAId): AError; virtual;
   end;
 
-  //TAiSourceObject20050911 = TAiSourceObject2005;
   //TAiSourceObject20050915 = TAiSourceObject2005;
   //TAiSource20050915 = TAiSourceObject2005;
+
+  TAiSourceObject20050526 = class(TAiSourceObject20050819)
+  public
+    function LoadFromFile(F: TFileProfKB; Path: String): TError;
+    function SaveToFile(F: TFileProfKB; Path: String): TError;
+  end;
+
+  TAiSourceObject20050525 = class(TAiSourceObject20050526)
+  public
+    function LoadFromFile(F: TFileProfKB; Path: String): TError;
+    function SaveToFile(F: TFileProfKB; Path: String): TError;
+  end;
 
 const // Сообщения -------------------------------------------------------------
   stCheckFreimsStart  = 'Проверка базовых фреймов в БЗ';
@@ -545,6 +556,44 @@ begin
   if Index >= UInt32(Length(FParents)) then Exit;
   FParents[Index].Id := Value;
   FParents[Index].Source := 0;
+end;
+
+{ TAiSourceObject20050525 }
+
+function TAiSourceObject20050525.LoadFromFile(F: TFileProfKB; Path: String): TError;
+begin
+  Close;
+  Result := 1;
+  if not(Assigned(F)) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
+  Result := 0;
+end;
+
+function TAiSourceObject20050525.SaveToFile(F: TFileProfKB; Path: String): TError;
+begin
+  Result := 1;
+  if (not(Assigned(F))) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
+  Result := 0;
+end;
+
+{ TAiSourceObject20050526 }
+
+function TAiSourceObject20050526.LoadFromFile(F: TFileProfKB; Path: String): TError;
+begin
+  Close;
+  Result := 1;
+  if not(Assigned(F)) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
+  Result := 0;
+end;
+
+function TAiSourceObject20050526.SaveToFile(F: TFileProfKB; Path: String): TError;
+begin
+  Result := 1;
+  if (not(Assigned(F))) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
+  Result := 0;
 end;
 
 { TAiSourceAbstractObject2005 }

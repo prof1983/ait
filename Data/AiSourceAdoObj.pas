@@ -2,7 +2,7 @@
 @Abstract(Источник знаний из БД ADO)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(14.09.2005)
-@LastMod(30.05.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 Структура описана в aiSourceAdoStruct.pas Необходимые фреймы описаны в aiGlobals.pas
@@ -14,7 +14,7 @@ interface
 uses
   AdoDB, Forms, SysUtils,
   ABase, ADbDataModule1, ADbDescMain, ADbTypes, AConsts2, ATypes,
-  AiFrameObj, AiIntf, AiSourceObj, AiSourceAdoStruct, AiType, AiTypes;
+  AiFrameObj, AiSourceObj, AiSourceAdoStruct, AiType, AiTypes;
 
 type //** @abstract(БЗ ADO)
   TAISourceAdo = class(TAISourceObject)
@@ -48,7 +48,7 @@ type //** @abstract(БЗ ADO)
     // AId - Идентификатор проверяемого фрейма, если 0, то создается новый фрейм
     // AStruct - Описание структуры ф-типа
     // Result - Идентификатор фрейма после проверки (0 - проверка провалена/не создан)
-    function CheckFreimType(AId: TAI_Id; AStruct: PStructFreimType): TAI_Id;
+    function CheckFreimType(AId: TAId; AStruct: PStructFreimType): TAId;
     function GetTableFreims(): TAdoTable;
     procedure SetTableFreims(Value: TAdoTable);
     function Open(): AError; override;
@@ -65,10 +65,22 @@ type //** @abstract(БЗ ADO)
     property TableFreims: TAdoTable read GetTableFreims;
   public // Переопределение функций из TAI_Source
     //** Возвращает фрейм по его идентификатору. -Фрейм должен освобождаться вызывающей процедурой.
-    function Get_Freim(ID: TAI_ID): TAiFrame2005; override;
-    function NewFreim(AType: TAI_Id; AId: TAI_Id = 0): TAI_Id; override;
+    function Get_Freim(ID: TAId): TAiFrameObject; override;
+    function NewFreim(AType: TAId; AId: TAId = 0): TAId; override;
       // Создает и регистрирует новый тип фрейма Если AStructure задан, то AName игнорируется
-    function NewFreimType(const AName: WideString; AStruct: PStructFreimType = nil): TAI_ID; override;
+    function NewFreimType(const AName: WideString; AStruct: PStructFreimType = nil): TAId; override;
+  end;
+
+  TAiSourceAdo20050815 = class(TAiSourceAdo)
+  private
+    FConnection: TAdoConnection;
+    FTableFreims: TAdoTable;
+    FTableConects: TAdoTable;
+    FTableNames: TAdoTable;
+  public
+    property Connection: TAdoConnection read FConnection write FConnection;
+    {property TableFreims: TAdoTableFreims read FTableFreims write FTableFreims;
+    property TableConnects: TAdoTable}
   end;
 
 resourcestring // Сообщения ----------------------------------------------------
@@ -151,9 +163,9 @@ begin
   Result := CheckFreims();
 end;
 
-function TAISourceAdo.CheckFreimType(AId: TAI_Id; AStruct: PStructFreimType): TAI_Id;
+function TAISourceAdo.CheckFreimType(AId: TAId; AStruct: PStructFreimType): TAId;
 var
-  Freim: TAIFreim;
+  Freim: TAiFrameObject;
 
   function Check: Boolean;
   {var
@@ -173,8 +185,9 @@ var
 begin
   Result := 0;
   // Чтение и проверка фрейма
-  if AId > 0 then begin
-    Freim := TAIFreim(GetFreim(AId));
+  if AId > 0 then
+  begin
+    Freim := GetFreim(AId);
     if Check then Result := AId;
     FreeAndNil(Freim);
     Exit;
@@ -240,7 +253,7 @@ begin
   Result := FDBFileName;
 end;
 
-function TAISourceAdo.Get_Freim(ID: TAI_ID): TAiFrame2005;
+function TAISourceAdo.Get_Freim(ID: TAId): TAiFrameObject;
 var
   Rec: TAIFreimRecF64;
 begin
@@ -261,10 +274,10 @@ begin
     end;
   end;
 
-  if Rec.ID = ID then
+  if (Rec.Id = Id) then
   begin
-    Result := TAiFrame2005.Create();
-    TAIFreim(Result).LoadFromRecF64(Rec);
+    Result := TAiFrameObject.Create();
+    Result.LoadFromRecF64(Rec);
   end;
 end;
 
@@ -288,7 +301,7 @@ begin
   AddToLog(lgDataBase, ltInformation, stInitializeOk);
 end;
 
-function TAISourceAdo.NewFreim(AType: TAI_Id; AId: TAI_Id = 0): TAI_Id;
+function TAISourceAdo.NewFreim(AType: TAId; AId: TAId = 0): TAId;
 begin
   Result := 0;
   if not(ActiveConnection) then Exit;
@@ -319,7 +332,7 @@ begin
   end;
 end;
 
-function TAISourceAdo.NewFreimType(const AName: WideString; AStruct: PStructFreimType): TAI_ID;
+function TAISourceAdo.NewFreimType(const AName: WideString; AStruct: PStructFreimType): TAId;
 var
   Freim: TAIType;
 begin

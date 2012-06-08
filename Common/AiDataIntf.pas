@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейса для IAiData)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(22.03.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 }
 unit AiDataIntf;
@@ -27,23 +27,21 @@ type //** Интерфейс для работы с данными фрейма
   end;
 
 type //** Интерфейс для работы с данными фрейма
-  IAiData2 = interface
-    //** Очистить фрейм
-    procedure Clear(); safecall;
+  IAiData2 = interface(IAiData)
     //** Получить тип данных
-    function Get_DataType(): AIDataTypeEnum; safecall;
+    function Get_DataTypeEnum(): AIDataTypeEnum; safecall;
     function Get_Opened(): WordBool; safecall;
     //function Get_Stream(): IStream; safecall;
     function Get_Text(): WideString; safecall;
     //function Get_Xml(): IXmlNode; safecall;
     //function Get_XmlDocument(): IXmlDocument; safecall;
     procedure Set_Opened(Value: WordBool); safecall;
-    procedure Set_DataType(Value: AiDataTypeEnum); safecall;
+    procedure Set_DataTypeEnum(Value: AiDataTypeEnum); safecall;
     procedure Set_Text(const Value: WideString); safecall;
     //procedure Set_Xml(Value: IXmlNode); safecall;
     //procedure Set_XmlDocument(Value: IXmlDocument); safecall;
 
-    property DataType: AiDataTypeEnum read Get_DataType write Set_DataType;
+    property DataTypeEnum: AiDataTypeEnum read Get_DataTypeEnum write Set_DataTypeEnum;
     property Opened: WordBool read Get_Opened write Set_Opened;
     //property Stream: IStream read Get_Stream;
     property Text: WideString read Get_Text write Set_Text;

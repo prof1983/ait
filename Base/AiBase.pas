@@ -2,7 +2,7 @@
 @Abstract(Базовые константы и типы для ИР)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(19.03.2008)
-@LastMod(07.06.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 }
 unit AiBase;
@@ -40,12 +40,13 @@ type
 
 type
   AiPool = type AInt;
+  AiSource1 = type AInt; // IAiSource1
+  AiSource2 = type AInt; // IAiSource2
   AiSourceObject = type Integer; // TAiSourceObject
   // TODO: Delete
   AiSourceObject2005 = type Integer; // TAiSource2005
   AiSource2005 = AiSourceObject2005;
   AiSource20050819 = type Integer; // TAiSource20050819
-  //AiSourceObject20050911 = AiSourceObject2005; // TAiSourceObject20050911
 
 const
   AOntologyEntityType = $10;

@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2005)
-@LastMod(07.06.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 15.05.2012 - Move functions to AiBaseUtils.pas
@@ -15,7 +15,7 @@ interface
 uses
   Classes, ComObj, Forms, SysUtils, XmlIntf,
   ATypes, AXml3,
-  AiBase, AiConnectsObj, AiFrameImpl, AiGlobals, AiIntf, AiTypes;
+  AiBase, AiConnectsObj, AiFrameImpl, {AiGlobals,} {AiIntf,} AiTypes;
 
 type //** Связи
   TAI_Connects = AiConnectsObj.TAiConnectsObject; //AiConnectsImpl.TAI_Connects;

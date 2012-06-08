@@ -2,7 +2,7 @@
 @Abstract(Процесс выполнения команд для агентов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.01.2006)
-@LastMod(17.05.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 }
 unit AiProcessObj;
@@ -15,7 +15,7 @@ uses
   AiFrameObj;
 
 type // Процесс выполнения какого-либо метода(процедуры или функции). Используется в TAIAgent
-  TAiProcess2006 = class(TAiFreim) //LastMod(14.03.2006)
+  TAiProcess2006 = class(TAiFrameObject) //LastMod(14.03.2006)
   private
     FThread: TThread;
   public
@@ -25,7 +25,7 @@ type // Процесс выполнения какого-либо метода(�
 
   { Процесс выполнения какого-либо метода(процедуры или фенкции).
     Используется в TAiAgent20050915 }
-  TAiProcess2005 = class(TAiFrameObject2005)
+  TAiProcess2005 = class(TAiFrameObject)
   private
     FThread: TThread;
   public

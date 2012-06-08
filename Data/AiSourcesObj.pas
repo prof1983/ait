@@ -2,7 +2,7 @@
 @Abstract(Источники)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(30.05.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 0.0.0.2 - 07.01.2006 - Coments
@@ -17,35 +17,36 @@ uses
   AiBase, AiSourceObj;
 
 type
-  TAiSources20050915 = class(TAiSourceObject2005)
+  {** Источники }
+  TAiSources2006 = class(TAiSourceObject2005)
+  private
+    FSources: array of TAiRecSource;
+  public
+    function AddSource(Value: TAiSourceObject): Int32;
+    function Clear(): TError; override;
+    function DeleteSource(Index: Int32): AError;
+    procedure Free; virtual;
+    function FreeSource(Index: Int32): AError;
+    function GetCountFreims: UInt64; override;
+    function GetCountSources: UInt32;
+    function GetSource(Index: UInt32): TAiSourceObject;
+  end;
+
+  //TAiSources = TAiSources2006;
+
+  TAiSources20050915 = class(TAiSources2006)
   private
     FSources: array of TAiRecSource;
   public
     function AddSource(Value: AiSourceObject2005): AInt32;
     function Clear(): TError; override;
     function DeleteSource(Index: Int32): TError;
-    procedure Free(); {override;}
+    procedure Free(); override;
     function FreeSource(Index: Int32): TError;
     function GetCountFreims(): UInt64; override;
     function GetCountSources(): UInt32;
     function GetSource(Index: UInt32): TAiSourceObject2005;
   end;
-
-    // Источники
-  TAiSources2006 = class(TAiSourceObject) // LastMod(07.01.2006)
-  private
-    FSources: array of TAiRecSource;
-  public
-    function AddSource(Value: TAiSourceObject): Int32;
-    function Clear(): TError; override;
-    function DeleteSource(Index: Int32): Boolean;
-    procedure Free; virtual;
-    function FreeSource(Index: Int32): Boolean;
-    function GetCountFreims: UInt64; override;
-    function GetCountSources: UInt32;
-    function GetSource(Index: UInt32): TAiSourceObject;
-  end;
-  //TAiSources = TAiSources2006;
 
 implementation
 
@@ -153,17 +154,18 @@ begin
   Result := inherited Clear;
 end;
 
-function TAiSources2006.DeleteSource(Index: Int32): Boolean;
+function TAiSources2006.DeleteSource(Index: Int32): AError;
 var
   I: Int32;
 begin
-  Result := False;
+  Result := -1;
   if (Index < 0) or (Index >= Length(FSources)) then Exit;
   if Assigned(TObject(FSources[Index].Source)) then
     (TObject(FSources[Index].Source) as TAiSourceObject).Free();
-  for I := Index to High(FSources) - 1 do FSources[I] := FSources[I + 1];
+  for I := Index to High(FSources) - 1 do
+    FSources[I] := FSources[I + 1];
   SetLength(FSources, High(FSources));
-  Result := True;
+  Result := 0;
 end;
 
 procedure TAiSources2006.Free;
@@ -172,16 +174,16 @@ begin
   inherited Free;
 end;
 
-function TAiSources2006.FreeSource(Index: Int32): Boolean;
+function TAiSources2006.FreeSource(Index: Int32): AError;
 begin
-  Result := False;
+  Result := -1;
   if (Index < 0) or (Index >= Length(FSources)) then Exit;
   if Assigned(TObject(FSources[Index].Source)) then
   begin
     (TObject(FSources[Index].Source) as TAiSourceObject).Free();
     FSources[Index].Source := 0;
   end;
-  Result := True;
+  Result := 0;
 end;
 
 function TAiSources2006.GetCountFreims: UInt64;

@@ -2,7 +2,7 @@
 @Abstract(Агент в системе AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(13.11.2007)
-@LastMod(17.05.2012)
+@LastMod(08.06.2012)
 @Version(0.5)
 
 Агент - это отдельная программа или отдельный подпроцесс.
@@ -46,7 +46,7 @@ type
     //property JobCount: Integer read GetJobCount;
   end;
 
-  TAiAgent2005 = class(TAiFrameObject2005) {274}
+  TAiAgent2006 = class(TAiFrameObject)
   protected
     {FNeuro: TAINeuroNetwork;
     FLogic: TAILogic;
@@ -56,11 +56,13 @@ type
     FProbability: TAIProbability;}
     {+Алгоритмы кластеризации ???}
     {FProgram: TAIPrograms;}
+
     {FModules: array of TAIModule;}
-      // Процесс
+
+      {** Процесс }
     FProcess: TAiProcess2005;
-      // Статус процесса
-    FStatus: TAIAgentStatus;
+      {** Статус процесса }
+    FStatus: TAiAgentStatus;
   protected
       // Запущен ли агент
     FActive: Boolean;
@@ -74,27 +76,27 @@ type
     FVisible: Boolean;
     //F_AR: TAiAr20050915;
   public
-    constructor Create(Source: AiSourceObject2005; Id: TAI_Id = 0);
-    function GetActive: Boolean;
-    function GetName: String;
+    constructor Create(Source: AiSourceObject2005; Id: TAId = 0);
+    function GetActive(): Boolean;
+    function GetName(): String;
     function GetProcess(): TAiProcess2005;
-    function GetStatus: TAIAgentStatus;
-    function GetTitle: String;
-    function GetVisible: Boolean;
+    function GetStatus(): TAiAgentStatus;
+    function GetTitle(): String;
+    function GetVisible(): Boolean;
     function Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; {AAR: TAIAR;} AFormMain: TForm): TError; virtual;
-    function Initialize: TError; override;
-    function Pause: TError; virtual;
-    function Regist: TError; override;
-    function Run: TError; virtual;
+    function Pause(): TError; virtual;
+    function Run(): TError; virtual;
     procedure SetActive(Value: Boolean);
     procedure SetName(Value: String);
     function SetProcess(Value: TAiProcess2005): TError;
-    function SetStatus(Value: TAIAgentStatus): TError;
+    function SetStatus(Value: TAiAgentStatus): TError;
     function SetTitle(Value: String): TError;
     procedure SetVisible(Value: Boolean);
-    function Show: TError; virtual;
-    function Stop: TError; virtual;
+    function Show(): TError; virtual;
+    function Stop(): TError; virtual;
   end;
+
+  TAiAgent2005 = TAiAgent2006;
 
   //TAiAgent20050526 = TAiAgent2005;
   //TAiAgent20050915 = TAiAgent2005;
@@ -104,50 +106,50 @@ type
 
 implementation
 
-{ TAiAgent2005 }
+{ TAiAgent2006 }
 
-constructor TAiAgent2005.Create(Source: AiSource2005; Id: TAI_Id);
+constructor TAiAgent2006.Create(Source: AiSourceObject2005; Id: TAId = 0);
 begin
   inherited Create(Source, Id);
   FStatus := AgentStatusStoped;
 end;
 
-function TAiAgent2005.GetActive(): Boolean;
+function TAiAgent2006.GetActive(): Boolean;
 begin
   Result := FActive;
 end;
 
-function TAiAgent2005.GetName(): String;
+function TAiAgent2006.GetName(): String;
 var
-  Id: TAI_Id;
+  Id: TAId;
 begin
   Result := FName;
-  Id := GetId;
+  Id := GetId();
   if (Result = '') and (Id > 0) then
     Result := IntToStr(Id);
 end;
 
-function TAiAgent2005.GetProcess(): TAiProcess2005;
+function TAiAgent2006.GetProcess(): TAiProcess2005;
 begin
   Result := FProcess;
 end;
 
-function TAiAgent2005.GetStatus(): TAIAgentStatus;
+function TAiAgent2006.GetStatus(): TAiAgentStatus;
 begin
   Result := FStatus;
 end;
 
-function TAiAgent2005.GetTitle(): String;
+function TAiAgent2006.GetTitle(): String;
 begin
   Result := FTitle;
 end;
 
-function TAiAgent2005.GetVisible(): Boolean;
+function TAiAgent2006.GetVisible(): Boolean;
 begin
   Result := FVisible;
 end;
 
-function TAiAgent2005.Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; {AAR: TAIAR;} AFormMain: TForm): TError;
+function TAiAgent2006.Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; {AAR: TAIAR;} AFormMain: TForm): TError;
 begin
   FActive := True;
   //F_AR := AAR;
@@ -155,46 +157,36 @@ begin
   Result := inherited Init(APath, ALog, AConfig, APrefix);
 end;
 
-function TAiAgent2005.Initialize: TError;
-begin
-  Result := inherited Initialize;
-end;
-
-function TAiAgent2005.Pause: TError;
+function TAiAgent2006.Pause(): TError;
 begin
   FStatus := AgentStatusPaused;
   Result := 0;
 end;
 
-function TAiAgent2005.Regist: TError;
-begin
-  Result := inherited Regist;
-end;
-
-function TAiAgent2005.Run: TError;
+function TAiAgent2006.Run(): TError;
 begin
   FStatus := AgentStatusRuned;
   Result := 0;
 end;
 
-procedure TAiAgent2005.SetActive(Value: Boolean);
+procedure TAiAgent2006.SetActive(Value: Boolean);
 begin
   FActive := Value;
 end;
 
-procedure TAiAgent2005.SetName(Value: String);
+procedure TAiAgent2006.SetName(Value: String);
 begin
   FName := Value;
 end;
 
-function TAiAgent2005.SetProcess(Value: TAiProcess2005): TError;
+function TAiAgent2006.SetProcess(Value: TAiProcess2005): TError;
 begin
   Result := Stop;
   if Result <> 0 then Exit;
   FProcess := Value;
 end;
 
-function TAiAgent2005.SetStatus(Value: TAIAgentStatus): TError;
+function TAiAgent2006.SetStatus(Value: TAiAgentStatus): TError;
 begin
   case Value of
     AgentStatusPaused: Pause;
@@ -204,23 +196,23 @@ begin
   Result := 0;
 end;
 
-function TAiAgent2005.SetTitle(Value: String): TError;
+function TAiAgent2006.SetTitle(Value: String): TError;
 begin
   FTitle := Value;
   Result := 0;
 end;
 
-procedure TAiAgent2005.SetVisible(Value: Boolean);
+procedure TAiAgent2006.SetVisible(Value: Boolean);
 begin
   FVisible := Value;
 end;
 
-function TAiAgent2005.Show: TError;
+function TAiAgent2006.Show(): TError;
 begin
   Result := 0;
 end;
 
-function TAiAgent2005.Stop: TError;
+function TAiAgent2006.Stop(): TError;
 begin
   FStatus := AgentStatusStoped;
   Result := 0;
