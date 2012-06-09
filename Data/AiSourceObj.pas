@@ -20,21 +20,7 @@ type
     Source: AiSourceObject2005;
   end;
 
-type // Recovered
-  TAiSource2004 = class
-  public
-    function Count(): AInt32;
-    function CountFreim_Get(): AInt;
-    function F(Id: AInt64): TAiFrameObject; deprecated; // Use FreimGet()
-    function FreimGet(Id: AInt32; Created: Boolean = False): TAiFrameObject; virtual;
-    function FreimNew(Typ: AInt32): AInt32;
-    function FreimSearch54(const Name: string): AInt32;
-      {** Return identifier of param by type in frame
-          @return(identifier) }
-    function FreimSelectParamByType(Id, ParamTyp: AInt): AInt;
-    function FreimSelectByType(Typ: TAId): TAId;
-  end;
-
+type
   //** @abstract(Источник фреймов) // 256
   TAiSourceObject = class
   protected
@@ -93,16 +79,17 @@ type // Recovered
     function GetFreimDateTimeCreate(Id: TAId): TDateTime; virtual;
     function GetFreimType(Id: TAId): TAId; virtual;
     function GetId(): AiSourceObject;
-    function GetItemID(Index: Integer): TAId; virtual;
+    function GetItemId(Index: Integer): TAId; virtual;
     function GetName(): string;
     function GetNextFreeFreimId(): TAId; virtual;
     function GetOpened(): Boolean;
     function GetParent(Index: UInt32): AiSourceObject2005;
-    function GetParentID(Index: UInt32): TAId;
+    function GetParentId(Index: UInt32): TAId;
     function GetParentObj(Index: UInt32): TAiSourceObject;
       // Произвести инициализацию с установкой параметров
     function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
-    function Initialize(): TProfError; virtual;
+    function Initialize(): AError; virtual;
+    function LoadFromFile(F: TFileProfKB; Path: String): TError;
     function LoadFromFileN(Path, FileName: String): Boolean;
     function LoadFromFileXml(FileName: String): TError;
     function LoadFromRecF64(Rec: TAiFreimRecF64): WordBool;
@@ -111,14 +98,18 @@ type // Recovered
       //** Создает новый фрейм
     function NewFreim2(Frame: TAiFrameObject): TAId; virtual;
     function Open(): TError; virtual;
+    function SaveToFile(F: TFileProfKB; Path: String): TError;
     function SaveToFileN(FileName, Path: String): Boolean;
     function SaveToFileXml(FileName: String): Boolean;
       //** Сделать выборку по типу
     function Select(AType: TAId): TAiSelect; virtual;
-    procedure SetFreim(ID: TAId; Value: TAiFrameObject); virtual;
-    function SetFreimConnects(Id: TAId; Value: TAiConnectsObject): TError; virtual;
-    function SetFreimData(Id: TAId; Data: TAiDataObject): TError; virtual;
-    function SetFreimType(Id, Value: TAId): Boolean; virtual;
+    procedure SetFreim(Id: TAId; Value: TAiFrameObject); virtual;
+    function SetFreimConnects(Id: TAId; Value: TAiConnectsObject): AError; virtual;
+    function SetFreimData(Id: TAId; Data: TAiDataObject): AError; virtual;
+    function SetFreimType(Id, Value: TAId): AError; virtual;
+    procedure SetName(Value: String);
+    procedure SetParent(Index: UInt32; Value: TAiSourceObject);
+    procedure SetParentId(Index: UInt32; Value: TAId);
     procedure SetParentObj(Index: UInt32; Value: TAiSourceObject);
     //** Создает и регистрирует новый тип фрейма Если AStructure задан, то AName игнорируется
     function NewFreimType(const AName: WideString; AStruct: PStructFreimType = nil): TAId; virtual;
@@ -135,33 +126,25 @@ type // Recovered
     property ParentsObj[Index: UInt32]: TAiSourceObject read GetParentObj write SetParentObj;
   end;
 
-  TAiSourceObject2005 = class(TAiSourceObject)
+  // Recovered
+  TAiSource2004 = class
   public
-    function GetItemId(Index: UInt32): TAId; virtual;
-    function GetName(): String;
-    function GetOpened(): Boolean;
-    function GetParentId(Index: UInt32): TAId;
-    //function Init(const APath: APascalString; ALog: TLog; AConfig: TConfig; APrefix: APascalString): TError;
-    function Initialize(): TError; virtual;
-    function LoadFromFile(F: TFileProfKB; Path: String): TError;
-    function LoadFromFileN(Path, FileName: String): TError;
-    function LoadFromFileXml(FileName: String): TError;
-    function NewFreim(Typ: TAId; Id: TAId = 0): TAId; virtual;
-    function Open(): TError; virtual;
-    function SaveToFile(F: TFileProfKB; Path: String): TError;
-    function SaveToFileN(FileName, Path: String): TError;
-    function SaveToFileXml(FileName: String): TError;
-    function SetFreim(Id: TAId; Value: TAiFrameObject): TError; virtual;
-    function SetFreimConnects(Id: TAId; Value: TAiConnectsObject): TError; virtual;
-    function SetFreimData(Id: TAId; Data: TAiDataObject2005): TError; virtual;
-    function SetFreimType(Id, Value: TAId): TError; virtual;
-    procedure SetName(Value: String);
-    procedure SetParent(Index: UInt32; Value: TAiSourceObject2005);
-    procedure SetParentId(Index: UInt32; Value: TAId);
+    function Count(): AInt32;
+    function CountFreim_Get(): AInt;
+    function F(Id: AInt64): TAiFrameObject; deprecated; // Use FreimGet()
+    function FreimGet(Id: AInt32; Created: Boolean = False): TAiFrameObject; virtual;
+    function FreimNew(Typ: AId): AId;
+    function FreimSearch54(const Name: string): AInt32;
+    function FreimSearch56(): TAId{THandle064};
+      {** Return identifier of param by type in frame
+          @return(identifier) }
+    function FreimSelectParamByType(Id, ParamTyp: AInt): AInt;
+    function FreimSelectByType(Typ: TAId): TAId;
   end;
 
   TAiSource = TAiSourceObject;
-  TAiSource2005 = TAiSourceObject2005;
+  TAiSource2005 = TAiSourceObject;
+  TAiSourceObject2005 = TAiSourceObject;
 
 const // Сообщения -------------------------------------------------------------
   stCheckFreimsStart  = 'Проверка базовых фреймов в БЗ';
@@ -266,12 +249,17 @@ begin
   Result := nil;
 end;
 
-function TAiSource2004.FreimNew(Typ: AInt32): AInt32;
+function TAiSource2004.FreimNew(Typ: AId): AId;
 begin
   Result := 0;
 end;
 
 function TAiSource2004.FreimSearch54(const Name: string): AInt32;
+begin
+  Result := 0;
+end;
+
+function TAiSource2004.FreimSearch56(): TAId;
 begin
   Result := 0;
 end;
@@ -284,230 +272,6 @@ end;
 function TAiSource2004.FreimSelectParamByType(Id, ParamTyp: AInt): AInt;
 begin
   Result := 0;
-end;
-
-{ TAiSourceObject2005 }
-
-function TAiSourceObject2005.GetItemId(Index: AUInt32): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceObject2005.GetName(): String;
-begin
-  Result := FName;
-end;
-
-function TAiSourceObject2005.GetOpened: Boolean;
-begin
-  Result := FOpened;
-end;
-
-function TAiSourceObject2005.GetParentId(Index: UInt32): TAId;
-begin
-  if Index >= UInt32(Length(FParents)) then
-    Result := 0
-  else
-    Result := FParents[Index].Id;
-end;
-
-{function TAiSourceObject2005.Init(const APath: APascalString;
-  ALog: TLog; AConfig: TConfig; APrefix: APascalString): TError;
-begin
-  Result := Initialize();
-end;}
-
-function TAiSourceObject2005.Initialize: TError;
-begin
-  Result := 0;
-  if FInitialized then Exit;
-  FInitialized := True;
-  //Result := Load;
-  //Result := inherited Initialize;
-  Open;
-end;
-
-function TAiSourceObject2005.LoadFromFile(F: TFileProfKB; Path: String): TError;
-begin
-  Close;
-  Result := 1;
-  if not(Assigned(F)) or (Path = '') then Exit;
-  {Далее обработка в дочерних классах}
-  Result := 0;
-end;
-
-function TAiSourceObject2005.LoadFromFileN(Path, FileName: String): TError;
-var
-  Count: UInt32;
-  I: Int32;
-  {F: TFileProfKB;}
-  Freim: TAiFrameObject;
-  Rec: TAIFreimRec;
-{var
-  Count: UInt32;
-  F: file;
-  HProf: TFileProfHeader;
-  HKB: TFileProfKBHeader;
-  Rec: TAIFreimRec;}
-  S: String;
-begin
-  if ExtractFilePath(FileName) = '' then FileName := Path + FileName;
-  Result := LoadSourceFromFileN2005(Self, FileName, Path);
-
-  (*F := TFileProfKB.Create;
-  Result := F.Open(FileName, Path);
-  if Result <> 0 then Exit;
-
-  Count := F.GetHeaderKB.CountF;
-  Freim := TAI_Freim.Create(nil, 0);
-  for I := 0 to Count - 1 do begin
-    F.FreimRead(I, Rec);
-    SetFreimRec(Rec.Id, Freim);
-  end;
-  Freim.Free;
-  F.Close;
-  F.Free;
-  Result := 0;
-
-  {Clear;
-  AssignFile(F, FileName);
-  HProf.Prof := 'Prof';
-  HProf.Ident := 1;
-  HProf.Version1 := 2;
-  HProf.Version2 := 4;}*)
-end;
-
-function TAiSourceObject2005.LoadFromFileXml(FileName: String): TError;
-var
-  Freim: TAiFrameObject;
-  I: Int32;
-  Id: TAId;
-  {Xml: TMyXml;}
-begin
-  (*Xml := TMyXml.Create;
-  Result := Xml.LoadFromFileText(FileName);
-  for I := 0 to Xml.GetCountParams - 1 do begin
-    Freim := TAI_Freim.Create;
-    Freim.LoadFromXml(Xml.GetParam(I));
-    Id := Freim.GetId;
-    if Id = 0 then begin
-      Id := NewFreim(Freim.GetType);
-      SetFreim(Id, Freim);
-    end else
-      SetFreim(Id, Freim);
-  end;
-  Xml.Free;*)
-  Result := 1;
-end;
-
-function TAiSourceObject2005.NewFreim(Typ: TAId; Id: TAId = 0): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceObject2005.Open: TError;
-begin
-  FOpened := True;
-  Result := 0;
-end;
-
-function TAiSourceObject2005.SaveToFile(F: TFileProfKB; Path: String): TError;
-begin
-  Result := 1;
-  if (not(Assigned(F))) or (Path = '') then Exit;
-  {Далее обработка в дочерних классах}
-  Result := 0;
-end;
-
-function TAiSourceObject2005.SaveToFileN(FileName, Path: String): TError;
-{var
-  F: TFileProfKB;
-  I: Int32;
-  RecF: TAIFreimRecF64;}
-begin
-  Result := SaveSourceToFileN2005(Self, FileName, Path);
-  (*F := TFileProfKB.Create;
-  F.OpenCreate(FileName);
-  if not(FArbitrary) then begin
-    for I := 0 to High(FItems) do begin
-      if not(Assigned(FItems[I])) then GetFreim(I);
-      RecF := FItems[I].ToRecF64;
-      if F.FreimWriteNext(RecF) <> 0 then begin
-        Result := 2;
-        F.Free;
-        Exit;
-      end;
-    end;
-  end else begin
-    for I := 0 to FreimCount-1 do begin
-      RecF := GetFreim(I).ToRecF64;
-      if F.FreimWriteNext(RecF) <> 0 then begin
-        Result := 2;
-        F.Free;
-        Exit;
-      end;
-    end;
-  end;
-  F.Free;
-  Result := 0;*)
-end;
-
-function TAiSourceObject2005.SaveToFileXml(FileName: String): TError;
-var
-  I: Int32;
-  {Param: TMyXml;
-  Xml: TMyXml;}
-begin
-  {Xml := TMyXml.Create;
-  for I := 0 to High(FFreims) do begin
-    Param := Xml.NewParam('Freim', '');
-    GetFreim(I).SaveToXml(Param);
-  end;
-  Result := Xml.SaveToFileText(FileName);
-  Xml.Free;}
-  Result := 1;
-end;
-
-function TAiSourceObject2005.SetFreim(Id: TAId; Value: TAiFrameObject): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceObject2005.SetFreimConnects(Id: TAId; Value: TAiConnectsObject): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceObject2005.SetFreimData(Id: TAId; Data: TAiDataObject2005): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceObject2005.SetFreimType(Id, Value: TAId): AError;
-begin
-  Result := 1;
-end;
-
-procedure TAiSourceObject2005.SetName(Value: String);
-begin
-  FName := Value;
-end;
-
-procedure TAiSourceObject2005.SetParent(Index: UInt32; Value: TAiSource2005);
-begin
-  if Index >= UInt32(Length(FParents)) then Exit;
-  FParents[Index].Source := AiSource2005(Value);
-  if Assigned(Value) then
-    FParents[Index].Id := Value.GetId
-  else
-    FParents[Index].Id := 0;
-end;
-
-procedure TAiSourceObject2005.SetParentId(Index: UInt32; Value: TAId);
-begin
-  if Index >= UInt32(Length(FParents)) then Exit;
-  FParents[Index].Id := Value;
-  FParents[Index].Source := 0;
 end;
 
 { TAiSourceObject }
@@ -698,15 +462,14 @@ begin
   Result := TAiConnectsObject.Create();
 end;
 
-function TAiSourceObject.GetFreimData(Id: TAId): TAiDataObject2005;
+function TAiSourceObject.GetFreimData(Id: TAId): TAiDataObject;
 var
   Freim: TAiFrameObject;
 begin
-  {Result := TAiDataObject20050911.Create(Id);}
   Freim := GetFreim(Id);
   if not(Assigned(Freim)) then
   begin
-    Result := TAiDataObject2005.Create(Id, dtNone);
+    Result := TAiDataObject.Create(Id, dtNone);
     Exit;
   end;
   Result := Freim.GetData;
@@ -783,7 +546,7 @@ begin
   end;
 end;
 
-function TAiSourceObject.GetParentID(Index: AUInt32): TAId;
+function TAiSourceObject.GetParentId(Index: AUInt32): TAId;
 begin
   if Index >= UInt32(Length(FParents)) then
     Result := 0
@@ -820,28 +583,35 @@ begin
   Result := Initialize;
 end;
 
-function TAiSourceObject.Initialize(): TProfError;
+function TAiSourceObject.Initialize(): AError;
 begin
   Result := 0;
+  if FInitialized then Exit;
+  FInitialized := True;
+  //Result := Load;
   Open();
 end;
 
+function TAiSourceObject.LoadFromFile(F: TFileProfKB; Path: String): TError;
+begin
+  Close;
+  Result := 1;
+  if not(Assigned(F)) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
+  Result := 0;
+end;
+
 function TAiSourceObject.LoadFromFileN(Path, FileName: String): Boolean;
-//var
-  //Count: UInt32;
-  //I: Int32;
-  {F: TFileProfKB;}
-  //Freim: TAiFrame2005;
-  //Rec: TAIFreimRec;
 {var
   Count: UInt32;
-  F: file;
-  HProf: TFileProfHeader;
-  HKB: TFileProfKBHeader;
-  Rec: TAIFreimRec;}
-  //S: String;
+  I: Int32;
+  F: TFileProfKB;
+  Freim: TAiFrameObject;
+  Rec: TAIFreimRec;
+  S: String;}
 begin
-  if ExtractFilePath(FileName) = '' then FileName := Path + FileName;
+  if (ExtractFilePath(FileName) = '') then
+    FileName := Path + FileName;
   Result := LoadSourceFromFileN(Self, FileName, Path);
 
   (*F := TFileProfKB.Create;
@@ -865,7 +635,6 @@ begin
   HProf.Ident := 1;
   HProf.Version1 := 2;
   HProf.Version2 := 4;}*)
-
 end;
 
 function TAiSourceObject.LoadFromFileXml(FileName: String): TError;
@@ -875,7 +644,6 @@ function TAiSourceObject.LoadFromFileXml(FileName: String): TError;
   Id: TAI_Id;
   {Xml: TMyXml;}
 begin
-  Result := -1;
   (*Xml := TMyXml.Create;
   Result := Xml.LoadFromFileText(FileName);
   for I := 0 to Xml.GetCountParams - 1 do begin
@@ -889,6 +657,7 @@ begin
       SetFreim(Id, Freim);
   end;
   Xml.Free;*)
+  Result := -1;
 end;
 
 function TAiSourceObject.LoadFromRecF64(Rec: TAIFreimRecF64): WordBool;
@@ -896,9 +665,34 @@ begin
   Result := False;
 end;
 
+function TAiSourceObject.NewFreim(Typ: TAId; Id: TAId = 0): TAId;
+begin
+  Result := 0;
+  AddToLog(lgDataBase, ltError, Format(stNotOverrideA, ['NewFreim']));
+end;
+
+function TAiSourceObject.NewFreim2(Frame: TAiFrameObject): TAId;
+begin
+  Result := 0;
+end;
+
+function TAiSourceObject.NewFreimType(const AName: WideString; AStruct: PStructFreimType): TAId;
+begin
+  Result := 0;
+  //AddToLog(lgDataBase, ltError, stNotOverrideA, ['NewFreimType']);
+end;
+
 function TAiSourceObject.Open(): TError;
 begin
   FOpened := True;
+  Result := 0;
+end;
+
+function TAiSourceObject.SaveToFile(F: TFileProfKB; Path: String): TError;
+begin
+  Result := 1;
+  if (not(Assigned(F))) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
   Result := 0;
 end;
 
@@ -942,6 +736,8 @@ function TAiSourceObject.SaveToFileXml(FileName: String): Boolean;
   I: Int32;
   //Node: TProfXmlNode;
   //Xml: TProfXmlDocument;}
+  {Param: TMyXml;
+  Xml: TMyXml;}
 begin
   Result := False;
   {Xml := TProfXmlDocument.Create;
@@ -960,42 +756,14 @@ begin
   finally
     Xml.Free;
   end;}
-end;
-
-{procedure TAISource.SetName(Value: WideString);
-begin
-  FName := Value;
-end;}
-
-procedure TAiSourceObject.SetParentObj(Index: UInt32; Value: TAiSourceObject);
-begin
-  if Index >= UInt32(Length(FParents)) then Exit;
-  FParents[Index].Id := Value.GetId();
-  FParents[Index].Source := Value.GetId();
-end;
-
-{procedure TAiSourceObject.SetParentID(Index: UInt32; Value: TAI_ID);
-begin
-  if Index >= UInt32(Length(FParents)) then Exit;
-  FParents[Index].Id := Value;
-  FParents[Index].Source := nil;
-end;}
-
-function TAiSourceObject.NewFreim(Typ: TAId; Id: TAId = 0): TAId;
-begin
-  Result := 0;
-  AddToLog(lgDataBase, ltError, Format(stNotOverrideA, ['NewFreim']));
-end;
-
-function TAiSourceObject.NewFreim2(Frame: TAiFrameObject): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceObject.NewFreimType(const AName: WideString; AStruct: PStructFreimType): TAId;
-begin
-  Result := 0;
-  //AddToLog(lgDataBase, ltError, stNotOverrideA, ['NewFreimType']);
+  // ---
+  {Xml := TMyXml.Create;
+  for I := 0 to High(FFreims) do begin
+    Param := Xml.NewParam('Freim', '');
+    GetFreim(I).SaveToXml(Param);
+  end;
+  Result := Xml.SaveToFileText(FileName);
+  Xml.Free;}
 end;
 
 function TAiSourceObject.Select(AType: TAId): TAI_Select;
@@ -1014,16 +782,51 @@ begin
   Result := -1;
 end;
 
-function TAiSourceObject.SetFreimData(Id: TAId; Data: TAiDataObject): TError;
+function TAiSourceObject.SetFreimData(Id: TAId; Data: TAiDataObject): AError;
 begin
   Result := -1;
 end;
 
-function TAiSourceObject.SetFreimType(Id, Value: TAId): Boolean;
+function TAiSourceObject.SetFreimType(Id, Value: TAId): AError;
 begin
-  //Self.FFreimType := Value;
-  Result := True;
+  Result := -1;
 end;
+
+procedure TAiSourceObject.SetName(Value: String);
+begin
+  FName := Value;
+end;
+
+procedure TAiSourceObject.SetParent(Index: UInt32; Value: TAiSourceObject);
+begin
+  if Index >= UInt32(Length(FParents)) then Exit;
+  FParents[Index].Source := AiSource2005(Value);
+  if Assigned(Value) then
+    FParents[Index].Id := Value.GetId
+  else
+    FParents[Index].Id := 0;
+end;
+
+procedure TAiSourceObject.SetParentId(Index: UInt32; Value: TAId);
+begin
+  if Index >= UInt32(Length(FParents)) then Exit;
+  FParents[Index].Id := Value;
+  FParents[Index].Source := 0;
+end;
+
+procedure TAiSourceObject.SetParentObj(Index: UInt32; Value: TAiSourceObject);
+begin
+  if Index >= UInt32(Length(FParents)) then Exit;
+  FParents[Index].Id := Value.GetId();
+  FParents[Index].Source := Value.GetId();
+end;
+
+{procedure TAiSourceObject.SetParentID(Index: UInt32; Value: TAI_ID);
+begin
+  if Index >= UInt32(Length(FParents)) then Exit;
+  FParents[Index].Id := Value;
+  FParents[Index].Source := nil;
+end;}
 
 {procedure TAiSourceObject.Set_FreimType(Value: TAI_Id);
 begin

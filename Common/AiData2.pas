@@ -2,7 +2,7 @@
 @Abstract(Базовый тип данных для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2005)
-@LastMod(10.04.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 }
 unit AiData2;
@@ -56,17 +56,10 @@ type //** Данные
     property XmlDocument: IXmlDocument read Get_XmlDocument write Set_XmlDocument;
   end;
 
-  TAI_DataFile = class(TAIData)
-  end;
-
-  TAI_DataFileCashe = class(TAI_DataFile)
-  end;
-
-  TAI_DataMemory = class(TAIData)
-  end;
-
-  TAI_DataNet = class(TAIData)
-  end;
+  TAI_DataFile = TAiData;
+  TAI_DataFileCashe = TAiData;
+  TAI_DataMemory = TAiData;
+  TAI_DataNet = TAiData;
 
   (*TAI_DataStream = class(TAI_Data)
   private

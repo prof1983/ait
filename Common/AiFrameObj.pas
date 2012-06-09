@@ -427,7 +427,7 @@ begin
     end;
     if not(Assigned(FData)) then
     try
-      FData := TAiDataObject2005.Create(FId, dtNone);
+      FData := TAiDataObject.Create(FId, dtNone);
     except
       FData := nil;
     end;
