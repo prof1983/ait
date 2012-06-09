@@ -1,28 +1,28 @@
 {**
 @Abstract(UAI_A)
-@Author(Prof1983 prof1983@yandex.ru)
+@Author(Prof1983 prof1983@ya.ru)
 @Created(<26.09.2004)
-@LastMod(16.05.2012)
-@Version(0.0.5)
+@LastMod(09.06.2012)
+@Version(0.5)
 }
 unit UAI_A;
 
 interface
 
 uses
-  AiFrameObj, AiSourceObj;
+  AiFrameObj, AiQuestionsObj, AiSourceObj;
 
 type
   AInfoProc = procedure(Str: String);
 
 type
-  TAiFreimBase = class(TAiFrame2004)
+  TAiFreimBase = class(TAiFrameObject)
   public
     procedure ToHtml(const Name: string; B: Boolean);
   end;
 
 type
-  TAiFreimMethod = class(TAiFrame2004)
+  TAiFreimMethod = class(TAiFrameObject)
   private
     FName: string;
   public
@@ -30,7 +30,7 @@ type
   end;
 
 type
-  TAiBaseMethods = class(TAiFrame2004)
+  TAiBaseMethods = class(TAiFrameObject)
   public
     function Get(Index: Integer): TAiFreimMethod;
     function GetCount(): Integer;
@@ -49,13 +49,7 @@ type
     property Base: TAiBaseMethods read FBase;
   end;
 
-type
-  TAiQuestions = class
-  public
-    function GetCount(): Integer;
-  public
-    property Count: Integer read GetCount;
-  end;
+  TAiQuestions = AiQuestionsObj.TAiQuestions2004;
 
 type
   TAiTasks = class
@@ -129,13 +123,6 @@ constructor TAiMethods.Create();
 begin
   inherited Create();
   FBase := TAiBaseMethods.Create();
-end;
-
-{ TAiQuestions }
-
-function TAiQuestions.GetCount(): Integer;
-begin
-  Result := 0;
 end;
 
 { TAiTasks }

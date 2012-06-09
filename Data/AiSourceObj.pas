@@ -258,7 +258,6 @@ type // Recovered
   end;
 
   //TAiSourceObject20050915 = TAiSourceObject2005;
-  //TAiSource20050915 = TAiSourceObject2005;
 
   TAiSourceObject20050526 = class(TAiSourceObject20050819)
   public

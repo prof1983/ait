@@ -1,8 +1,8 @@
 {**
-@Abstract(AiTaskList)
+@Abstract(AiTaskList - Список заданий)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.06.2012)
-@LastMod(08.06.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 }
 unit AiTaskListObj;
@@ -23,85 +23,9 @@ type
     function GetTask(Index: UInt32): TAiTaskObject;
   end;
 
-  TAiListTask2006 = TAiTaskListObject;
-  TAiListTask20050915 = TAiListTask2006;
-
-  TAiListTask20050830 = class(TAiListTask20050915)
-  private
-    FList: TAiListObject;
-  public
-    function DeleteByIndex(Index: UInt32): AError;
-    procedure Free(); override;
-    function GetList(): TAiListObject;
-    function GetTask(Index: UInt32): TAiTask20050830;
-  end;
-
-  TAiListTask20050525 = class(TAiListTask20050830)
-  private
-    FList: TAiListObject;
-  public
-    function DeleteByIndex(Index: UInt32): AError;
-    procedure Free(); override;
-    function GetList(): TAiListObject;
-    function GetTask(Index: UInt32): TAiTask20050525;
-  end;
-
 implementation
 
-{ TAiListTask20050525 }
-
-function TAiListTask20050525.DeleteByIndex(Index: UInt32): AError;
-begin
-  Result := GetList.DeleteByIndex(Index);
-end;
-
-procedure TAiListTask20050525.Free();
-begin
-  if Assigned(FList) then FList.Free;
-  FList := nil;
-  inherited Free;
-end;
-
-function TAiListTask20050525.GetList(): TAiListObject;
-begin
-  if not(Assigned(FList)) then
-    FList := TAiListObject.Create();
-  Result := FList;
-end;
-
-function TAiListTask20050525.GetTask(Index: UInt32): TAiTask20050525;
-begin
-  Result := TAiTask20050525(GetList.GetItem(Index));
-end;
-
-{ TAiListTask20050830 }
-
-function TAiListTask20050830.DeleteByIndex(Index: UInt32): AError;
-begin
-  Result := GetList.DeleteByIndex(Index);
-end;
-
-procedure TAiListTask20050830.Free();
-begin
-  if Assigned(FList) then
-    FList.Free();
-  FList := nil;
-  inherited Free;
-end;
-
-function TAiListTask20050830.GetList(): TAiListObject;
-begin
-  if not(Assigned(FList)) then
-    FList := TAiListObject.Create();
-  Result := FList;
-end;
-
-function TAiListTask20050830.GetTask(Index: UInt32): TAiTask20050830;
-begin
-  Result := TAiTask20050830(GetList.GetItem(Index));
-end;
-
-{ TAiListTask2006 }
+{ TAiTaskListObject }
 
 function TAiTaskListObject.DeleteByIndex(Index: UInt32): AError;
 begin
