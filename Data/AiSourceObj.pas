@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(07.06.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 }
 unit AiSourceObj;
@@ -65,39 +65,29 @@ type // Recovered
   protected // IAiSource
     // Возвращает фрейм
     function Get_Freim(Id: TAId): TAiFrameObject; virtual;
-  public // from TAiSourceAbstractObject2005
-    function ConnectAdd(Id, Con: TAId): AInt32; virtual; // deprecated
   public
-    function GetFreim(Id: TAId): TAiFrameObject; virtual;
-    function GetNextFreeFreimId(): TAId; virtual;
-    function GetParent(Index: UInt32): AiSourceObject2005;
-    function GetParentID(Index: UInt32): TAId;
-    function GetParentObj(Index: UInt32): TAiSourceObject;
-    procedure SetParentObj(Index: UInt32; Value: TAiSourceObject);
-    //procedure SetParentID(Index: UInt32; Value: TAId);
+    constructor Create();
   public
     function AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage;
         const AStrMsg: WideString): Integer; virtual;
     //** Проверяет и создает базовые фреймы Prof_AI_GLobals.AIFreims
     function CheckFreims(): Boolean;
     function Clear(): TError; virtual;
-    function Close(): TError; virtual;
-    constructor Create({Source: TAISource = nil; Id: TAId = 0});
+    function Close(): AError; virtual;
+    function ConnectAdd(Id, Con: TAId): AInt32; virtual; deprecated; // Delete
+    function ConnectCount(Id: TAId): AError; virtual; deprecated; // Delete
+    function ConnectDelete(Id, Con: TAId): AError; virtual; deprecated; // Delete
+    function ConnectDeleteI(Id: TAId; Index: UInt32): AError; virtual; deprecated; // Delete
+    function ConnectGet(Id: TAId; Index: UInt32): TAId; virtual; deprecated; // Delete
+    function ConnectIndexGet(Id, Con: TAId): AInt32; virtual; deprecated; // Delete
+    function DataClear(Id: TAId): TError; virtual; deprecated; // Use Clear()
+    function DataSize(Id: TAId): AUInt64; virtual; // deprecated
     function Finalize(): TProfError; virtual;
     procedure Free(); virtual;
-      // Произвести инициализацию с установкой параметров
-    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
-    function Initialize(): TProfError; virtual;
-    function LoadFromFileN(Path, FileName: String): Boolean;
-    function LoadFromFileXml(FileName: String): TError;
-    function Open(): TError; virtual;
-    property ParentsObj[Index: UInt32]: TAiSourceObject read GetParentObj write SetParentObj;
-    //property ParentsID[Index: UInt32]: TAId read GetParentId write SetParentId;
-    function SaveToFileN(FileName, Path: String): Boolean;
-    function SaveToFileXml(FileName: String): Boolean;
-  public
+    function FreimFree(Id: TAId): Boolean; virtual; // deprecated
     function GetActive(): Boolean;
     function GetCountFreims(): UInt64; virtual;
+    function GetFreim(Id: TAId): TAiFrameObject; virtual;
     function GetFreimConnects(Id: TAId): TAiConnectsObject; virtual;
     function GetFreimData(Id: TAId): TAiDataObject; virtual;
     function GetFreimDateTimeCreate(Id: TAId): TDateTime; virtual;
@@ -105,29 +95,36 @@ type // Recovered
     function GetId(): AiSourceObject;
     function GetItemID(Index: Integer): TAId; virtual;
     function GetName(): string;
+    function GetNextFreeFreimId(): TAId; virtual;
     function GetOpened(): Boolean;
+    function GetParent(Index: UInt32): AiSourceObject2005;
+    function GetParentID(Index: UInt32): TAId;
+    function GetParentObj(Index: UInt32): TAiSourceObject;
+      // Произвести инициализацию с установкой параметров
+    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
+    function Initialize(): TProfError; virtual;
+    function LoadFromFileN(Path, FileName: String): Boolean;
+    function LoadFromFileXml(FileName: String): TError;
+    function LoadFromRecF64(Rec: TAiFreimRecF64): WordBool;
       //** Создает новый фрейм
     function NewFreim(Typ: TAId; Id: TAId = 0): TAId; virtual;
       //** Создает новый фрейм
     function NewFreim2(Frame: TAiFrameObject): TAId; virtual;
-    //** Сделать выборку по типу
+    function Open(): TError; virtual;
+    function SaveToFileN(FileName, Path: String): Boolean;
+    function SaveToFileXml(FileName: String): Boolean;
+      //** Сделать выборку по типу
     function Select(AType: TAId): TAiSelect; virtual;
     procedure SetFreim(ID: TAId; Value: TAiFrameObject); virtual;
     function SetFreimConnects(Id: TAId; Value: TAiConnectsObject): TError; virtual;
     function SetFreimData(Id: TAId; Data: TAiDataObject): TError; virtual;
     function SetFreimType(Id, Value: TAId): Boolean; virtual;
+    procedure SetParentObj(Index: UInt32; Value: TAiSourceObject);
     //** Создает и регистрирует новый тип фрейма Если AStructure задан, то AName игнорируется
     function NewFreimType(const AName: WideString; AStruct: PStructFreimType = nil): TAId; virtual;
-  public // IAIFreim
-    //function Get_FreimName(): WideString;
-    //function Get_FreimType(): TAId;
-    //function Get_Source(): TAiSourceObject;
-    function LoadFromRecF64(Rec: TAiFreimRecF64): WordBool;
-    //procedure Set_FreimType(Value: TAI_Id);
-    //procedure Set_Source(const Value: TAiSourceObject);
   public
-    function Activate(): Boolean;
-    function Deactivate(): Boolean;
+    function Activate(): Boolean; deprecated; // Delete
+    function Deactivate(): Boolean; deprecated; // Delete
   public
     property CountFreims: UInt64 read GetCountFreims;
     property FreimByID[ID: TAId]: TAiFrameObject read GetFreim write SetFreim;
@@ -135,141 +132,36 @@ type // Recovered
     property Id: TAId read FId;
     property NextFreeFreimID: TAId read GetNextFreeFreimID;
     property OnAddToLog: TAddToLogProc read FOnAddToLog write FOnAddToLog;
+    property ParentsObj[Index: UInt32]: TAiSourceObject read GetParentObj write SetParentObj;
   end;
-  TAiSource = TAiSourceObject;
 
-  TAiSourceAbstractObject2005 = class(TAiSourceObject)
+  TAiSourceObject2005 = class(TAiSourceObject)
   public
-    function ConnectCount(Id: TAId): AError; virtual; // deprecated
-    function ConnectDelete(Id, Con: TAId): AError; virtual; // deprecated
-    function ConnectDeleteI(Id: TAId; Index: UInt32): AError; virtual; // deprecated
-    function ConnectGet(Id: TAId; Index: UInt32): TAId; virtual; // deprecated
-    function ConnectIndexGet(Id, Con: TAId): AInt32; virtual; // deprecated
-    constructor Create(Source: AiSourceObject; Id: TAId = 0);
-    function DataClear(Id: TAId): TError; virtual; // deprecated
-    {function DataRead(Id: TAI_Id; var Buf: TArrayByte; Count: UInt64; Seek: UInt64): UInt64; virtual;
-    function DataReadFloat32(Id: TAI_Id; var Value: Float32; Seek: UInt64): TError; virtual;
-    function DataReadFloat64(Id: TAI_Id; var Value: Float64; Seek: UInt64): TError; virtual;
-    function DataReadInt08(Id: TAI_Id; var Value: Int08; Seek: UInt64): TError; virtual;
-    function DataReadInt16(Id: TAI_Id; var Value: Int16; Seek: UInt64): TError; virtual;
-    function DataReadInt32(Id: TAI_Id; var Value: Int32; Seek: UInt64): TError; virtual;
-    function DataReadInt64(Id: TAI_Id; var Value: Int64; Seek: UInt64): TError; virtual;
-    function DataReadUInt08(Id: TAI_Id; var Value: UInt08; Seek: UInt64): TError; virtual;
-    function DataReadUInt16(Id: TAI_Id; var Value: UInt16; Seek: UInt64): TError; virtual;
-    function DataReadUInt32(Id: TAI_Id; var Value: UInt32; Seek: UInt64): TError; virtual;
-    function DataReadUInt64(Id: TAI_Id; var Value: UInt64; Seek: UInt64): TError; virtual;}
-    function DataSize(Id: TAId): AUInt64; virtual; // deprecated
-    {function DataWrite(Id: TAI_Id; const Buf: TArrayByte; Count: UInt64; Seek: UInt64): UInt64; virtual;
-    function DataWriteFloat32(Id: TAI_Id; Value: Float32; Seek: UInt64): TError; virtual;
-    function DataWriteFloat64(Id: TAI_Id; Value: Float64; Seek: UInt64): TError; virtual;
-    function DataWriteInt08(Id: TAI_Id; Value: Int08; Seek: UInt64): TError; virtual;
-    function DataWriteInt16(Id: TAI_Id; Value: Int16; Seek: UInt64): TError; virtual;
-    function DataWriteInt32(Id: TAI_Id; Value: Int32; Seek: UInt64): TError; virtual;
-    function DataWriteInt64(Id: TAI_Id; Value: Int64; Seek: UInt64): TError; virtual;
-    function DataWriteUInt08(Id: TAI_Id; Value: UInt08; Seek: UInt64): TError; virtual;
-    function DataWriteUInt16(Id: TAI_Id; Value: UInt16; Seek: UInt64): TError; virtual;
-    function DataWriteUInt32(Id: TAI_Id; Value: UInt32; Seek: UInt64): TError; virtual;
-    function DataWriteUInt64(Id: TAI_Id; Value, Seek: UInt64): TError; virtual;}
-    function FreimFree(Id: TAId): Boolean; virtual; // deprecated
     function GetItemId(Index: UInt32): TAId; virtual;
-    function GetOpened: Boolean;
+    function GetName(): String;
+    function GetOpened(): Boolean;
+    function GetParentId(Index: UInt32): TAId;
     //function Init(const APath: APascalString; ALog: TLog; AConfig: TConfig; APrefix: APascalString): TError;
-    function Initialize: TError; virtual;
+    function Initialize(): TError; virtual;
+    function LoadFromFile(F: TFileProfKB; Path: String): TError;
+    function LoadFromFileN(Path, FileName: String): TError;
+    function LoadFromFileXml(FileName: String): TError;
     function NewFreim(Typ: TAId; Id: TAId = 0): TAId; virtual;
-    function Open: TError; virtual;
+    function Open(): TError; virtual;
+    function SaveToFile(F: TFileProfKB; Path: String): TError;
+    function SaveToFileN(FileName, Path: String): TError;
+    function SaveToFileXml(FileName: String): TError;
     function SetFreim(Id: TAId; Value: TAiFrameObject): TError; virtual;
     function SetFreimConnects(Id: TAId; Value: TAiConnectsObject): TError; virtual;
     function SetFreimData(Id: TAId; Data: TAiDataObject2005): TError; virtual;
     function SetFreimType(Id, Value: TAId): TError; virtual;
-  end;
-
-  //TAiSource2005 = TAiSourceAbstractObject2005;
-  TAiSourceObject2005 = class(TAiSourceAbstractObject2005) {256}
-  public
-    constructor Create(Source: AiSourceObject; Id: TAId = 0);
-    function GetName(): String;
-    function GetParentId(Index: UInt32): TAId;
-    function LoadFromFileN(Path, FileName: String): TError;
-    function LoadFromFileXml(FileName: String): TError;
-    function SaveToFileN(FileName, Path: String): TError;
-    function SaveToFileXml(FileName: String): TError;
     procedure SetName(Value: String);
     procedure SetParent(Index: UInt32; Value: TAiSourceObject2005);
     procedure SetParentId(Index: UInt32; Value: TAId);
-  public
-    {function ConnectAdd(Id, Con: TAI_Id): Int32; virtual;
-    function ConnectCount(Id: TAI_Id): TError; virtual;
-    function ConnectDelete(Id, Con: TAI_Id): TError; virtual;
-    function ConnectDeleteI(Id: TAI_Id; Index: UInt32): TError; virtual;
-    function ConnectGet(Id: TAI_Id; Index: UInt32): TAI_Id; virtual;
-    function ConnectIndexGet(Id, Con: TAI_Id): Int32; virtual;}
   end;
+
+  TAiSource = TAiSourceObject;
   TAiSource2005 = TAiSourceObject2005;
-
-  TAiSourceObject20050819 = class(TAiSourceObject2005)
-  private
-    FOpened: Boolean;
-  public
-    function Close: TError; virtual;
-    {function ConnectAdd(Id, Con: TAI_Id): Int32; virtual;
-    function ConnectCount(Id: TAI_Id): TError; virtual;
-    function ConnectDelete(Id, Con: TAI_Id): TError; virtual;
-    function ConnectDeleteI(Id: TAI_Id; Index: UInt32): TError; virtual;
-    function ConnectGet(Id: TAI_Id; Index: UInt32): TAI_Id; virtual;
-    function ConnectIndexGet(Id, Con: TAI_Id): Int32; virtual;}
-    {function DataClear(Id: TAI_Id): TError; virtual;
-    function DataRead(Id: TAI_Id; var Buf: TArrayByte; Count: UInt64; Seek: UInt64): UInt64; virtual;
-    function DataReadFloat32(Id: TAI_Id; var Value: Float32; Seek: UInt64): TError; virtual;
-    function DataReadFloat64(Id: TAI_Id; var Value: Float64; Seek: UInt64): TError; virtual;
-    function DataReadInt08(Id: TAI_Id; var Value: Int08; Seek: UInt64): TError; virtual;
-    function DataReadInt16(Id: TAI_Id; var Value: Int16; Seek: UInt64): TError; virtual;
-    function DataReadInt32(Id: TAI_Id; var Value: Int32; Seek: UInt64): TError; virtual;
-    function DataReadInt64(Id: TAI_Id; var Value: Int64; Seek: UInt64): TError; virtual;
-    function DataReadUInt08(Id: TAI_Id; var Value: UInt08; Seek: UInt64): TError; virtual;
-    function DataReadUInt16(Id: TAI_Id; var Value: UInt16; Seek: UInt64): TError; virtual;
-    function DataReadUInt32(Id: TAI_Id; var Value: UInt32; Seek: UInt64): TError; virtual;
-    function DataReadUInt64(Id: TAI_Id; var Value: UInt64; Seek: UInt64): TError; virtual;
-    function DataSize(Id: TAI_Id): UInt64; virtual;
-    function DataWrite(Id: TAI_Id; const Buf: TArrayByte; Count: UInt64; Seek: UInt64): UInt64; virtual;
-    function DataWriteFloat32(Id: TAI_Id; Value: Float32; Seek: UInt64): TError; virtual;
-    function DataWriteFloat64(Id: TAI_Id; Value: Float64; Seek: UInt64): TError; virtual;
-    function DataWriteInt08(Id: TAI_Id; Value: Int08; Seek: UInt64): TError; virtual;
-    function DataWriteInt16(Id: TAI_Id; Value: Int16; Seek: UInt64): TError; virtual;
-    function DataWriteInt32(Id: TAI_Id; Value: Int32; Seek: UInt64): TError; virtual;
-    function DataWriteInt64(Id: TAI_Id; Value: Int64; Seek: UInt64): TError; virtual;
-    function DataWriteUInt08(Id: TAI_Id; Value: UInt08; Seek: UInt64): TError; virtual;
-    function DataWriteUInt16(Id: TAI_Id; Value: UInt16; Seek: UInt64): TError; virtual;
-    function DataWriteUInt32(Id: TAI_Id; Value: UInt32; Seek: UInt64): TError; virtual;
-    function DataWriteUInt64(Id: TAI_Id; Value, Seek: UInt64): TError; virtual;}
-    procedure Free; override;
-    {function FreimFree(Id: TAI_Id): Boolean; virtual;}
-    function GetCountFreims: UInt64; virtual;
-    function GetFreim(Id: TAId): TAiFrameObject; virtual;
-    function GetFreimConnects(Id: TAId): TAiConnectsObject20050819; virtual;
-    function GetFreimData(Id: TAId): TAiDataObject2005; virtual;
-    function GetFreimType(Id: TAId): TAId; virtual;
-    function GetItemId(Index: AUInt32): TAId; virtual;
-    function GetOpened: Boolean;
-    function NewFreim(Typ: TAId; Id: TAId = 0): TAId; virtual;
-    function SetFreim(Id: TAId; Value: TAiFrameObject): AError; virtual;
-    function SetFreimConnects(Id: TAId; Value: TAiConnectsObject20050819): AError; virtual;
-    function SetFreimData(Id: TAId; Data: TAiDataObject2005): AError; virtual;
-    function SetFreimType(Id, Value: TAId): AError; virtual;
-  end;
-
-  //TAiSourceObject20050915 = TAiSourceObject2005;
-
-  TAiSourceObject20050526 = class(TAiSourceObject20050819)
-  public
-    function LoadFromFile(F: TFileProfKB; Path: String): TError;
-    function SaveToFile(F: TFileProfKB; Path: String): TError;
-  end;
-
-  TAiSourceObject20050525 = class(TAiSourceObject20050526)
-  public
-    function LoadFromFile(F: TFileProfKB; Path: String): TError;
-    function SaveToFile(F: TFileProfKB; Path: String): TError;
-  end;
 
 const // Сообщения -------------------------------------------------------------
   stCheckFreimsStart  = 'Проверка базовых фреймов в БЗ';
@@ -394,24 +286,21 @@ begin
   Result := 0;
 end;
 
-{ TAiSource2005 }
+{ TAiSourceObject2005 }
 
-constructor TAiSourceObject2005.Create(Source: AiSourceObject; Id: TAId);
+function TAiSourceObject2005.GetItemId(Index: AUInt32): TAId;
 begin
-  inherited Create(Source, Id);
-  FOpened := False;
-  {FParent := Parent;
-  if not(Assigned(FParent)) then
-    FParentId := ParentId
-  else
-    FParentId := FParent.FreimId;}
-  {FSearch := TKBSearch.Create;
-  FSelect := TKBSelect.Create(Source, 0);}
+  Result := 0;
 end;
 
 function TAiSourceObject2005.GetName(): String;
 begin
   Result := FName;
+end;
+
+function TAiSourceObject2005.GetOpened: Boolean;
+begin
+  Result := FOpened;
 end;
 
 function TAiSourceObject2005.GetParentId(Index: UInt32): TAId;
@@ -420,6 +309,31 @@ begin
     Result := 0
   else
     Result := FParents[Index].Id;
+end;
+
+{function TAiSourceObject2005.Init(const APath: APascalString;
+  ALog: TLog; AConfig: TConfig; APrefix: APascalString): TError;
+begin
+  Result := Initialize();
+end;}
+
+function TAiSourceObject2005.Initialize: TError;
+begin
+  Result := 0;
+  if FInitialized then Exit;
+  FInitialized := True;
+  //Result := Load;
+  //Result := inherited Initialize;
+  Open;
+end;
+
+function TAiSourceObject2005.LoadFromFile(F: TFileProfKB; Path: String): TError;
+begin
+  Close;
+  Result := 1;
+  if not(Assigned(F)) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
+  Result := 0;
 end;
 
 function TAiSourceObject2005.LoadFromFileN(Path, FileName: String): TError;
@@ -486,6 +400,25 @@ begin
   Result := 1;
 end;
 
+function TAiSourceObject2005.NewFreim(Typ: TAId; Id: TAId = 0): TAId;
+begin
+  Result := 0;
+end;
+
+function TAiSourceObject2005.Open: TError;
+begin
+  FOpened := True;
+  Result := 0;
+end;
+
+function TAiSourceObject2005.SaveToFile(F: TFileProfKB; Path: String): TError;
+begin
+  Result := 1;
+  if (not(Assigned(F))) or (Path = '') then Exit;
+  {Далее обработка в дочерних классах}
+  Result := 0;
+end;
+
 function TAiSourceObject2005.SaveToFileN(FileName, Path: String): TError;
 {var
   F: TFileProfKB;
@@ -535,6 +468,26 @@ begin
   Result := 1;
 end;
 
+function TAiSourceObject2005.SetFreim(Id: TAId; Value: TAiFrameObject): AError;
+begin
+  Result := 1;
+end;
+
+function TAiSourceObject2005.SetFreimConnects(Id: TAId; Value: TAiConnectsObject): AError;
+begin
+  Result := 1;
+end;
+
+function TAiSourceObject2005.SetFreimData(Id: TAId; Data: TAiDataObject2005): AError;
+begin
+  Result := 1;
+end;
+
+function TAiSourceObject2005.SetFreimType(Id, Value: TAId): AError;
+begin
+  Result := 1;
+end;
+
 procedure TAiSourceObject2005.SetName(Value: String);
 begin
   FName := Value;
@@ -555,269 +508,6 @@ begin
   if Index >= UInt32(Length(FParents)) then Exit;
   FParents[Index].Id := Value;
   FParents[Index].Source := 0;
-end;
-
-{ TAiSourceObject20050525 }
-
-function TAiSourceObject20050525.LoadFromFile(F: TFileProfKB; Path: String): TError;
-begin
-  Close;
-  Result := 1;
-  if not(Assigned(F)) or (Path = '') then Exit;
-  {Далее обработка в дочерних классах}
-  Result := 0;
-end;
-
-function TAiSourceObject20050525.SaveToFile(F: TFileProfKB; Path: String): TError;
-begin
-  Result := 1;
-  if (not(Assigned(F))) or (Path = '') then Exit;
-  {Далее обработка в дочерних классах}
-  Result := 0;
-end;
-
-{ TAiSourceObject20050526 }
-
-function TAiSourceObject20050526.LoadFromFile(F: TFileProfKB; Path: String): TError;
-begin
-  Close;
-  Result := 1;
-  if not(Assigned(F)) or (Path = '') then Exit;
-  {Далее обработка в дочерних классах}
-  Result := 0;
-end;
-
-function TAiSourceObject20050526.SaveToFile(F: TFileProfKB; Path: String): TError;
-begin
-  Result := 1;
-  if (not(Assigned(F))) or (Path = '') then Exit;
-  {Далее обработка в дочерних классах}
-  Result := 0;
-end;
-
-{ TAiSourceAbstractObject2005 }
-
-function TAiSourceAbstractObject2005.ConnectCount(Id: TAId): AError;
-begin
-  Result := 0;
-end;
-
-function TAiSourceAbstractObject2005.ConnectDelete(Id, Con: TAId): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceAbstractObject2005.ConnectDeleteI(Id: TAId; Index: UInt32): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceAbstractObject2005.ConnectGet(Id: TAId; Index: AUInt32): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceAbstractObject2005.ConnectIndexGet(Id, Con: TAId): AInt32;
-begin
-  Result := -1;
-end;
-
-constructor TAiSourceAbstractObject2005.Create(Source: AiSourceObject; Id: TAId);
-begin
-  inherited Create(); //(AiSource2005(Source), Id);
-  FOpened := False;
-end;
-
-function TAiSourceAbstractObject2005.DataClear(Id: TAId): AError;
-begin
-  Result := 1;
-end;
-
-{function TAiSource2005.DataRead(Id: TAI_Id; var Buf: TArrayByte; Count: UInt64; Seek: UInt64): UInt64;
-begin
-  Result := 0;
-end;
-
-function TAiSource2005.DataReadFloat32(Id: TAI_Id; var Value: Float32; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadFloat64(Id: TAI_Id; var Value: Float64; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadInt08(Id: TAI_Id; var Value: Int08; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadInt16(Id: TAI_Id; var Value: Int16; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadInt32(Id: TAI_Id; var Value: Int32; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadInt64(Id: TAI_Id; var Value: Int64; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadUInt08(Id: TAI_Id; var Value: UInt08; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadUInt16(Id: TAI_Id; var Value: UInt16; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadUInt32(Id: TAI_Id; var Value: UInt32; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAiSource2005.DataReadUInt64(Id: TAI_Id; var Value: UInt64; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;}
-
-function TAiSourceAbstractObject2005.DataSize(Id: TAId): AUInt64;
-begin
-  Result := 0;
-end;
-
-{function TAiSource2005.DataWrite(Id: TAI_Id; const Buf: TArrayByte; Count, Seek: UInt64): UInt64;
-begin
-  Result := 0;
-end;
-
-function TAiSource2005.DataWriteFloat32(Id: TAI_Id; Value: Float32; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteFloat64(Id: TAI_Id; Value: Float64; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteInt08(Id: TAI_Id; Value: Int08; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteInt16(Id: TAI_Id; Value: Int16; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteInt32(Id: TAI_Id; Value: Int32; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteInt64(Id: TAI_Id; Value: Int64; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteUInt08(Id: TAI_Id; Value: UInt08; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteUInt16(Id: TAI_Id; Value: UInt16; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteUInt32(Id: TAI_Id; Value: UInt32; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAiSource2005.DataWriteUInt64(Id: TAI_Id; Value, Seek: UInt64): TError;
-begin
-  Result := 1;
-end;}
-
-function TAiSourceAbstractObject2005.FreimFree(Id: TAId): Boolean;
-begin
-  Result := True;
-end;
-
-function TAiSourceAbstractObject2005.GetItemId(Index: AUInt32): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceAbstractObject2005.GetOpened: Boolean;
-begin
-  Result := FOpened;
-end;
-
-{function TAiSourceAbstractObject2005.Init(const APath: APascalString;
-  ALog: TLog; AConfig: TConfig; APrefix: APascalString): TError;
-begin
-  Result := Initialize();
-end;}
-
-function TAiSourceAbstractObject2005.Initialize: TError;
-begin
-  Result := 0;
-  if FInitialized then Exit;
-  FInitialized := True;
-  //Result := Load;
-  //Result := inherited Initialize;
-  Open;
-end;
-
-function TAiSourceAbstractObject2005.NewFreim(Typ: TAId; Id: TAId = 0): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceAbstractObject2005.Open: TError;
-begin
-  FOpened := True;
-  Result := 0;
-end;
-
-function TAiSourceAbstractObject2005.SetFreim(Id: TAId; Value: TAiFrameObject): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceAbstractObject2005.SetFreimConnects(Id: TAId; Value: TAiConnectsObject): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceAbstractObject2005.SetFreimData(Id: TAId; Data: TAiDataObject2005): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceAbstractObject2005.SetFreimType(Id, Value: TAId): AError;
-begin
-  Result := 1;
 end;
 
 { TAiSourceObject }
@@ -884,9 +574,15 @@ begin
   Result := 0;
 end;
 
-function TAiSourceObject.Close(): TError;
+function TAiSourceObject.Close(): AError;
 begin
-  Result := Clear();
+  if (Clear() < 0) then
+  begin
+    Result := -1;
+    Exit;
+  end;
+  FOpened := False;
+  Result := 0;
 end;
 
 function TAiSourceObject.ConnectAdd(Id, Con: TAId): AInt32;
@@ -894,9 +590,45 @@ begin
   Result := -1;
 end;
 
-constructor TAiSourceObject.Create({Source: TAISource = nil; Id: TAI_Id = 0});
+function TAiSourceObject.ConnectCount(Id: TAId): AError;
+begin
+  Result := 0;
+end;
+
+function TAiSourceObject.ConnectDelete(Id, Con: TAId): AError;
+begin
+  Result := 1;
+end;
+
+function TAiSourceObject.ConnectDeleteI(Id: TAId; Index: UInt32): AError;
+begin
+  Result := 1;
+end;
+
+function TAiSourceObject.ConnectGet(Id: TAId; Index: AUInt32): TAId;
+begin
+  Result := 0;
+end;
+
+function TAiSourceObject.ConnectIndexGet(Id, Con: TAId): AInt32;
+begin
+  Result := -1;
+end;
+
+function TAiSourceObject.DataClear(Id: TAId): AError;
+begin
+  Result := 1;
+end;
+
+function TAiSourceObject.DataSize(Id: TAId): AUInt64;
+begin
+  Result := 0;
+end;
+
+constructor TAiSourceObject.Create();
 begin
   inherited Create();
+  FOpened := False;
   {FParent := Parent;
   if not(Assigned(FParent)) then
     FParentId := ParentId
@@ -940,6 +672,11 @@ begin
   inherited Free;
 end;
 
+function TAiSourceObject.FreimFree(Id: TAId): Boolean;
+begin
+  Result := True;
+end;
+
 function TAiSourceObject.GetActive(): Boolean;
 begin
   Result := FOpened;
@@ -961,7 +698,7 @@ begin
   Result := TAiConnectsObject.Create();
 end;
 
-function TAiSourceObject.GetFreimData(Id: TAId): TAiDataObject;
+function TAiSourceObject.GetFreimData(Id: TAId): TAiDataObject2005;
 var
   Freim: TAiFrameObject;
 begin
@@ -969,7 +706,7 @@ begin
   Freim := GetFreim(Id);
   if not(Assigned(Freim)) then
   begin
-    Result := TAiDataObject2005.Create(0, dtNone);
+    Result := TAiDataObject2005.Create(Id, dtNone);
     Exit;
   end;
   Result := Freim.GetData;
@@ -1296,243 +1033,5 @@ end;}
 {procedure TAiSourceObject.Set_Source(const Value: IAISource);
 begin
 end;}
-
-{ TAiSource20050819 }
-
-function TAiSourceObject20050819.Close: TError;
-begin
-  FOpened := False;
-  Result := 0;
-end;
-
-{function TAI_Source.ConnectAdd(Id, Con: TAI_Id): Int32;
-begin
-  Result := -1;
-end;
-
-function TAI_Source.ConnectCount(Id: TAI_Id): TError;
-begin
-  Result := 0;
-end;
-
-function TAI_Source.ConnectDelete(Id, Con: TAI_Id): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.ConnectDeleteI(Id: TAI_Id; Index: UInt32): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.ConnectGet(Id: TAI_Id; Index: UInt32): TAI_Id;
-begin
-  Result := 0;
-end;
-
-function TAI_Source.ConnectIndexGet(Id, Con: TAI_Id): Int32;
-begin
-  Result := -1;
-end;}
-
-{function TAI_Source.DataClear(Id: TAI_Id): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataRead(Id: TAI_Id; var Buf: TArrayByte; Count: UInt64; Seek: UInt64): UInt64;
-begin
-  Result := 0;
-end;
-
-function TAI_Source.DataReadFloat32(Id: TAI_Id; var Value: Float32; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadFloat64(Id: TAI_Id; var Value: Float64; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadInt08(Id: TAI_Id; var Value: Int08; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadInt16(Id: TAI_Id; var Value: Int16; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadInt32(Id: TAI_Id; var Value: Int32; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadInt64(Id: TAI_Id; var Value: Int64; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadUInt08(Id: TAI_Id; var Value: UInt08; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadUInt16(Id: TAI_Id; var Value: UInt16; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadUInt32(Id: TAI_Id; var Value: UInt32; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataReadUInt64(Id: TAI_Id; var Value: UInt64; Seek: UInt64): TError;
-begin
-  Result := 1;
-  Value := 0;
-end;
-
-function TAI_Source.DataSize(Id: TAI_Id): UInt64;
-begin
-  Result := 0;
-end;
-
-function TAI_Source.DataWrite(Id: TAI_Id; const Buf: TArrayByte; Count, Seek: UInt64): UInt64;
-begin
-  Result := 0;
-end;
-
-function TAI_Source.DataWriteFloat32(Id: TAI_Id; Value: Float32; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteFloat64(Id: TAI_Id; Value: Float64; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteInt08(Id: TAI_Id; Value: Int08; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteInt16(Id: TAI_Id; Value: Int16; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteInt32(Id: TAI_Id; Value: Int32; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteInt64(Id: TAI_Id; Value: Int64; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteUInt08(Id: TAI_Id; Value: UInt08; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteUInt16(Id: TAI_Id; Value: UInt16; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteUInt32(Id: TAI_Id; Value: UInt32; Seek: UInt64): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_Source.DataWriteUInt64(Id: TAI_Id; Value, Seek: UInt64): TError;
-begin
-  Result := 1;
-end;}
-
-procedure TAiSourceObject20050819.Free;
-begin
-  inherited Free;
-end;
-
-{function TAI_Source.FreimFree(Id: TAI_Id): Boolean;
-begin
-  Result := True;
-end;}
-
-function TAiSourceObject20050819.GetCountFreims: UInt64;
-begin
-  Result := 0;
-end;
-
-function TAiSourceObject20050819.GetFreim(Id: TAId): TAiFrameObject;
-begin
-  Result := nil;
-end;
-
-function TAiSourceObject20050819.GetFreimConnects(Id: TAId): TAiConnectsObject20050819;
-begin
-  Result := TAiConnectsObject20050819.Create;
-end;
-
-function TAiSourceObject20050819.GetFreimData(Id: TAId): TAiDataObject2005;
-begin
-  Result := TAiDataObject2005.Create(Id);
-end;
-
-function TAiSourceObject20050819.GetFreimType(Id: TAId): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceObject20050819.GetItemId(Index: AUInt32): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceObject20050819.GetOpened: Boolean;
-begin
-  Result := FOpened;
-end;
-
-function TAiSourceObject20050819.NewFreim(Typ: TAId; Id: TAId = 0): TAId;
-begin
-  Result := 0;
-end;
-
-function TAiSourceObject20050819.SetFreim(Id: TAId; Value: TAiFrameObject): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceObject20050819.SetFreimConnects(Id: TAId; Value: TAiConnectsObject20050819): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceObject20050819.SetFreimData(Id: TAId; Data: TAiDataObject2005): AError;
-begin
-  Result := 1;
-end;
-
-function TAiSourceObject20050819.SetFreimType(Id, Value: TAId): AError;
-begin
-  Result := 1;
-end;
 
 end.

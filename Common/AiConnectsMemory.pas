@@ -2,7 +2,7 @@
 @Anstract(Базовый типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(03.05.2012)
-@LastMod(30.05.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 
 03.05.2012 - From Prof_AI_Base.pas
@@ -32,7 +32,7 @@ type
     function SetConnectA(Index: Integer; Value: TAId): TError; override;
   end;
 
-  TAiConnectsMemory20050911 = class(TAiConnectsObject20050911)
+  TAiConnectsMemory20050911 = class(TAiConnectsMemory2005)
   private
     FConnects: array of TAI_Id;
   public
@@ -48,7 +48,7 @@ type
     function SetConnectA(Index: Integer; Value: TAI_Id): TError; override;
   end;
 
-  TAiConnectsMemory20050819 = class(TAiConnectsObject20050819)
+  TAiConnectsMemory20050819 = class(TAiConnectsMemory20050911)
   private
     FConnects: array of TAI_Id;
   public

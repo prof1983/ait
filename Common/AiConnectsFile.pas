@@ -1,8 +1,8 @@
-{**
+﻿{**
 @Abstract(AiConnectionsFile)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.05.2012)
-@LastMod(30.05.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 
 02.05.2012 - From Prof_AI_Base.pas
@@ -16,7 +16,7 @@ uses
   AiBase, AiConnectsObj;
 
 type
-  TAiConnectsFile2005 = class(TAiConnects)
+  TAiConnectsFile2005 = class(TAiConnectsObject)
   private
     FFile: TProfFile;
   public
@@ -30,7 +30,7 @@ type
     function SetConnectA(Index: Integer; Con: TAId): TError; override;
   end;
 
-  TAiConnectsFile20050911 = class(TAiConnectsObject20050911)
+  TAiConnectsFile20050911 = class(TAiConnectsFile2005)
   private
     FFile: AStreamObj.TProfFile;
   public
@@ -44,7 +44,7 @@ type
     function SetConnectA(Index: Integer; Con: TAId): TError; override;
   end;
 
-  TAiConnectsFile20050819 = class(TAiConnectsObject20050819)
+  TAiConnectsFile20050819 = class(TAiConnectsFile20050911)
   public
     function AddConnect(Con: TAId): Int32; override;
     function Clear: TError; override;

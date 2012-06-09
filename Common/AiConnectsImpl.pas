@@ -2,7 +2,7 @@
 @Abstract(AiConnects)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(12.03.2012)
-@LastMod(03.05.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 }
 unit AiConnectsImpl;
@@ -70,7 +70,7 @@ type //** Связи (From AiBaseObj2006.pas)
   TAI_Connects = TAIConnects;
 
 type //** Связи
-  TAI_Connects_20060920 = TAI_Connects;
+  TAI_Connects_20060920 = TAiConnects;
 
 implementation
 

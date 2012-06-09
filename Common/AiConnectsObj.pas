@@ -2,7 +2,7 @@
 @Abstract(AiConnects)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(12.03.2012)
-@LastMod(04.06.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 }
 unit AiConnectsObj;
@@ -80,27 +80,10 @@ type //** Связи
     //** Идетификаторы связвных фреймов
     property Connects[Index: Integer]: TAIID read GetConnect write SetConnect;
   end;
+
   TAiConnects = TAiConnectsObject;
-
-type
-  TAiConnectsObject20050819 = class(TAiConnectsObject)
-  public
-    function LoadFromXml(Xml: IXmlNode): TError; virtual; deprecated; // Use LoadFormXml20050819()
-    function SaveToFile(F: AStreamObj.TProfFile): TError; virtual; deprecated; // Use SaveToFile2005()
-    function SaveToXml(Xml: IXmlNode): TError; virtual; deprecated; // Use SaveToXml20050819()
-  end;
-
-  TAiConnectsObject20050911 = TAiConnectsObject;
-  {TAiConnectsObject20050911 = class(TAiConnectsObject)
-  public
-    function SaveToFile(F: AStreamObj.TProfFile): TError; virtual; deprecated; // Use SaveToFile20050911()
-  end;}
-
-(*
   //TAIConnects2 = TAiConnectsObject; (From AiBaseObj.pas)
   //TAI_Connects = TAiConnectsObject; (From AiBaseObj2006.pas)
-  //TAI_Connects_20060920 = TAiConnectsObject;
-*)
 
 implementation
 
@@ -394,29 +377,5 @@ procedure TAiConnectsObject.SetFreimID(Value: TAIID);
 begin
   FOwnerID := Value;
 end;
-
-{ TAiConnectsObject20050819 }
-
-function TAiConnectsObject20050819.LoadFromXml(Xml: IXmlNode{TMyXml}): TError;
-begin
-  Result := LoadFromXml20050819(Xml);
-end;
-
-function TAiConnectsObject20050819.SaveToFile(F: AStreamObj.TProfFile): TError;
-begin
-  Result := SaveToFile2005(F);
-end;
-
-function TAiConnectsObject20050819.SaveToXml(Xml: IXmlNode{TMyXml}): TError;
-begin
-  Result := SaveToXml20050819(Xml);
-end;
-
-{ TAiConnectsObject20050911 }
-
-{function TAiConnectsObject20050911.SaveToFile(F: AStreamObj.TProfFile): TError;
-begin
-  Result := SaveToFile20050911(F);
-end;}
 
 end.

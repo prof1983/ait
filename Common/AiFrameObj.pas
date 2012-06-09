@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(07.06.2012)
+@LastMod(09.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -410,7 +410,7 @@ begin
     if (FInitialized) and (FSource <> 0) then
       FConnects := (TObject(FSource) as TAiSourceObject).GetFreimConnects(FId);
     if not(Assigned(FConnects)) then
-      FConnects := TAiConnectsObject20050819.Create();
+      FConnects := TAiConnectsObject.Create();
   end;
   Result := FConnects;
 end;
