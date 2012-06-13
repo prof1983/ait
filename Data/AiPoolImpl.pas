@@ -20,7 +20,7 @@ unit AiPoolImpl;
 interface
 
 uses
-  ABase, ACollectionIntf, AEntityIntf, AIteratorIntf,
+  ABase, ABaseTypes, ACollectionIntf, AEntityIntf, AIteratorIntf,
   AiBaseTypes, AiCollectionImpl, AiConsts, AiEntityIntf, AiLogingObject, AiPoolIntf;
 
 type //** Источник знаний
@@ -112,6 +112,8 @@ type //** Источник знаний
     function Select(Query: WideString): IACollection; virtual;
     //** Сделать выборку всех сущностей определенного типа
     function SelectT(TypeId: TAId): IACollection; virtual;
+      {** Делает выборку всех сущностей определенного типа }
+    function SelectT2(TypeId: TAId): ACollection; virtual;
     //** Разблокировать сущность
     procedure UnLockEntity(Id: TAId); virtual;
   public
@@ -313,6 +315,12 @@ end;
 function TAiPool.SelectT(TypeId: TAId): IACollection;
 begin
   Result := TAiCollection.Create();
+  // ...
+end;
+
+function TAiPool.SelectT2(TypeId: TAId): ACollection;
+begin
+  Result := ACollection(TAiCollection.Create());
   // ...
 end;
 
