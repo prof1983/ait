@@ -2,10 +2,8 @@
 @Abstract(Ai knowledge base object)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.06.2012)
-@LastMod(04.06.2012)
-@Version(0.0.5)
-
-From Prof_AI_Base_Class_20050526
+@LastMod(13.06.2012)
+@Version(0.5)
 }
 unit AiKbObj;
 
@@ -17,7 +15,7 @@ uses
   AiBase, AiFrameObj, AiIoFileKb, AiSourceObj, AiTypes;
 
 type
-  TAiKb = class(TAiSourceObject2005)
+  TAiKb = class(TAiSourceObject)
   private
     {FBases: array of TKB;}
     FParents: array of TAIKB;
@@ -33,8 +31,8 @@ type
     procedure SetParent(Index: UInt32; Value: TAIKB);
     procedure SetParentId(Index: AUInt32; Value: TAId);
   public
-    constructor Create(Source: AiSourceObject; Id: TAId = 0);
-    procedure Free(); {override;}
+    constructor Create();
+    procedure Free();
   end;
 
   TAiKbFile = class(TAIKB)
@@ -65,15 +63,13 @@ type
     function OpenCreate(FileName, Path: String): AError;
   end;
 
-  TAiKbFileCashe = TAiKbFile;
-
   TAiKbMemory = class(TAiKb)
   private
     FItems: array of TAiFrameObject;
     FItemsRec: array of TAIFreimRec;
   public
-    constructor Create(Source: AiSourceObject; Id: TAId = 0);
-    procedure Free(); {override;}
+    constructor Create();
+    procedure Free();
     function GetFreim(Id: TAId): TAiFrameObject; override;
     function GetItem(Index: AUInt32): TAiFrameObject;
     function GetCountFreims(): UInt64; override;
@@ -92,13 +88,13 @@ type
     {FOrder: TKBMemoryOrder;}   {Порядок. Очередность.}
   public
     function GetFreim(Id: TAId): TAiFrameObject; override;
-    function SetFreim(Id: TAId; Freim: TAiFrameObject): AError; override;
+    function SetFreim2(Id: TAId; Freim: TAiFrameObject): AError; override;
     function Initialize(): AError; override;
     function GetFreimCashe(Id: TAId): TAiFrameObject;
     function NewFreim(Freim: TAiFrameObject): TAId; {override;}
   public
-    constructor Create(Source: AiSourceObject; Id: TAId = 0);
-    procedure Free(); {override;}
+    constructor Create();
+    procedure Free();
     function GetCountFreims(): UInt64; override;
     function GetFreeIndexCashe(): AUInt32;
     function GetItem(Index: AUInt32): TAiFrameObject;
@@ -106,12 +102,6 @@ type
     procedure SetArbitrary(Value: Boolean);
     function Open(): AError;
   end;
-
-  {Источник БЗ через сеть}
-  //TAiKbNet = TAiKb;
-  //TAiKbNetCasheFile = TAiKbNet;
-  //TAiKbNetCasheFileMemory = TAiKbNet;
-  //TAiKbNetCasheMemory = TAiKbNet;
 
 implementation
 
@@ -124,9 +114,9 @@ begin
   SetLength(FParentsId, 0);
 end;
 
-constructor TAiKb.Create(Source: AiSourceObject; Id: TAId = 0);
+constructor TAiKb.Create();
 begin
-  inherited Create(Source, Id);
+  inherited Create();
   {FParent := Parent;
   if not(Assigned(FParent)) then
     FParentId := ParentId
@@ -550,11 +540,11 @@ end;
 
 { TAiKbMemory }
 
-constructor TAiKbMemory.Create(Source: AiSourceObject; Id: TAId = 0);
+constructor TAiKbMemory.Create();
 var
   I: Int32;
 begin
-  inherited Create(Source, Id);
+  inherited Create();
   SetLength(FItems, 1024);
   for I := 0 to High(FItems) do FItems[I] := nil;
 end;
@@ -654,9 +644,9 @@ end;
 
 { TAiKbMemory2 }
 
-constructor TAiKbMemory2.Create(Source: AiSourceObject; Id: TAId = 0);
+constructor TAiKbMemory2.Create();
 begin
-  inherited Create(Source, Id);
+  inherited Create();
   {FArbitrary := Arbitrary;}
   FArbitrary := True;
 end;
@@ -830,7 +820,7 @@ begin
     FArbitrary := Value;
 end;
 
-function TAiKbMemory2.SetFreim(Id: TAId; Freim: TAiFrameObject): AError;
+function TAiKbMemory2.SetFreim2(Id: TAId; Freim: TAiFrameObject): AError;
 var
   F2: TAiFrameObject;
   I: UInt32;

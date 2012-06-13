@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(09.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 }
 unit AiSourceObj;
@@ -104,6 +104,7 @@ type
       //** Сделать выборку по типу
     function Select(AType: TAId): TAiSelect; virtual;
     procedure SetFreim(Id: TAId; Value: TAiFrameObject); virtual;
+    function SetFreim2(Id: TAId; Freim: TAiFrameObject): AError; virtual;
     function SetFreimConnects(Id: TAId; Value: TAiConnectsObject): AError; virtual;
     function SetFreimData(Id: TAId; Data: TAiDataObject): AError; virtual;
     function SetFreimType(Id, Value: TAId): AError; virtual;
@@ -775,6 +776,11 @@ end;
 
 procedure TAiSourceObject.SetFreim(Id: TAId; Value: TAiFrameObject);
 begin
+end;
+
+function TAiSourceObject.SetFreim2(Id: TAId; Freim: TAiFrameObject): AError;
+begin
+  Result := -1;
 end;
 
 function TAiSourceObject.SetFreimConnects(Id: TAId; Value: TAiConnectsObject): AError;
