@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(18.05.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 }
 unit AiPoolImpl_20070511;
@@ -14,7 +14,7 @@ interface
 uses
   SysUtils,
   AConsts2, ATypes,
-  AiBase, AiBaseTypes, AiDataIntf, AiFrame, AiFrameListIntf, AiModuleImpl, AiFramePoolIntf;
+  AiBase, AiBaseTypes, AiDataIntf, AiFrameIntf, AiFrameListIntf, AiModuleImpl, AiFramePoolIntf;
 
 type //** Запись для источника фреймов
   TAIPoolRec = record

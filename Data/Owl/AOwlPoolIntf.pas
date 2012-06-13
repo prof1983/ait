@@ -2,7 +2,7 @@
 @Abstract(Пул (источник) работы с OWL элементами)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(04.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Prototype: org.mindswap.pellet.KnowledgeBase
@@ -17,7 +17,7 @@ unit AOwlPoolIntf;
 interface
 
 uses
-  ACollection, AEntityIntf, AOwlClassIntf;
+  ACollectionIntf, AEntityIntf, AOwlClassIntf;
 
 type
   IAiOwlPool = interface

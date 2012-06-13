@@ -2,7 +2,7 @@
 @Abstract(OWL класс)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(17.05.2007)
-@LastMod(04.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Prototype: org.semanticweb.owl.model.OwlClass
@@ -19,7 +19,7 @@ unit AOwlClassImpl;
 interface
 
 uses
-  ACollection, AEntityIntf, AiEntityImpl,
+  ACollectionIntf, AEntityIntf, AiEntityImpl,
   AOwlClassIntf;
 
 type //** @abstract(OWL класс)

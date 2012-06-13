@@ -2,7 +2,7 @@
 @Abstract(Файловый пул (источник знаний))
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(25.04.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Пул хранения сущностей в файле
@@ -23,7 +23,8 @@ unit AiFilePoolImpl;
 interface
 
 uses
-  AiBase, AiBaseTypes, AiIteratorIntf, AiPoolImpl;
+  AIteratorIntf,
+  AiBase, AiBaseTypes, AiPoolImpl;
 
 type
   TFileHeader = packed record // 16 байт + 16 байт
@@ -91,7 +92,7 @@ type
     Возвращает итератор.
     Служит для перечисления всех сущностей по порядку
     }
-    function GetIterator(): IAiIterator; override;
+    function GetIterator(): IAIterator; override;
     //** Возвращает True, если открыт
     function GetIsOpened(): Boolean; override;
   public
@@ -152,7 +153,7 @@ begin
   Result := FIsOpened;
 end;
 
-function TAiFilePool.GetIterator(): IAiIterator;
+function TAiFilePool.GetIterator(): IAIterator;
 begin
   Result := nil;
   //Result := TAIIterator.Create();

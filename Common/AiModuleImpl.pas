@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для модулей)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.03.2007)
-@LastMod(18.05.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Модуль - это объект AI, который имеет механизм отсылки и приема сообщений.
@@ -13,7 +13,7 @@ interface
 
 uses
   ABase, AMessageIntf, AModuleInformationIntf, AModuleIntf, ATypes,
-  AiFrame, AiModuleIntf, AiObjectImpl;
+  AiFrameIntf, AiModuleIntf, AiObjectImpl;
 
 type //** Базовый класс для модулей
   TAiModule = class(TAiObject, IAiModule, IProfModule)

@@ -2,7 +2,7 @@
 @Abstract(AiNamedFrame)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(21.11.2011)
-@LastMod(03.05.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 }
 unit AiNamedFrameImpl;
@@ -10,10 +10,10 @@ unit AiNamedFrameImpl;
 interface
 
 uses
-  AiFrameImpl, AiIntf;
+  AiFrameImpl;
 
 type //** Фрейм с названием, заголовком и описанием
-  TAiNamedFrame = class(TAiFrame, IAiFrame)
+  TAiNamedFrame = class(TAiFrame)
   private
       //** Описание фрейма
     FDescription: WideString;

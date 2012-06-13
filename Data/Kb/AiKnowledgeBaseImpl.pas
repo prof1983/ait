@@ -2,7 +2,7 @@
 @Abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(14.02.2006)
-@LastMod(04.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Может работать с несколькими источниками знаний. (пока не реализовано)
@@ -19,8 +19,8 @@ interface
 
 uses
   SysUtils,
-  ABase, ACollection, AOwlClassIntf, AOwlPoolIntf,
-  AiFrame, AiKnowledgeBaseIntf, AiPoolImpl_20070511, AiPoolListImpl, AiTermIntf;
+  ABase, ACollectionIntf, AOwlClassIntf, AOwlPoolIntf,
+  AiFrameIntf, AiKnowledgeBaseIntf, AiPoolImpl_20070511, AiPoolListImpl, AiTermIntf;
 
 type // База Знаний. Работает с фреймами в виде отдельных файлов N.xml
   TAiKnowledgeBase = class(TAiFramePool, IAiKnowledgeBaseOld, IAiKnowledgeBaseOwl)

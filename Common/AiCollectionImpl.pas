@@ -2,7 +2,7 @@
 @Abstract(Коллекция)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(25.05.2007)
-@LastMod(08.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 История версий:
@@ -13,8 +13,8 @@ unit AiCollectionImpl;
 interface
 
 uses
-  ACollection, AIteratorIntf,
-  AiEntityImpl; {AiPoolIntf;}
+  ACollectionIntf, AIteratorIntf,
+  AiEntityImpl;
 
 type //** @abstract(Коллекция)
   TAiCollection = class(TAiEntity, IACollection)

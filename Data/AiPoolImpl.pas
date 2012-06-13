@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(04.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Прототип: org.framerd.Pool
@@ -20,11 +20,11 @@ unit AiPoolImpl;
 interface
 
 uses
-  ABase, ACollection, AEntityIntf,
-  AiBaseTypes, AiCollectionImpl, AiConsts, AiEntityIntf, AiIteratorIntf, AiLogingObject, AiPoolIntf;
+  ABase, ACollectionIntf, AEntityIntf, AIteratorIntf,
+  AiBaseTypes, AiCollectionImpl, AiConsts, AiEntityIntf, AiLogingObject, AiPoolIntf;
 
 type //** Источник знаний
-  TAiPool = class(TAiLogingObject, IAiPool) //(TInterfacedObject, IAIPool)
+  TAiPool = class(TAiLogingObject, IAiPool)
   protected
     //** Начальный идентификатор для этого пула (источника) фреймов
     FBase: TAId;
@@ -49,7 +49,7 @@ type //** Источник знаний
     Возвращает итератор.
     Служит для перечисления всех сущностей по порядку
     }
-    function GetIterator(): IAIIterator; virtual;
+    function GetIterator(): IAIterator; virtual;
   public
       {**
         Return entity by index
@@ -117,8 +117,8 @@ type //** Источник знаний
   public
     function AddElement(Id, Element: TAId): Boolean;    // ToCollection
     function InsertElement(Id, Element: TAId; Index: Integer): Boolean; // To Array
-    function InsertElementIterator(Iterator: IAIIterator; Id, Element: TAId): Boolean; // To Collection
-    function RemoteElementIterator(Iterator: IAIIterator; Id: TAId): Boolean;
+    function InsertElementIterator(Iterator: IAIterator; Id, Element: TAId): Boolean; // To Collection
+    function RemoteElementIterator(Iterator: IAIterator; Id: TAId): Boolean;
     //function RemoteElement(ID, Element: TAIID): Boolean; // FromCollection
   public
     procedure AfterConstruction(); override;
@@ -138,7 +138,7 @@ type //** Источник знаний
     Итератор
     Служит для перечисления всех сущностей по порядку
     }
-    property Iterator: IAIIterator read GetIterator;
+    property Iterator: IAIterator read GetIterator;
   end;
 
 implementation
@@ -183,11 +183,6 @@ function TAiPool.GetCount(): Int64;
 begin
   Result := 0;
 end;
-
-{function TAIPool.GetEntityByIndex(Index: Integer): IAIEntity;
-begin
-  Result := nil;
-end;}
 
 function TAiPool.GetEntityByIndex(Index: Integer): IAEntity;
 begin
@@ -239,7 +234,7 @@ begin
   Result := False;
 end;
 
-function TAiPool.GetIterator(): IAIIterator;
+function TAiPool.GetIterator(): IAIterator;
 begin
   Result := nil;
   // ...
@@ -250,7 +245,7 @@ begin
   Result := False;
 end;
 
-function TAiPool.InsertElementIterator(Iterator: IAIIterator; Id, Element: TAId): Boolean;
+function TAiPool.InsertElementIterator(Iterator: IAIterator; Id, Element: TAId): Boolean;
 begin
   Result := False;
 end;
@@ -305,7 +300,7 @@ begin
   Result := False;
 end;}
 
-function TAiPool.RemoteElementIterator(Iterator: IAIIterator; Id: TAId): Boolean;
+function TAiPool.RemoteElementIterator(Iterator: IAIterator; Id: TAId): Boolean;
 begin
   Result := False;
 end;

@@ -2,7 +2,7 @@
 @Abstract(Объект AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(25.09.2006)
-@LastMod(15.03.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Объект AI наследник от фрейма.
@@ -27,7 +27,7 @@ interface
 
 uses
   SysUtils,
-  AiFrame, AiNamedFrameImpl, AiObjectIntf, AiSlotIntf;
+  AiFrameIntf, AiNamedFrameImpl, AiObjectIntf, AiSlotIntf;
 
 type //** Объект AI
   TAiObject = class(TAiNamedFrame, IAiObject)

@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейса IAiFrameList)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(11.03.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 }
 unit AiFrameListIntf;
@@ -10,7 +10,7 @@ unit AiFrameListIntf;
 interface
 
 uses
-  AiBase, AiFrame;
+  AiBase, AiFrameIntf;
 
 type
   IAiFrameList = interface

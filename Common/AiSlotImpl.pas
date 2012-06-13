@@ -2,7 +2,7 @@
 @Abstract(Слот фрейма)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.06.2007)
-@LastMod(18.05.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Содержит имя слота и значение слота.
@@ -17,16 +17,22 @@ interface
 
 uses
   Variants,
+  ABase,
   AiEntityImpl, AiSlotIntf;
 
 type //** Слот фрейма
-  TAiSlot = class(TAiEntity, IAiSlot2007)
+  TAiSlot = class(TAiEntity, IAiSlot)
   private
     // Имя слота
     FName: WideString;
     // Данные слота. В том числе может быть указатель на сущность (AIID).
     FValue: Variant;
+  public
     function GetName(): WideString;
+    function GetSlotId(): TAId;
+    function GetSlotName(): WideString;
+    function GetSlotValue(): Variant;
+    function GetSlotType(): TAId;
     function GetValue(): Variant;
     procedure SetName(Value: WideString);
     procedure SetValue(Value: Variant);
@@ -46,6 +52,26 @@ implementation
 function TAiSlot.GetName(): WideString;
 begin
   Result := FName;
+end;
+
+function TAiSlot.GetSlotId(): TAId;
+begin
+  Result := FId;
+end;
+
+function TAiSlot.GetSlotName(): WideString;
+begin
+  Result := FName;
+end;
+
+function TAiSlot.GetSlotType(): TAId;
+begin
+  Result := FEntityType;
+end;
+
+function TAiSlot.GetSlotValue(): Variant;
+begin
+  Result := FValue;
 end;
 
 function TAiSlot.GetValue(): Variant;

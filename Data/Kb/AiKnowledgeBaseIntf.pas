@@ -2,7 +2,7 @@
 @Abstract(Интерфейс для класса базы знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.04.2007)
-@LastMod(04.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 База знаний - это объект, который работает с несколькими источниками (пулами) фреймов.
@@ -20,7 +20,7 @@ unit AiKnowledgeBaseIntf;
 interface
 
 uses
-  ABase, ACollection,
+  ABase, ACollectionIntf,
   AiFramePoolIntf, AiTermIntf;
 
 type

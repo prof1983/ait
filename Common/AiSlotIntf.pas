@@ -2,10 +2,11 @@
 @Abstract(Слот фрейма)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.06.2007)
-@LastMod(18.05.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Содержит имя слота и значение слота.
+Аналог - org.framerd.FDType
 
 История версий:
 0.0.0.2 - 21.06.2007 - Добавил GetName, GetValue, SetName, SetValue
@@ -16,11 +17,15 @@ unit AiSlotIntf;
 interface
 
 uses
-  AiBase;
+  ABase;
 
 type //** Слот фрейма
-  IAiSlot2007 = interface // LastMod(21.06.2007)
+  IAiSlot = interface
     function GetName: WideString;
+    function GetSlotId(): TAId;
+    function GetSlotName(): WideString;
+    function GetSlotValue(): Variant;
+    function GetSlotType(): TAId;
     function GetValue: Variant;
     procedure SetName(Value: WideString);
     procedure SetValue(Value: Variant);
@@ -29,25 +34,30 @@ type //** Слот фрейма
     function ToString: WideString; {deprecated;}
 
     property Name: WideString read GetName write SetName;
+      {** Идентификатор слота - уникальный идентификатор }
+    property SlotId: TAId read GetSlotId;
+      {** Имя слота }
+    property SlotName: WideString read GetSlotName;
+      {** Данные слота }
+    property SlotValue: Variant read GetSlotValue;
+      {** Тип слота }
+    property SlotType: TAId read GetSlotType;
     property Value: Variant read GetValue write SetValue;
   end;
-  //IAiSlot = IAiSlot2007;
+  IAiSlot2007 = IAiSlot;
+  //IAiSlot_20071128 = IAiSlot2007;
 
-type //** Слот фрейма
-  IAiSlot_20071128 = interface
-    function GetSlotID(): TAiID;
-    function GetSlotName(): WideString;
-    function GetSlotValue(): Variant;
-    function GetSlotType(): TAiID;
+  IAiSlotList = interface
+    function GetSlotById(SlotId: TAId): IAiSlot; safecall;
+    function GetSlotByIndex(Index: Integer): IAiSlot; safecall;
+    function GetSlotByName(const SlotName: WideString): IAiSlot; safecall;
+    function GetSlotValueById(SlotId: TAId): Variant; safecall;
+    function GetSlotValueByIndex(Index: Integer): Variant; safecall;
+    function GetSlotValueByName(const SlotName: WideString): Variant; safecall;
 
-    //** Идентификатор слота - уникальный идентификатор
-    property SlotID: TAiID read GetSlotID;
-    //** Имя слота
-    property SlotName: WideString read GetSlotName;
-    //** Данные слота
-    property SlotValue: Variant read GetSlotValue;
-    //** Тип слота
-    property SlotType: TAiID read GetSlotType;
+    property SlotById[SlotId: TAId]: IAiSlot read GetSlotById;
+    property SlotByIndex[Index: Integer]: IAiSlot read GetSlotByIndex;
+    property SlotByName[const SlotName: WideString]: IAiSlot read GetSlotByName;
   end;
 
 implementation

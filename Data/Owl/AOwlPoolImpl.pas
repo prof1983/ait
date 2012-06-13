@@ -2,7 +2,7 @@
 @Abstract(Пул (источник) работы с OWL элементами)
 @Author(Prof1983 prof183@ya.ru)
 @Created(12.05.2006)
-@LastMod(04.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Prototype: Pellet.KnowledgeBase
@@ -19,7 +19,7 @@ unit AOwlPoolImpl;
 interface
 
 uses
-  ABase, ACollection, AEntityIntf,
+  ABase, ACollectionIntf, AEntityIntf,
   AOwlClassIntf, AOwlClassImpl, AOwlPoolIntf,
   AiConsts, AiLogingObject,
   AiOntologyIndividual, AiPoolIntf;

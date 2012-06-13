@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(30.05.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -18,15 +18,9 @@ uses
   AConsts2, ANodeIntf, AObjectImpl, ATypes,
   AiBase, AiBaseTypes, AiDataIntf, AiFrame, AiIntf, AiFramePoolIntf;
 
-{type
-  // Аналог - org.framerd.FDType
-  IAIValue = interface
-  end;}
-
 type
   //** @abstract(Фрейм)
   TAIFrame = class(TProfObject, IAIFrame)
-  private
   protected
     //** Данные - объект источника. Если источника нет - локальный объект
     FData: IAIData;
@@ -101,8 +95,6 @@ type
     //** Задаем фрейм в виде XML строки
     procedure SetXml(Value: WideString);
   public
-    //** Разобрать и выполнить сообщение
-    function AddMessage(const Msg: WideString): Integer; override; safecall;
     //** Очистить объект
     function Clear(): WordBool; virtual; safecall;
     // Загрузить конфигурации
@@ -161,11 +153,6 @@ type
 implementation
 
 { TAIFrame }
-
-function TAIFrame.AddMessage(const Msg: WideString): Integer;
-begin
-  Result := inherited AddMessage(Msg);
-end;
 
 function TAIFrame.Clear(): WordBool;
 begin

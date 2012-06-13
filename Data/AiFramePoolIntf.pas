@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейса IAiFramePool)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(18.05.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 }
 unit AiFramePoolIntf;
@@ -11,14 +11,14 @@ interface
 
 uses
   ABase,
-  AiBase, AiBaseTypes, AiFrame, AiFrameListIntf;
+  AiBase, AiBaseTypes, AiFrameIntf, AiFrameListIntf;
 
 type
   {**
     @abstract(Источник знаний)
     UML соответствие: "Коллекция объектов [ Identity Map ]" http://ooad.asf.ru/Pattern.aspx?IdKat=7&IdPat=9
   }
-  IAIFramePool = interface(IAIFrame)
+  IAiFramePool = interface(IAiFrame)
     //** Возвращает базовый идентификатор (идентификатор с которого будет начинаться отсчет ID для фреймов)
     function GetBase(): TAIID; safecall;
     //** Возвращает вместимость хранилища

@@ -2,7 +2,7 @@
 @Abstract(Сущность - базовый класс для представления знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.05.2007)
-@LastMod(04.06.2012)
+@LastMod(13.06.2012)
 @Version(0.5)
 
 Эта сущность для хранения в ОЗУ в виде объекта.
@@ -24,15 +24,11 @@ unit AiEntityImpl;
 interface
 
 uses
-  ABase, AEntityIntf, AiPoolIntf;
+  ABase, AEntityImpl, AiPoolIntf;
 
 type
-  TAiEntity = class(TInterfacedObject, IAEntity)
+  TAiEntity = class(TProfEntity)
   protected
-      //** Идентификатор
-    FEntityID: TAId;
-      //** Тип сущности
-    FEntityType: TAId;
       //** Пул, откуда запрашиваются сущности по идентификатору
     FPool: IAIPool;
   public
@@ -87,7 +83,7 @@ constructor TAiEntity.Create();
 begin
   inherited Create();
   FPool := nil;
-  FEntityID := 0;
+  FId := 0;
   FEntityType := 0;
 end;
 
@@ -95,7 +91,7 @@ constructor TAiEntity.Create2(Pool: IAiPool; Id: TAId);
 begin
   inherited Create();
   FPool := Pool;
-  FEntityId := Id;
+  FId := Id;
   if Assigned(FPool) then
   try
     FEntityType := FPool.GetEntityType(Id);
@@ -110,13 +106,13 @@ constructor TAiEntity.Create3(Pool: IAiPool; Id, Typ: TAId);
 begin
   inherited Create();
   FPool := Pool;
-  FEntityId := Id;
+  FId := Id;
   FEntityType := Typ;
 end;
 
 function TAiEntity.GetEntityId(): TAId;
 begin
-  Result := FEntityId;
+  Result := FId;
 end;
 
 function TAiEntity.GetEntityType(): TAId;
@@ -126,7 +122,7 @@ end;
 
 function TAiEntity.GetId(): TAId;
 begin
-  Result := FEntityId;
+  Result := FId;
 end;
 
 procedure TAiEntity.SetEntityType(Value: TAId);
