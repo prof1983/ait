@@ -2,8 +2,8 @@
 @Abstract(БЗ фреймов v. 0.1)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(15.03.2005)
-@LastMod(07.06.2012)
-@Version(0.0.5)
+@LastMod(19.06.2012)
+@Version(0.5)
 
 Функции доступа к файлу БЗ (идентификаторы фреймов - 64 бита)
 
@@ -666,7 +666,7 @@ begin
   FCount := FHeader.CountF;
   ICashe := 0;*)
   KbClose();
-  Kb := TAiKbFile.Create(0, 0);
+  Kb := TAiKbFile.Create();
   Result := Kb.Open(FileName, Path);
   if (Result <> 0) then
   begin
@@ -693,7 +693,7 @@ begin
   FCount := FHeader.CountF;
   ICashe := 0;*)
   KbClose();
-  Kb := TAiKbFile.Create(0, 0);
+  Kb := TAiKbFile.Create();
   Result := Kb.OpenCreate(FileName, Path);
   if (Result <> 0) then
   begin
