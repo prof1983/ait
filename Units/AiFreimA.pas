@@ -2,8 +2,8 @@
 @Abstract(AiFrame functions)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(06.06.2012)
-@LastMod(08.06.2012)
-@Version(0.0)
+@LastMod(19.06.2012)
+@Version(0.5)
 
 Recovered
 }
@@ -47,6 +47,8 @@ function AiSourceFreim_PointOpen(P: Pointer; HBase: AInt; oX, oY: AInt): AError;
 function AiSourceFreim_StrOpen(var HBase: AInt{THandle064}; S: PChar): AError;
 
 function AiSourceLoad2(const FileName: APascalString): AError;
+
+function AiSourceOpen(const FileName: APascalString; Mode: AInt): AError;
 
 function AiSourceSave2(const FileName: APascalString): AError;
 
@@ -131,6 +133,11 @@ begin
 end;
 
 function AiSourceLoad2(const FileName: APascalString): AError;
+begin
+  Result := -1;
+end;
+
+function AiSourceOpen(const FileName: APascalString; Mode: AInt): AError;
 begin
   Result := -1;
 end;
