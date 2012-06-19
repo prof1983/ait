@@ -2,7 +2,7 @@
 @Abstract(AiMethod)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(17.06.2007)
-@LastMod(09.06.2012)
+@LastMod(19.06.2012)
 @Version(0.5)
 }
 unit AiMethodObj;
@@ -10,7 +10,8 @@ unit AiMethodObj;
 interface
 
 uses
-  ABase, AiBase, AiBaseTypes, AiDataObj, AiFrameObj, AiTypes;
+  ABase, AStreamObj,
+  AiBase, AiBaseTypes, AiDataObj, AiFrameObj, AiTypes;
 
 type // Метод
   TAiMethod = class
@@ -71,6 +72,7 @@ end;
 function TAiMethodObject.Load(): AError;
 var
   Data: TAiDataObject;
+  Stream: TProfStream;
 begin
   Result := inherited Load();
   if Result <> 0 then Exit;
@@ -80,9 +82,10 @@ begin
   Data.ReadId(FBody);}
   if (Data.GetType = dtStream) then
   begin
-    Data.GetStream.ReadInt64(FInput);
-    Data.GetStream.ReadInt64(FOutput);
-    Data.GetStream.ReadInt64(FBody);
+    Stream := Data.GetStreamMy();
+    Stream.ReadInt64(FInput);
+    Stream.ReadInt64(FOutput);
+    Stream.ReadInt64(FBody);
   end
   else
   begin
@@ -119,6 +122,7 @@ end;
 function TAiMethodObject.Save(): AError;
 var
   Data: TAiDataObject;
+  Stream: TProfStream;
 begin
   Result := inherited Save();
   if (Result <> 0) then Exit;
@@ -128,9 +132,10 @@ begin
   Data.WriteId(FBody);}
   if (Data.GetType = dtStream) then
   begin
-    Data.GetStream.WriteUInt64(FInput);
-    Data.GetStream.WriteUInt64(FOutput);
-    Data.GetStream.WriteUInt64(FBody);
+    Stream := Data.GetStreamMy();
+    Stream.WriteUInt64(FInput);
+    Stream.WriteUInt64(FOutput);
+    Stream.WriteUInt64(FBody);
   end
   else
   begin
