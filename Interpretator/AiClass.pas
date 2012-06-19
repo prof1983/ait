@@ -2,7 +2,7 @@
 @Abstract(AiClass)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(17.06.2007)
-@LastMod(25.04.2012)
+@LastMod(19.06.2012)
 @Version(0.5)
 }
 unit AiClass;
@@ -10,7 +10,7 @@ unit AiClass;
 interface
 
 uses
-  AiMethod;
+  AiMethodObj;
 
 type // Класс
   TAiClass = class(TInterfacedObject)

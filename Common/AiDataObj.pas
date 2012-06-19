@@ -2,7 +2,7 @@
 @Abstract(Базовый тип данных для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2005)
-@LastMod(09.06.2012)
+@LastMod(19.06.2012)
 @Version(0.5)
 
 02.05.2012 - Added from Prof_AI_Base.pas
@@ -15,9 +15,6 @@ uses
   Classes,
   ABase, AStreamObj, ATypes, AXml20060314, AXmlObj,
   AiBase, AiTypes;
-
-type
-  TMyXml20050819 = AXml20060314.TProfXmlNode2;
 
 type //** @abstract(Базовый тип данных для AI)
   TAiDataObject = class
@@ -35,7 +32,7 @@ type //** @abstract(Базовый тип данных для AI)
       //** Данные в виде XML
     FXml: TProfXml; //FXml: IProfNode;
       // В виде параметров. Id=0 Source=nil
-    FXml2006: AXml20060314.TProfXmlNode2{TMyXml20050819};
+    FXml2006: AXml20060314.TProfXmlNode2;
   protected
     //FType: TAIDataType; - Use FDataType {Тип даных}
   protected
@@ -79,7 +76,7 @@ type //** @abstract(Базовый тип данных для AI)
     function SetOpened(Value: Boolean): TError;
     function SetStream(Value: AStreamObj.TProfStream): TError;
     function SetType(Value: TAiDataType): TError;
-    function SetXml(Value: AXml20060314.TProfXmlNode2{TMyXml20050819}): TError;
+    function SetXml(Value: AXml20060314.TProfXmlNode2): TError;
     function Write(A: TArrayByte; Count: UInt64): UInt64; virtual;
     function WriteId(Value: TAId): AError; virtual;
     function WriteInt08(Value: Int08): TError; virtual;
@@ -343,7 +340,7 @@ begin
     FXml := TProfXml.Create;
   Result := FXml.LoadFromXml(Xml);
 end;
-(*function TAiDataObject.LoadFromXml(Xml: TMyXml20050819): TError;
+(*function TAiDataObject.LoadFromXml(Xml: TProfXmlNode2): TError;
 var
   Count: UInt32;
   I: Int32;
@@ -495,7 +492,7 @@ begin
   Result := 0;
 end;
 
-function TAiDataObject.SetXml(Value: AXml20060314.TProfXmlNode2{TMyXml20050819}): TError;
+function TAiDataObject.SetXml(Value: AXml20060314.TProfXmlNode2): TError;
 begin
   FXml2006 := Value;
   FDataType := dtXml;
