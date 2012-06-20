@@ -231,7 +231,7 @@ begin
     if (FInitialized) and Assigned(FSource) then
       FConnects := FSource.GetFreimConnects(FId);
     if not(Assigned(FConnects)) then
-      FConnects := TAI_Connects.Create;
+      FConnects := TAiConnects.Create();
   end;}
   Result := FConnects;
 end;*)
@@ -409,7 +409,7 @@ end;
 
 {function TAIFreim.SaveToXml(Xml: IXmlNode): WordBool;
 var
-  con: TAI_Connects;
+  con: TAiConnects;
 begin
   Result := Assigned(Xml);
   if not(Result) then Exit;

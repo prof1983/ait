@@ -2,7 +2,7 @@
 @Abstract(Объект доступа к вложенным сущностям)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(15.05.2007)
-@LastMod(25.04.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 Записываются идентификаторы сущностей.
@@ -17,63 +17,63 @@
 }
 unit AiEntitiesImpl;
 
+// TODO: Move to AiConnectsImpl.pas
+
 interface
 
 uses
+  ABase, AEntityIntf,
   AiBase, AiBaseTypes, AiEntityIntf, AiPoolIntf;
 
 type //** @abstract(Объект доступа к вложенным сущностям)
-  TAIWSEntities = class(TInterfacedObject, IAIWSEntities)
+  TAiEntities = class(TInterfacedObject, IAiEntities)
   private
     //** Сущности
     FEntities: array of TAId;
     //** Пул, откуда запрашиваются сущности по идентификатору
-    FPool: IAIWSPool;
+    FPool: IAiPool;
   protected
     //** Возвращает сущность по идентификатору
-    function GetByID(ID: TAId): IAIWSEntity;
+    function GetById(Id: AId): IAEntity;
     //** Возвращает сущность по индексу
-    function GetByIndex(Index: Integer): IAIWSEntity;
+    function GetByIndex(Index: AInt): IAEntity;
     //** Возвращает сущность по имени
-    function GetByName(Name: WideString): IAIWSEntity;
+    function GetByName(const Name: WideString): IAEntity;
     //** Возврвщает колличество сущностей
     function GetCount(): Integer;
   public
-    {**
-    Добавить сущность (в списке может находится только один экземпляр)
-    Если сущность уже присутствует в списке возвращает False,
-    если добавлено успешно возвращает True.
-    }
-    function Add(ID: TAId): Boolean; overload;
-    {**
-    Добавить сущность (в списке может находится только один экземпляр)
-    Если сущность уже присутствует в списке возвращает False,
-    если добавлено успешно возвращает True.
-    }
-    function Add(Entity: IAIWSEntity): Boolean; overload;
-    constructor Create(Pool: IAIWSPool); 
-    //** Удалить сущность из списка
-    function Remote(Entity: TAId): Boolean; overload;
-    //** Удалить сущность из списка
-    function Remote(Entity: IAIWSEntity): Boolean; overload;
+    {** Добавляет сущность (в списке может находится только один экземпляр)
+        Если сущность уже присутствует в списке возвращает False,
+        если добавлено успешно возвращает True. }
+    function Add(Id: AId): Boolean; overload;
+    {** Добавляет сущность (в списке может находится только один экземпляр)
+        Если сущность уже присутствует в списке возвращает False,
+        если добавлено успешно возвращает True. }
+    function Add(Entity: IAEntity): ABoolean; overload;
+    {** Удаляет сущность из списка }
+    function Remove(Entity: IAEntity): ABoolean; overload;
+    {** Удаляет сущность из списка }
+    function RemoveById(Entity: AId): ABoolean; overload;
+  public
+    constructor Create(Pool: IAiPool);
   public
     //** Сущности по идентификатору
-    property ByID[ID: TAId]: IAIWSEntity read GetByID;
+    property ById[Id: AId]: IAEntity read GetById;
     //** Сущности по индексу
-    property ByIndex[Index: Integer]: IAIWSEntity read GetByIndex;
+    property ByIndex[Index: AInt]: IAEntity read GetByIndex;
     //** Сущности по имени
-    property ByName[Name: WideString]: IAIWSEntity read GetByName;
+    property ByName[const Name: WideString]: IAEntity read GetByName;
     //** Колличество сущностей
     property Count: Integer read GetCount;
     //** Пул для чтения и записи сущностей
-    property Pool: IAIWSPool read FPool;
+    property Pool: IAiPool read FPool;
   end;
 
 implementation
 
 { TAIWSEntities }
 
-function TAIWSEntities.Add(Entity: IAIWSEntity): Boolean;
+function TAiEntities.Add(Entity: IAEntity): ABoolean;
 var
   i: Integer;
 begin
@@ -90,13 +90,13 @@ begin
   Result := True;
 end;
 
-constructor TAIWSEntities.Create(Pool: IAIWSPool);
+constructor TAiEntities.Create(Pool: IAiPool);
 begin
   inherited Create();
   FPool := Pool;
 end;
 
-function TAIWSEntities.Add(ID: TAId): Boolean;
+function TAiEntities.Add(ID: TAId): Boolean;
 var
   i: Integer;
 begin
@@ -114,7 +114,7 @@ begin
   Result := True;
 end;
 
-function TAIWSEntities.GetByID(ID: TAId): IAIWSEntity;
+function TAiEntities.GetById(Id: AId): IAEntity;
 var
   i: Integer;
 begin
@@ -127,7 +127,7 @@ begin
     end;
 end;
 
-function TAIWSEntities.GetByIndex(Index: Integer): IAIWSEntity;
+function TAiEntities.GetByIndex(Index: AInt): IAEntity;
 var
   id: TAId;
 begin
@@ -138,29 +138,36 @@ begin
   FPool.EntityByID[id];
 end;
 
-function TAIWSEntities.GetByName(Name: WideString): IAIWSEntity;
+function TAiEntities.GetByName(const Name: WideString): IAEntity;
 var
-  e: IAIWSEntity;
+  e: IAEntity;
   i: Integer;
 begin
   Result := nil;
+  {
   for i := 0 to High(FEntities) do
   begin
-    e := FPool.EntityByID[FEntities[i]];
-    if e.Name = Name then
+    e := FPool.EntityById[FEntities[i]];
+    if (e.Name = Name) then
     begin
       Result := e;
       Exit;
     end;
   end;
+  }
 end;
 
-function TAIWSEntities.GetCount(): Integer;
+function TAiEntities.GetCount(): Integer;
 begin
   Result := Length(FEntities);
 end;
 
-function TAIWSEntities.Remote(Entity: TAId): Boolean;
+function TAiEntities.Remove(Entity: IAEntity): ABoolean;
+begin
+  Result := RemoveById(Entity.Id);
+end;
+
+function TAiEntities.RemoveById(Entity: AId): ABoolean;
 var
   i: Integer;
   i2: Integer;
@@ -175,11 +182,6 @@ begin
       Result := True;
       Exit;
     end;
-end;
-
-function TAIWSEntities.Remote(Entity: IAIWSEntity): Boolean;
-begin
-  Result := Remote(Entity.ID);
 end;
 
 end.

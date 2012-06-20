@@ -2,7 +2,7 @@
 @Abstract(Именованая сущность)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(06.03.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 }
 unit AiNamedEntity;
@@ -10,18 +10,14 @@ unit AiNamedEntity;
 interface
 
 uses
-  AiConsts, AiEntityIntf, AiEntityImpl;
+  AEntityIntf,
+  AiConsts, AiEntityImpl;
 
-type //** Именованая сущность
-  IAINamedEntity = interface(IAIEntity)
-    function GetName(): WideString;
-    procedure SetName(Value: WideString);
+type
+  //IAINamedEntity = IANamedEntity;
 
-    property Name: WideString read GetName write SetName;
-  end;
-
-type //** Именованая сущность
-  TAINamedEntity = class(TAIEntity, IAINamedEntity)
+  //** Именованая сущность
+  TAINamedEntity = class(TAIEntity, IANamedEntity)
   private
     FName: WideString;
   public

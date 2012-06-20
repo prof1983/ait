@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(13.06.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 Прототип: org.framerd.Pool
@@ -21,7 +21,7 @@ interface
 
 uses
   ABase, ABaseTypes, ACollectionIntf, AEntityIntf, AIteratorIntf,
-  AiBaseTypes, AiCollectionImpl, AiConsts, AiEntityIntf, AiLogingObject, AiPoolIntf;
+  AiBaseTypes, AiCollectionImpl, AiConsts, AiLogingObject, AiPoolIntf;
 
 type //** Источник знаний
   TAiPool = class(TAiLogingObject, IAiPool)
@@ -51,10 +51,10 @@ type //** Источник знаний
     }
     function GetIterator(): IAIterator; virtual;
   public
-      {**
-        Return entity by index
-        @return(Entity by index)
-      }
+    {** Возвращает сущность по идентификатору }
+    function GetEntityById(Id: AId): IAEntity;
+    {** Return entity by index
+        @return(Entity by index) }
     function GetEntityByIndex(Index: Integer): IAEntity; virtual;
     //** Возвращает значение сущности как Boolean
     function GetEntityValueAsBool(Id: TAId): Boolean; virtual;
@@ -86,26 +86,40 @@ type //** Источник знаний
     //function GetEntityByIndex(Index: Integer): IAIEntity; virtual;
   public
     //** Возвращает true, если сущность является Bool
-    function IsBoolEntity(Entity: IAIEntity): Boolean;
+    function IsBoolEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является Int
-    function IsIntEntity(Entity: IAIEntity): Boolean;
+    function IsIntEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является Float
-    function IsFloatEntity(Entity: IAIEntity): Boolean;
+    function IsFloatEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является строкой
-    function IsStringEntity(Entity: IAIEntity): Boolean;
+    function IsStringEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является коллекцией
-    function IsCollectionEntity(Entity: IAIEntity): Boolean;
+    function IsCollectionEntity(Entity: IAEntity): Boolean;
   public
-    //** Закрыть пул (источник)
-    procedure Close(); virtual;
-    //** Пул (источник) содержит в себе сущность
+    {** Закрывает пул (источник) }
+    function Close(): AError; virtual;
+    {** Сохраняет все изменения }
+    function Commit(): AError;
+    {** Созраняет сущность в пул }
+    function CommitEntity(Entity: IAEntity): AError;
+    {** Возвращает True, если пул (источник) содержит в себе сущность }
     function Contains(Id: TAId): Boolean; virtual;
-    //** Заблокировать сущность
-    function LockEntity(Id: TAId): Boolean; virtual;
+    {** Блокирует сущность }
+    function LockEntity(X: IAEntity): AError;
+    {** Блокирует сущность }
+    function LockEntityById(Id: AId): AError; virtual;
     //** Заблокировать пул (источник)
     function LockPool(): Boolean; virtual;
-    // Создать новую сущность (заререзвировать идентификатор под сущность)
-    function NewEntity(EntityType: TAId): TAId; virtual;
+    {** Помечает как измененый }
+    function MarkModified(Id: IAEntity): AError;
+    {** Помечает как измененый }
+    function MarkModifiedById(Id: AId): AError;
+    {** Создает новую сущность }
+    function NewEntity(): AId;
+    {** Создает новую сущность (заререзвировать идентификатор под сущность) }
+    function NewEntity2(EntityType: AId): AId; virtual;
+    {** Создает новую сущность }
+    function NewEntityA(): IAEntity;
     //** Открыть пул (источник)
     function Open(): AError; virtual;
     //** Сделать выборку сущностей по запросу
@@ -116,6 +130,10 @@ type //** Источник знаний
     function SelectT2(TypeId: TAId): ACollection; virtual;
     //** Разблокировать сущность
     procedure UnLockEntity(Id: TAId); virtual;
+    {** Обновить все данные из пула }
+    function Update(): AError;
+    {** Обновить данные сущности из пула }
+    function UpdateEntity(Entity: IAEntity): AError;
   public
     function AddElement(Id, Element: TAId): Boolean;    // ToCollection
     function InsertElement(Id, Element: TAId; Index: Integer): Boolean; // To Array
@@ -159,8 +177,19 @@ begin
   FCapacity := 100000;
 end;
 
-procedure TAiPool.Close();
+function TAiPool.Close(): AError;
 begin
+  Result := -1;
+end;
+
+function TAiPool.Commit(): AError;
+begin
+  Result := -1;
+end;
+
+function TAiPool.CommitEntity(Entity: IAEntity): AError;
+begin
+  Result := -1;
 end;
 
 function TAiPool.Contains(Id: TAId): Boolean;
@@ -184,6 +213,11 @@ end;
 function TAiPool.GetCount(): Int64;
 begin
   Result := 0;
+end;
+
+function TAiPool.GetEntityById(Id: AId): IAEntity;
+begin
+  Result := nil;
 end;
 
 function TAiPool.GetEntityByIndex(Index: Integer): IAEntity;
@@ -252,34 +286,39 @@ begin
   Result := False;
 end;
 
-function TAiPool.IsBoolEntity(Entity: IAIEntity): Boolean;
+function TAiPool.IsBoolEntity(Entity: IAEntity): Boolean;
 begin
   Result := Assigned(Entity) and (Entity.EntityType = AIBoolType);
 end;
 
-function TAiPool.IsCollectionEntity(Entity: IAIEntity): Boolean;
+function TAiPool.IsCollectionEntity(Entity: IAEntity): Boolean;
 begin
   Result := Assigned(Entity) and (Entity.EntityType = AICollectionType);
 end;
 
-function TAiPool.IsFloatEntity(Entity: IAIEntity): Boolean;
+function TAiPool.IsFloatEntity(Entity: IAEntity): Boolean;
 begin
   Result := Assigned(Entity) and (Entity.EntityType = AIFloatType);
 end;
 
-function TAiPool.IsIntEntity(Entity: IAIEntity): Boolean;
+function TAiPool.IsIntEntity(Entity: IAEntity): Boolean;
 begin
   Result := Assigned(Entity) and (Entity.EntityType = AIIntType);
 end;
 
-function TAiPool.IsStringEntity(Entity: IAIEntity): Boolean;
+function TAiPool.IsStringEntity(Entity: IAEntity): Boolean;
 begin
   Result := Assigned(Entity) and (Entity.EntityType = AIStringType);
 end;
 
-function TAiPool.LockEntity(Id: TAId): Boolean;
+function TAiPool.LockEntity(X: IAEntity): AError;
 begin
-  Result := False;
+  Result := -1;
+end;
+
+function TAiPool.LockEntityById(Id: AId): AError;
+begin
+  Result := -1;
 end;
 
 function TAiPool.LockPool(): Boolean;
@@ -287,9 +326,29 @@ begin
   Result := False;
 end;
 
-function TAiPool.NewEntity(EntityType: TAId): TAId;
+function TAiPool.MarkModified(Id: IAEntity): AError;
+begin
+  Result := -1;
+end;
+
+function TAiPool.MarkModifiedById(Id: AId): AError;
+begin
+  Result := -1;
+end;
+
+function TAiPool.NewEntity(): AId;
 begin
   Result := 0;
+end;
+
+function TAiPool.NewEntity2(EntityType: AId): AId;
+begin
+  Result := 0;
+end;
+
+function TAiPool.NewEntityA(): IAEntity;
+begin
+  Result := nil;
 end;
 
 function TAiPool.Open(): AError;
@@ -346,6 +405,16 @@ end;
 
 procedure TAiPool.UnLockEntity(Id: TAId);
 begin
+end;
+
+function TAiPool.Update(): AError;
+begin
+  Result := -1;
+end;
+
+function TAiPool.UpdateEntity(Entity: IAEntity): AError;
+begin
+  Result := -1;
 end;
 
 end.

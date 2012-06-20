@@ -2,7 +2,7 @@
 @Abstract(Сущность - базовый интерфейс для представления знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.05.2007)
-@LastMod(04.06.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 Эта сущность для хранения в ОЗУ в виде объекта.
@@ -30,7 +30,7 @@ uses
 
 type
     //** Сущность - базовый интерфейс для представления знаний
-  IAiEntity = IAEntity;
+  //IAiEntity = IAEntity;
 
     // Прототип: org.framed.OID
   IAIWSFrame = interface
@@ -38,6 +38,7 @@ type
     //Value: TAiEntity;
   end;
 
+  // TODO: Use IAiCollection
   {**
     Список сущностей, интерфейс доступа к вложенным сущностям.
     Аналоги:
@@ -47,22 +48,22 @@ type
       ru.narod.profsoft.ai.common.aiFrame.Slots
       java.util.Set
   }
-  IAIWSEntities = interface
+  IAiEntities = interface
     {**
     Возвращает сущность по идентификатору.
     Если сущность является слотом (вложеной сущностью),
     то идентификатор можно не указывать.
     }
-    function GetByID(ID: TAId): IAEntity;
+    function GetById(Id: AId): IAEntity;
     {**
     Возвращает сущность по индексу.
     Индекс сужности указывается от нуля до Count-1 по порядку.
     }
-    function GetByIndex(Index: Integer): IAEntity;
+    function GetByIndex(Index: AInt): IAEntity;
     {**
     Возвращает сущность по имени.
     }
-    function GetByName(Name: WideString): IAEntity;
+    function GetByName(const Name: WideString): IAEntity;
     {**
     Возвращает сущность по номеру.
     Номер вложеной сущности задается от 1 и
@@ -79,7 +80,7 @@ type
     Если сущность уже присутствует в списке возвращает False,
     если добавлено успешно возвращает True.
     }
-    function Add(ID: TAId): Boolean; overload;
+    function Add(Id: AId): Boolean; overload;
     {**
     Добавить сущность (в списке может находится только один экземпляр)
     Если сущность уже присутствует в списке возвращает False,
@@ -87,10 +88,10 @@ type
     }
     function Add(Entity: IAEntity): Boolean; overload;
 
-    //** Удалить сущность из списка
-    function Remote(Entity: TAId): Boolean; overload;
-    //** Удалить сущность из списка
-    function Remote(Entity: IAEntity): Boolean; overload;
+    {** Удаляет сущность из списка }
+    function Remove(Entity: IAEntity): ABoolean; overload;
+    {** Удаляет сущность из списка }
+    function RemoveById(Entity: AId): ABoolean; overload;
 
     {**
     Сущности по идентификатору
@@ -102,11 +103,11 @@ type
     Сущности по индексу
     Индекс сужности указывается от нуля до Count-1 по порядку.
     }
-    property ByIndex[Index: Integer]: IAEntity read GetByIndex;
+    property ByIndex[Index: AInt]: IAEntity read GetByIndex;
     {**
     Сущности по имени
     }
-    property ByName[Name: WideString]: IAEntity read GetByName;
+    property ByName[const Name: WideString]: IAEntity read GetByName;
     {**
     Сущности по номеру
     Номер вложеной сущности задается от 1 и
@@ -121,18 +122,14 @@ type
 
   // TODO: IAIWSEntity -> IAIWSFrame
   //** @abstract(Сущность - базовый интерфейс для представления знаний)
-  IAIWSEntity = interface(IAEntity)
+  IAIWSEntity = interface(IANamedEntity)
     // Protected методы
     // ----------------
 
     {**
     Возвращает объект работы с вложеными сущностями
     }
-    function GetEntities(): IAIWSEntities;
-    //** Возвращает имя
-    function GetName(): WideString;
-    //** Задать имя
-    procedure SetName(Value: WideString);
+    function GetEntities(): IAiEntities;
 
     // Properties
     // ----------
@@ -146,14 +143,7 @@ type
         org.framerd.FDType.Get
         ru.narod.profsoft.ai.common.aiFrame.Slots
     }
-    property Entities: IAIWSEntities read GetEntities;
-    {**
-      Имя. Имя используется как идентификатор для OWL объектов.
-      Аналоги:
-        aterm.ATerm.Name
-        ru.narod.profsoft.common.ProfEntity.Name
-    }
-    property Name: WideString read GetName write SetName;
+    property Entities: IAiEntities read GetEntities;
   end;
 
 // -----------------------------------------------------------------------------

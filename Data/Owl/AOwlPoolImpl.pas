@@ -2,7 +2,7 @@
 @Abstract(Пул (источник) работы с OWL элементами)
 @Author(Prof1983 prof183@ya.ru)
 @Created(12.05.2006)
-@LastMod(13.06.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 Prototype: Pellet.KnowledgeBase
@@ -873,7 +873,7 @@ begin
   Result := nil;
   if not(Assigned(FPool)) then Exit;
   try
-    id := FPool.NewEntity(FClassTypeID);
+    id := FPool.NewEntity2(FClassTypeID);
     OwlClass := TAiOwlClass.Create2(FPool, Id);
     OwlClass.Name := Name;
     Result := OwlClass;
@@ -973,35 +973,35 @@ begin
 
   //FPool.OnAddToLog := AddToLog;
 
-  FAllID := FPool.NewEntity(AINullType);
-  FAndID := FPool.NewEntity(AINullType);
-  FCardID := FPool.NewEntity(AINullType);
-  FInvID := FPool.NewEntity(AINullType);
-  FNotID := FPool.NewEntity(AINullType);
-  FMaxID := FPool.NewEntity(AINullType);
-  FMinID := FPool.NewEntity(AINullType);
-  FOrID := FPool.NewEntity(AINullType);
-  FSameID := FPool.NewEntity(AINullType);
-  FSelfID := FPool.NewEntity(AINullType);
-  FSomeID := FPool.NewEntity(AINullType);
-  FSubID := FPool.NewEntity(AINullType);
-  FValueID := FPool.NewEntity(AINullType);
+  FAllId := FPool.NewEntity2(AiNullType);
+  FAndId := FPool.NewEntity2(AiNullType);
+  FCardId := FPool.NewEntity2(AiNullType);
+  FInvId := FPool.NewEntity2(AiNullType);
+  FNotId := FPool.NewEntity2(AiNullType);
+  FMaxId := FPool.NewEntity2(AiNullType);
+  FMinId := FPool.NewEntity2(AiNullType);
+  FOrId := FPool.NewEntity2(AiNullType);
+  FSameId := FPool.NewEntity2(AiNullType);
+  FSelfId := FPool.NewEntity2(AiNullType);
+  FSomeId := FPool.NewEntity2(AiNullType);
+  FSubId := FPool.NewEntity2(AiNullType);
+  FValueId := FPool.NewEntity2(AiNullType);
 
-  FAnnotationPropertyTypeID := FPool.NewEntity(AINullType);
-  FAntisymmetricPropertyTypeID := FPool.NewEntity(AINullType);
-  FClassTypeID := FPool.NewEntity(AINullType);
-  FDatatypeTypeID := FPool.NewEntity(AINullType);
-  FDatatypePropertyTypeID := FPool.NewEntity(AINullType);
-  FDifferentTypeID := FPool.NewEntity(AINullType);
-  FDisjointClassTypeID := FPool.NewEntity(AINullType);
-  FDisjointPropertyTypeID := FPool.NewEntity(AINullType);
-  FDomainTypeID := FPool.NewEntity(AINullType);
-  FEquivalentPropertyTypeID := FPool.NewEntity(AINullType);
-  FObjectPropertyTypeID := FPool.NewEntity(AINullType);
-  FOntologyPropertyID := FPool.NewEntity(AINullType);
-  FPropertyTypeID := FPool.NewEntity(AINullType);
-  FPropertyValueTypeID := FPool.NewEntity(AINullType);
-  FReflexivePropertyTypeID := FPool.NewEntity(AINullType);
+  FAnnotationPropertyTypeId := FPool.NewEntity2(AiNullType);
+  FAntisymmetricPropertyTypeId := FPool.NewEntity2(AiNullType);
+  FClassTypeId := FPool.NewEntity2(AiNullType);
+  FDatatypeTypeId := FPool.NewEntity2(AiNullType);
+  FDatatypePropertyTypeId := FPool.NewEntity2(AiNullType);
+  FDifferentTypeId := FPool.NewEntity2(AiNullType);
+  FDisjointClassTypeId := FPool.NewEntity2(AiNullType);
+  FDisjointPropertyTypeId := FPool.NewEntity2(AiNullType);
+  FDomainTypeId := FPool.NewEntity2(AiNullType);
+  FEquivalentPropertyTypeId := FPool.NewEntity2(AiNullType);
+  FObjectPropertyTypeId := FPool.NewEntity2(AiNullType);
+  FOntologyPropertyId := FPool.NewEntity2(AiNullType);
+  FPropertyTypeId := FPool.NewEntity2(AiNullType);
+  FPropertyValueTypeId := FPool.NewEntity2(AiNullType);
+  FReflexivePropertyTypeId := FPool.NewEntity2(AiNullType);
 end;
 
 procedure TAIOwlPool.RemoveIndividual(c: IAEntity);

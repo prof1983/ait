@@ -2,7 +2,7 @@
 @Abstract(Сущность - базовый класс для представления знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.05.2007)
-@LastMod(25.04.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 Эта сущность для хранения в ОЗУ в виде объекта.
@@ -22,26 +22,31 @@ unit AiEntityImpl1;
 interface
 
 uses
-  AiBase, AiBaseTypes, AiEntityIntf, AiEntitiesImpl, AiPoolIntf;
+  ABase, AEntityIntf,
+  AiBase, AiBaseTypes, AiEntityImpl, AiEntityIntf, AiEntitiesImpl, AiPoolIntf;
 
 type
   //** @abstract(Сущность - базовый класс для представления знаний)
-  TAIWSEntity = class(TInterfacedObject, IAIWSEntity)
+  TAIWSEntity = class(TInterfacedObject, IAEntity, IANamedEntity, IAIWSEntity)
   protected
+    {** Сущность }
+    FEntity: TAiEntity;
     //** Объект доступа к вложенным сущностям
-    FEntities: IAIWSEntities;
+    FEntities: IAiEntities;
     //** Тип сущности
-    FEntityType: TAId;
+    //FEntityType: TAId;
     //** Идентификатор
-    FID: TAId;
+    //FID: TAId;
     //** Имя
-    FName: WideString;
+    //FName: WideString;
     //** Пул, откуда запрашиваются сущности по идентификатору
-    FPool: IAIWSPool;
+    //FPool: IAiPool;
     FValue: Variant;
   protected
     //** Возвращает объект работы с вложеными сущностями
-    function GetEntities(): IAIWSEntities;
+    function GetEntities(): IAiEntities;
+    {** Возвращает идентификатор сущности }
+    function GetEntityId(): AId;
     //** Возвращает тип сущности
     function GetEntityType(): TAId;
     //** Возвращает идентификатор сущности
@@ -51,7 +56,7 @@ type
     //** Задать тип сущности
     procedure SetEntityType(Value: TAId);
     //** Задать имя
-    procedure SetName(Value: WideString);
+    procedure SetName(const Value: WideString);
   public
     //** Созранить в пул
     function Commit(): Boolean; virtual;
@@ -66,23 +71,21 @@ type
     constructor Create(ID: TAId; Name: WideString); overload;
     constructor Create(ID: TAId; Name: WideString; AType: TAId); overload;
     // Конструкторы с указанием пула откуда загружать и куда сохранять данные
-    constructor Create(Pool: IAIWSPool; ID: TAId); overload;
-    constructor Create(Pool: IAIWSPool; ID, AType: TAId); overload;
-    constructor Create(Pool: IAIWSPool; ID: TAId; Name: WideString); overload;
-    constructor Create(Pool: IAIWSPool; ID: TAId; Name: WideString; AType: TAId); overload;
+    constructor Create(Pool: IAiPool; ID: TAId); overload;
+    constructor Create(Pool: IAiPool; ID, AType: TAId); overload;
+    constructor Create(Pool: IAiPool; ID: TAId; Name: WideString); overload;
+    constructor Create(Pool: IAiPool; ID: TAId; Name: WideString; AType: TAId); overload;
     //** Загрузить данные из пула
     function Update(): Boolean;
   public
     //** Объект доступа к вложенным сущностям
-    property Entities: IAIWSEntities read GetEntities;
+    property Entities: IAiEntities read GetEntities;
     //** Тип сущности
     property EntityType: TAId read GetEntityType write SetEntityType;
     //** Идентификатор
     property ID: Int64 read GetId;
     //** Имя
     property Name: WideString read GetName write SetName;
-    //** Пул, откуда запрашиваются сущности по идентификатору
-    property Pool: IAIWSPool read FPool write FPool;
     //** Значение сущности
     property Value: Variant read FValue write FValue;
   end;
@@ -163,109 +166,101 @@ implementation
 
 { TAIWSEntity }
 
+function TAIWSEntity.Commit(): Boolean;
+begin
+  Result := FEntity.Commit();
+end;
+
 constructor TAIWSEntity.Create(ID: TAId);
 begin
   inherited Create();
-  FID := ID;
+  FEntity := TAiEntity.Create2(nil, Id);
 end;
 
-constructor TAIWSEntity.Create(Pool: IAIWSPool; ID, AType: TAId);
+constructor TAIWSEntity.Create(Pool: IAiPool; ID, AType: TAId);
 begin
   inherited Create();
-  FPool := Pool;
-  FID := ID;
-  FEntityType := AType;
+  FEntity := TAiEntity.Create3(Pool, Id, AType);
 end;
 
-constructor TAIWSEntity.Create(Pool: IAIWSPool; ID: TAId; Name: WideString);
+constructor TAIWSEntity.Create(Pool: IAiPool; ID: TAId; Name: WideString);
 begin
   inherited Create();
-  FPool := Pool;
-  FID := ID;
-  FName := Name;
+  FEntity := TAiEntity.Create2(Pool, Id);
+  FEntity.SetName(Name);
 end;
 
-function TAIWSEntity.Commit(): Boolean;
-begin
-  Result := Assigned(FPool);
-  if not(Result) then Exit;
-  // Сохранить текущую сущность в БЗ
-  Result := FPool.CommitEntity(Self);
-end;
-
-constructor TAIWSEntity.Create(Pool: IAIWSPool; ID: TAId; Name: WideString; AType: TAId);
+constructor TAIWSEntity.Create(Pool: IAiPool; ID: TAId; Name: WideString; AType: TAId);
 begin
   inherited Create();
-  FPool := Pool;
-  FID := ID;
-  FName := Name;
-  FEntityType := AType;
+  FEntity := TAiEntity.Create3(Pool, Id, AType);
+  FEntity.SetName(Name);
 end;
 
 constructor TAIWSEntity.Create(ID: TAId; Name: WideString);
 begin
   inherited Create();
-  FID := ID;
-  FName := Name;
+  FEntity := TAiEntity.Create2(nil, Id);
+  FEntity.SetName(Name);
 end;
 
 constructor TAIWSEntity.Create(ID, AType: TAId);
 begin
   inherited Create();
-  FID := ID;
-  FEntityType := AType;
+  FEntity := TAiEntity.Create3(nil, Id, AType);
 end;
 
-constructor TAIWSEntity.Create(Pool: IAIWSPool; ID: TAId);
+constructor TAIWSEntity.Create(Pool: IAiPool; ID: TAId);
 begin
   inherited Create();
-  FPool := Pool;
-  FID := ID;
+  FEntity := TAiEntity.Create2(Pool, Id);
 end;
 
 constructor TAIWSEntity.Create(ID: TAId; Name: WideString; AType: TAId);
 begin
   inherited Create();
-  FID := ID;
-  FName := Name;
-  FEntityType := AType;
+  FEntity := TAiEntity.Create3(nil, Id, AType);
+  FEntity.SetName(Name);
 end;
 
-function TAIWSEntity.GetEntities(): IAIWSEntities;
+function TAIWSEntity.GetEntities(): IAiEntities;
 begin
   Result := FEntities;
 end;
 
+function TAIWSEntity.GetEntityId(): AId;
+begin
+  Result := FEntity.GetEntityId();
+end;
+
 function TAIWSEntity.GetEntityType(): TAId;
 begin
-  Result := FEntityType;
+  Result := FEntity.GetEntityType();
 end;
 
 function TAIWSEntity.GetID(): Int64;
 begin
-  Result := FID;
+  Result := FEntity.GetId();
 end;
 
 function TAIWSEntity.GetName(): WideString;
 begin
-  Result := FName;
+  Result := FEntity.GetName();
 end;
 
 procedure TAIWSEntity.SetEntityType(Value: TAId);
 begin
-  FEntityType := Value;
+  FEntity.SetEntityType(Value);
 end;
 
-procedure TAIWSEntity.SetName(Value: WideString);
+procedure TAIWSEntity.SetName(const Value: WideString);
 begin
-  FName := Value;
+  FEntity.SetName(Value);
 end;
 
 function TAIWSEntity.Update(): Boolean;
 begin
-  Result := Assigned(FPool);
-  if not(Result) then Exit;
-  Result := FPool.UpdateEntity(Self);
+  Result := FEntity.Update();
 end;
 
 { TAIWSEntityEx }
@@ -286,9 +281,7 @@ procedure TAIWSEntityEx.CheckEntities();
 begin
   if not(Assigned(FEntities)) then
   begin
-    FEntities := TAIWSEntities.Create(FPool);
-    //FEntities := TAIWSEntitySet.Create();
-    //TAIWSEntitySet(FEntities).Pool := FPool;
+    FEntities := TAiEntities.Create(FEntity.GetPool());
   end;
 end;
 
@@ -301,14 +294,16 @@ function TAIWSEntityEx.NewEntity(Name: WideString): TAId;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := 0;
   CheckEntities();
 
-  id := FPool.NewEntity();
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id, Name);
+  e := TAIWSEntityEx.Create(Pool, id, Name);
 
   if FEntities.Add(e) then
     Result := id;
@@ -318,13 +313,16 @@ function TAIWSEntityEx.NewEntity(): TAId;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := 0;
   CheckEntities();
-  id := FPool.NewEntity();
+
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id);
+  e := TAIWSEntityEx.Create(Pool, id);
 
   if FEntities.Add(e) then
     Result := id;
@@ -334,13 +332,16 @@ function TAIWSEntityEx.NewEntity(Name: WideString; AType: TAId): TAId;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := 0;
   CheckEntities();
-  id := FPool.NewEntity();
+
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id, Name, AType);
+  e := TAIWSEntityEx.Create(Pool, id, Name, AType);
 
   if FEntities.Add(e) then
     Result := id;
@@ -350,13 +351,16 @@ function TAIWSEntityEx.NewEntity(AType: TAId): TAId;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := 0;
   CheckEntities();
-  id := FPool.NewEntity();
+
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id, AType);
+  e := TAIWSEntityEx.Create(Pool, id, AType);
 
   if FEntities.Add(e) then
     Result := id;
@@ -366,13 +370,16 @@ function TAIWSEntityEx.NewEntityA(Name: WideString): IAIWSEntity;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := nil;
   CheckEntities();
-  id := FPool.NewEntity();
+
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id, Name);
+  e := TAIWSEntityEx.Create(Pool, id, Name);
 
   if FEntities.Add(e) then
     Result := e;
@@ -382,13 +389,16 @@ function TAIWSEntityEx.NewEntityA(): IAIWSEntity;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := nil;
   CheckEntities();
-  id := FPool.NewEntity();
+
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id);
+  e := TAIWSEntityEx.Create(Pool, id);
 
   if FEntities.Add(e) then
     Result := e;
@@ -398,13 +408,16 @@ function TAIWSEntityEx.NewEntityA(Name: WideString; AType: TAId): IAIWSEntity;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := nil;
   CheckEntities();
-  id := FPool.NewEntity();
+
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id, Name, AType);
+  e := TAIWSEntityEx.Create(Pool, id, Name, AType);
 
   if FEntities.Add(e) then
     Result := e;
@@ -414,13 +427,16 @@ function TAIWSEntityEx.NewEntityA(AType: TAId): IAIWSEntity;
 var
   e: TAIWSEntityEx;
   id: TAId;
+  Pool: IAiPool;
 begin
   Result := nil;
   CheckEntities();
-  id := FPool.NewEntity();
+
+  Pool := FEntity.GetPool();
+  id := Pool.NewEntity();
   if (id <= 0) then Exit;
 
-  e := TAIWSEntityEx.Create(FPool, id, AType);
+  e := TAIWSEntityEx.Create(Pool, id, AType);
 
   if FEntities.Add(e) then
     Result := e;

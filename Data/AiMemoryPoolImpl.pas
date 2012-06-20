@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(04.06.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 История версий:
@@ -16,7 +16,7 @@ interface
 
 uses
   ABase, AEntityIntf, AIteratorIntf,
-  AiConsts, AiEntityImpl, AiNamedEntity, AiPoolImpl;
+  AiConsts, AiEntityImpl, AiPoolImpl;
 
 type //** Пул с хранением сущностей в памяти
   TAiMemoryPool = class(TAiPool)
@@ -42,15 +42,15 @@ type //** Пул с хранением сущностей в памяти
         @return(Entity by index)
       }
     function GetEntityByIndex(Index: Integer): IAEntity; override;
-      //** Создать новую сущность (заререзвировать идентификатор под сущность)
-    function NewEntity(EntityType: TAId): TAId; override;
-    function NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
-    function NewNamedEntityA(EntityType: TAId; Name: WideString): IAINamedEntity;
+    {** Создает новую сущность (заререзвировать идентификатор под сущность) }
+    function NewEntity2(EntityType: AId): AId; override;
+    function NewNamedEntity(EntityType: AId; const Name: WideString): AId;
+    function NewNamedEntityA(EntityType: AId; const Name: WideString): IANamedEntity;
     //function NewValueEntity(): IAIValueEntity;
     function NewType(Name: WideString): TAId;
   public
-      //** Закрыть пул (источник)
-    procedure Close(); override;
+    {** Закрывает пул (источник) }
+    function Close(): AError; override;
       //** Пул (источник) содержит в себе сущность
     function Contains(ID: TAId): Boolean; override;
       //** Открыть пул (источник)
@@ -90,7 +90,7 @@ type //** Итератор для MemoryPool
 
 { TAiMemoryPool }
 
-procedure TAiMemoryPool.Close();
+function TAiMemoryPool.Close(): AError;
 begin
   FIsOpened := False;
 end;
@@ -151,7 +151,7 @@ begin
   Result := iterator;
 end;
 
-function TAiMemoryPool.NewEntity(EntityType: TAId): TAId;
+function TAiMemoryPool.NewEntity2(EntityType: AId): AId;
 var
   I: Integer;
   Id: TAId;
@@ -173,13 +173,7 @@ begin
   Result := Id;
 end;
 
-function TAiMemoryPool.Open(): AError;
-begin
-  Result := 0;
-  FIsOpened := True;
-end;
-
-function TAiMemoryPool.NewNamedEntity(EntityType: TAId; Name: WideString): TAId;
+function TAiMemoryPool.NewNamedEntity(EntityType: AId; const Name: WideString): AId;
 var
   e: IAEntity;
 begin
@@ -189,7 +183,7 @@ begin
     Result := e.EntityID;
 end;
 
-function TAiMemoryPool.NewNamedEntityA(EntityType: TAId; Name: WideString): IAiNamedEntity;
+function TAiMemoryPool.NewNamedEntityA(EntityType: AId; const Name: WideString): IANamedEntity;
 begin
   Result := nil;
 
@@ -202,6 +196,12 @@ function TAiMemoryPool.NewType(Name: WideString): TAId;
 begin
   // Создаем новую именованую сущность
   Result := NewNamedEntity(AINullType, Name);
+end;
+
+function TAiMemoryPool.Open(): AError;
+begin
+  Result := 0;
+  FIsOpened := True;
 end;
 
 { TAiMemoryPoolIterator }

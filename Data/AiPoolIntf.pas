@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(08.06.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.Pool
@@ -19,7 +19,8 @@ interface
 
 uses
   AIteratorIntf,
-  AiBase, AiBaseTypes, AiCollection, AiEntityIntf;
+  ABase, AEntityIntf,
+  AiBase, AiBaseTypes, AiCollection;
 
 type
   {**
@@ -39,6 +40,9 @@ type
       (колличество использованых идентификаторов)
     }
     function GetCount(): Int64;
+
+    //** Возвращает сущность по идентификатору
+    function GetEntityById(ID: AId): IAEntity;
 
     {** Возвращает значение сущности как Boolean }
     function GetEntityValueAsBool(Id: TAId): Boolean;
@@ -84,48 +88,58 @@ type
     // -------------------------------------------------------------------------
 
     //** Возвращает true, если сущность является Bool
-    function IsBoolEntity(Entity: IAiEntity): Boolean;
+    function IsBoolEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является Int
-    function IsIntEntity(Entity: IAiEntity): Boolean;
+    function IsIntEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является Float
-    function IsFloatEntity(Entity: IAiEntity): Boolean;
+    function IsFloatEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является строкой
-    function IsStringEntity(Entity: IAiEntity): Boolean;
+    function IsStringEntity(Entity: IAEntity): Boolean;
     //** Возвращает true, если сущность является коллекцией
-    function IsCollectionEntity(Entity: IAiEntity): Boolean;
+    function IsCollectionEntity(Entity: IAEntity): Boolean;
 
     // -------------------------------------------------------------------------
 
     // Добавить новую сущность. Задает идентификатор для сущности
     //function AddEntity(Entity: IAIEntity): TAIID;
-    //** Закрыть пул (источник)
-    procedure Close();
-    //** Сохранить все
-    //procedure Commit();
-    // Сохранить сущность в пул
-    //function CommitEntity(Entity: IAIEntity): Boolean;
-    //** Пул (источник) содержит в себе сущность
+    {** Закрывает пул (источник) }
+    function Close(): AError;
+    {** Сохраняет все изменения }
+    function Commit(): AError;
+    {** Созраняет сущность в пул }
+    function CommitEntity(Entity: IAEntity): AError;
+    {** Возвращает True, если пул (источник) содержит в себе сущность }
     function Contains(Id: TAId): Boolean;
-    //** Заблокировать сущность
-    function LockEntity(Id: TAId): Boolean;
-    //** Заблокировать пул (источник)
+    {** Блокирует сущность }
+    function LockEntity(X: IAEntity): AError;
+    {** Блокирует сущность }
+    function LockEntityById(Id: AId): AError;
+    {** Блокирует пул (источник) }
     function LockPool(): Boolean;
-    //** Пометить как измененый
-    //procedure MarkModified(x: TAId);
-    // Создать новую сущность (заререзвировать идентификатор под сущность)
-    function NewEntity(EntityType: TAId): TAId;
-    //** Открыть пул (источник)
-    function Open(): TAiError;
-
-    //** Разблокировать сущность
-    procedure UnLockEntity(Id: TAId);
-    // Обновить данные сущности из пула
-    //function UpdateEntity(Entity: TAIEntity): Boolean;
+    {** Помечает как измененый }
+    function MarkModified(Id: IAEntity): AError;
+    {** Помечает как измененый }
+    function MarkModifiedById(Id: AId): AError;
+    {** Создает новую сущность }
+    function NewEntity(): AId;
+    {** Создает новую сущность (заререзвировать идентификатор под сущность) }
+    function NewEntity2(EntityType: AId): AId;
+    {** Создает новую сущность }
+    function NewEntityA(): IAEntity;
+    {** Открыть пул (источник) }
+    function Open(): AError;
 
     //** Сделать выборку сущностей по запросу
     function Select(Query: WideString): IAiCollection;
     //** Сделать выборку всех сущностей определенного типа
-    function SelectT(TypeId: TAId): IAiCollection;
+    function SelectT(TypeId: AId): IAiCollection{IAiEntities};
+
+    //** Разблокировать сущность
+    procedure UnLockEntity(Id: TAId);
+    {** Обновить все данные из пула }
+    function Update(): AError;
+    {** Обновить данные сущности из пула }
+    function UpdateEntity(Entity: IAEntity): AError;
 
     // -------------------------------------------------------------------------
 
@@ -147,8 +161,8 @@ type
     (колличество использованых идентификаторов)
     }
     property Count: Int64 read GetCount;
-    //** Сущность по идентификатору
-    //property EntityById[Id: TAId]: IAiEntity read GetEntityById;
+    {** Сущность по идентификатору }
+    property EntityById[Id: AId]: IAEntity read GetEntityById;
     //** Открыт
     property IsOpened: Boolean read GetIsOpened;
     {**
@@ -158,61 +172,7 @@ type
     property Iterator: IAIterator read GetIterator;
   end;
 
-type
-  {**
-  @abstract(Источник знаний)
-  UML соответствие: "Коллекция объектов [ Identity Map ]" http://ooad.asf.ru/Pattern.aspx?IdKat=7&IdPat=9
-  }
-  IAIWSPool = interface //(IAIFrame)
-    //** Возвращает базовый идентификатор (идентификатор с которого будет начинаться отсчет ID для фреймов)
-    function GetBase(): TAId;
-    //** Возвращает вместимость хранилища
-    function GetCapacity(): Int64;
-    //** Возвращает сущность по идентификатору
-    function GetEntityByID(ID: TAId): IAIWSEntity;
-    //** Возвращает True, если открыт
-    function GetIsOpened(): Boolean;
-
-    //** Закрыть пул (источник)
-    procedure Close();
-    //** Сохранить все
-    procedure Commit();
-    //** Созранить сущность в пул
-    function CommitEntity(Entity: IAIWSEntity): Boolean;
-    //** Пул (источник) содержит в себе сущность
-    function Contains(ID: TAId): Boolean;
-    //** Заблокировать сущность
-    function LockEntity(x: TAId): Boolean;
-    //** Заблокировать сущность
-    function LockEntityA(x: IAIWSEntity): Boolean;
-    //** Заблокировать пул (источник)
-    function LockPool(): Boolean;
-    //** Пометить как измененый
-    procedure MarkModified(x: TAId);
-    //** Пометить как измененый
-    procedure MarkModifiedA(x: IAIWSEntity);
-    //** Создать новую сущность
-    function NewEntity(): TAId;
-    //** Создать новую сущность
-    function NewEntityA(): IAIWSEntity;
-    //** Открыть пул (источник)
-    function Open(): TAiError;
-    //** Выбрать все сущности определенного типа
-    function Select(TypeID: TAId): IAIWSEntities;
-    //** Загрузить все данные из пула
-    procedure Update();
-    //** Загрузить данные сущности из пула
-    function UpdateEntity(Entity: IAIWSEntity): Boolean;
-
-    //** Начальный идентификатор для этого пула (источника) фреймов
-    property Base: TAId read GetBase;
-    //** Вместимость хранилища
-    property Capacity: Int64 read GetCapacity;
-    //** Сущность по идентификатору
-    property EntityByID[ID: TAId]: IAIWSEntity read GetEntityByID;
-    //** Открыт
-    property IsOpened: Boolean read GetIsOpened;
-  end;
+  //IAIWSPool = IAiPool;
 
 implementation
 

@@ -2,7 +2,7 @@
 @Abstract(Сущность - базовый класс для представления знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.05.2007)
-@LastMod(13.06.2012)
+@LastMod(20.06.2012)
 @Version(0.5)
 
 Эта сущность для хранения в ОЗУ в виде объекта.
@@ -27,47 +27,23 @@ uses
   ABase, AEntityImpl, AiPoolIntf;
 
 type
-  TAiEntity = class(TProfEntity)
+  TAiEntity = class(TANamedEntity)
   protected
       //** Пул, откуда запрашиваются сущности по идентификатору
-    FPool: IAIPool;
-  public
-    //** Возвращает идентификатор сущности
-    function GetId(): TAId;
-      //** Возвращает идентификатор сущности
-    function GetEntityID(): TAId;
-      //** Возвращает тип сущности
-    function GetEntityType(): TAId;
-    //** Задает тип сущности
-    procedure SetEntityType(Value: TAId);
+    FPool: IAiPool;
   public // Конструкторы
     constructor Create();
     constructor Create2(Pool: IAIPool; Id: TAId);
     constructor Create3(Pool: IAiPool; Id, Typ: TAId);
   public
+    function GetPool(): IAiPool;
       //** Сохранить данные в пул
     function Commit(): Boolean; virtual;
       //** Загрузить данные из пула
     function Update(): Boolean; virtual;
   public
-    {**
-      Идентификатор. Только для чтения.
-      Идентификатор залается при создании сущности и не меняется.
-      Агалоги:
-        ru.narod.profsoft.common.ProfEntity.ID
-        org.framerd.OID.OID
-    }
-    property EntityID: TAId read GetEntityID;
-    {**
-      Тип сущности. Номера от 0 до 1023 заререзвированы.
-      Аналоги:
-        aterm.ATermAppl.AFun
-        org.framerd.FDType.TypeName
-        ru.narod.profsoft.common.ProfEntity.EntityType
-    }
-    property EntityType: TAId read GetEntityType;
     //** Пул, откуда запрашиваются сущности по идентификатору
-    property Pool: IAIPool read FPool write FPool;
+    property Pool: IAiPool read FPool write FPool;
   end;
 
 implementation
@@ -76,7 +52,14 @@ implementation
 
 function TAiEntity.Commit(): Boolean;
 begin
-  Result := False;
+  if not(Assigned(FPool)) then
+  begin
+    Result := False;
+    Exit;
+  end;
+  // Сохранить текущую сущность в БЗ
+  Result := (FPool.CommitEntity(Self) >= 0);
+  Result := True;
 end;
 
 constructor TAiEntity.Create();
@@ -110,29 +93,20 @@ begin
   FEntityType := Typ;
 end;
 
-function TAiEntity.GetEntityId(): TAId;
+function TAiEntity.GetPool(): IAiPool;
 begin
-  Result := FId;
-end;
-
-function TAiEntity.GetEntityType(): TAId;
-begin
-  Result := FEntityType;
-end;
-
-function TAiEntity.GetId(): TAId;
-begin
-  Result := FId;
-end;
-
-procedure TAiEntity.SetEntityType(Value: TAId);
-begin
-  FEntityType := Value;
+  Result := FPool;
 end;
 
 function TAiEntity.Update(): Boolean;
 begin
-  Result := False;
+  if not(Assigned(FPool)) then
+  begin
+    Result := False;
+    Exit;
+  end;
+  Result := (FPool.UpdateEntity(Self) >= 0);
+  Result := True;
 end;
 
 end.
