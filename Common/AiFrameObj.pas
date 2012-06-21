@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(09.06.2012)
+@LastMod(21.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -220,7 +220,7 @@ type //** Фрейм
     procedure SetXml(Value: WideString);
     //function ToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString; AParams: array of const): Integer;
   public
-    constructor Create(Source: AiSource2005 = 0; Id: TAId = 0);
+    constructor Create(Source: AiSourceObject2005 = 0; Id: TAId = 0);
   public
     property ConnectCount: AInt32 read GetConnectCount;
     property Connects: TAiConnectsObject read GetConnects;
@@ -333,7 +333,7 @@ begin
   Result := 0;
 end;
 
-constructor TAiFrameObject.Create(Source: AiSource2005; Id: TAId);
+constructor TAiFrameObject.Create(Source: AiSourceObject2005; Id: TAId);
 begin
   inherited Create;
   FConnects := nil;

@@ -32,7 +32,7 @@ type //** Выборка фреймов
     property Source: AiSourceObject read FSource write FSource;
   end;
   TAiSelect = TAiSelectObject;
-  TAI_Select = TAiSelect;
+  TAI_Select = TAiSelectObject;
 
 implementation
 

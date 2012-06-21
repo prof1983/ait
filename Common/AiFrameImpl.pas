@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(13.06.2012)
+@LastMod(21.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -15,8 +15,8 @@ interface
 uses
   SysUtils, XmlIntf,
   AConsts2, AEntityImpl, AIteratorIntf, ANodeIntf, AObjectImpl, ATypes, AXmlUtils,
-  AiBase, AiBaseTypes, AiCollectionImpl, AiConnectsIntf, AiDataIntf, AiEntityImpl, AiFrameIntf, AiFramePoolIntf,
-  AiSlotIntf, AiSlotImpl, AiTypes;
+  AiBase, AiBaseTypes, AiCollectionImpl, AiConnectsIntf, AiDataIntf, AiEntityImpl,
+  AiFrameIntf, AiFramePoolIntf, AiFrameUtils, AiSlotIntf, AiSlotImpl, AiTypes;
 
 type //** Фрейм
   TAIFrame = class(TAiEntity{TProfObject}, IAIFrame)
@@ -1315,6 +1315,7 @@ function TAIFreim.LoadFromXml(Xml: IXmlNode): WordBool;
 var
   Connects: IXmlNode;
 begin
+  ...
   Result := False;
   if not(Assigned(Xml)) then Exit;
   Clear();
