@@ -71,7 +71,7 @@ type //** Фрейм
       //** Пул (Источник)
     FPool: AiPool;
       //** Источник
-    FSource: AiSource2005;
+    FSource: AiSourceObject2005;
       //** Версия фрейма
     FVersion: TAiVersion;
   protected
@@ -270,6 +270,7 @@ type //** Фрейм
   //TAiFrameObject2005 = TAiFrameObject;
   //TAiFreimObject = TAiFrameObject;
   //TAiFreim = TAiFreimObject;
+  //TAI_Freim = TAiFrameObject;
 
 implementation
 

@@ -33,6 +33,7 @@ type // Процесс выполнения какого-либо метода(�
     function SetThread(Value: TThread): TError;
   end;
 
+  //TAiProcess = TAiProcess2005;
   //TAiProcess20050525 = TAiProcess2005;
   //TAiProcess20050526 = TAiProcess2005;
   //TAiProcess20050830 = TAiProcess2005;
