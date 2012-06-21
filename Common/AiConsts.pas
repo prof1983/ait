@@ -2,7 +2,7 @@
 @Abstract(Базовые типы сущностей)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(25.04.2012)
+@LastMod(21.06.2012)
 @Version(0.5)
 
 История версий:
@@ -15,120 +15,12 @@ unit AiConsts;
 
 interface
 
-// Базовые типы сущностей [0..1024]
-
 const
-  AIEmptyType = 300;      // Пусто
-  AINullType = 301;       // Null
-  AIBoolType = 302;       // Boolean
-  AIIntType = 303;        // Целое
-  AIFloatType = 304;      // Значение с плавающей точкой
-  AIStringType = 305;     // строка
-  AIDateTimeType = 306;   // дата/время
-  AICollectionType = 307; // коллекция
+  AiNone = 0; //**< Нет записи
 
-const
-  AISlot = 9;             // слот. содержит имя, тип данных и данные слота
-  AIFrame = 10;           // коллекция слотов
-  AIID = 11;              // Идентификатор (используется в AISlot для указания типа данных как указателя на сущность в БЗ)
+// --- Базовые типы сущностей [0..1024] ---
 
-const
-  AILocalSettings = 1024;
-
-// Рекомендуемые типы сущностей [1025..2048]
-
-const
-  AISlotedEntityType = 1025;
-  AISlotEntityType = 1026;
-  AINamedEntityType = 1027;
-
-const
-  AIOwlClass = 1028;
-  AIOwlProperty = 1029;
-
-(*
-const
-  AIEmptyType    = $0000; { vt_empty        0 }
-  AINullType     = $0001; { vt_null         1 }
-  AISmallintType = $0002; { vt_i2           2 }
-  AIIntegerType  = $0003; { vt_i4           3 }
-  AISingleType   = $0004; { vt_r4           4 }
-  AIDoubleType   = $0005; { vt_r8           5 }
-  AICurrencyType = $0006; { vt_cy           6 }
-  AIDateType     = $0007; { vt_date         7 }
-  AIStringType   = $0008; { vt_bstr         8 } // AIOleStr
-  AIDispatchType = $0009; { vt_dispatch     9 }
-  AIErrorType    = $000A; { vt_error       10 }
-  AIBooleanType  = $000B; { vt_bool        11 }
-  AIVariantType  = $000C; { vt_variant     12 }
-  AIUnknownType  = $000D; { vt_unknown     13 }
-//AIDecimal  = $000E; { vt_decimal     14 } {UNSUPPORTED as of v6.x code base}
-//AIUndef0F  = $000F; { undefined      15 } {UNSUPPORTED per Microsoft}
-  AIShortIntType = $0010; { vt_i1          16 }
-  AIByteType     = $0011; { vt_ui1         17 }
-  AIWordType     = $0012; { vt_ui2         18 }
-  AILongWordType = $0013; { vt_ui4         19 }
-  AIInt64Type    = $0014; { vt_i8          20 }
-
-  AIArray    = $000E;
-  AIType     = $000F;
-
-//  varStrArg   = $0048; { vt_clsid       72 }
-//  AIString   = $0100; { Pascal string 256 } {not OLE compatible }
-//  AIAny      = $0101; { Corba any     257 } {not OLE compatible }
-  // custom types range from $110 (272) to $7FF (2047)
-
-//  varTypeMask = $0FFF;
-//  varArray    = $2000;
-//  varByRef    = $4000;
-
-const
-  AITypes: array[0..20] of Integer = (
-    AIEmpty,
-    AINull,
-    AISmallint,
-    AIInteger,
-    AISingle,
-    AIDouble,
-    AICurrency,
-    AIDate,
-    AIOleStr,
-    AIDispatch,
-    AIError,
-    AIBoolean,
-    AIVariant,
-    AIUnknown,
-
-    AIArray,
-    AIType,
-
-    AIShortInt,
-    AIByte,
-    AIWord,
-    AILongWord,
-    AIInt64
-    );
-*)
-
-// --- from AiConst.pas ---
-
-const // Идентифкаторы базовых объектов, которыми оперирует среда выполнения ---
-  // Экземпляр искусственного разума
-  AIAR            = 640; // Экземпляр класса 272
-  // Экземпляр внутреннего мира
-  AIWorld         = 641; // Экземпляр класса 273
-  // Экземпляр базы знаний
-  AIKB            = 642; // Экземпляр класса 256
-  // Главный агент
-  AIAgentMain     = 643; // Экземпляр класса 276
-  // Главный модуль
-  AIModuleMain    = 644; // Экземпляр класса 277
-  // Список агентов
-  AIAgents        = 0;
-  // Список источников
-  AISources       = 0;
-
-const // Костанты номеров типов ------------------------------------------------
+const // Костанты номеров типов
   AIBase           = 0;
   // Основное описание типов (1..14)
   AIType           = 1; // Тип
@@ -200,12 +92,54 @@ const // Костанты номеров типов ----------------------------
   AITypeKBNetCasheFile       = 262;
   AITypeKBNetCasheFileMemory = 263;
   // Типы базовых объектов, которыми оперирут среда выполнения
-  AITypeAR          = 272;          // Искусственный разум (ядро системы)
-  AITypeWorld       = 273;          // Внутренний мир
-  AITypeAgent       = 274;          // Агент
-  AITypeModule      = 275;          // Модуль
-  AITypeAgentMain   = 276;          // Главный агент
-  AITypeModuleMain  = 277;          // Главнй модуль
+  AiTypeAR = 272;               //**< Искусственный разум (ядро системы)
+  AiTypeWorld = 273;            //**< Внутренний мир
+  AiTypeAgent = 274;            //**< Агент
+  AiTypeModule = 275;           //**< Модуль
+  AiTypeAgentMain = 276;        //**< Главный агент
+  AiTypeModuleMain = 277;       //**< Главнй модуль
+  AiEmptyType = 300;            //**< Пусто - AiEmptyType = $0000;
+  AiNullType = 301;             //**< Null - AiNullType = $0001;
+  AiBoolType = 302;             //**< Boolean - AiBooleanType = $000B;
+  AiIntType = 303;              //**< Целое - AiIntegerType = $0003;
+  AiFloatType = 304;            //**< Значение с плавающей точкой
+  AiStringType = 305;           //**< Строка - AiStringType = $0008;
+  AiDateTimeType = 306;         //**< Дата/время - AiDateType = $0007;
+  AiCollectionType = 307;       //**< Коллекция
+  AiSlot = 409;                 //**< Слот. содержит имя, тип данных и данные слота
+  AiFrame = 410;                //**< Коллекция слотов
+  AiId = 411;                   //**< Идентификатор (используется в AISlot для указания типа данных как указателя на сущность в БЗ)
+  // --- Идентифкаторы базовых объектов, которыми оперирует среда выполнения ---
+  {** Экземпляр искусственного разума
+      Экземпляр класса 272 }
+  AiAr = 640;
+  {** Экземпляр внутреннего мира
+      Экземпляр класса 273 }
+  AiWorld = 641;
+  {** Экземпляр базы знаний
+      Экземпляр класса 256 }
+  AiKb = 642;
+  {** Главный агент
+      Экземпляр класса 276 }
+  AiAgentMain = 643;
+  {** Главный модуль
+      Экземпляр класса 277 }
+  AiModuleMain = 644;
+  {** Список агентов }
+  AiAgents = 645;
+  {** Список источников }
+  AiSources = 646;
+  {** Локальные настройки }
+  AiLocalSettings = 1024;
+
+// --- Рекомендуемые типы сущностей [1025..2048] ---
+
+const
+  AiSlotedEntityType = 1025;
+  AiSlotEntityType = 1026;
+  AiNamedEntityType = 1027;
+  AiOwlClass = 1028;
+  AiOwlProperty = 1029;
 
 implementation
 
