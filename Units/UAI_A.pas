@@ -2,7 +2,7 @@
 @Abstract(UAI_A)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(<26.09.2004)
-@LastMod(09.06.2012)
+@LastMod(21.06.2012)
 @Version(0.5)
 }
 unit UAI_A;
@@ -10,7 +10,8 @@ unit UAI_A;
 interface
 
 uses
-  AiFrameObj, AiQuestionsObj, AiSourceObj;
+  ABase,
+  AiFrameObj, AiMethodObj, AiMethodsObj, AiQuestionsObj, AiSourceObj;
 
 type
   AInfoProc = procedure(Str: String);
@@ -18,28 +19,12 @@ type
 type
   TAiFreimBase = class(TAiFrameObject)
   public
-    procedure ToHtml(const Name: string; B: Boolean);
+    procedure ToHtml(const Name: string; B: Boolean); deprecated; // Use AiFrameObject_ToHtml()
   end;
 
-type
-  TAiFreimMethod = class(TAiFrameObject)
-  private
-    FName: string;
-  public
-    property Name: string read FName;
-  end;
+  TAiFreimMethod = AiMethodObj.TAiMethodObject;
+  TAiBaseMethods = AiMethodsObj.TAiBaseMethods;
 
-type
-  TAiBaseMethods = class(TAiFrameObject)
-  public
-    function Get(Index: Integer): TAiFreimMethod;
-    function GetCount(): Integer;
-    function MGet(const Name: string): TAiFreimMethod;
-  public
-    property Count: Integer read GetCount;
-  end;
-
-type
   TAiMethods = class
   private
     FBase: TAiBaseMethods;
@@ -51,7 +36,6 @@ type
 
   TAiQuestions = AiQuestionsObj.TAiQuestions2004;
 
-type
   TAiTasks = class
   public
     function GetCount(): Integer;
@@ -80,7 +64,16 @@ type
 var
   AI: TAI;
 
+function AiFrameObject_ToHtml(Frame: TAiFrameObject; const Name: APascalString; B: ABoolean): APascalString;
+
 implementation
+
+// --- AiFrameObject ---
+
+function AiFrameObject_ToHtml(Frame: TAiFrameObject; const Name: APascalString; B: ABoolean): APascalString;
+begin
+  Result := '';
+end;
 
 { TAI }
 
@@ -92,23 +85,6 @@ begin
   FQuestions := TAiQuestions.Create();
   FSource := TAiSource2004.Create();
   FTasks := TAiTasks.Create();
-end;
-
-{ TAiBaseMethods }
-
-function TAiBaseMethods.Get(Index: Integer): TAiFreimMethod;
-begin
-  Result := nil;
-end;
-
-function TAiBaseMethods.GetCount(): Integer;
-begin
-  Result := 0;
-end;
-
-function TAiBaseMethods.MGet(const Name: string): TAiFreimMethod;
-begin
-  Result := nil;
 end;
 
 { TAiFreimBase }
