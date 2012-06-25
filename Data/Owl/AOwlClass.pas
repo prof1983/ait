@@ -2,7 +2,7 @@
 @Abstract(OWL class)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.04.2007)
-@LastMod(27.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Prototype: SemanticwebOwl.Model.OwlClass
@@ -12,8 +12,8 @@ unit AOwlClass;
 interface
 
 uses
-  JavaSet,
-  OwlDescription;
+  AOwlDescriptionIntf,
+  AiSet;
 
 //import java.util.Set;
 
@@ -30,7 +30,7 @@ type
   @author Sean Bechhofer
   @version $Id: OWLClass.java,v 1.4 2005/06/10 12:20:28 sean_bechhofer Exp $
   }
-  IOwlClass = interface(IOwlDescription) //extends OWLDescription, OWLEntity, OWLDeprecatableObject
+  IOwlClass = interface(IAOwlDescription) //extends OWLDescription, OWLEntity, OWLDeprecatableObject
     {**
     Returns the explicit superclasses of this class in the given ontology. Returns a
     collection of {@link OWLDescription OWLDescriptions. Each description in this list

@@ -2,7 +2,7 @@
 @Abstract(Логического вывода на основе онтологии OWL)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.05.2007)
-@LastMod(26.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Prototype: org.mindswap.pellet.owlapi.Reasoner
@@ -12,35 +12,35 @@ unit AiReasonerIntf;
 interface
 
 uses
-  AiCollection, AiOwlClassIntf,
-  AiOwlDescription, AiOwlIndividual, AiOwlOntologyManager, AiOwlOntology;
+  AOwlClassIntf, AOwlDescriptionIntf, AOwlIndividualIntf, AOwlOntologyManager, AOwlOntologyIntf,
+  AiCollection;
 
 type //** Логического вывода на основе онтологии OWL
   IAiReasoner = interface
     //** Возвращает классы
     function GetClasses(): IAiCollection;
     //** Возвращает __ классы
-    function GetDescendantClasses(c: IAIWSOwlDescription): IAICollection;
+    function GetDescendantClasses(c: IAOwlDescription): IAICollection;
     //** Возвращает эквивалентные классы
-    function GetEquivalentClasses(c: IAIWSOwlDescription): IAICollection;
+    function GetEquivalentClasses(c: IAOwlDescription): IAICollection;
     //** Возвращает индивиды
-    function GetIndividuals(clsC: IAIWSOwlDescription; direct: WordBool): IAICollection;
+    function GetIndividuals(clsC: IAOwlDescription; direct: WordBool): IAICollection;
     //** Возвращает менеджер онтологий
-    function GetManager(): IAIWSOwlOntologyManager;
+    function GetManager(): IAOwlOntologyManager;
     //** Возвращает свойства объекта
     function GetObjectProperties(): IAICollection;
     //** Возвращает онтологию
-    function GetOntology(): IAIWSOwlOntology;
+    function GetOntology(): IAOwlOntology;
     //** Созвращяет набор оттологий
     function GetOntologies(): IAICollection;
     //** Возвращает свойства
     function GetProperties(): IAICollection;
     //** Возвращает родительские классы
-    function GetSuperClasses(c: IAIWSOwlDescription): IAICollection;
+    function GetSuperClasses(c: IAOwlDescription): IAICollection;
     //** Возвращает менеджера онтологий
-    procedure SetManager(Manager: IAIWSOwlOntologyManager);
+    procedure SetManager(Manager: IAOwlOntologyManager);
     //** Задать онтологию
-    procedure SetOntology(Ontology: IAIWSOwlOntology);
+    procedure SetOntology(Ontology: IAOwlOntology);
 
     function AllInstancesOf(c: IAIOwlClass): IAICollection;
     //** Ичистить онтологии
@@ -48,18 +48,18 @@ type //** Логического вывода на основе онтологи
     //** Возвращает потомов класса
     function DescendantClassesOf(c: IAIOwlClass): IAICollection;
     //** Возвращает потомов класса
-    function DescendantClassesOfA(c: IAIWSOwlDescription): IAICollection;
+    function DescendantClassesOfA(c: IAOwlDescription): IAICollection;
     //** Возвращает эквивалентные классы
     function EquivalentClassesOf(c: IAIOwlClass): IAICollection;
     //** Возвращает эквивалентные классы
-    function EquivalentClassesOfA(c: IAIWSOwlDescription): IAICollection;
-    function HasType(individual: IAIWSOwlIndividual; AType: IAIWSOwlDescription): WordBool;
+    function EquivalentClassesOfA(c: IAOwlDescription): IAICollection;
+    function HasType(individual: IAOwlIndividual; AType: IAOwlDescription): WordBool;
     //** Повлечет за собой
-    function IsEntailed(ont: IAIWSOwlOntology): WordBool;
+    function IsEntailed(ont: IAOwlOntology): WordBool;
     //** Повлечет за собой
     function IsEntailedA(axioms: IAICollection): WordBool;
     //** OwlIndividual является объектом класса OwlClass
-    function IsInstanceOf(ind: IAIWSOwlIndividual; c: IAIOwlClass): WordBool;
+    function IsInstanceOf(ind: IAOwlIndividual; c: IAIOwlClass): WordBool;
     //** Обновить
     procedure Refresh();
     //** Обновить онтологию
@@ -67,14 +67,14 @@ type //** Логического вывода на основе онтологи
     //** Возвращает родительские (super) классы указанного класса
     function SuperClassesOf(c: IAIOwlClass): IAICollection;
     //** Возвращает родительские (super) классы указанного класса
-    function SuperClassesOfA(c: IAIWSOwlDescription): IAICollection;
+    function SuperClassesOfA(c: IAOwlDescription): IAICollection;
 
     //** Менеджер онтологии
-    property Manager: IAIWSOwlOntologyManager read GetManager write SetManager;
+    property Manager: IAOwlOntologyManager read GetManager write SetManager;
     //** Набор онтологий
     property Ontologies: IAICollection read GetOntologies;
     //** Онтология
-    property Ontology: IAIWSOwlOntology read GetOntology write SetOntology;
+    property Ontology: IAOwlOntology read GetOntology write SetOntology;
   end;
 
 implementation

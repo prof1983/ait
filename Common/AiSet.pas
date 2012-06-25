@@ -2,7 +2,7 @@
 @Abstract(AiSet)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(01.05.2007)
-@LastMod(27.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Prototype: java.util.Set.java 1.35 04/02/19
@@ -12,7 +12,7 @@ unit AiSet;
 interface
 
 uses
-  JavaCollection, JavaIterator;
+  ACollectionIntf, AIteratorIntf;
 
 type
   {**
@@ -70,47 +70,8 @@ type
   @see Collections#EMPTY_SET
   @since 1.2
   }
-  IJavaSet = interface(IJavaCollection) //<E> extends Collection<E>
+  IJavaSet = interface(IACollection)
     // Query Operations
-
-    {**
-      Returns the number of elements in this set (its cardinality).  If this
-      set contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
-      <tt>Integer.MAX_VALUE</tt>.
-      @return the number of elements in this set (its cardinality).
-    }
-    function Size(): Integer;
-    //int size();
-
-    {**
-      Returns <tt>true</tt> if this set contains no elements.
-      @return <tt>true</tt> if this set contains no elements.
-    }
-    function IsEmpty(): WordBool;
-    //boolean isEmpty();
-
-    {**
-      Returns <tt>true</tt> if this set contains the specified element.  More
-      formally, returns <tt>true</tt> if and only if this set contains an
-      element <code>e</code> such that <code>(o==null ? e==null :
-      o.equals(e))</code>.
-      @param o element whose presence in this set is to be tested.
-      @return <tt>true</tt> if this set contains the specified element.
-      @throws ClassCastException if the type of the specified element
-      	       is incompatible with this set (optional).
-      @throws NullPointerException if the specified element is null and this
-              set does not support null elements (optional).
-    }
-    function Contains(o: IUnknown): WordBool;
-    //boolean contains(Object o);
-
-    {**
-      Returns an iterator over the elements in this set.  The elements are
-      returned in no particular order (unless this set is an instance of some
-      class that provides a guarantee).
-      @return an iterator over the elements in this set.
-    }
-    function Iterator(): IJavaIterator; //Iterator<E> iterator();
 
     {**
       Returns an array containing all of the elements in this set.
@@ -213,7 +174,7 @@ type
               <tt>null</tt>.
       @see    #contains(Object)
     }
-    function ContainsAll(c: IJavaCollection): WordBool;
+    function ContainsAll(c: IACollection): WordBool;
     //boolean containsAll(Collection<?> c);
 
     {**
@@ -240,7 +201,7 @@ type
      		  set.
       @see #add(Object)
     }
-    function AddAll(c: IJavaCollection): WordBool;
+    function AddAll(c: IACollection): WordBool;
     //boolean addAll(Collection<? extends E> c);
 
     {**
@@ -266,7 +227,7 @@ type
                 <tt>null</tt>.
       @see #remove(Object)
     }
-    function RetainAll(c: IJavaCollection): WordBool;
+    function RetainAll(c: IACollection): WordBool;
     //boolean retainAll(Collection<?> c);
 
     {**
@@ -292,7 +253,7 @@ type
                 <tt>null</tt>.
       @see    #remove(Object)
     }
-    function RemoveAll(c: IJavaCollection): WordBool;
+    function RemoveAll(c: IACollection): WordBool;
     //boolean removeAll(Collection<?> c);
 
     {**

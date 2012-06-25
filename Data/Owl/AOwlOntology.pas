@@ -2,7 +2,7 @@
 @Abstract(OwlOntology)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.04.2007)
-@LastMod(27.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Prototype: org.semanticweb.owl.model.OWLOntology.java,v 1.2 2005/06/10 12:20:29
@@ -12,11 +12,9 @@ unit AOwlOntology;
 interface
 
 uses
-  // java
-  JavaSet, JavaUri,
-  // org.semanticweb.owl
-  OwlAnnotationProperty, OwlClass, OwlDataProperty, OwlDataType, OwlIndividual,
-  OwlNamedObject, OwlObjectProperty;
+  AOwlAnnotationProperty, AOwlClass, AOwlDataProperty, AOwlDataType, AOwlIndividualIntf,
+  AOwlNamedObject, AOwlObjectProperty,
+  AiSet, AiNetUri;
 
 //import java.util.List;
 //import java.util.Set;
@@ -109,7 +107,7 @@ type
       @param uri (String)
       @return OWLDataProperty, returns null if it is there
     }
-    function GetIndividual(uri: TJavaUri): IOwlIndividual;
+    function GetIndividual(uri: TJavaUri): IAOwlIndividual;
     //public OWLIndividual getIndividual(URI uri) throws OWLException;
 
 

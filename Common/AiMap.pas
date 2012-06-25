@@ -2,7 +2,7 @@
 @Abstract(AiMap)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(14.05.2007)
-@LastMod(27.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Prototype: java.util.Map (1.48 04/06/28)
@@ -12,7 +12,7 @@ unit AiMap;
 interface
 
 uses
-  JavaCollection, JavaSet;
+  ACollectionIntf, AiSet;
 
 type
   {**
@@ -310,7 +310,7 @@ type
 
       @return a collection view of the values contained in this map.
     }
-    function Values(): IJavaCollection;
+    function Values(): IACollection;
     //Collection<V> values();
 
     {**

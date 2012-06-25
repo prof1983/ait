@@ -2,7 +2,7 @@
 @Abstract(OwlProperty)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.04.2007)
-@LastMod(27.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Prototype: org.semanticweb.owl.model.OWLProperty.java,v 1.3 2005/06/10 12:20:29
@@ -12,7 +12,7 @@ unit AOwlProperty;
 interface
 
 uses
-  OwlEntity;
+  AOwlEntity;
 
 //import java.util.Set;
 

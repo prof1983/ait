@@ -2,7 +2,7 @@
 @Abstract(Логического вывода на основе онтологии OWL)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.05.2007)
-@LastMod(26.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Prototype: org.mindswap.pellet.owlapi.Reasoner
@@ -42,8 +42,9 @@ unit AiReasonerImpl;
 interface
 
 uses
-  AiCollection, AiKnowledgeBaseIntf, AiOwlClassIntf, AiOwlDescription,
-  AiOwlIndividual, AiOwlOntology, AiOwlOntologyManager, AiReasonerIntf;
+  AOwlClassIntf, AOwlDescriptionIntf, AOwlIndividualIntf, AOwlOntology, AOwlOntologyManager,
+  AiCollection, AiKnowledgeBaseIntf,
+  AiReasonerIntf;
 
 type //** Логического вывода на основе онтологии OWL
   TAIWSReasoner = class(TInterfacedObject, IAiReasoner)
