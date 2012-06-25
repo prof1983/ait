@@ -2,7 +2,7 @@
 @Abstract(Главное окно органайзера)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.05.2007)
-@LastMod(20.04.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 История версий:
@@ -18,7 +18,7 @@ uses
   Graphics, Forms, Messages, SysUtils, ToolWin, Variants, Windows,
   XPStyleActnCtrls, StdCtrls, Menus, ImgList,
   {AiReasonerImpl,}
-  fEntity;
+  AiEntityForm;
 
 type
   TTabItem = class
