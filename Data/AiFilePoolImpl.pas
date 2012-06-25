@@ -2,7 +2,7 @@
 @Abstract(Файловый пул (источник знаний))
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(13.06.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 Пул хранения сущностей в файле
@@ -23,7 +23,7 @@ unit AiFilePoolImpl;
 interface
 
 uses
-  AIteratorIntf,
+  ABase, AIteratorIntf,
   AiBase, AiBaseTypes, AiPoolImpl;
 
 type
@@ -97,11 +97,11 @@ type
     function GetIsOpened(): Boolean; override;
   public
     //** Закрыть пул (источник)
-    procedure Close(); override;
+    function Close(): AError; override;
     //** Пул (источник) содержит в себе сущность
     function Contains(ID: TAId): Boolean; override;
     // Создать новую сущность (заререзвировать идентификатор под сущность)
-    function NewEntity(EntityType: TAId): TAId; override;
+    function NewEntity2(EntityType: AId): AId; override;
     //** Открыть пул (источник)
     function Open(): TAiError; override;
     //** Создать и открыть пул (источник)
@@ -115,7 +115,7 @@ implementation
 
 { TAIFilePool }
 
-procedure TAiFilePool.Close();
+function TAiFilePool.Close(): AError;
 var
   Header: TFileHeader;
   res: Integer;
@@ -134,6 +134,7 @@ begin
   CloseFile(FFile);
 
   FIsOpened := False;
+  Result := 0;
 end;
 
 function TAiFilePool.Contains(ID: TAId): Boolean;
@@ -160,7 +161,7 @@ begin
   // ...
 end;
 
-function TAiFilePool.NewEntity(EntityType: TAId): TAId;
+function TAiFilePool.NewEntity2(EntityType: AId): AId;
 begin
   if FNextFreeID >= FCapacity then
     Result := 0

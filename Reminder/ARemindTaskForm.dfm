@@ -1,9 +1,9 @@
 object fmRemindTask: TfmRemindTask
   Left = 0
   Top = 0
-  Width = 480
-  Height = 137
   Caption = #1053#1072#1087#1086#1084#1080#1085#1072#1085#1080#1077
+  ClientHeight = 110
+  ClientWidth = 472
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -49,9 +49,10 @@ object fmRemindTask: TfmRemindTask
     Top = 78
     Width = 75
     Height = 25
+    Kind = bkOK
+    NumGlyphs = 2
     TabOrder = 2
     OnClick = bbOkClick
-    Kind = bkOK
   end
   object bbCancel: TBitBtn
     Left = 216
@@ -59,8 +60,9 @@ object fmRemindTask: TfmRemindTask
     Width = 75
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1072
-    TabOrder = 3
     Kind = bkCancel
+    NumGlyphs = 2
+    TabOrder = 3
   end
   object DateTimePicker2: TDateTimePicker
     Left = 255

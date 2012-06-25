@@ -2,7 +2,7 @@
 @Abstract(Форма редактирования задания)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(27.06.2007)
-@LastMod(01.06.2012)
+@LastMod(25.06.2012)
 @Version(0.5)
 
 История версий:
@@ -10,7 +10,7 @@
 0.0.0.2 - 28.06.2007
 0.0.0.1 - 27.06.2007
 }
-unit ARemindTask;
+unit ARemindTaskForm;
 
 interface
 
