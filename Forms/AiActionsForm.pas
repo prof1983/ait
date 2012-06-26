@@ -13,7 +13,7 @@ uses
   Classes, ComCtrls, Controls, Dialogs, ExtCtrls, Graphics, Forms, Messages, StdCtrls, SysUtils,
   Windows,
   ABase, AForm2007,
-  AiAction, arfAction;
+  AiAction, AiActionForm;
 
 type
   TFormActions = class(TProfForm)

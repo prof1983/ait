@@ -2,7 +2,7 @@
 @Abstract(Ассоциативная связь)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.09.2006)
-@LastMod(04.05.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 }
 unit AiAssociation;
@@ -10,28 +10,31 @@ unit AiAssociation;
 interface
 
 uses
+  ABase,
   AiFrameImpl, AiTypes;
 
 type //** Ассоциация
   TAIAssociation = class(TAiFrame2007)
   private
-    FFreim1Id: TAI_ID;      // Идентификатор ассоциируемого фрейма 1
-    FFreim2Id: TAI_ID;      // Идентификатор ассоциируемого фрейма 1
+    {** Идентификатор ассоциируемого фрейма 1 }
+    FFreim1Id: AId;
+    {** Идентификатор ассоциируемого фрейма 1 }
+    FFreim2Id: AId;
     FAssociationType: TAIAssociationType; // Тип ассоциативной связи
     FWeight: Integer;               // Вес связи
     FReliance: Integer;             // Уверенность
   public
     function GetAssociationType(): TAIAssociationType;
     function GetFreim1(): TAiFrame2007;
-    function GetFreim1Id(): TAI_Id;
+    function GetFreim1Id(): AId;
     function GetFreim2(): TAiFrame2007;
-    function GetFreim2Id(): TAI_Id;
+    function GetFreim2Id(): AId;
     function GetReliance(): Integer;
     function GetWeight(): Integer;
   published
     property AssociationType: TAIAssociationType read FAssociationType write FAssociationType;
-    property Freim1ID: TAI_ID read FFreim1ID write FFreim1ID;
-    property Freim2ID: TAI_ID read FFreim2ID write FFreim2ID;
+    property Freim1Id: AId read FFreim1Id write FFreim1Id;
+    property Freim2Id: AId read FFreim2Id write FFreim2Id;
     // Надежность связи
     property Reliance: Integer read FReliance write FReliance;
     // Вес связи
@@ -57,7 +60,7 @@ begin
   Result := TAIFreim(Source.GetFreim(FFreim1Id));}
 end;
 
-function TAIAssociation.GetFreim1Id: TAI_ID;
+function TAIAssociation.GetFreim1Id(): AId;
 begin
   Result := FFreim1Id;
 end;
@@ -72,7 +75,7 @@ begin
   Result := TAIFreim(Source.GetFreim(FFreim2ID));}
 end;
 
-function TAIAssociation.GetFreim2Id: TAI_ID;
+function TAIAssociation.GetFreim2Id(): AId;
 begin
   Result := FFreim2Id;
 end;
