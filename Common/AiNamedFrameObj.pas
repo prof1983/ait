@@ -2,7 +2,7 @@
 @Abstract(AiNamedFrameObj)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(21.11.2011)
-@LastMod(21.06.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 }
 unit AiNamedFrameObj;
@@ -33,8 +33,8 @@ type
     {** Заголовок для отображения }
     property Title: WideString read FTitle write FTitle;
   end;
-  TAiNamedFrame = TAiNamedFrameObject;
-  TAiFreimNamed = TAiNamedFrameObject;
+  //TAiNamedFrame = TAiNamedFrameObject;
+  //TAiFreimNamed = TAiNamedFrameObject;
 
 implementation
 

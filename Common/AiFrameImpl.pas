@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(21.06.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -14,7 +14,7 @@ interface
 
 uses
   SysUtils, XmlIntf,
-  AConsts2, AEntityImpl, AIteratorIntf, ANodeIntf, AObjectImpl, ATypes, AXmlUtils,
+  ABase, AConsts2, AEntityImpl, AIteratorIntf, ANodeIntf, AObjectImpl, ATypes, AXmlUtils,
   AiBase, AiBaseTypes, AiCollectionImpl, AiConnectsIntf, AiDataIntf, AiEntityImpl,
   AiFrameIntf, AiFramePoolIntf, AiFrameUtils, AiSlotIntf, AiSlotImpl, AiTypes;
 
@@ -185,7 +185,7 @@ type //** Фрейм
     procedure Set_FrameType(Value: TAiId); safecall;
     procedure Set_FreimType(Value: TAiId); safecall;
     procedure Set_Source2(const Value: AiSource2); safecall;
-  protected
+  public
       //** Возвращает объект работы со связями
     function GetConnects(): IAiConnects;
       //** Возвращает класс работы с данными
@@ -198,6 +198,10 @@ type //** Фрейм
     function GetFrameID(): TAIID; safecall;
       //** Возвращает тип фрейма
     function GetFreimType(): TAId;
+    {**
+      Return frame identifier
+    }
+    function GetId(): AId;
       //** Инициализирован?
     function GetInitialized(): Boolean;
       //** Возвращает фрейм в виде XML строки
@@ -233,14 +237,22 @@ type //** Фрейм
     function Load(): Boolean; virtual;
       //** Загрузить из файла
     function LoadFromFile(const AFileName: WideString): WordBool; virtual; safecall;
+    {**
+      Load frame data from xml
+    }
+    function LoadFromXml(Xml: IXmlNode): WordBool; virtual;
       //** Сохранить в источник
     function Save(): WordBool; virtual;
       //** Сохранить в файл
     function SaveToFile(const AFileName: WideString): WordBool; virtual; safecall;
+    {**
+      Save frame data to FrameRec64
+    }
+    function SaveToRecF64(var Rec: TAIFreimRecF64): Boolean;
       //** Сохранить в XML
     function SaveToXml(Xml: IXmlNode): WordBool; virtual;
   public
-    constructor Create();
+    constructor Create(ASource: AiSource2 = 0; AId: TAId = 0);
   public
       //** Связи
     property Connects: IAiConnects read GetConnects;
@@ -312,11 +324,7 @@ type // Фрейм
     procedure Set_DateTimeCreate(Value: TDateTime); safecall;
     procedure Set_FreimType(Value: TAId); safecall;
     procedure Set_Source1(const Value: AiSource1); safecall;
-    //function AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: string; AParams: array of const): Boolean;
-    //function ToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString; AParams: array of const): Integer;
   protected
-    procedure DoCreate(); override; safecall;
-    procedure DoDestroy(); override; safecall;
     procedure SetDateTimeCreate(Value: TDateTime);
     procedure SetId(Value: TAId);             // Установить Id. Если не инициализирован.
     procedure SetInitialized(Value: Boolean); // Инициализировать/Финализировать
@@ -324,30 +332,10 @@ type // Фрейм
   public // IAIFreim
     function LoadFromRecF64(Rec: TAIFreimRecF64): WordBool; safecall;
   public
-    function GetId(): TAId;                   // Возвращает Id
     function GetInitialized(): Boolean;       // Инициализирован?
       // Возвращает источник
     function GetSource(): AiSource2;
     function GetXml(): WideString; virtual;
-  public
-    function Clear(): WordBool; virtual;          // Очистить объект
-    //function ConfigureLoad: WordBool; override; // Загрузить конфигурации
-    //function ConfigureSave: WordBool; override; // Сохранить конфигурации
-    constructor Create(ASource: AiSource2 = 0; AId: TAId = 0);
-      // Финализировать. Разорвать связь объекта с источником.
-    function Finalize(): TProfError; override;
-    procedure Free(); override;
-      // Произвести инициализацию. Установить связь с источником.
-    function Initialize(): TProfError; override;
-    function Regist(): Boolean; virtual;         // Зарегистрировать тип фрейма в источнике
-  public
-    function Load(): Boolean; virtual;           // FromSource
-    function LoadFromXml(Xml: IXmlNode): WordBool; virtual;
-    function Save(): WordBool; virtual;          // ToSource
-    function SaveToFile(const AFileName: WideString): WordBool; virtual;
-    function SaveToRecF64(var Rec: TAIFreimRecF64): Boolean;
-      //** Сохранить список связей в XML
-    function SaveToXml(Xml: IXmlNode): WordBool; virtual;
   end;
 
 implementation
@@ -687,28 +675,19 @@ begin
   Result := True;
 end;
 
-{function TAIFreim.ConfigureLoad: WordBool;
-begin
-  Result := inherited ConfigureLoad;
-end;}
-
-{function TAIFreim.ConfigureSave: WordBool;
-begin
-  Result := inherited ConfigureSave;
-end;}
-
-constructor TAiFrame2007.Create();
+constructor TAiFrame2007.Create(ASource: AiSource2 = 0; AId: TAId = 0);
 begin
   inherited Create();
   FConnects := nil;
   FData := nil;
   FDateCreate := 0;
-  FID := 0;
+  FId := AId;
   FInitialized := False;
-  FSource := 0;
+  FSource := ASource;
   FFrameType := 0;
-  //if Assigned(Source) and (ID > 0) then Load();
-  //DoCreate();
+  {if Assigned(Source) and (Id > 0) then Load;}
+  Self.FName := IntToStr(FId);
+  DoCreate();
 end;
 
 function TAiFrame2007.Finalize(): TProfError;
@@ -755,6 +734,11 @@ end;
 function TAiFrame2007.GetDateTimeCreate(): TDateTime;
 begin
   Result := FDateCreate;
+end;
+
+function TAiFrame2007.GetId(): AId;
+begin
+  Result := FId;
 end;
 
 function TAiFrame2007.GetInitialized(): Boolean;
@@ -897,18 +881,10 @@ begin
   Result := True;
 end;}
 
-{function TAIFreim.LoadFromXml(Xml: IXmlNode): WordBool;
+function TAiFrame2007.LoadFromXml(Xml: IXmlNode): WordBool;
 begin
-  Result := False;
-  if not(Assigned(Xml)) then Exit;
-  Clear();
-  FID := TProfXmlNode.ReadInt64Def(Xml, 'ID');
-  FDateTimeCreate := TProfXmlNode.ReadDateTimeDef(Xml, 'DateTimeCreate');
-  FFreimType := TProfXmlNode.ReadInt64Def(Xml, 'Type');
-  GetConnects.LoadFromXml(TProfXmlNode.GetNodeByNameA(Xml, 'Connects'));
-  //GetData.LoadFromXml(Xml.GetNodeByName('Data'));
-  Result := True;
-end;}
+  Result := (AiFrameUtils.AiFrame_LoadFromXml(Self, Xml) >= 0);
+end;
 
 function TAiFrame2007.Regist(): Boolean;
 begin
@@ -929,7 +905,7 @@ begin
   Result := False;
 end;
 
-(*function TAIFreim.SaveToRecF64(var Rec: TAIFreimRecF64): Boolean;
+function TAiFrame2007.SaveToRecF64(var Rec: TAIFreimRecF64): Boolean;
 begin
   {Rec.Id := FId;
   Rec.Typ := FFreimType;
@@ -941,22 +917,11 @@ begin
   Rec.ConnectCount := GetConnects.GetCountConnects;
   Result := True;}
   Result := False;
-end;*)
+end;
 
 function TAiFrame2007.SaveToXml(Xml: IXmlNode): WordBool;
-{var
-  con: TAI_Connects;}
 begin
-  {Result := Assigned(Xml);
-  if not(Result) then Exit;
-  TProfXmlNode.WriteIntegerA(Xml, 'ID', FID);
-  TProfXmlNode.WriteDateTimeA(Xml, 'DateTimeCreate', FDateTimeCreate);
-  TProfXmlNode.WriteIntegerA(Xml, 'Type', FFreimType);
-  con := Connects;
-  if Assigned(con) then
-    con.SaveToXml(TProfXmlNode.GetNodeByNameA(Xml, 'Connects'));
-  //Data.SaveToXml(Xml.GetNodeByName('Data'));}
-  Result := False;
+  Result := (AiFrame_SaveToXml(Self, Xml) >= 0);
 end;
 
 procedure TAiFrame2007.SetDateTimeCreate(Value: TDateTime);
@@ -1126,75 +1091,6 @@ end;
 
 { TAiFreim }
 
-function TAIFreim.Clear: WordBool;
-begin
-  if Assigned(FConnects) then FreeAndNil(FConnects);
-  if Assigned(FData) then FreeAndNil(FData);
-  FDateCreate := 0;
-  FId := 0;
-  FInitialized := False;
-  FSource := 0;
-  FFrameType := 0;
-  Result := True;
-end;
-
-constructor TAIFreim.Create(ASource: AiSource2 = 0; AId: TAId = 0);
-begin
-  inherited Create();
-  FConnects := nil;
-  FData := nil;
-  FDateCreate := 0;
-  FId := AId;
-  FInitialized := False;
-  FSource := ASource;
-  FFrameType := 0;
-  {if Assigned(Source) and (Id > 0) then Load;}
-  Self.FName := IntToStr(FId);
-  DoCreate();
-end;
-
-procedure TAIFreim.DoCreate();
-begin
-  inherited DoCreate();
-end;
-
-procedure TAIFreim.DoDestroy();
-begin
-  inherited DoDestroy();
-end;
-
-function TAIFreim.Finalize(): TProfError;
-begin
-  if (FSource = 0) then
-  begin
-    if Assigned(FConnects) then
-    begin
-      //FConnects.Free;
-      FConnects := nil;
-    end;
-    if Assigned(FData) then
-    begin
-      //FData.Free;
-      FData := nil;
-    end;
-  end;
-  FInitialized := False;
-  Clear;
-  Result := 0;
-end;
-
-procedure TAIFreim.Free();
-begin
-  {Finalize;}
-  DoDestroy();
-  inherited Free();
-end;
-
-function TAIFreim.GetID(): TAId;
-begin
-  Result := FId;
-end;
-
 function TAIFreim.GetInitialized(): Boolean;
 begin
   Result := FInitialized;
@@ -1284,95 +1180,12 @@ begin
   Result := FSource;
 end;
 
-function TAIFreim.Initialize(): TProfError;
-begin
-  Result := 0;
-  if FInitialized then Exit;
-  FInitialized := True;
-  Load;
-  {Result := SetInitialized(True);}
-end;
-
-function TAIFreim.Load(): Boolean;
-begin
-  Result := True;
-  {if not(FInitialized) then Exit;
-  if not(Assigned(FSource)) then Exit;
-  FDateTimeCreate := FSource.GetFreimDateTimeCreate(FId);
-  if FDateTimeCreate = 0 then FDateTimeCreate := dtNow;
-  FFreimType := FSource.GetFreimType(FId);}
-end;
-
 function TAIFreim.LoadFromRecF64(Rec: TAIFreimRecF64): WordBool;
 begin
   FId := Rec.Id;
   FFrameType := Rec.Typ;
   FDateCreate := Rec.DTCreate;
   Result := True;
-end;
-
-function TAIFreim.LoadFromXml(Xml: IXmlNode): WordBool;
-var
-  Connects: IXmlNode;
-begin
-  ...
-  Result := False;
-  if not(Assigned(Xml)) then Exit;
-  Clear();
-  AXmlUtils.ProfXmlNode_ReadInt64(Xml, 'ID', FId);
-  AXmlUtils.ProfXmlNode_ReadDateTime(Xml, 'DateTimeCreate', FDateCreate);
-  AXmlUtils.ProfXmlNode_ReadInt64(Xml, 'Type', FFrameType);
-  Connects := AXmlUtils.ProfXmlNode_GetNodeByName(Xml, 'Connects');
-  GetConnects.LoadFromXml(Connects);
-  //GetData.LoadFromXml(Xml.GetNodeByName('Data'));
-  Result := True;
-end;
-
-function TAIFreim.Regist(): Boolean;
-begin
-  Result := False;
-  AddToLog(lgGeneral, ltError, stNotOverrideA);
-end;
-
-function TAIFreim.Save(): WordBool;
-begin
-  {if (FInitialized) and Assigned(FSource) and (FId > 0) then begin
-    FSource.SetFreimType(FId, FFreimType);
-    Result := True;
-  end else} Result := False;
-end;
-
-function TAIFreim.SaveToFile(const AFileName: WideString): WordBool;
-begin
-  Result := True;
-end;
-
-function TAIFreim.SaveToRecF64(var Rec: TAIFreimRecF64): Boolean;
-begin
-  {Rec.Id := FId;
-  Rec.Typ := FFreimType;
-  Rec.DTCreate := FDateTimeCreate;
-  if GetData.GetType = dtStream then
-    Rec.DataSize := GetData.GetStream.GetSize
-  else
-    Rec.DataSize := 0;
-  Rec.ConnectCount := GetConnects.GetCountConnects;
-  Result := True;}
-  Result := False;
-end;
-
-function TAIFreim.SaveToXml(Xml: IXmlNode): WordBool;
-var
-  Connects: IXmlNode;
-begin
-  Result := Assigned(Xml);
-  if not(Result) then Exit;
-  AXmlUtils.ProfXmlNode_WriteInt64(Xml, 'ID', FId);
-  AXmlUtils.ProfXmlNode_WriteDateTime(Xml, 'DateTimeCreate', FDateCreate);
-  AXmlUtils.ProfXmlNode_WriteInt64(Xml, 'Type', FFrameType);
-  Connects := AXmlUtils.ProfXmlNode_GetNodeByName(Xml, 'Connects');
-  GetConnects.SaveToXml(Connects);
-  //Data.SaveToXml(Xml.GetNodeByName('Data'));
 end;
 
 procedure TAIFreim.SetDateTimeCreate(Value: TDateTime);
@@ -1426,21 +1239,6 @@ procedure TAIFreim.Set_Source1(const Value: AiSource1);
 begin
   //FSource := IAiSource1(Value);
 end;
-
-{function TAIFreim.AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: string; AParams: array of const): Boolean;
-begin
-  Result := False;
-  if Assigned(FOnAddToLog) then try
-    Result := FOnAddToLog(AGroup, AType, AStrMsg, AParams);
-  except
-  end;
-end;}
-
-{function TAIFreim.ToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString; AParams: array of const): Integer;
-begin
-  AddToLog(AGroup, AType, AStrMsg, AParams);
-  Result := 0;
-end;}
 
 { TAIFreimNamed }
 
