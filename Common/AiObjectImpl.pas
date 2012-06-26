@@ -2,7 +2,7 @@
 @Abstract(Объект AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(25.09.2006)
-@LastMod(13.06.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 
 Объект AI наследник от фрейма.
@@ -53,7 +53,6 @@ type //** Объект AI
     //property MethodCodeByIndex[Index: Integer]: WideString read GetMethodCodeByIndex;
     property MethodCodeByName[const MethodName: WideString]: WideString read GetMethodCodeByName;
   end;
-  TAIObject3 = TAIObject;
 
 implementation
 

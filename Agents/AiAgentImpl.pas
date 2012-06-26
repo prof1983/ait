@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для агента)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(18.05.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 
 Агент - это модуль, который имеет свой подпроцесс выполнения команд (Thread).
@@ -19,7 +19,7 @@ interface
 uses
   AConsts2, ATypes,
   AclMessageIntf,
-  AiAgentIntf, AiAgentProcess, AiBase, AiBaseTypes, AiFrame, AiInterpretatorIntf, AiMessagesImpl, AiModuleImpl;
+  AiAgentIntf, AiAgentProcess, AiBase, AiBaseTypes, AiInterpretatorIntf, AiMessagesImpl, AiModuleImpl;
 
 type //** Статус агента
   TAiAgentStatus1 = (
@@ -53,12 +53,6 @@ type
   end;
   TAiAgentRec3 = TAiRecAgent;
 
-{type
-  TAiAgentRec3 = record
-    ID: TAIID;
-    Agent: IAIAgent;
-  end;}
-
 type // Базовый класс для агента
   TAiAgent = class(TAiModule, IAiAgent)
   private
@@ -72,12 +66,21 @@ type // Базовый класс для агента
       // Окно агента видимо
     FVisible: Boolean;
   protected
+      //** Запущен ли агент
+    //FActive: Boolean; - use FProcess.Thread.Suspended
+      //** Конвеер сообщений
+    FMessages: TAiMessages;
+      //** Статус процесса
+    FStatus: TAiAgentStatus1;
+  protected
       // Возвращает True, если агент активен
     function GetActive(): Boolean;
       // Возвращает процесс выполнения команд
     function GetProcess(): TAiAgentProcess;
       // Возвращает статус
     function GetStatus(): TAiAgentStatus2;
+      //** Возвращает статус
+    function GetStatus1(): TAiAgentStatus1;
       // Возвращает True, если у агента есть видемые окна
     function GetVisible(): Boolean;
       // Устанавливает активность агента
@@ -86,6 +89,8 @@ type // Базовый класс для агента
     procedure SetProcess(Value: TAiAgentProcess);
       // Задает статус агента
     procedure SetStatus(Value: TAiAgentStatus2);
+      //** Задает статус агента
+    procedure SetStatus1(Value: TAiAgentStatus1);
       // Задает видимость окон
     procedure SetVisible(Value: Boolean);
   protected
@@ -106,7 +111,7 @@ type // Базовый класс для агента
       // Добавить сообщение
     function AddMessage(Msg: IAclMessage): Integer;
       // Добавляет сообщение в стек сообщений подпроцесса выполнения.
-    function AddMessageStr(const Msg: WideString): Integer; override;
+    function AddMessageStr(const Msg: WideString): Integer;
       // Финализирует
     function Finalize(): TProfError; override;
       // Скрыть видимые окна. Должен быть переопределен.
@@ -115,10 +120,10 @@ type // Базовый класс для агента
     function Initialize(): TProfError; override;
       // Приостанавливает процесс выполнения команд
     function Pause(): Boolean; virtual; safecall;
-      // Регистрирует агент в БЗ, выделяет ID
-    function Regist(): Boolean; override; safecall;
       // Показывает окно агента. Должен быть переопределен.
     function Show(): WordBool; virtual; safecall;
+      // Запускает процесс выполнения команд ?
+    function Run(): Boolean; virtual; safecall;
       // Запускает процесс выполнения команд
     function Start(): WordBool; virtual; safecall;
       // Останавливает процесс выполнения команд
@@ -132,74 +137,7 @@ type // Базовый класс для агента
     property OnProgress: TProcProgress read GetOnProgress write SetOnProgress;
   end;
 
-type //** Базовый класс для агента
-  TAiAgent1 = class(TAiModule, IAiAgent)
-  protected
-      //** Запущен ли агент
-    FActive: Boolean;
-      //** Конвеер сообщений
-    FMessages: TAiMessages;
-      //** Процесс выполнения команд
-    FProcess: TAiAgentProcess;
-      //** Статус процесса
-    FStatus: TAiAgentStatus1;
-      //** Окно агента видимо
-    FVisible: Boolean;
-  protected
-      //** Возвращает True, если агент активен
-    function GetActive(): Boolean;
-      //** Возвращает процесс выполнения команд
-    function GetProcess(): TAIAgentProcess;
-      //** Возвращает статус
-    function GetStatus(): TAiAgentStatus1;
-      //** Возвращает True, если у агента есть видемые окна
-    function GetVisible(): Boolean;
-      //** Устанавливает активность агента
-    procedure SetActive(Value: Boolean);
-      //** Задает процесс выполнения команд
-    procedure SetProcess(Value: TAIAgentProcess);
-      //** Задает статус агента
-    procedure SetStatus(Value: TAiAgentStatus1);
-      //** Задает видимость окон
-    procedure SetVisible(Value: Boolean);
-  protected
-      //** Возвращает выполняемый код агента в виде строки
-    function GetCodeString(): WideString; safecall;
-      //** Возвращает интерпретатор
-    function GetInterpretator(): IAIInterpretator; safecall;
-      //** Задает выполняемый код агента в виде строки
-    procedure SetCodeString(const Value: WideString); safecall;
-    procedure SetInterpretator(Value: IAIInterpretator); safecall;
-  protected
-    //** Срабатывает при создании
-    procedure DoCreate(); override; safecall;
-    //** Срабатывает при вызове метода Start
-    function DoStart(): WordBool; virtual; safecall;
-  public // IAiAgent
-      // Добавить сообщение
-    function AddMessage(Msg: IAclMessage): Integer;
-      // Добавить сообщение
-    function AddMessageStr(const AMsg: WideString): Integer;
-      // Скрыть видимые окна
-    function Hide(): WordBool; virtual; safecall; deprecated;
-      // Приостанавливает процесс выполнения команд
-    function Pause(): Boolean; virtual; safecall;
-      // Регистрирует агент в БЗ, выделяет ID
-    function Regist(): Boolean; override; safecall;
-      // Запускает процесс выполнения команд ?
-    function Run(): Boolean; virtual; safecall;
-      // Показывает окно агента
-    function Show(): WordBool; virtual; safecall; deprecated;
-      // Запускает процесс выполнения команд
-    function Start(): WordBool; virtual; safecall;
-      // Останавливает процесс выполнения команд
-    function Stop(): WordBool; virtual; safecall;
-  public
-    //** Строка с кодом, который нужно выполнить
-    property CodeString: WideString read GetCodeString write SetCodeString;
-    //** Интерпретатор кода
-    property Interpretator: IAIInterpretator read GetInterpretator write SetInterpretator;
-  end;
+  //TAiAgent1 = TAiAgent;
 
 implementation
 
@@ -212,10 +150,10 @@ end;
 
 function TAiAgent.AddMessageStr(const Msg: WideString): Integer;
 begin
-  Result := inherited AddMessageStr(Msg);
+  Result := -1;
   if Assigned(FProcess) then
   try
-    Result := FProcess.AddMessage(Msg);
+    Result := FProcess.Messages.AddMessage(Msg);
   except
   end;
 end;
@@ -224,12 +162,13 @@ procedure TAiAgent.DoCreate();
 begin
   inherited DoCreate();
 
-//  if not(Assigned(FMessages)) then
-//    FMessages := TAIMessages.Create();
+  FStatus := AgentStatusStoped;
+  if not(Assigned(FMessages)) then
+    FMessages := TAiMessages.Create();
   if not(Assigned(FProcess)) then
     FProcess := TAiAgentProcess.Create();
-//  FProcess.Messages := FMessages;
-  FProcess.OnSendMessage := SendMessage;
+  FProcess.Messages := FMessages;
+  //FProcess.OnSendMessage := SendMessage;
 end;
 
 function TAiAgent.DoStart(): WordBool;
@@ -310,6 +249,11 @@ begin
   end;
 end;
 
+function TAiAgent.GetStatus1(): TAiAgentStatus1;
+begin
+  Result := FStatus;
+end;
+
 function TAiAgent.GetVisible(): Boolean;
 begin
   Result := FVisible;
@@ -349,6 +293,7 @@ end;
 
 function TAiAgent.Pause(): Boolean;
 begin
+  FStatus := AgentStatusPaused;
   //FStatus := AGENT_STATUS_PAUSED;
   //Result := True;
 
@@ -358,12 +303,6 @@ begin
     Result := FProcess.Pause();
   except
   end;
-end;
-
-function TAiAgent.Regist(): Boolean;
-begin
-  Result := inherited Regist;
-  // ...
 end;
 
 {function TAIAgent.Run(): Boolean;
@@ -430,9 +369,24 @@ begin
   end;
 end;
 
+procedure TAiAgent.SetStatus1(Value: TAiAgentStatus1);
+begin
+  case Value of
+    AgentStatusPaused: Pause();
+    AgentStatusRuned: Run();
+    AgentStatusStoped: Stop();
+  end;
+end;
+
 procedure TAiAgent.SetVisible(Value: Boolean);
 begin
   FVisible := Value;
+end;
+
+function TAiAgent.Run(): Boolean;
+begin
+  FStatus := AgentStatusRuned;
+  Result := True;
 end;
 
 function TAiAgent.Show(): WordBool;
@@ -446,168 +400,13 @@ begin
   if Assigned(FProcess) then
   try
     Result := FProcess.Start();
-    //if Result then
-    //  Self.FStatus := AGENT_STATUS_RUNED;
-  except
-  end;
-end;
-
-function TAiAgent.Stop(): WordBool;
-begin
-  //FStatus := AGENT_STATUS_STOPED;
-  Result := False;
-  if Assigned(FProcess) then
-  try
-    Result := FProcess.Stop();
-  except
-  end;
-end;
-
-{ TAiAgent1 }
-
-function TAiAgent1.AddMessage(Msg: IAclMessage): Integer;
-begin
-  Result := 0;
-end;
-
-function TAiAgent1.AddMessageStr(const AMsg: WideString): Integer;
-begin
-  Result := 0;
-end;
-
-procedure TAiAgent1.DoCreate();
-begin
-  inherited;
-  FStatus := AgentStatusStoped;
-  FMessages := TAIMessages.Create();
-  FProcess := TAIAgentProcess.Create();
-  FProcess.Messages := FMessages;
-end;
-
-function TAiAgent1.DoStart(): WordBool;
-begin
-  Result := False;
-  if Assigned(FProcess) then
-  try
-    Result := FProcess.Start();
-  except
-  end;
-end;
-
-function TAiAgent1.GetActive(): Boolean;
-begin
-  Result := FActive;
-end;
-
-function TAiAgent1.GetCodeString(): WideString;
-begin
-  Result := '';
-  if Assigned(FProcess) then
-    Result := FProcess.CodeString;
-  // TODO: Make
-end;
-
-function TAiAgent1.GetInterpretator(): IAIInterpretator;
-begin
-  Result := nil;
-  if Assigned(FProcess) then
-    Result := FProcess.Interpretator;
-end;
-
-function TAiAgent1.GetProcess(): TAIAgentProcess;
-begin
-  Result := FProcess;
-end;
-
-function TAiAgent1.GetStatus(): TAiAgentStatus1;
-begin
-  Result := FStatus;
-end;
-
-function TAiAgent1.GetVisible(): Boolean;
-begin
-  Result := FVisible;
-  {if not(FActive) then Result := ER_Warning else Result := 0;}
-end;
-
-function TAiAgent1.Hide(): WordBool;
-begin
-  Result := False;
-  AddToLog(lgGeneral, ltError, stNotOverride+' '+ClassName+'.Hide');
-end;
-
-function TAiAgent1.Pause(): Boolean;
-begin
-  FStatus := AgentStatusPaused;
-  Result := True;
-end;
-
-function TAiAgent1.Regist(): Boolean;
-begin
-  Result := inherited Regist;
-end;
-
-function TAiAgent1.Run(): Boolean;
-begin
-  FStatus := AgentStatusRuned;
-  Result := True;
-end;
-
-procedure TAiAgent1.SetActive(Value: Boolean);
-begin
-  FActive := Value;
-end;
-
-procedure TAiAgent1.SetCodeString(const Value: WideString);
-begin
-  if Assigned(FProcess) then
-    FProcess.CodeString := Value;
-end;
-
-procedure TAiAgent1.SetInterpretator(Value: IAIInterpretator);
-begin
-  if Assigned(FProcess) then
-    FProcess.Interpretator := Value;
-end;
-
-procedure TAiAgent1.SetProcess(Value: TAIAgentProcess);
-begin
-  if Assigned(FProcess) then
-  Stop();
-  FProcess := Value;
-end;
-
-procedure TAiAgent1.SetStatus(Value: TAiAgentStatus1);
-begin
-  case Value of
-    AgentStatusPaused: Pause();
-    AgentStatusRuned: Run();
-    AgentStatusStoped: Stop();
-  end;
-end;
-
-procedure TAiAgent1.SetVisible(Value: Boolean);
-begin
-  FVisible := Value;
-end;
-
-function TAiAgent1.Show(): WordBool;
-begin
-  Result := False;
-end;
-
-function TAiAgent1.Start(): WordBool;
-begin
-  if Assigned(FProcess) then
-  try
-    Result := FProcess.Start();
     if Result then
       Self.FStatus := AgentStatusRuned;
   except
   end;
 end;
 
-function TAiAgent1.Stop(): WordBool;
+function TAiAgent.Stop(): WordBool;
 begin
   FStatus := AgentStatusStoped;
   Result := False;

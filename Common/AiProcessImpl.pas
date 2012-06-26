@@ -2,7 +2,7 @@
 @Abstract(Процесс выполнения команд для агентов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.01.2006)
-@LastMod(26.04.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 }
 unit AiProcessImpl;
@@ -12,10 +12,10 @@ interface
 uses
   Classes, SysUtils,
   ATypes,
-  AiFrame, AiFrameImpl, AiInterpretatorIntf, AiInterpretatorThread, AiProcessIntf;
+  AiFrameImpl, AiInterpretatorIntf, AiInterpretatorThread, AiProcessIntf;
 
 type //** Процесс выполнения какого-либо метода(процедуры или функции). Используется в TAIAgent
-  TAiProcess = class(TAIFrame, IAIProcess3)
+  TAiProcess = class(TAIFrame, IAiProcess)
   private
     function GetOnProgress: TProcProgress;
     procedure SetOnProgress(const Value: TProcProgress);
@@ -55,7 +55,6 @@ type //** Процесс выполнения какого-либо метода
       //** Подпроцесс выполнения команд
     property Thread: TInterpretatorThread3 read GetThread write SetThread;
   end;
-  TAiProcess3 = TAiProcess;
 
 implementation
 

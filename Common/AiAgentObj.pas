@@ -2,7 +2,7 @@
 @Abstract(Агент в системе AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(13.11.2007)
-@LastMod(08.06.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 
 Агент - это отдельная программа или отдельный подпроцесс.
@@ -97,9 +97,6 @@ type
   end;
 
   TAiAgent2005 = TAiAgent2006;
-
-  //TAiAgent20050526 = TAiAgent2005;
-  //TAiAgent20050915 = TAiAgent2005;
 
   //TAiAgent = TAiAgent2007;
   //TArAgent = TAiAgent

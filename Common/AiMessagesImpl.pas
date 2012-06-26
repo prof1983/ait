@@ -2,7 +2,7 @@
 @Abstract(Конвеер сообщений)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.11.2005)
-@LastMod(26.04.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 
 24.02.2012 - Объединил AiMessages.pas и AiMessagesImpl.pas
@@ -12,7 +12,7 @@ unit AiMessagesImpl;
 interface
 
 uses
-  AObjectImpl, AMessageObj, AMessagesObj, ATypes,
+  ABase, AObjectImpl, AMessageObj, AMessagesObj, ATypes,
   AiTypes;
 
 type
@@ -26,11 +26,11 @@ type //** Конвеер сообщений
   private
     FMessages: TProfMessages3;
   protected
-    function Get_Count(): Integer; safecall;
-    function Get_NextRunMessage(): WideString; safecall;
-    function Get_CountMessages(): Integer; safecall;
+    function Get_Count(): Integer;
+    function Get_NextRunMessage(): WideString;
+    function Get_CountMessages(): Integer;
   public
-    procedure AddMessage(const AMessage: WideString); safecall;
+    function AddMessage(const AMessage: WideString): AInt;
   public
       //** Добавить команду в список. Поставить команду в очередь выполнения.
     function AddComand(AConnectionID: UInt64; AIdent: Int32; AOwner: UInt64; AComId: UInt64;
@@ -61,7 +61,7 @@ begin
   Result := FMessages.AddComand(AConnectionId, AIdent, AOwner, AComId, AComName, AParams);
 end;
 
-procedure TAIMessages.AddMessage(const AMessage: WideString);
+function TAIMessages.AddMessage(const AMessage: WideString): AInt;
 begin
   AddMsg(0, AMessage);
 end;

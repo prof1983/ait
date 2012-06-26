@@ -2,7 +2,7 @@
 @Abstract(Подпроцесс выполнения кода на языке AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(12.03.2007)
-@LastMod(26.04.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 
 Подпроцесс выполнения кода работает с TInterpretator.
@@ -19,7 +19,7 @@ interface
 uses
   ActiveX,
   ANodeIntf, AThreadObj, AXmlDocumentImpl, 
-  AiFrame, AiInterpretatorIntf;
+  AiInterpretatorIntf;
 
 type //** Подпроцесс выполнения кода на языке AR
   TInterpretatorThread3 = class(TProfThread)

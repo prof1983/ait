@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейса IAiProcess)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(26.04.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 }
 unit AiProcessIntf;
@@ -10,7 +10,7 @@ unit AiProcessIntf;
 interface
 
 uses
-  AiFrame, AiInterpretatorIntf;
+  AiFrameIntf, AiInterpretatorIntf;
 
 type //** Интерфейс процесса выполнения команд для агентов
   IAiProcess = interface(IAiFrame)
@@ -29,7 +29,6 @@ type //** Интерфейс процесса выполнения команд 
     //** Интерпретатор кода
     property Interpretator: IAiInterpretator read GetInterpretator write SetInterpretator;
   end;
-  IAIProcess3 = IAIProcess;
 
 implementation
 

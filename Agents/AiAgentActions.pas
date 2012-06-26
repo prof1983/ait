@@ -2,7 +2,7 @@
 @Abstract(Форма управления действиями)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(09.11.2005)
-@LastMod(26.04.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 }
 unit AiAgentActions;
@@ -11,10 +11,10 @@ interface
 
 uses
   ANodeIntf, ATypes,
-  AiAgent, AiActionsForm, AiGlobals;
+  AiAgentObj, AiActionsForm; {AiGlobals;}
 
 type
-  TAIAgentActions = class(TAIAgent)
+  TAIAgentActions = class(TAiAgent2006)
   private
     FActions: array of Integer; // Список IDs действий
     FCreated: Boolean;   // FForm создан при инициализации->должен быть удален при финализации
@@ -22,7 +22,7 @@ type
     function GetActionCount(): Integer;
     function GetActionID(Index: Integer): Integer;
   protected
-    procedure DoDestroy(); override;
+    //procedure DoDestroy(); override;
   public
     function Finalize(): TProfError; override;
     function Initialize(): TProfError; override;
@@ -35,11 +35,11 @@ implementation
 
 { TAIAgentActions }
 
-procedure TAIAgentActions.DoDestroy();
+{procedure TAIAgentActions.DoDestroy();
 begin
   SetLength(FActions, 0);
   inherited DoDestroy();
-end;
+end;}
 
 function TAIAgentActions.Finalize(): TProfError;
 begin

@@ -2,7 +2,7 @@
 @Abstract(Список заданий)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.03.2006)
-@LastMod(07.06.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 }
 unit AiTaskListImpl;
@@ -31,8 +31,8 @@ type //** Список заданий
   end;
   TAiTaskList3 = TAiTaskList;
 
-type //** Задания, связанные между собой
-  TAITasks3 = class(TAiFrame)
+  {** Задания, связанные между собой }
+  TAiTasks = class(TAiFrame)
   private
     FList: TAiTaskList;
     function GetTaskCount(): Integer;
@@ -40,12 +40,13 @@ type //** Задания, связанные между собой
     function AddTask(Task: TAITask): Integer;
     function GetTask(Index: Integer): TAiTask;
   public
-    constructor Create(); override;
+    constructor Create();
   public
     property TaskCount: Integer read GetTaskCount;
   end;
+  TAiTasks3 = TAiTasks;
 
-type //** Дерево задач
+  {** Дерево задач }
   TAITasksTree3 = class(TAiTasks3)
   private
     FTasks: array of TAiTaskNode;
@@ -108,18 +109,18 @@ end;
 
 { TAITasks }
 
-function TAITasks3.AddTask(Task: TAITask): Integer;
+function TAiTasks.AddTask(Task: TAITask): Integer;
 begin
   Result := FList.AddTask(Task);
 end;
 
-constructor TAITasks3.Create();
+constructor TAiTasks.Create();
 begin
   inherited Create();
   Self.FList := TAiTaskList.Create();
 end;
 
-function TAITasks3.GetTask(Index: Integer): TAITask;
+function TAiTasks.GetTask(Index: Integer): TAITask;
 begin
   if (Index >= FList.TaskCount) then
     Result := nil
@@ -127,7 +128,7 @@ begin
     Result := FList.GetItem(Index);
 end;
 
-function TAITasks3.GetTaskCount(): Integer;
+function TAiTasks.GetTaskCount(): Integer;
 begin
   Result := FList.TaskCount;
 end;
