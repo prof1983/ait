@@ -2,7 +2,7 @@
 @Abstract(Базовые типы сущностей)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(21.06.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 
 История версий:
@@ -140,6 +140,12 @@ const
   AiNamedEntityType = 1027;
   AiOwlClass = 1028;
   AiOwlProperty = 1029;
+
+const // Типы передаваемых сообщений - имя верхнего(первого) тега --------------
+  cMsgComand = 'Comand';
+  cMsgEvent = 'Event';
+  cMsgPing = 'Ping';
+  cMsgAnswer = 'Answer';
 
 implementation
 

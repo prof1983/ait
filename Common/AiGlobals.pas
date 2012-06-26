@@ -2,7 +2,7 @@
 @Abstract(Описания структур и типов для фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(04.05.2012)
+@LastMod(26.06.2012)
 @Version(0.5)
 }
 unit AiGlobals;
@@ -17,12 +17,6 @@ uses
 
 type // Тип сообщения
   TAiMsgType = TMessageType;
-
-const // Типы передаваемых сообщений - имя верхнего(первого) тега --------------
-  cMsgComand = 'Comand';
-  cMsgEvent = 'Event';
-  cMsgPing = 'Ping';
-  cMsgAnswer = 'Answer';
 
 {type //** Тип данных
   TAiDataType = AiTypes.TAiDataType;}
