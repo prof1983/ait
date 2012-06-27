@@ -2,7 +2,7 @@
 @Abstract(Источник знаний)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(23.05.2007)
-@LastMod(08.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Прототип: org.framerd.Pool
@@ -21,7 +21,7 @@ interface
 
 uses
   ABase, ABaseTypes, ACollectionUtils, AEntityObj, APoolObj,
-  AiBaseTypes, AiIteratorObj;
+  AiBaseTypes, AiConsts, AiIteratorObj;
 
 type //** Источник знаний
   TAiPoolObject = class(TAPoolObject)
