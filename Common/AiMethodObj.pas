@@ -2,7 +2,7 @@
 @Abstract(AiMethod)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(17.06.2007)
-@LastMod(19.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiMethodObj;
@@ -11,7 +11,7 @@ interface
 
 uses
   ABase, AStreamObj,
-  AiBase, AiBaseTypes, AiDataObj, AiFrameObj, AiTypes;
+  AiBase, AiBaseTypes, AiDataObj, AiNamedFrameObj, AiTypes;
 
 type // Метод
   TAiMethod = class
@@ -31,7 +31,7 @@ type // Метод
     property ResultType: TAiValueType read FResultType write FResultType;
   end;
 
-  TAiMethodObject = class(TAiFrameObject)
+  TAiMethodObject = class(TAiNamedFrameObject)
   protected
     FBody: TAId;
     FInput: TAId;
