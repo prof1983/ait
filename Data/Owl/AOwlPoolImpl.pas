@@ -2,7 +2,7 @@
 @Abstract(Пул (источник) работы с OWL элементами)
 @Author(Prof1983 prof183@ya.ru)
 @Created(12.05.2006)
-@LastMod(20.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Prototype: Pellet.KnowledgeBase
@@ -20,9 +20,9 @@ interface
 
 uses
   ABase, ACollectionIntf, AEntityIntf,
-  AOwlClassIntf, AOwlClassImpl, AOwlPoolIntf,
+  AOwlClassIntf, AOwlClassImpl, AOwlIndividualIntf, AOwlPoolIntf,
   AiConsts, AiLogingObject,
-  AiOntologyIndividual, AiPoolIntf;
+  AiPoolIntf;
 
 type
   // Пул (источник) работы с OWL элементами
@@ -196,8 +196,8 @@ type
     //procedure NewDomain(p, c: IAIEntity);
     //procedure NewEquivalentProperty(p1, p2: IAIEntity);
     function NewFunctionalProperty: IAEntity;
-    function NewIndividual: IAIOntologyIndividual;
-    function NewIndividual2(const Name: APascalString): IAIOntologyIndividual;
+    function NewIndividual: IAOwlIndividual;
+    function NewIndividual2(const Name: APascalString): IAOwlIndividual;
     function NewInverseFunctionalProperty: IAEntity;
     //procedure NewInverseProperty(p1, p2: IAIEntity);
     function NewIrreflexiveProperty(): IAEntity;
@@ -903,13 +903,13 @@ begin
   // ...
 end;
 
-function TAIOwlPool.NewIndividual{(i: IAEntity)}: IAIOntologyIndividual;
+function TAIOwlPool.NewIndividual{(i: IAEntity)}: IAOwlIndividual;
 begin
   Result := nil;
   // ...
 end;
 
-function TAIOwlPool.NewIndividual2(const Name: APascalString): IAIOntologyIndividual;
+function TAIOwlPool.NewIndividual2(const Name: APascalString): IAOwlIndividual;
 begin
   Result := nil;
   // ...

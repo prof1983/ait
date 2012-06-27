@@ -2,7 +2,7 @@
 @Abstract(Сущность-коллекция)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(24.05.2007)
-@LastMod(06.03.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 История версий:
@@ -13,10 +13,11 @@ unit AiCollectionEntity;
 interface
 
 uses
-  AiCollection, AiEntityIntf;
+  AEntityIntf,
+  AiCollection;
 
 type //** @abstract(Сущность-коллекция)
-  IAICollectionEntity = interface(IAIEntity)
+  IAICollectionEntity = interface(IAEntity)
     function GetValue(): IAICollection;
 
     property Value: IAICollection read GetValue;
