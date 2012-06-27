@@ -2,7 +2,7 @@
 @Abstract(Класс для загрузки параметров из INI файла)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(29.06.2007)
-@LastMod(01.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 История версий:
@@ -43,7 +43,7 @@ begin
   end;
 
   try
-    Settings.Title := f.ReadString('General', 'Title', '');
+    Settings.Title := f.ReadString('General', 'Title', Settings.Title);
     Settings.TaskTypeID := f.ReadInteger('General', 'TaskTypeID', 0);
   except
     f.Free();
