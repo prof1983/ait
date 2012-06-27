@@ -2,7 +2,7 @@
 @Abstract(Логического вывода на основе онтологии OWL)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.05.2007)
-@LastMod(25.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Prototype: org.mindswap.pellet.owlapi.Reasoner
@@ -44,14 +44,13 @@ interface
 uses
   ACollectionIntf,
   AOwlClassIntf, AOwlDescriptionIntf, AOwlIndividualIntf, AOwlOntologyIntf, AOwlOntologyManager,
-  {AiCollection,} AiKnowledgeBaseIntf,
-  AiReasonerIntf;
+  AiOwlKnowledgeBaseIntf, AiReasonerIntf;
 
 type //** Логического вывода на основе онтологии OWL
-  TAIWSReasoner = class(TInterfacedObject, IAiReasoner)
+  TAiReasoner = class(TInterfacedObject, IAiReasoner)
   private
     // База знаний
-    FKnowledgeBase: IAiKnowledgeBaseOwl;
+    FKnowledgeBase: IAiOwlKnowledgeBase;
     // Менеджер онтологии ?
     FManager: IAOwlOntologyManager;
     // Набор онтологий
@@ -111,53 +110,54 @@ type //** Логического вывода на основе онтологи
     //** Онтология
     property Ontology: IAOwlOntology read GetOntology write SetOntology;
   end;
+  //TAIWSReasoner = TAiReasoner;
 
 implementation
 
-{ TAIWSReasoner }
+{ TAiReasoner }
 
-function TAIWSReasoner.AllInstancesOf(c: IAIOwlClass): IACollection;
+function TAiReasoner.AllInstancesOf(c: IAIOwlClass): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIWSReasoner.ClearOntologies();
+procedure TAiReasoner.ClearOntologies();
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.DescendantClassesOf(c: IAIOwlClass): IACollection;
-begin
-  Result := nil;
-  // TODO -oProf: Make
-  // ...
-end;
-
-function TAIWSReasoner.DescendantClassesOfA(c: IAOwlDescription): IACollection;
+function TAiReasoner.DescendantClassesOf(c: IAIOwlClass): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.EquivalentClassesOf(c: IAIOwlClass): IACollection;
+function TAiReasoner.DescendantClassesOfA(c: IAOwlDescription): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.EquivalentClassesOfA(c: IAOwlDescription): IACollection;
+function TAiReasoner.EquivalentClassesOf(c: IAIOwlClass): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.GetClasses(): IACollection;
+function TAiReasoner.EquivalentClassesOfA(c: IAOwlDescription): IACollection;
+begin
+  Result := nil;
+  // TODO -oProf: Make
+  // ...
+end;
+
+function TAiReasoner.GetClasses(): IACollection;
 begin
   //Result := nil;
   Result := FKnowledgeBase.GetClasses();
@@ -181,123 +181,123 @@ begin
 	*)
 end;
 
-function TAIWSReasoner.GetDescendantClasses(c: IAOwlDescription): IACollection;
+function TAiReasoner.GetDescendantClasses(c: IAOwlDescription): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.GetEquivalentClasses(c: IAOwlDescription): IACollection;
+function TAiReasoner.GetEquivalentClasses(c: IAOwlDescription): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.GetIndividuals(clsC: IAOwlDescription; direct: WordBool): IACollection;
+function TAiReasoner.GetIndividuals(clsC: IAOwlDescription; direct: WordBool): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.GetManager(): IAOwlOntologyManager;
+function TAiReasoner.GetManager(): IAOwlOntologyManager;
 begin
   Result := FManager;
 end;
 
-function TAIWSReasoner.GetObjectProperties(): IACollection;
+function TAiReasoner.GetObjectProperties(): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.GetOntologies(): IACollection;
+function TAiReasoner.GetOntologies(): IACollection;
 begin
   Result := FOntologies;
 end;
 
-function TAIWSReasoner.GetOntology(): IAOwlOntology;
+function TAiReasoner.GetOntology(): IAOwlOntology;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.GetProperties(): IACollection;
+function TAiReasoner.GetProperties(): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.GetSuperClasses(c: IAOwlDescription): IACollection;
+function TAiReasoner.GetSuperClasses(c: IAOwlDescription): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.HasType(individual: IAOwlIndividual; AType: IAOwlDescription): WordBool;
+function TAiReasoner.HasType(individual: IAOwlIndividual; AType: IAOwlDescription): WordBool;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.IsEntailed(ont: IAOwlOntology): WordBool;
+function TAiReasoner.IsEntailed(ont: IAOwlOntology): WordBool;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.IsEntailedA(axioms: IACollection): WordBool;
+function TAiReasoner.IsEntailedA(axioms: IACollection): WordBool;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.IsInstanceOf(ind: IAOwlIndividual; c: IAIOwlClass): WordBool;
+function TAiReasoner.IsInstanceOf(ind: IAOwlIndividual; c: IAIOwlClass): WordBool;
 begin
   Result := False;
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIWSReasoner.Refresh();
+procedure TAiReasoner.Refresh();
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-procedure TAIWSReasoner.RefreshOntology();
+procedure TAiReasoner.RefreshOntology();
 begin
   Refresh();
 end;
 
-procedure TAIWSReasoner.SetManager(Manager: IAOwlOntologyManager);
+procedure TAiReasoner.SetManager(Manager: IAOwlOntologyManager);
 begin
   FManager := Manager;
 end;
 
-procedure TAIWSReasoner.SetOntology(Ontology: IAOwlOntology);
+procedure TAiReasoner.SetOntology(Ontology: IAOwlOntology);
 begin
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.SuperClassesOf(c: IAIOwlClass): IACollection;
+function TAiReasoner.SuperClassesOf(c: IAIOwlClass): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
   // ...
 end;
 
-function TAIWSReasoner.SuperClassesOfA(c: IAOwlDescription): IACollection;
+function TAiReasoner.SuperClassesOfA(c: IAOwlDescription): IACollection;
 begin
   Result := nil;
   // TODO -oProf: Make
