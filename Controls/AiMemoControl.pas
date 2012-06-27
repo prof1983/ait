@@ -2,7 +2,7 @@
 @Abstract(AiMemoControl)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.05.2007)
-@LastMod(26.04.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiMemoControl;
@@ -10,7 +10,7 @@ unit AiMemoControl;
 interface
 
 uses
-  AMemoControl, ATypesEx,
+  AMemoControl,
   AclMessageIntf;
 
 type
