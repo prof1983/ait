@@ -2,7 +2,7 @@
 @Abstract(События для объекта AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.10.2006)
-@LastMod(21.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiEventsObj;
@@ -14,7 +14,7 @@ uses
   AiFrameObj;
 
 type
-  TAIProc = TProcMessage;
+  TAiProc = TProcMessageStr;
   TAiProc2006 = function(Sender, Params, Results: AId): AError of object;
 
 type
