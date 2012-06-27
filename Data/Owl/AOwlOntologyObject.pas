@@ -2,7 +2,7 @@
 @Abstract(OwlOntologyObject)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.04.2007)
-@LastMod(25.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Prototype: org.semanticweb.owl.model.OWLOntologyObject.java,v 1.3 2006/03/28 16:14:45
@@ -17,7 +17,7 @@ interface
 
 uses
   AiSet,
-  AOwlNamedObject;
+  AOwlNamedObjectIntf;
 
 //import java.io.Serializable;
 //import java.util.Set;

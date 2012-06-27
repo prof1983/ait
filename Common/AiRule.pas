@@ -2,7 +2,7 @@
 @Abstract(Правило)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(17.03.2005)
-@LastMod(27.04.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiRule;
@@ -11,7 +11,7 @@ interface
 
 uses
   ATypes,
-  AiBase, AiFrame, AiFrameComImpl;
+  AiBase, AiFrameImpl;
 
 type
   IAIRule = interface
@@ -22,8 +22,6 @@ type
 
 type // Список условий
   TAIConditionList = class //(TAIList)
-  private
-  public
   end;
 
 type

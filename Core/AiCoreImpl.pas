@@ -2,7 +2,7 @@
 @Abstract(Микроядро системы)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.06.2007)
-@LastMod(04.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Замечание!!!
@@ -162,6 +162,7 @@ begin
   FClients := TAiClients.Create();
   // Создаем объект доступа к базе знаний
   FKnowledgeBase := TAiKnowledgeBase.Create();
+  IInterface(FKnowledgeBase)._AddRef();
 
   SetLength(FLogJournals, 0);
   if Length(FLogJournals) > 0 then

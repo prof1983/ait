@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для агента)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(26.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Агент - это модуль, который имеет свой подпроцесс выполнения команд (Thread).
@@ -111,7 +111,7 @@ type // Базовый класс для агента
       // Добавить сообщение
     function AddMessage(Msg: IAclMessage): Integer;
       // Добавляет сообщение в стек сообщений подпроцесса выполнения.
-    function AddMessageStr(const Msg: WideString): Integer;
+    function AddMessageStr(const Msg: WideString): Integer; virtual;
       // Финализирует
     function Finalize(): TProfError; override;
       // Скрыть видимые окна. Должен быть переопределен.

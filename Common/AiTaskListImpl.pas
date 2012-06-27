@@ -2,7 +2,7 @@
 @Abstract(Список заданий)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.03.2006)
-@LastMod(26.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiTaskListImpl;
@@ -23,8 +23,9 @@ type //** Список заданий
     procedure DoDestroy(); override;
   public
     function AddTask(Task: TAITask): Integer;
-    property Count: Integer read GetCount;
     procedure DeleteTask(Index: Integer);
+  public
+    property Count: Integer read GetCount;
     property TaskByIndex[Index: Integer]: TAiTask read GetItem;
     property TaskCount: Integer read GetCount;
     property Tasks[Index: Integer]: TAiTask read GetItem;

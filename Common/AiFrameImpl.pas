@@ -14,7 +14,7 @@ interface
 
 uses
   SysUtils, XmlIntf,
-  ABase, AConsts2, AEntityImpl, AIteratorIntf, ANodeIntf, AObjectImpl, ATypes, AXmlUtils,
+  ABase, AConsts2, AEntityImpl, AIteratorIntf, ANodeIntf, {AObjectImpl,} ATypes, AXmlUtils,
   AiBase, AiBaseTypes, AiCollectionImpl, AiConnectsIntf, AiDataIntf, AiEntityImpl,
   AiFrameIntf, AiFramePoolIntf, AiFrameUtils, AiSlotIntf, AiSlotImpl, AiTypes;
 
@@ -139,6 +139,8 @@ type //** Фрейм
     function SaveToFile(const AFileName: WideString): WordBool; virtual; safecall;
       //** Сохранить список связей в XML
     function SaveToXml(Xml: IXmlNode): WordBool; virtual;
+  public
+    constructor Create();
   public
     //** Данные
     property Data: IAiData2 read Get_Data;
@@ -501,6 +503,12 @@ begin
   FPool := nil;
   FFrameType := 0;
   Result := True;
+end;
+
+constructor TAIFrame.Create();
+begin
+  inherited Create();
+  DoCreate();
 end;
 
 procedure TAIFrame.DoCreate();

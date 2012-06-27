@@ -2,7 +2,7 @@
 @Abstract(OWL онтология)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(01.05.2007)
-@LastMod(27.04.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Prototype: org.semanticweb.owl
@@ -12,11 +12,11 @@ unit AiOwlOntology2;
 interface
 
 uses
-  OwlOntology,
-  AiFrame, AiOwlNamedObject;
+  AOwlOntologyIntf,
+  AiFrameComImpl;
 
-type // OWL онтология
-  IAiOwlOntology = IAiFrame;
+type
+  TAiOwlNamedObject = TAiFrame;
 
 type // OWL онтология
   TAiOwlOntology = class(TAiOwlNamedObject)

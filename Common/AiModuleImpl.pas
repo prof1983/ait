@@ -21,8 +21,8 @@ type //** Базовый класс для модулей
       //** CallBack функция отсылки сообщения ядру
     FOnSendMessageToCore: TProcMessageStr;
   public
-      // Послать сообщения ядру
-//    function SendMessageToCore(const AMsg: WideString): Integer; virtual; safecall;
+      //** Передает сообщения ядру
+    function SendStrMessageToCore(const Msg: APascalString): Integer;
   public // IProfModule
     function GetInformation(): IModuleInformation;
     function GetLocalId(): Integer;
@@ -62,19 +62,23 @@ begin
   Result := 0;
 end;
 
-{function TAIModule4.SendMessageToCore(const AMsg: WideString): Integer;
-begin
-  Result := 0;
-  if Assigned(FOnSendMessageToCore) then
-  try
-    Result := FOnSendMessageToCore(AMsg);
-  except
-  end;
-end;}
-
 function TAiModule.PushMessage(Msg: ISimpleMessage): Integer;
 begin
   Result := 0;
+end;
+
+function TAiModule.SendStrMessageToCore(const Msg: APascalString): Integer;
+begin
+  if not(Assigned(FOnSendMessageToCore)) then
+  begin
+    Result := -1;
+    Exit;
+  end;
+  try
+    Result := FOnSendMessageToCore(Msg)
+  except
+    Result := -1;
+  end;
 end;
 
 function TAiModule.Start(): Integer;

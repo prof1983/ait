@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейсов для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(08.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiIntf;
@@ -12,15 +12,12 @@ interface
 uses
   ActiveX, XmlIntf,
   ABase, AObjectIntf, ATypes,
-  AiBase, AiConnectsIntf, AiDataIntf, AiFrame, AiTypes;
+  AiBase, AiConnectsIntf, AiDataIntf, AiFrameIntf, AiTypes;
 
 type
   Largeuint = LongWord;
 
 type // ------------------------------------------------------------------------
-  IAiSource1 = interface;
-  IAiSource2 = interface;
-
   //** Интерфейс для работы с данными фрейма
   IAiData2 = AiDataIntf.IAiData2;
   IAiData = IAiData2;
@@ -42,49 +39,6 @@ type // ------------------------------------------------------------------------
   IAIFrame2 = interface(IAIFrame) // from IAIFreim
     function LoadFromRecF64(Rec: TAIFreimRecF64): WordBool; safecall;
   end;
-
-  IAIFrameNamed = IAIFrame;
-
-  IAIFreimEx1 = interface(IAIFreim)
-    function GetFreimID(): TAId; safecall;
-    procedure SetFreimID(Value: TAId); safecall;
-
-    property FreimID: TAId read GetFreimID write SetFreimID;
-  end;
-
-  IAiSource1 = interface(IAiFreim)
-    function Get_Freim(ID: TAId): IAIFreim;
-
-    function GetFreim(ID: TAId): IAIFreim;
-
-    property Freims[ID: TAId]: IAIFreim read Get_Freim;
-  end;
-  //IAiSource = IAiSource1;
-
-  {
-  Источник знаний.
-  UML соответствие: "Коллекция объектов [ Identity Map ]" http://ooad.asf.ru/Pattern.aspx?IdKat=7&IdPat=9
-  }
-  IAiSource2 = interface(IAiSource1)
-    function Get_FrameCount(): Integer; safecall;
-    function Get_FrameById(Id: TAiId): IAIFrame; safecall;
-    function Get_IsOpened(): WordBool; safecall;
-    function Get_NextFreeFrameId(): TAiId; safecall;
-
-    //** Закрыть источник
-    procedure Close(); safecall;
-    //** Открыть источник
-    function Open(): AError; safecall;
-
-    //** Фреймы по Id
-    property FrameById[Id: TAiId]: IAIFrame read Get_FrameById;
-    property FrameCount: Integer read Get_FrameCount;
-    //** Открыт
-    property IsOpened: WordBool read Get_IsOpened;
-    //** Следующий свободный Id для создания фрейма
-    property NextFreeFrameId: TAiId read Get_NextFreeFrameId;
-  end;
-  IAiSource3 = IAiSource2;
 
 // --- AIIntf3 -------------------------------------------------------------------------------------
 
@@ -120,25 +74,6 @@ type
     //** Источник фрейма
     property Source: IAISource2 read Get_Source;
   end;
-
-  IAINamedFrame3 = IAIFrame3;
-
-type
-  IAiSourceList3 = interface
-    function GetSourceByID(ID: TAIID): IAISource3; safecall;
-    function GetSourceByIndex(Index: Integer): IAISource3; safecall;
-    function GetSourceByName(const Name: WideString): IAISource3; safecall;
-    function GetCount(): Integer; safecall;
-
-    property Count: Integer read GetCount;
-    property SourceByID[ID: TAIID]: IAISource3 read GetSourceByID;
-    property SourceByIndex[Index: Integer]: IAISource3 read GetSourceByIndex;
-    property SourceByName[const Name: WideString]: IAISource3 read GetSourceByName;
-  end;
-
-type
-  IAIObject3 = IAIFrame3;
-  IAIModule3 = IAIObject3;
 
 type // Интерфейс для форм
   IAIForm = interface

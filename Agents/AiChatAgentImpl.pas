@@ -2,7 +2,7 @@
 @Abstract(Агент чат-бот)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.05.2007)
-@LastMod(27.03.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiChatAgentImpl;
@@ -49,7 +49,7 @@ function TAIChatAgent.AddMessageStr(const Msg: WideString): Integer;
 begin
   Result := inherited AddMessageStr(Msg);
   if (Length(Msg) > 0) and (Msg[1] <> '#') then
-    SendMessage('#Сообщение принято: "'+Msg+'"');
+    SendStrMessageToCore('#Сообщение принято: "'+Msg+'"');
 end;
 
 procedure TAIChatAgent.DoCreate();
@@ -74,26 +74,26 @@ end;
 
 function TAIChatAgent.Initialize(): TProfError;
 begin
-  SendMessage('Инициализация агента ChatAgent');
+  SendStrMessageToCore('Инициализация агента ChatAgent');
   inherited Initialize();
   FKnowledgeBase.Initialize();
   Result := FKnowledgeBase.Open();
 
   FReasoner.Initialize();
 
-  SendMessage('Агент ChatAgent инициализирован');
+  SendStrMessageToCore('Агент ChatAgent инициализирован');
 end;
 
 function TAIChatAgent.Start(): WordBool;
 begin
-  SendMessage('Старт выполнения агента ChatAgent');
+  SendStrMessageToCore('Старт выполнения агента ChatAgent');
   Self.FProcess.Thread.Priority := tpLowest;
   Result := inherited Start();
 end;
 
 function TAIChatAgent.Stop(): WordBool;
 begin
-  SendMessage('Остановка выполнения агента ChatAgent');
+  SendStrMessageToCore('Остановка выполнения агента ChatAgent');
   Result := inherited Stop();
 end;
 

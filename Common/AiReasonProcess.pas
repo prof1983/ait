@@ -2,7 +2,7 @@
 @Abstract(Процесс выполнения команд агента реализации локального разума)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(01.04.2007)
-@LastMod(27.04.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiReasonProcess;
@@ -17,7 +17,7 @@ type
   TReasonThread = class(TAgentThread)
   private
     //** Список глобальных заданий
-    FGlobalTasks: TAIGlobalTaskList3;
+    FGlobalTasks: TAiGlobalTaskList;
   protected
     procedure Execute(); override;
     //** Обработаем глобальное задание
@@ -26,21 +26,20 @@ type
     procedure WorkGlobalTasks();
   public
     //** Список глобальных заданий
-    property GlobalTasks: TAIGlobalTaskList3 read FGlobalTasks write FGlobalTasks;
+    property GlobalTasks: TAiGlobalTaskList read FGlobalTasks write FGlobalTasks;
   end;
-  //TReasonThread3 = TReasonThread;
 
 type // Процесс выполнения команд агента реализации локального разума
   TAIReasonProcess = class(TAIAgentProcess3)
   private
-    function GetGlobalTasks: TAIGlobalTaskList3;
-    procedure SetGlobalTasks(const Value: TAIGlobalTaskList3);
+    function GetGlobalTasks: TAiGlobalTaskList;
+    procedure SetGlobalTasks(const Value: TAiGlobalTaskList);
   protected
     //** Срабатывает при создании
     procedure DoCreate(); override; safecall;
   public
     //** Список глобальных заданий
-    property GlobalTasks: TAIGlobalTaskList3 read GetGlobalTasks write SetGlobalTasks;
+    property GlobalTasks: TAiGlobalTaskList read GetGlobalTasks write SetGlobalTasks;
   end;
   TAIReasonProcess3 = TAIReasonProcess;
 
@@ -55,7 +54,7 @@ begin
   inherited DoCreate();
 end;
 
-function TAIReasonProcess.GetGlobalTasks(): TAIGlobalTaskList3;
+function TAIReasonProcess.GetGlobalTasks(): TAiGlobalTaskList;
 begin
   Result := nil;
   if Assigned(FThread) then
@@ -65,7 +64,7 @@ begin
   end;
 end;
 
-procedure TAIReasonProcess.SetGlobalTasks(const Value: TAIGlobalTaskList3);
+procedure TAIReasonProcess.SetGlobalTasks(const Value: TAiGlobalTaskList);
 begin
   if Assigned(FThread) then
   try
@@ -74,7 +73,7 @@ begin
   end;
 end;
 
-{ TReasonThread3 }
+{ TReasonThread }
 
 procedure TReasonThread.Execute();
 begin

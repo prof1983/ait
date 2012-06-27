@@ -12,12 +12,11 @@ unit AiOwlKnowledgeBaseImpl;
 interface
 
 uses
-  ATypes,
-  AiBase, AiKnowledgeBaseImpl, {AiOwlClass_20070503,} AiOwlKnowledgeBaseIntf,
-  AiOwlOntology2;
+  AOwlClassIntf, AOwlOntologyIntf, ATypes,
+  AiBase, AiKnowledgeBaseImpl, AiOwlKnowledgeBaseIntf;
 
 type // База Знаний OWL
-  TAiOwlKnowledgeBase = class(TAiKnowledgeBase1, IAiOwlKnowledgeBase)
+  TAiOwlKnowledgeBase = class(TAiKnowledgeBase, IAiOwlKnowledgeBase)
   protected
     //** Идентификатор типа OwlClass
     FOwlClassTypeID: TAIID;
@@ -25,7 +24,7 @@ type // База Знаний OWL
     FOwlOntologyTypeID: TAIID;
   public
     function GetOwlClass(ID: TAIID): IAIOwlClass; safecall;
-    function GetOwlOntology(ID: TAIID): IAIOwlOntology; safecall;
+    function GetOwlOntology(ID: TAIID): IAOwlOntology; safecall;
     //function GetOwlResource(ID: TAIID): IAIOwlResource; safecall;
   end;
 
@@ -45,7 +44,7 @@ begin
   // ...
 end;
 
-function TAiOwlKnowledgeBase.GetOwlOntology(ID: TAIID): IAIOwlOntology;
+function TAiOwlKnowledgeBase.GetOwlOntology(ID: TAIID): IAOwlOntology;
 begin
   Result := nil;
   // ...

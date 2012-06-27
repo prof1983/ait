@@ -10,25 +10,24 @@ unit AiGlobalTaskListImpl;
 interface
 
 uses
-  ATypes,
+  ABase,
   AiTaskImpl, AiTaskListImpl;
 
 type //** Список главных заданий для реализации разума
   TAiGlobalTaskList = class(TAiTaskList)
-  protected
-    function DoInitialize(): TProfError; override; safecall;
+  public
+    function Initialize(): AError; override;
   end;
-  TAIGlobalTaskList3 = TAIGlobalTaskList;
 
 implementation
 
-{ TAIGlobalTaskList }
+{ TAiGlobalTaskList }
 
-function TAiGlobalTaskList.DoInitialize(): TProfError;
+function TAiGlobalTaskList.Initialize(): AError;
 var
   t: TAITask;
 begin
-  Result := inherited DoInitialize();
+  Result := inherited Initialize();
   if not(Result >= 0) then Exit;
 
   // Добавляем глобальные задачи

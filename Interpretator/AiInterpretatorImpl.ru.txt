@@ -1,0 +1,315 @@
+Пример записи условия:
+(для простого условия x > y)
+<if condition="$x gt $y">
+  <then>
+    ...
+  </then>
+  <else>
+    ...
+  </else>
+</if>
+или
+(для сложного условия)
+<if>
+  <condition>
+    (System.Input($s) == "InputText")
+  </condition>
+  <then>
+    ...
+  </then>
+  <else>
+    ...
+  </else>
+</if>
+
+Пример записи вызова метода:
+<do method="System.Out" text="ExampleText" />
+или
+<System.Out text="ExampleText" />
+или
+{ System.Out(text="ExampleText"); }
+
+
+// -----------------------------------------------------------------------------
+
+Типы [.NET]
+  Типы-значения
+    Встроеные типы-значения
+      System.Boolean
+      System.Char     - UTF-16
+      System.Int8
+      System.Int16
+      System.Int32
+      System.Int64
+      System.IntPtr
+      System.UInt8
+      System.UInt16
+      System.UInt32
+      System.UInt64
+      System.UIntPtr
+      System.Float32
+      System.Float64
+      System.DateTime - Дата/время
+      System.Decimal
+      System.TimeSpan
+      System.Guid
+  Ссылочные типы
+    Объектные типы (Object)
+      System.Object
+        System.Type
+      System.String    - UTF-16
+    Интерфейсные типы (Interface)
+      System.INullableValue
+    Указательные типы (Pointer)
+
+  Перечисления
+    System.Enum
+  Исключительное событие
+    System.Exception
+  Событие
+    System.Delegate
+  Тип значения
+    System.ValueType
+  Массив
+    System.Array
+
+Объект может содержать:
+- атрибуты
+- методы (статические и экземпляра)
+- свойства
+- константы
+- события
+
+Объект System.Object содержит следующие методы:
+- Equals - возвращает true, если два объекта равны.
+- Finalize - вызывается при сборке мусора
+- GetHashCode - возвращает хэш-код
+- GetType - Возвращает метаданные типа данных. Статический метод класса Type.
+- MemberwiseClone - клонирует видимую часть объекта
+- ReferenceEquals - возвращает true, если обе объектные ссылки, переданые методу относятся к одному объекту.
+- ToString - возвращает строку, которая представляет этот объект
+
+Методы объекта System.String:
+- Compare - производит сравнение с учетом и без учета регистра
+- Concat - возвращает новую строку
+- ToLower, ToUpper
+- Format - Заменяет символы подстановки и возвращает строковое представление каждого объекта.
+- IndexOf - возвращает индекс местоположения первого искомого символа или подстроки.
+- Insert - возвращает новую строку
+- Lenght - возвращает длину строки
+
+Методы класса System.Type
+- BaseType - возвращает объект типа Type базового типа
+- FindInterface - Возвращает массив объектов типа Type, представляющих интерфейсные типы, которые поддурживаются данным типом.
+- FindMembers - Возвращает массив объектов типа MemberInfo, представляющих интерфейсные типы, которые поддерживаются данным типом.
+- AssemblyQualifiedName - Возвращает полное имя данного типа
+- GetConstructors - Возвращает массив объектов типа ConstructorInfo, представляющих конструкторы данного типа
+- GetMethods - Возвращает массив объектов типа MethodInfo, представляющие открытые методы данного типа
+- GetNestedTypes - Возвращает массив объектов типа Type, представляющих вложенные типы данного типа
+- IsAbstract - является абстрактным
+- IsInterface - является интерфейсом
+- InvokeMember - вызывает член данного типа
+- IsPublic - является открытым
+- IsSealed - является опечатаным
+- IsValueType - является типом значения
+
+Стандартные атрибуты:
+- Obsolve - устаревший
+- DllImport - импортировать из библиотеки .DLL
+- ClsCompliant
+- WebMethod
+- Guid
+- ProgID
+
+Иерархия классов описания метаданных:
+System.Object
+  System.MemberInfo
+    System.FieldInfo
+      System.FieldBuilder
+    System.MethodBase
+      System.ConstructorInfo
+        System.ConstructorBuilder
+      System.MethodInfo
+        System.MethodBuilder
+    System.PropertyInfo
+      System.PropertyBuilder
+    System.Type
+      System.EnumBuilder
+      System.TypeBuilder
+      System.TypeDelegator
+}
+// -----------------------------------------------------------------------------
+{ Пример кода на языке ARL
+<?arl version="0.1"?>
+<arl>
+  <namespace name="System">
+    <class name="ValueType">
+      <description>
+        <about lang="ru">Базовый тип для любого элемента.</about>
+      </description>
+    </class>
+    <class name="Boolean" type="ValueType" isValueType="true" />
+    <class name="Int8" type="ValueType" isValueType="true" />
+    <class name="Int16" type="ValueType" isValueType="true" />
+    <class name="Int32" type="ValueType" isValueType="true" />
+    <class name="Int64" type="ValueType" isValueType="true" />
+    <class name="UInt8" type="ValueType" isValueType="true" />
+    <class name="SByte" type="UInt8" />
+    <class name="UInt16" type="ValueType" isValueType="true" />
+    <class name="UInt32" type="ValueType" isValueType="true" />
+    <class name="UInt64" type="ValueType" isValueType="true" />
+    <class name="Float32" type="ValueType" isValueType="true" />
+    <class name="Float64" type="ValueType" isValueType="true" />
+
+    <class name="Object">
+      <method name="Equals" description="возвращает true, если два объекта равны.">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="Finalize" description="вызывается при сборке мусора">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="GetHashCode" description="возвращает хэш-код">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="GetType" description="Возвращает метаданные типа данных. Статический метод класса Type.">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="MemberwiseClone" description="клонирует видимую часть объекта">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="ReferenceEquals" description="возвращает true, если обе объектные ссылки, переданые методу относятся к одному объекту.">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="ToString" description="возвращает строку, которая представляет этот объект">
+        <params></params>
+        <code></code>
+      </method>
+    </class>
+    <class name="String" isSealed="true">
+      <method name="Compare" description="производит сравнение с учетом и без учета регистра">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="Concat" description="возвращает новую строку">
+        <params></params>
+        <code></code>
+      </method>
+      <method name="ToLower" />
+      <method name="ToUpper" />
+      <method name="Format" description="Заменяет символы подстановки и возвращает строковое представление каждого объекта.">
+      </method>
+      <method name="IndexOf" description="возвращает индекс местоположения первого искомого символа или подстроки.">
+      </method>
+      <method name="Insert" description="возвращает новую строку">
+      </method>
+      <method name="Lenght" description="возвращает длину строки">
+      </method>
+    </class>
+
+    <class name="MemberInfo" type="Object">
+    </class>
+    <class name="FieldInfo" type="MemberInfo">
+    </class>
+    <class name="FieldBuilder" type="FieldInfo">
+    </class>
+    <class name="MethodBase" type="MemberInfo">
+    </class>
+    <class name="ConstructorInfo" type="MethodBase">
+    </class>
+    <class name="ConstructorBuilder" type="ConstructorInfo">
+    </class>
+    <class name="MethodInfo" type="MethodBase">
+    </class>
+    <class name="MethodBuilder" type="MethodInfo">
+    </class>
+    <class name="PropertyInfo" type="MemberInfo">
+    </class>
+    <class name="PropertyBuilder" type="PropertyInfo">
+    </class>
+    <class name="Type" type="MemberInfo">
+    </class>
+    <class name="EnumBuilder" type="Type">
+    </class>
+    <class name="TypeBuilder" type="Type">
+    </class>
+    <class name="TypeDelegator" type="Type">
+    </class>
+  </namespace>
+  <namespace name="Org.AR">
+    <class name="Agent" type="System.Object">
+    </class>
+  </namespace>
+</arl>
+}
+// -----------------------------------------------------------------------------
+{ Пример кода на языке ARL (версия 0.2):
+<?arl version="0.2"?>
+<arl>
+  <Type Name="Agent" FullName="Org.AR.Agent" FullNameSP="Org_AR_Agent">
+    <TypeSignature Language="ILAsm" Value=".class public serializable Agent extends System.Object"/>
+    <TypeSignature Language="C#" Value="public class Agent : System.Object"/>
+    <MemberOfLibrary>BCL</MemberOfLibrary>
+    <AssemblyInfo>
+      <AssemblyName>arcorlib</AssemblyName>
+      <AssemblyPublicKey>[00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00 ]</AssemblyPublicKey>
+      <AssemblyVersion>0.0.x.x</AssemblyVersion>
+      <AssemblyCulture>none</AssemblyCulture>
+      <Attributes>
+        <Attribute>
+          <AttributeName>CLSCompliantAttribute(true)</AttributeName>
+          <Excluded>0</Excluded>
+        </Attribute>
+      </Attributes>
+    </AssemblyInfo>
+    <Base>
+      <BaseTypeName>System.Object</BaseTypeName>
+    </Base>
+    <Members>
+      <Member MemberName=".ctor">
+        <MemberSignature Language="ILAsm" Value="public rtspecialname specialname instance void .ctor()">
+        <MemberSignature Language="C#" Value="public Agent();" />
+        <MemberType>Constructor</MemberType>
+        <ReturnValue />
+        <Parameters />
+        <Docs>
+          <summary>
+            <para>Constructs and initializes a new instance of the <see cref="T:Org.AR.Agent"/> class.</para>
+          </summary>
+          <remarks>
+          </remarks>
+        </Docs>
+        <Excluded>0</Excluded>
+      </Member>
+      <Member MemberName=".ctor">
+        <MemberSignature Language="ILAsm" Value="public rtspecialname specialname instance void .ctor(string message)">
+        <MemberSignature Language="C#" Value="public Agent(string message);" />
+        <MemberType>Constructor</MemberType>
+        <ReturnValue />
+        <Parameters>
+          <Parameter Name="message" type="System.String" />
+        </Parameters>
+        <Docs>
+          <summary>
+            <para>Constructs and initializes a new instance of the <see cref="T:Org.AR.Agent"/> class.</para>
+          </summary>
+          <remarks>
+          </remarks>
+        </Docs>
+        <Excluded>0</Excluded>
+      </Member>
+    </Members>
+  </Type>
+</arl>
+
+
+<arl version="0.1">
+  <code>
+    <System.Out text="ExampleText" />
+  </code>
+</arl>

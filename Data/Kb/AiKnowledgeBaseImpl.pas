@@ -39,8 +39,6 @@ type // База Знаний. Работает с фреймами в виде 
     function Get_FrameCount(): Integer; override; safecall;
 //    function Get_FrameData(ID: TAIID): IAIData; override; safecall;
 //    procedure Set_FrameType(ID, Typ: TAIID); override; safecall;
-  protected
-    procedure DoCreate(); override; safecall;
   public // IAiKnowledgeBase
       // Возвращает список онтологических классов
     function GetClasses(): IACollection;
@@ -60,6 +58,8 @@ type // База Знаний. Работает с фреймами в виде 
     //** Открываем все пулы
     function Open(): AError; override; safecall;
     function ToString(): WideString; override; safecall;
+  public
+    constructor Create();
   public
     //property FilePath: WideString read FFilePath write FFilePath;
 //    property FreimStringByID[ID: TAIID]: WideString read GetFreimStringByID;
@@ -88,7 +88,7 @@ begin
   inherited Close();
 end;
 
-procedure TAiKnowledgeBase.DoCreate();
+constructor TAiKnowledgeBase.Create();
 begin
   inherited DoCreate();
   FName := 'KnowlegeBase';

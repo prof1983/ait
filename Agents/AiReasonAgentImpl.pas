@@ -2,7 +2,7 @@
 @Abstract(Главный Агент реализации разума)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.10.2006)
-@LastMod(03.05.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiReasonAgentImpl;
@@ -12,9 +12,8 @@ unit AiReasonAgentImpl;
 interface
 
 uses
-  ATypes,
+  ABase,
   AiAgentImpl, AiGlobalTaskListImpl, AiReasonProcess, AiWorldImpl;
-  //{aiCodeInterpretator,} {aiInternalI,} aiSource, aiGlobalTaskList,
 
 type //** Главный Агент реализации разума
   TAiReasonAgent = class(TAiAgent)
@@ -24,20 +23,19 @@ type //** Главный Агент реализации разума
       //** Главный объект отражения внешнего мира
     FWorld: TAIWorld3;
     // ... // Предметные области для решения локальных задач
-      //** Внутреннее Я
-    //FInternalI: TAIInternalI;
       //** Сессия
     //FSession: TARSession;
   private // События
     //FOnTaskAdd: TProcMessage;
   protected
     procedure DoCreate(); override; safecall;
-    function DoFinalize(): TProfError; override; safecall;
-    function DoInitialize(): TProfError; override; safecall;
     function DoStart(): WordBool; override; safecall;
   public
+    function Finalize(): AError; override;
+    function Initialize(): AError; override;
+  public
       //** Глобальные задачи. Задаются один раз при создании и больше не меняются.
-    property GlobalTasks: TAIGlobalTaskList3 read FGlobalTasks;
+    property GlobalTasks: TAiGlobalTaskList read FGlobalTasks;
       //** Главный объект отражения внешнего мира
     property World: TAIWorld3 read FWorld;
   public // События
@@ -55,8 +53,6 @@ type //** Главный Агент реализации разума
     // ... // Предметные области для решения локальных задач
     // Глобальные задачи. Задаются один раз при создании и больше не меняются.
     //FGlobalTasks: TAIGlobalTaskList;
-    // Внутреннее Я
-    //FInternalI: TAIInternalI;
     //** Сессия
     //FSession: TARSession;
     // ... // Предметные области для решения локальных задач
@@ -65,9 +61,10 @@ type //** Главный Агент реализации разума
     //FOnProgress: TProcReasonProgress;
     //FOnTaskAdd: TProcMessage;
   protected
-    function DoFinalize(): TProfError; override; safecall;
-    function DoInitialize(): TProfError; override; safecall;
     function DoStart(): WordBool; override; safecall;
+  public
+    function Finalize(): AError; override;
+    function Initialize(): AError; override;
   public
     //property GlobalTasks: TAIGlobalTaskList read FGlobalTasks;
     property World: TAIWorld read FWorld;
@@ -88,7 +85,7 @@ begin
   FName := 'ReasonAgent';
 end;
 
-function TAiReasonAgent.DoFinalize(): TProfError;
+function TAiReasonAgent.Finalize(): AError;
 begin
   if Assigned(FGlobalTasks) then
   try
@@ -104,12 +101,12 @@ begin
   except
   end;
 
-  Result := inherited DoFinalize();
+  Result := inherited Finalize();
 end;
 
-function TAiReasonAgent.DoInitialize(): TProfError;
+function TAiReasonAgent.Initialize(): AError;
 begin
-  Result := inherited DoInitialize();
+  Result := inherited Initialize();
 
   // Создание процесса работы локального разума
   //FThread := TAIReasonThread.Create(False);
@@ -178,7 +175,7 @@ end;
 
 { TAiReasonAgent2007 }
 
-function TAiReasonAgent2007.DoFinalize(): TProfError;
+function TAiReasonAgent2007.Finalize(): AError;
 begin
   {try
     FGlobalTasks.Free();
@@ -194,12 +191,12 @@ begin
   except
   end;
 
-  Result := inherited DoFinalize();
+  Result := inherited Finalize();
 end;
 
-function TAiReasonAgent2007.DoInitialize(): TProfError;
+function TAiReasonAgent2007.Initialize(): AError;
 begin
-  Result := inherited DoInitialize();
+  Result := inherited Initialize();
 
   // Создание процесса работы локального разума
   //FThread := TAIReasonThread.Create(False);
