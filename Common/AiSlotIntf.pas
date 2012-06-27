@@ -2,7 +2,7 @@
 @Abstract(Слот фрейма)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.06.2007)
-@LastMod(13.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Содержит имя слота и значение слота.
@@ -44,8 +44,6 @@ type //** Слот фрейма
     property SlotType: TAId read GetSlotType;
     property Value: Variant read GetValue write SetValue;
   end;
-  IAiSlot2007 = IAiSlot;
-  //IAiSlot_20071128 = IAiSlot2007;
 
   IAiSlotList = interface
     function GetSlotById(SlotId: TAId): IAiSlot; safecall;

@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(22.05.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiSourceImpl;
@@ -12,12 +12,12 @@ interface
 uses
   SysUtils,
   AConsts2, ATypes,
-  AiBase, AiFrameImpl, AiIntf, AiModuleImpl;
+  AiBase, AiFrameImpl, AiModuleImpl, AiSourceIntf;
 
 type //** Запись для источника фреймов
   TAISourceRec3 = record
     ID: TAiId;
-    Source: IAISource3;
+    Source: IAiSource2;
   end;
 
 // TODO: Remove TAiModule from TAiSource
@@ -53,7 +53,7 @@ type //** Базовый класс для источника фреймов
     function Get_IsOpened(): WordBool; virtual; safecall;
     function Get_NextFreeFrameID(): TAIID; virtual; safecall;
     //** Возвращает объект для работы с родительской БЗ
-    function GetParent(Index: Integer): IAISource3; safecall;
+    function GetParent(Index: Integer): IAiSource2; safecall;
     //** Возвращает ID фрейма родительской БЗ
     function GetParentID(Index: Integer): TAIID;
     //** Задать фрейм
@@ -62,7 +62,7 @@ type //** Базовый класс для источника фреймов
 //    procedure Set_FrameConnectsByID(ID: TAIID; Value: IAIConnects); virtual; safecall;
     //** Задать данные фрейма
     procedure Set_FrameDataByID(ID: TAIID; Data: IAIData); virtual; safecall;
-    procedure SetParent(Index: Integer; Value: IAISource3); safecall;
+    procedure SetParent(Index: Integer; Value: IAiSource2); safecall;
     procedure SetParentID(Index: Integer; Value: TAIID); safecall;
   protected
     function Get_FrameDateTimeCreate(ID: TAIID): TDateTime; virtual;
@@ -90,7 +90,7 @@ type //** Базовый класс для источника фреймов
     property FrameDatas[ID: TAIID]: IAIData read Get_FrameDataByID write Set_FrameDataByID;
     property NextFreeFrameID: TAIID read Get_NextFreeFrameID;
     //** Родительские БЗ
-    property Parents[Index: Integer]: IAISource3 read GetParent write SetParent;
+    property Parents[Index: Integer]: IAiSource2 read GetParent write SetParent;
     //** ID фреймов родительских БЗ
     property ParentsID[Index: Integer]: TAIID read GetParentID write SetParentID;
   end;
@@ -164,7 +164,7 @@ begin
   Result := nil;
 end;
 
-function TAISource.GetParent(Index: Integer): IAISource3;
+function TAISource.GetParent(Index: Integer): IAiSource2;
 begin
   Result := nil;
   {if Index >= UInt32(Length(FParents)) then
@@ -286,7 +286,7 @@ begin
   Result := -1;
 end;
 
-procedure TAISource.SetParent(Index: Integer; Value: IAISource3);
+procedure TAISource.SetParent(Index: Integer; Value: IAiSource2);
 begin
   if Index >= Length(FParents) then Exit;
   FParents[Index].Source := Value;

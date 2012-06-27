@@ -2,7 +2,7 @@
 @Abstract(Объект AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(25.09.2006)
-@LastMod(26.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Объект AI наследник от фрейма.
@@ -39,9 +39,9 @@ type //** Объект AI
     function GetMethodCodeByName(const MethodName: WideString): WideString;
   public // IAiFrame
       //** Добавляет слот
-    function AddSlot(Slot: IAiSlot2007): Integer;
+    function AddSlot(Slot: IAiSlot): Integer;
       //** Создает новый слот
-    function NewSlot(Name: WideString): IAiSlot2007;
+    function NewSlot(Name: WideString): IAiSlot;
   public
       // Срабатывает при получении сообщения
     //function AddMessageStr(const Msg: WideString): Integer; override;
@@ -116,7 +116,7 @@ begin
     Result := inherited AddMessage(Msg);
 end;*)
 
-function TAiObject.AddSlot(Slot: IAiSlot2007): Integer;
+function TAiObject.AddSlot(Slot: IAiSlot): Integer;
 begin
   Result := -1;
 end;
@@ -128,7 +128,7 @@ begin
   // TODO: Реализовать
 end;
 
-function TAiObject.NewSlot(Name: WideString): IAiSlot2007;
+function TAiObject.NewSlot(Name: WideString): IAiSlot;
 begin
   Result := nil;
 end;

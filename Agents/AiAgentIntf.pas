@@ -2,7 +2,7 @@
 @Abstract(Агент)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(08.05.2007)
-@LastMod(04.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Прототип: jade.core.Agent ?
@@ -13,8 +13,7 @@ interface
 
 uses
   AclMessageIntf, // for IAiAgent.AddMessage
-  AiInterpretatorIntf, AiModuleIntf,
-  AiKnowledgeBaseIntf; // for IAIWSAgent
+  AiInterpretatorIntf, AiModuleIntf, AiOwlKnowledgeBaseIntf;
 
 type //** Базовый интерфейс для агента
   IAiAgent = interface(IAiModule)
@@ -45,12 +44,12 @@ type //** Базовый интерфейс для агента
 type
   IAiWSAgent = interface
       // Возвращает базу знаний
-    function GetKnowledgeBase(): IAiKnowledgeBaseOwl;
+    function GetKnowledgeBase(): IAiOwlKnowledgeBase;
       // Задать базу знаний
-    procedure SetKnowledgeBase(KnowledgeBase: IAiKnowledgeBaseOwl);
+    procedure SetKnowledgeBase(KnowledgeBase: IAiOwlKnowledgeBase);
 
       // База Знаний
-    property KnowledgeBase: IAiKnowledgeBaseOwl read GetKnowledgeBase write SetKnowledgeBase;
+    property KnowledgeBase: IAiOwlKnowledgeBase read GetKnowledgeBase write SetKnowledgeBase;
   end;
 
 implementation

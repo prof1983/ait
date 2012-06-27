@@ -2,7 +2,7 @@
 @Abstract(Список агентов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(15.03.2007)
-@LastMod(27.03.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 }
 unit AiAgentList;
@@ -10,7 +10,7 @@ unit AiAgentList;
 interface
 
 uses
-  AiAgentIntf, AiFrame, AiFrameImpl;
+  AiAgentIntf, {AiFrame,} AiFrameImpl;
 
 type //** Список агентов
   TAIAgentList = class(TAIFrame)
@@ -25,7 +25,7 @@ type //** Список агентов
       //** Добавить агента в список
     function Add(AAgent: IAIAgent): Integer;
       //** Срабатывает при получении сообщения
-    function AddMessage(const AMsg: WideString): Integer; override; safecall;
+    function AddMessage(const AMsg: WideString): Integer;
   public
       //** Агенты по индексу
     property AgentByIndex[Index: Integer]: IAIAgent read GetAgentByIndex;
@@ -49,8 +49,6 @@ function TAIAgentList.AddMessage(const AMsg: WideString): Integer;
 var
   i: Integer;
 begin
-  inherited AddMessage(AMsg);
-
   // Рассылаем всем
   for i := 0 to High(FAgents) do
     FAgents[i].AddMessageStr(AMsg);

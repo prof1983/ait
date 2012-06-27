@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для модулей)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.03.2007)
-@LastMod(13.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Модуль - это объект AI, который имеет механизм отсылки и приема сообщений.
@@ -19,7 +19,7 @@ type //** Базовый класс для модулей
   TAiModule = class(TAiObject, IAiModule, IProfModule)
   protected
       //** CallBack функция отсылки сообщения ядру
-    FOnSendMessageToCore: TProcMessage;
+    FOnSendMessageToCore: TProcMessageStr;
   public
       // Послать сообщения ядру
 //    function SendMessageToCore(const AMsg: WideString): Integer; virtual; safecall;
@@ -35,7 +35,7 @@ type //** Базовый класс для модулей
     function PushMessage(Msg: ISimpleMessage): Integer;
   public
       //** CallBack функция отсылки сообщения ядру
-    property OnSendMessageToCore: TProcMessage read FOnSendMessageToCore write FOnSendMessageToCore;
+    property OnSendMessageToCore: TProcMessageStr read FOnSendMessageToCore write FOnSendMessageToCore;
   end;
 
 implementation

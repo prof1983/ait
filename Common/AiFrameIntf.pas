@@ -2,7 +2,7 @@
 @Abstract(Фрейм)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.06.2007)
-@LastMod(13.06.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Prototype: FramerD.OID
@@ -42,9 +42,9 @@ type
     procedure Set_FrameType(Value: TAId); safecall;
 
       {** Добавляет слот }
-    function AddSlot(Slot: IAiSlot2007): Integer;
+    function AddSlot(Slot: IAiSlot): Integer;
       {** Создает новый слот }
-    function NewSlot(Name: WideString): IAiSlot2007;
+    function NewSlot(Name: WideString): IAiSlot;
 
       {** Данные фрейма }
     property Data: AiDataIntf.IAiData2 read Get_Data;

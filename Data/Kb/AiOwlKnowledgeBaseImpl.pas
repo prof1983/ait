@@ -2,7 +2,7 @@
 @Abstract(База Знаний OWL)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(03.05.2007)
-@LastMod(27.03.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Эта база знаний предоставляет доступ к OWL фреймам.
@@ -13,7 +13,7 @@ interface
 
 uses
   ATypes,
-  AiBase, AiKnowledgeBaseImpl, AiOwlClass_20070503, AiOwlKnowledgeBaseIntf,
+  AiBase, AiKnowledgeBaseImpl, {AiOwlClass_20070503,} AiOwlKnowledgeBaseIntf,
   AiOwlOntology2;
 
 type // База Знаний OWL

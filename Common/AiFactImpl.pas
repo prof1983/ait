@@ -2,7 +2,7 @@
 @Abstract(AiFact)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.05.2007)
-@LastMod(27.04.2012)
+@LastMod(27.06.2012)
 @Version(0.5)
 
 Про TAIFact. Я думаю что в TAIFact должны быть свойства:
@@ -28,7 +28,7 @@ unit AiFactImpl;
 interface
 
 uses
-  AiFrame, AiFrameComImpl;
+  AiFrameImpl, AiFrameIntf, AiSlotIntf;
 
 type
   TAiRelation = Integer;
