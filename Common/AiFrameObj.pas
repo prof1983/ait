@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(21.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -116,7 +116,8 @@ type //** Фрейм
       //** Срабатывает при создании
     procedure DoCreate(); virtual;
   public
-    //function AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: string; AParams: array of const): Boolean;
+    function AddToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
+        const StrMsg: WideString): AInt;
       //** Очистить объект
     function Clear(): AError; virtual;
       //** Загрузить конфигурации
@@ -218,7 +219,8 @@ type //** Фрейм
     function SetType(Value: TAId): AError;
       //** Задаем фрейм в виде XML строки
     procedure SetXml(Value: WideString);
-    //function ToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString; AParams: array of const): Integer;
+    function ToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
+        const StrMsg: string; Params: array of const): Boolean;
   public
     constructor Create(Source: AiSourceObject2005 = 0; Id: TAId = 0);
   public
@@ -267,9 +269,8 @@ type //** Фрейм
 
   //TAiFrame2004 = TAiFrameObject;
   //TAiFrame2005 = TAiFrameObject;
-  //TAiFrameObject2005 = TAiFrameObject;
   //TAiFreimObject = TAiFrameObject;
-  //TAiFreim = TAiFreimObject;
+  //TAiFreim = TAiFrameObject;
   //TAI_Freim = TAiFrameObject;
 
 implementation
@@ -278,6 +279,18 @@ uses
   AiSourceObj;
 
 { TAiFrameObject }
+
+function TAiFrameObject.AddToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
+  const StrMsg: WideString): AInt;
+begin
+  if not(Assigned(FOnAddToLog)) then
+  begin
+    Result := -2;
+    Exit;
+  end;
+  FOnAddToLog(LogGroup, LogType, StrMsg, []);
+  Result := 0;
+end;
 
 function TAiFrameObject.Clear(): AError;
 begin
@@ -666,6 +679,29 @@ begin
   //GetData.LoadFromXml(Xml.GetNodeByName('Data'));
   Result := True;
 end;}
+{function TAiFreimObject.LoadFromXml(Xml: IXmlNode): WordBool;
+var
+  Connects: IXmlNode;
+begin
+  Result := False;
+  if not(Assigned(Xml)) then Exit;
+  Clear();
+  ProfXmlUtils.ProfXmlNode_ReadInt64(Xml, 'ID', FId);
+  ProfXmlUtils.ProfXmlNode_ReadDateTime(Xml, 'DateTimeCreate', FDateTimeCreate);
+  ProfXmlUtils.ProfXmlNode_ReadInt64(Xml, 'Type', FFreimType);
+  Connects := ProfXmlUtils.ProfXmlNode_GetNodeByName(Xml, 'Connects');
+  GetConnects.LoadFromXml(Connects);
+  //GetData.LoadFromXml(Xml.GetNodeByName('Data'));
+  Result := True;
+end;}
+{function TAIFreimNamed.LoadFromXml(Xml: IXmlNode): WordBool;
+begin
+  Result := inherited LoadFromXml(Xml);
+  if not(Result) then Exit;
+  TProfXmlNode.ReadStringA(Xml, 'Description', FDescription);
+  TProfXmlNode.ReadStringA(Xml, 'Name', FName);
+  TProfXmlNode.ReadStringA(Xml, 'Title', FTitle);
+end;}
 
 function TAiFrameObject.P(const Name: APascalString): TAiSlot2004;
 begin
@@ -752,6 +788,27 @@ begin
     con.SaveToXml(TProfXmlNode.GetNodeByNameA(Xml, 'Connects'));
   //Data.SaveToXml(Xml.GetNodeByName('Data'));}
 end;*)
+{function TAiFreimObject.SaveToXml(Xml: IXmlNode): WordBool;
+var
+  Connects: IXmlNode;
+begin
+  Result := Assigned(Xml);
+  if not(Result) then Exit;
+  ProfXmlUtils.ProfXmlNode_WriteInt64(Xml, 'ID', FId);
+  ProfXmlUtils.ProfXmlNode_WriteDateTime(Xml, 'DateTimeCreate', FDateTimeCreate);
+  ProfXmlUtils.ProfXmlNode_WriteInt64(Xml, 'Type', FFreimType);
+  Connects := ProfXmlUtils.ProfXmlNode_GetNodeByName(Xml, 'Connects');
+  GetConnects.SaveToXml(Connects);
+  //Data.SaveToXml(Xml.GetNodeByName('Data'));
+end;}
+{function TAIFreimNamed.SaveToXml(Xml: IXmlNode): WordBool;
+begin
+  Result := inherited SaveToXml(Xml);
+  if not(Result) then Exit;
+  TProfXmlNode.WriteStringA(Xml, 'Description', FDescription);
+  TProfXmlNode.WriteStringA(Xml, 'Name', FName);
+  TProfXmlNode.WriteStringA(Xml, 'Title', FTitle);
+end;}
 
 procedure TAiFrameObject.SetDateTimeCreate(Value: TDateTime);
 begin
@@ -845,88 +902,14 @@ begin
   FPool := Value;
 end;}
 
-{ TAiFreimObject }
-
-{function TAiFreimObject.GetSource(): IAISource;
+function TAiFrameObject.ToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
+    const StrMsg: string; Params: array of const): Boolean;
 begin
-  Result := FSource;
-end;}
-
-{function TAiFreimObject.LoadFromXml(Xml: IXmlNode): WordBool;
-var
-  Connects: IXmlNode;
-begin
-  Result := False;
-  if not(Assigned(Xml)) then Exit;
-  Clear();
-  ProfXmlUtils.ProfXmlNode_ReadInt64(Xml, 'ID', FId);
-  ProfXmlUtils.ProfXmlNode_ReadDateTime(Xml, 'DateTimeCreate', FDateTimeCreate);
-  ProfXmlUtils.ProfXmlNode_ReadInt64(Xml, 'Type', FFreimType);
-  Connects := ProfXmlUtils.ProfXmlNode_GetNodeByName(Xml, 'Connects');
-  GetConnects.LoadFromXml(Connects);
-  //GetData.LoadFromXml(Xml.GetNodeByName('Data'));
-  Result := True;
-end;}
-
-{function TAiFreimObject.SaveToXml(Xml: IXmlNode): WordBool;
-var
-  Connects: IXmlNode;
-begin
-  Result := Assigned(Xml);
-  if not(Result) then Exit;
-  ProfXmlUtils.ProfXmlNode_WriteInt64(Xml, 'ID', FId);
-  ProfXmlUtils.ProfXmlNode_WriteDateTime(Xml, 'DateTimeCreate', FDateTimeCreate);
-  ProfXmlUtils.ProfXmlNode_WriteInt64(Xml, 'Type', FFreimType);
-  Connects := ProfXmlUtils.ProfXmlNode_GetNodeByName(Xml, 'Connects');
-  GetConnects.SaveToXml(Connects);
-  //Data.SaveToXml(Xml.GetNodeByName('Data'));
-end;}
-
-{procedure TAiFreimObject.SetSource(Value: IAISource);
-begin
-  if FInitialized then Exit;
-  FSource := Value;
-end;}
-
-{procedure TAiFreimObject.Set_Source(const Value: IAISource);
-begin
-  FSource := IAISource(Value);
-end;}
-
-{function TAIFreim.AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: string; AParams: array of const): Boolean;
-begin
-  Result := False;
-  if Assigned(FOnAddToLog) then try
-    Result := FOnAddToLog(AGroup, AType, AStrMsg, AParams);
-  except
-  end;
-end;}
-
-{function TAIFreim.ToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString; AParams: array of const): Integer;
-begin
-  AddToLog(AGroup, AType, AStrMsg, AParams);
-  Result := 0;
-end;}
-
-{ TAIFreimNamed }
-
-{function TAIFreimNamed.LoadFromXml(Xml: IXmlNode): WordBool;
-begin
-  Result := inherited LoadFromXml(Xml);
-  if not(Result) then Exit;
-  TProfXmlNode.ReadStringA(Xml, 'Description', FDescription);
-  TProfXmlNode.ReadStringA(Xml, 'Name', FName);
-  TProfXmlNode.ReadStringA(Xml, 'Title', FTitle);
-end;}
-
-{function TAIFreimNamed.SaveToXml(Xml: IXmlNode): WordBool;
-begin
-  Result := inherited SaveToXml(Xml);
-  if not(Result) then Exit;
-  TProfXmlNode.WriteStringA(Xml, 'Description', FDescription);
-  TProfXmlNode.WriteStringA(Xml, 'Name', FName);
-  TProfXmlNode.WriteStringA(Xml, 'Title', FTitle);
-end;}
+  if Assigned(FOnAddToLog) then
+    Result := FOnAddToLog(LogGroup, LogType, StrMsg, Params)
+  else
+    Result := False;
+end;
 
 { TAiSlot2004 }
 

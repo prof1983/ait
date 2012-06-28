@@ -2,7 +2,7 @@
 @Abstract(AI Агент чат-бот)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.09.2005)
-@LastMod(27.04.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiAgentChat;
@@ -11,12 +11,14 @@ interface
 
 uses
   Classes, Forms, SysUtils, XmlIntf,
-  ALogNodeImpl, ALogNodeIntf, ATypes, AXmlNodeIntf,
-  AiAgent, AiBase, AiBaseObj, AiGlobals, AiIntf, AiSelectObj, AiSourceObj, AiSourceAdoObj,
-  aifChat;
+  ABase, ALogNodeImpl, ALogNodeIntf, ATypes, AXmlNodeIntf,
+  AiAgentObj, AiBase, AiChatForm, AiDataObj, AiSelectObj, AiSourceObj, AiSourceAdoObj;
 
 type
-  TAIAgentChat = class(TAIAgent)
+  {** Выделяет новые слова и пр. }
+  TAiAgentWord = TAiAgent2006;
+
+  TAiAgentChat = class(TAiAgent2006{TAIAgent})
   private
     //FAgentWord: TAIAgentWord;   // Агент. Выделяет ф-слова из ф-предложений.
     FAgentWordId: TAId;
@@ -31,21 +33,44 @@ type
     procedure SetFormChat(Value: TFormChat);
   public
     function AssignedForm(): Boolean;
-    constructor Create(AConfig: IXmlNode; ALog: ILogNode2; Source: TAISource = nil; Id: TAId = 0);
     function Finalize(): TProfError; override;
-    property Form: TFormChat read FForm write SetFormChat;
     procedure Free(); override;
     function GetAgentWordId(): TAId;
     function GetForm(): TFormChat;
     function GetModuleTextId(): TAId;
-    function Hide(): WordBool; override;
+    function Hide(): WordBool; virtual;
     function Initialize(): TProfError; override;
     //function Load(): Boolean; override;
-    function Pause(): Boolean; override;
-    function Run(): Boolean; override;
-    function Save(): Boolean; //override;
-    function Show(): WordBool; override;
-    function Stop(): WordBool; override;
+    function Save(): AError; override;
+    function Show(): AError; virtual;
+  public
+    constructor Create(Source: AiSourceObject2005; Id: AId);
+  public
+    property Form: TFormChat read FForm write SetFormChat;
+  end;
+
+  {Агент чат-бот}
+  TAiAgentChat20050525 = class(TAiAgentChat)
+  private
+    FAgentWord: TAIAgentWord; {Агент. Выделяет ф-слова из ф-предложений.}
+    FAgentWordId: AId;
+    FForm: TAiFormChat;     {Форма ввода/вывода}
+    FFormId: AId;
+    FModuleTextId: AId;  {Модуль работы с текстом}
+    FProcess: TThread;
+  public
+    constructor Create(Source: AiSourceObject2005; Id: AId = 0);
+    procedure Free; override;
+    function GetAgentWordId(): AId;
+    function GetForm: TAIFormChat;
+    function GetModuleTextId(): AId;
+    function Initialize: TError; override;
+    function Load: TError; override;
+    function Pause: TError; override;
+    function Run: TError; override;
+    function Save: TError; override;
+    function Show: TError; override;
+    function Stop: TError; override;
   end;
 
 resourcestring // Сообщения ----------------------------------------------------
@@ -55,21 +80,21 @@ implementation
 
 { TAIAgentChat }
 
-function TAIAgentChat.AssignedForm: Boolean;
+function TAiAgentChat.AssignedForm: Boolean;
 begin
   Result := Assigned(FForm);
   if not(Result) then
     AddToLog(lgGeneral, ltError, Format(stNotAssignedForm, [ClassName]));
 end;
 
-constructor TAIAgentChat.Create(AConfig: IXmlNode; ALog: ILogNode2; Source: TAISource = nil; Id: TAId = 0);
+constructor TAiAgentChat.Create(Source: AiSourceObject2005; Id: AId);
 begin
-  inherited Create(); //(AConfig, ALog, Source, Id);
+  inherited Create(Source, Id);
   Self.Name := 'Chat';
   Self.Title := 'AgentChat';
 end;
 
-function TAIAgentChat.Finalize(): TProfError;
+function TAiAgentChat.Finalize(): TProfError;
 begin
   Result := inherited Finalize();
 
@@ -82,7 +107,7 @@ begin
   FFormCreated := False;
 end;
 
-function TAIAgentChat.FormNewText(Sender: TObject; Params: WideString): WordBool;
+function TAiAgentChat.FormNewText(Sender: TObject; Params: WideString): WordBool;
 {var
   Text: WideString;
   Xml: TProfXmlNode;}
@@ -98,18 +123,18 @@ begin
   if Text = '' then Exit;}
 end;
 
-procedure TAIAgentChat.Free;
+procedure TAiAgentChat.Free;
 begin
   FreeAndNil(FProcess);
   inherited Free;
 end;
 
-function TAIAgentChat.GetAgentWordId: TAId;
+function TAiAgentChat.GetAgentWordId: TAId;
 begin
   Result := FAgentWordId;
 end;
 
-function TAIAgentChat.GetForm: TFormChat;
+function TAiAgentChat.GetForm: TFormChat;
 begin
   if not(Assigned(FForm)) then
   begin
@@ -118,19 +143,19 @@ begin
   Result := FForm;
 end;
 
-function TAIAgentChat.GetModuleTextId: TAId;
+function TAiAgentChat.GetModuleTextId: TAId;
 begin
   Result := FModuleTextId;
 end;
 
-function TAIAgentChat.Hide(): WordBool;
+function TAiAgentChat.Hide(): WordBool;
 begin
   Result := AssignedForm;
   if not(Result) then Exit;
   FForm.Hide;
 end;
 
-function TAIAgentChat.Initialize(): TProfError;
+function TAiAgentChat.Initialize(): TProfError;
 var
   ConfigForm: IProfXmlNode;
   ConfigSource: IProfXmlNode;
@@ -224,24 +249,14 @@ begin
   end;*
 end;*)
 
-function TAIAgentChat.Pause: Boolean;
-begin
-  Result := inherited Pause;
-end;
-
-function TAIAgentChat.Run: Boolean;
-begin
-  Result := inherited Run;
-end;
-
-function TAIAgentChat.Save: Boolean;
+function TAiAgentChat.Save(): AError;
 (*var
   Data: TAI_Data;
   Stream: TProfStream;
   Xml: TProfXmlNode;*)
 begin
-  (*Result := inherited Save;
-  if not(Result) then Exit;
+  Result := inherited Save();
+  (*if not(Result) then Exit;
   Data := GetData;
   if Data.GetType = dtStream then begin
     Stream := Data.GetStream;
@@ -258,7 +273,7 @@ begin
   end;*)
 end;
 
-procedure TAIAgentChat.SetFormChat(Value: TFormChat);
+procedure TAiAgentChat.SetFormChat(Value: TFormChat);
 begin
   // Удаление реакции на событие из предыдущей формы
   if Assigned(FForm) then begin
@@ -274,15 +289,130 @@ begin
   end;
 end;
 
-function TAIAgentChat.Show(): WordBool;
+function TAiAgentChat.Show(): AError;
 begin
   Result := inherited Show();
   GetForm.Show;
 end;
 
-function TAIAgentChat.Stop(): WordBool;
+{ TAiAgentChat20050525 }
+
+constructor TAiAgentChat20050525.Create(Source: AiSourceObject2005; Id: AId = 0);
+{var
+  Typ: TAIType;}
 begin
-  Result := inherited Stop();
+  inherited Create(Source, Id);
+  (*FAgentWordId := 0;
+  FFormId := 0;
+  FModuleTextId := 0;
+  FProcess := TThreadAgentChat.Create(True);
+  Title := 'AgentChat';
+  if not(Assigned(Source)) then Exit;
+
+  {Выделение идентификатора для типа и создание его}
+  {if frAgentChat = 0 then begin
+    frAgentChat := KB.FreimNew(1);
+    Typ := TAIType(KB.FreimGet(frAgentChat));
+    Typ.
+  end;}
+  {Выделение идентивикатора для объекта}*)
+end;
+
+procedure TAiAgentChat20050525.Free;
+begin
+  FProcess.Free;
+  inherited Free;
+end;
+
+function TAiAgentChat20050525.GetAgentWordId(): AId;
+begin
+  Result := FAgentWordId;
+end;
+
+function TAiAgentChat20050525.GetForm: TAIFormChat;
+var
+  Source: TAiSource2005;
+begin
+  if not(Assigned(FForm)) then
+  begin
+    Source := TObject(GetSource) as TAiSource;
+    FForm := TAIFormChat.Create(AiSource2005(Source), FFormId);
+    if (FFormId = 0) and (Assigned(Source)) then
+      FFormId := Source.NewFreim(0);
+  end;
+  Result := FForm;
+end;
+
+function TAiAgentChat20050525.GetModuleTextId(): AId;
+begin
+  Result := FModuleTextId;
+end;
+
+function TAiAgentChat20050525.Initialize: TError;
+begin
+  {if GetInitialized then Exit;
+  Result := inherited Initialize;
+  SetTitle('AgentChat');
+
+  if not(Assigned(FForm)) then begin
+    FForm := TAIFormChat1.Create(nil, 0);
+    GetSource.NewFreim(FForm);
+  end;
+  FForm.Initialize;}
+  Result := 0;
+end;
+
+function TAiAgentChat20050525.Load: TError;
+var
+  Id: AId;
+  Data: TAiDataObject;
+begin
+  Result := inherited Load;
+  if Result <> 0 then Exit;
+  Data := GetData;
+  Data.ReadId(Id);
+  FAgentWordId := Id;
+  Data.ReadId(Id);
+  FFormId := Id;
+  Data.ReadId(Id);
+  FModuleTextId := Id;
+end;
+
+function TAiAgentChat20050525.Pause: TError;
+begin
+  Result := inherited Pause;
+end;
+
+function TAiAgentChat20050525.Run: TError;
+begin
+  Result := inherited Run;
+end;
+
+function TAiAgentChat20050525.Save: TError;
+var
+  Id: AId;
+  Data: TAiDataObject;
+begin
+  Result := inherited Save;
+  if Result <> 0 then Exit;
+  Data := GetData;
+  Id := FAgentWordId;
+  Data.WriteId(Id);
+  Id := FFormId;
+  Data.WriteId(Id);
+  Id := FModuleTextId;
+  Data.WriteId(Id);
+end;
+
+function TAiAgentChat20050525.Show: TError;
+begin
+  Result := inherited Show;
+  GetForm.Show;
+end;
+
+function TAiAgentChat20050525.Stop: TError;
+begin
+  Result := inherited Stop;
 end;
 
 end.

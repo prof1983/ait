@@ -1,9 +1,9 @@
 object FormChat: TFormChat
   Left = 209
   Top = 106
-  Width = 416
-  Height = 233
   Caption = 'Prof.AI.Form.Chat 0.0.0.2'
+  ClientHeight = 206
+  ClientWidth = 408
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

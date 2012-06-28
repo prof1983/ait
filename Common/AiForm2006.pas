@@ -2,7 +2,7 @@
 @Abstract(Форма - окошко Windows)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.01.2006)
-@LastMod(03.05.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiForm2006;
@@ -11,64 +11,70 @@ interface
 
 uses
   Forms, SysUtils,
-  AConsts2, ATypes,
-  AiFrameImpl;
+  ABase, AConsts2, ATypes,
+  AiFrameObj;
 
-type //** Форма - окошко Windows
-  TAIForm = class(TAiFreim)
-  private
+type
+  {** Форма - окошко Windows }
+  TAiForm = class(TAiFrameObject)
+  protected
     FForm: TForm;
-  private
+  public
     function GetForm(): TForm;
     procedure SetForm(Value: TForm);
   public
     function AssignedForm(): Boolean;
-    property Form: TForm read GetForm write SetForm;
-    function Hide(): Boolean; virtual;
+    function Hide(): AError; virtual;
     function Initialize(): TProfError; override;
-    function Show(): Boolean; virtual;
+    function Show(): AError; virtual;
+  public
+    property Form: TForm read GetForm write SetForm;
   end;
 
 implementation
 
-{ TAIForm }
+{ TAiForm }
 
-function TAIForm.AssignedForm(): Boolean;
+function TAiForm.AssignedForm(): Boolean;
 begin
   Result := Assigned(FForm);
   if not(Result) then
     AddToLog(lgGeneral, ltError, Format(stNotAssigned, [ClassName, 'Form']));
 end;
 
-function TAIForm.GetForm(): TForm;
+function TAiForm.GetForm(): TForm;
 begin
   if not(Assigned(FForm)) then
     Application.CreateForm(TForm, FForm);
   Result := FForm;
 end;
 
-function TAIForm.Hide(): Boolean;
+function TAiForm.Hide(): AError;
 begin
-  Result := AssignedForm();
-  if not(Result) then Exit;
+  if not(AssignedForm()) then
+  begin
+    Result := -1;
+    Exit;
+  end;
   FForm.Hide();
+  Result := 0;
 end;
 
-function TAIForm.Initialize(): TProfError;
+function TAiForm.Initialize(): TProfError;
 begin
   Result := inherited Initialize();
   GetForm;
 end;
 
-procedure TAIForm.SetForm(Value: TForm);
+procedure TAiForm.SetForm(Value: TForm);
 begin
   FForm := Value;
 end;
 
-function TAIForm.Show(): Boolean;
+function TAiForm.Show(): AError;
 begin
   GetForm.Show;
-  Result := True;
+  Result := 0;
 end;
 
 end.

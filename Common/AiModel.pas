@@ -2,7 +2,7 @@
 @Abstarct(Агент модели)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.11.2005)
-@LastMod(24.05.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 
 0.0.0.2 - 03.02.2006
@@ -52,7 +52,7 @@ type
     function Stop: TError;
   end;
 
-  TAIModelDrives = class(TAiFreimObject)
+  TAIModelDrives = class(TAiFrameObject)
   private
     FItems: array of TAIModelDrive;
   public

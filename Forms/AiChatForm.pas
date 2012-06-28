@@ -2,7 +2,7 @@
 @Abstract(Главная форма для агента чат-бот)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(24.03.2005)
-@LastMod(27.04.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiChatForm;
@@ -12,10 +12,33 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls,
-  AEventObj, AForm2007, ATypes,
-  AiBase, AiGlobals;
+  ABase, ABaseUtils2, AEventObj, AForm2007, ATypes,
+  AiBase, AiForm2006;
 
 type
+  TAiFormChat = class(TAiForm)
+  protected
+    FDialog: TArrayString;
+    FInput: String;
+    FListIn: TArrayString;
+    FListOut: TArrayString;
+    FOutput: String;
+  public
+    procedure DialogAdd(Value: String); virtual;
+    procedure DialogAddIn(Value: String); virtual;
+    procedure DialogAddOut(Value: String); virtual;
+    procedure ListInAdd(Value: String); virtual;
+    function GetDialog: TArrayString;
+    function GetInput: String;
+    function GetListIn: TArrayString;
+    function GetListOut: TArrayString;
+    function GetOutput: String;
+    function SetInput(Value: String): TError;
+  public
+    constructor Create(Source: AiSourceObject2005; Id: AId = 0);
+    procedure Free; override;
+  end;
+
   TFormChat = class(TProfForm)
     ButtonInfo: TButton;
     ButtonOk: TButton;
@@ -78,6 +101,83 @@ procedure TFormChat.Free;
 begin
   FreeAndNil(FEventNewText);
   inherited Free;
+end;
+
+{ TAiFormChat }
+
+constructor TAiFormChat.Create(Source: AiSourceObject2005; Id: AId = 0);
+begin
+  inherited Create(Source, Id);
+  {FDialog := TListString.Create;
+  FListIn := TListString.Create;
+  FListOut := TListString.Create;}
+end;
+
+procedure TAiFormChat.DialogAdd(Value: String);
+var
+  I: Int32;
+begin
+  {Dialog.Add(Value);}
+  I := Length(FDialog);
+  SetLength(FDialog, I + 1);
+  FDialog[I] := Value;
+end;
+
+procedure TAiFormChat.DialogAddIn(Value: String);
+begin
+  DialogAdd('<You>:' + Value);
+end;
+
+procedure TAiFormChat.DialogAddOut(Value: String);
+begin
+  DialogAdd('<AI>:' + Value);
+end;
+
+procedure TAiFormChat.Free;
+begin
+  {FDialog.Free;
+  FListIn.Free;
+  FListOut.Free;}
+  inherited Free;
+end;
+
+function TAiFormChat.GetDialog: TArrayString;
+begin
+  Result := FDialog;
+end;
+
+function TAiFormChat.GetInput: String;
+begin
+  Result := FInput;
+end;
+
+function TAiFormChat.GetListIn: TArrayString;
+begin
+  Result := FListIn;
+end;
+
+function TAiFormChat.GetListOut: TArrayString;
+begin
+  Result := FListOut;
+end;
+
+function TAiFormChat.GetOutput: String;
+begin
+  Result := FOutput;
+end;
+
+procedure TAiFormChat.ListInAdd(Value: String);
+begin
+  {FListIn.Add(Value);}
+  ArrayStringAdd(FListIn, Value);
+end;
+
+function TAiFormChat.SetInput(Value: String): TError;
+begin
+  FInput := Value;
+  ListInAdd(FInput);
+  DialogAddIn(FInput);
+  Result := 0;
 end;
 
 end.

@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для агента)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(27.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 
 Агент - это модуль, который имеет свой подпроцесс выполнения команд (Thread).
@@ -55,9 +55,6 @@ type
 
 type // Базовый класс для агента
   TAiAgent = class(TAiModule, IAiAgent)
-  private
-    function GetOnProgress: TProcProgress;
-    procedure SetOnProgress(const Value: TProcProgress);
   protected
       // Конвеер сообщений
     //FMessages: TAIMessages;
@@ -75,6 +72,7 @@ type // Базовый класс для агента
   protected
       // Возвращает True, если агент активен
     function GetActive(): Boolean;
+    function GetOnProgress(): TProcProgress;
       // Возвращает процесс выполнения команд
     function GetProcess(): TAiAgentProcess;
       // Возвращает статус
@@ -85,6 +83,7 @@ type // Базовый класс для агента
     function GetVisible(): Boolean;
       // Устанавливает активность агента
     procedure SetActive(Value: Boolean);
+    procedure SetOnProgress(const Value: TProcProgress);
       // Задает процесс выполнения команд
     procedure SetProcess(Value: TAiAgentProcess);
       // Задает статус агента
@@ -93,7 +92,7 @@ type // Базовый класс для агента
     procedure SetStatus1(Value: TAiAgentStatus1);
       // Задает видимость окон
     procedure SetVisible(Value: Boolean);
-  protected
+  public // IAiAgent
     //** Возвращает выполняемый код агента в виде строки
     function GetCodeString(): WideString; safecall;
     //** Возвращает интерпретатор
@@ -107,27 +106,33 @@ type // Базовый класс для агента
     procedure DoCreate(); override; safecall;
       //** Срабатывает при вызове метода Start
     function DoStart(): WordBool; virtual; safecall;
+    {**
+      Срабатывает при получении сообщения.
+      Добавляет сообщение в стек сообщений подпроцесса выполнения.
+    }
+    //function SendMessage(const AMsg: WideString): Integer; override; safecall;
   public // IAiAgent
       // Добавить сообщение
     function AddMessage(Msg: IAclMessage): Integer;
       // Добавляет сообщение в стек сообщений подпроцесса выполнения.
     function AddMessageStr(const Msg: WideString): Integer; virtual;
+      // Запускает процесс выполнения команд
+    function Start(): WordBool; virtual; safecall;
+      // Останавливает процесс выполнения команд
+    function Stop(): WordBool; virtual; safecall;
+  public
       // Финализирует
     function Finalize(): TProfError; override;
       // Скрыть видимые окна. Должен быть переопределен.
-    function Hide(): WordBool; virtual; safecall;
+    //function Hide(): WordBool; virtual; safecall;
       // Инициализирует
     function Initialize(): TProfError; override;
       // Приостанавливает процесс выполнения команд
     function Pause(): Boolean; virtual; safecall;
       // Показывает окно агента. Должен быть переопределен.
-    function Show(): WordBool; virtual; safecall;
+    //function Show(): WordBool; virtual; safecall;
       // Запускает процесс выполнения команд ?
     function Run(): Boolean; virtual; safecall;
-      // Запускает процесс выполнения команд
-    function Start(): WordBool; virtual; safecall;
-      // Останавливает процесс выполнения команд
-    function Stop(): WordBool; virtual; safecall;
   public
       // Строка с кодом, который нужно выполнить
     property CodeString: WideString read GetCodeString write SetCodeString;
@@ -137,7 +142,7 @@ type // Базовый класс для агента
     property OnProgress: TProcProgress read GetOnProgress write SetOnProgress;
   end;
 
-  //TAiAgent1 = TAiAgent;
+  TAiAgent3 = TAiAgent;
 
 implementation
 
@@ -259,11 +264,11 @@ begin
   Result := FVisible;
 end;
 
-function TAiAgent.Hide(): WordBool;
+{function TAiAgent.Hide(): WordBool;
 begin
   Result := False;
   AddToLog(lgGeneral, ltError, stNotOverride+' '+ClassName+'.Hide');
-end;
+end;}
 
 function TAiAgent.Initialize(): TProfError;
 //var
@@ -309,6 +314,16 @@ end;
 begin
   //FStatus := AGENT_STATUS_RUNED;
   //Result := True;
+end;}
+
+{function TAiAgent.SendMessage(const AMsg: WideString): Integer;
+begin
+  Result := inherited SendMessage(AMsg);
+  if Assigned(FProcess) then
+  try
+    Result := FProcess.AddMessage(AMsg);
+  except
+  end;
 end;}
 
 procedure TAiAgent.SetActive(Value: Boolean);
@@ -389,10 +404,10 @@ begin
   Result := True;
 end;
 
-function TAiAgent.Show(): WordBool;
+{function TAiAgent.Show(): WordBool;
 begin
   Result := False;
-end;
+end;}
 
 function TAiAgent.Start(): WordBool;
 begin

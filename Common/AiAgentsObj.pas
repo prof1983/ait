@@ -2,7 +2,7 @@
 @Abstract(Агенты)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(17.05.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiAgentsObj;
@@ -21,7 +21,7 @@ type
 
 type
     // Агенты
-  TAiAgents2006 = class(TAiFrameObject2005)
+  TAiAgents2006 = class(TAiFrameObject)
   protected
     FAgents: array of TAiRecAgent2005;
     FAgentsName: array of String;

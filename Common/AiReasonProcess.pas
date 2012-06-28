@@ -2,7 +2,7 @@
 @Abstract(Процесс выполнения команд агента реализации локального разума)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(01.04.2007)
-@LastMod(27.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiReasonProcess;
@@ -30,7 +30,7 @@ type
   end;
 
 type // Процесс выполнения команд агента реализации локального разума
-  TAIReasonProcess = class(TAIAgentProcess3)
+  TAIReasonProcess = class(TAiAgentProcess)
   private
     function GetGlobalTasks: TAiGlobalTaskList;
     procedure SetGlobalTasks(const Value: TAiGlobalTaskList);
@@ -41,7 +41,6 @@ type // Процесс выполнения команд агента реали
     //** Список глобальных заданий
     property GlobalTasks: TAiGlobalTaskList read GetGlobalTasks write SetGlobalTasks;
   end;
-  TAIReasonProcess3 = TAIReasonProcess;
 
 implementation
 

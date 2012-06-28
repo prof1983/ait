@@ -2,7 +2,7 @@
 @Abstract(Агент в системе AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(13.11.2007)
-@LastMod(26.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 
 Агент - это отдельная программа или отдельный подпроцесс.
@@ -22,7 +22,7 @@ interface
 uses
   Forms, SysUtils,
   AConfigObj, ALogObj, ATypes,
-  AiAgentBase, AiBase, AiFrameObj, {AiMain,} AiProcessObj, AiTypes; {ArJob;}
+  AiAgentBase, AiBase, AiNamedFrameObj, AiProcessObj, AiTypes;
 
 type
   TAiAgent2007 = class // LastMod(01.12.2007)
@@ -46,7 +46,7 @@ type
     //property JobCount: Integer read GetJobCount;
   end;
 
-  TAiAgent2006 = class(TAiFrameObject)
+  TAiAgent2006 = class(TAiNamedFrameObject)
   protected
     {FNeuro: TAINeuroNetwork;
     FLogic: TAILogic;

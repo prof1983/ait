@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейсов для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(27.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiIntf;
@@ -12,7 +12,7 @@ interface
 uses
   ActiveX, XmlIntf,
   ABase, AObjectIntf, ATypes,
-  AiBase, AiConnectsIntf, AiDataIntf, AiFrameIntf, AiTypes;
+  AiBase, AiConnectsIntf, AiDataIntf, AiFrameIntf, AiSourceIntf, AiTypes;
 
 type
   Largeuint = LongWord;

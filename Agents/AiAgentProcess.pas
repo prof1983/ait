@@ -2,7 +2,7 @@
 @Abstract(Процесс выполнения команд для агентов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.03.2007)
-@LastMod(26.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiAgentProcess;
@@ -36,7 +36,6 @@ type //** Подпроцесс выполнения команд для аген
       //** Обработаем задания, команды, сообщения
     procedure WorkTasks(); virtual;
   end;
-  //TAgentThread3 = TAgentThread;
 
 type //** Процесс выполнения команд для агентов
   TAIAgentProcess = class(TAiProcess)
@@ -50,7 +49,6 @@ type //** Процесс выполнения команд для агентов
     //** Конвеер сообщений
     property Messages: TAIMessages read GetMessages write SetMessages;
   end;
-  TAIAgentProcess3 = TAIAgentProcess;
 
 implementation
 

@@ -2,7 +2,7 @@
 @Abstract(Выборка фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(07.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiSelectObj;
@@ -70,8 +70,7 @@ begin
     Result := nil;
     Exit;
   end;
-  // TODO: Conflict TAI_Freim and TAiFreimObject types
-  Result := nil; //Result := Source.Freims[ID];
+  Result := Source.Freims[ID];
 end;
 
 function TAiSelectObject.GetItem(Index: Int32): TAId;

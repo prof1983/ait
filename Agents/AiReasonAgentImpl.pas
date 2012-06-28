@@ -2,7 +2,7 @@
 @Abstract(Главный Агент реализации разума)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(30.10.2006)
-@LastMod(27.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiReasonAgentImpl;
@@ -80,7 +80,7 @@ implementation
 procedure TAiReasonAgent.DoCreate();
 begin
   if not(Assigned(FProcess)) then
-    FProcess := TAIReasonProcess3.Create();
+    FProcess := TAiReasonProcess.Create();
   inherited DoCreate();
   FName := 'ReasonAgent';
 end;
@@ -141,7 +141,7 @@ begin
     //FGlobalTasks.Pool := FPool;
     FGlobalTasks.Initialize();
   end;
-  TAIReasonProcess3(FProcess).GlobalTasks := FGlobalTasks;
+  TAiReasonProcess(FProcess).GlobalTasks := FGlobalTasks;
 
   {// Создаем интерпретатор кода на языке AR
   if not(Assigned(FInterpretator)) then
