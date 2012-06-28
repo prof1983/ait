@@ -2,7 +2,7 @@
 @Abstract(Базовый тип данных для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2005)
-@LastMod(19.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 
 02.05.2012 - Added from Prof_AI_Base.pas
@@ -97,15 +97,11 @@ type //** @abstract(Базовый тип данных для AI)
 
   TAiData = TAiDataObject;
   TAI_Data = TAiDataObject;
-  TAI_DataFile = TAiDataObject;
-  TAI_DataFileCashe = TAI_DataFile;
-  TAI_DataNet = TAiDataObject;
 
-  TAI_DataMemory = TAiDataObject;
-  TAiDataMemoryObject20050819 = class(TAiDataObject)
+  {TAiDataMemoryObject20050819 = class(TAiDataObject)
   public
     function GetStreamMy(): AStreamObj.TProfStream; override;
-  end;
+  end;}
 
   (*TAI_DataStream = class(TAiDataObject)
   private
@@ -210,14 +206,14 @@ implementation
 
 { TAiDataMemoryObject20050819 }
 
-function TAiDataMemoryObject20050819.GetStreamMy(): AStreamObj.TProfStream;
+{function TAiDataMemoryObject20050819.GetStreamMy(): AStreamObj.TProfStream;
 begin
   Result := nil;
   if (FDataType <> dtStream) then Exit;
   if not(Assigned(FStream)) then
     FStream := AStreamObj.TProfMemoryStream.Create;
   Result := FStream;
-end;
+end;}
 
 { TAiDataObject }
 
@@ -1218,92 +1214,4 @@ begin
   {}
 end;*)
 
-{ TAI_DataXml }
-
-(*function TAI_DataXml.Clear: TError;
-begin
-  FXml := nil;
-  Result := inherited Clear;
-end;
-
-constructor TAI_DataXml.Create(Freim: TAI_Freim);
-begin
-  inherited Create(Freim, dtXml);
-  FXml := nil;
-end;
-
-function TAI_DataXml.GetXml: TProfXml;
-begin
-  if not(Assigned(FXml)) then FXml := TProfXml.Create;
-  Result := FXml;
-end;
-
-function TAI_DataXml.LoadFromXml(Xml: TProfXml): TError;
-{var
-  Count: UInt32;
-  I: Int32;}
-begin
-  {Clear;}
-  SetType(dtXml);
-  {Count := Xml.GetCountParams;
-  for I := 0 to Count - 1 do begin
-    Xml
-  end;}
-  if not(Assigned(FXml)) then FXml := TProfXml.Create;
-  FXml.AddFromXml(Xml);
-  Result := 0;
-end;
-
-function TAI_DataXml.ReadId(Name: String; var Value: TAI_Id): TError;
-begin
-  Result := 1;
-  {}
-end;
-
-function TAI_DataXml.ReadStr(Name: String; var S: String): TError;
-begin
-  Result := 1;
-  {}
-end;
-
-function TAI_DataXml.ReadUInt08(Name: String; var Value: UInt08): TError;
-begin
-  Result := 1;
-  {}
-end;
-
-function TAI_DataXml.SaveToXml(Xml: TProfXml): TError;
-begin
-  Result := 1;
-  if not(Assigned(Xml)) then Exit;
-  if not(Assigned(FXml)) or (FType <> dtXml) then Exit;
-  Result := Xml.AddFromXml(Xml);
-end;
-
-function TAI_DataXml.SetXml(Value: TProfXml): TError;
-begin
-  FXml := Value;
-  FType := dtXml;
-  Result := 0;
-end;
-
-function TAI_DataXml.WriteId(Name: String; Value: TAI_Id): TError;
-begin
-  Result := 1;
-  {}
-end;
-
-function TAI_DataXml.WriteStr(Name, S: String): TError;
-begin
-  Result := 1;
-  {}
-end;
-
-function TAI_DataXml.WriteUInt08(Name: String; Value: UInt08): TError;
-begin
-  Result := 1;
-  {}
-end;*)
-
 end.
- 

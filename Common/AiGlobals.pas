@@ -2,7 +2,7 @@
 @Abstract(Описания структур и типов для фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(26.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiGlobals;
@@ -17,18 +17,6 @@ uses
 
 type // Тип сообщения
   TAiMsgType = TMessageType;
-
-{type //** Тип данных
-  TAiDataType = AiTypes.TAiDataType;}
-
-{type // Для передачи внутри программы
-  TAiFreimRec = AiTypes.TAiFreimRec;}
-
-{type // Для записи в файл
-  TAiFreimRecF32 = AiTypes.TAiFreimRecF32;}
-
-{type // Для записи в файл
-  TAiFreimRecF64 = AiTypes.TAiFreimRecF64;}
 
 type // Для передачи внутри программы
   TAiFreimRecFull = record

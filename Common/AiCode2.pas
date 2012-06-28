@@ -2,7 +2,7 @@
 @Abstract(Выполняемый код на языке AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(31.10.2006)
-@LastMod(28.04.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 }
 unit AiCode2;
@@ -12,7 +12,7 @@ interface
 uses
   Classes, XmlIntf,
   ATypes, AXml3,
-  AiBaseObj2006, AiData2, AiGlobals, AiIntf, AiTypes;
+  {AiBaseObj2006,} AiData2, {AiGlobals, AiIntf,} AiTypes;
 
 type //** @abstract(Выполняемый код на языке AR)
   TAICode = class(TAIFreim)

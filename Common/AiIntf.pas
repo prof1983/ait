@@ -17,11 +17,7 @@ uses
 type
   Largeuint = LongWord;
 
-type // ------------------------------------------------------------------------
-  //** Интерфейс для работы с данными фрейма
-  IAiData2 = AiDataIntf.IAiData2;
-  IAiData = IAiData2;
-
+type
   IAiDataEx1 = interface(IAiData2)
     procedure Clear(); safecall;
     function Get_Text(): WideString; safecall;
