@@ -32,8 +32,6 @@ type // Для передачи внутри программы
 const // Константы для преобразования типа сообщения ---------------------------
   AI_STR_MSG_TYPE: array[TAiMsgType] of string = ('', cMsgComand, cMsgEvent, cMsgAnswer, cMsgPing, '');
   AI_INT_MSG_TYPE: array[TAiMsgType] of Integer = (0, 1, 2, 3, 4, 5);
-const // Константы преобразования типов ----------------------------------------
-  OLE_DATA_TYPE: array[TAiDataType] of AIDataTypeEnum = (edtNone, edtStream, edtText, edtXml, edtUncnown);
 
 // Структуры для KnowlegeBase ==================================================
 

@@ -12,10 +12,10 @@ interface
 uses
   Classes, XmlIntf,
   ATypes, AXml3,
-  {AiBaseObj2006,} AiData2, {AiGlobals, AiIntf,} AiTypes;
+  AiData2, AiDataIntf, AiFrameImpl, AiFrameIntf, AiIntf, AiTypes;
 
 type //** @abstract(Выполняемый код на языке AR)
-  TAICode = class(TAIFreim)
+  TAICode = class(TAiFreim)
   private
     FDataEx1: IAIDataEx1;
     FLines: TStringList;

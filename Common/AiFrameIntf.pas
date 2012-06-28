@@ -2,7 +2,7 @@
 @Abstract(Фрейм)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.06.2007)
-@LastMod(27.06.2012)
+@LastMod(28.06.2012)
 @Version(0.5)
 
 Prototype: FramerD.OID
@@ -74,8 +74,6 @@ type
     property Name: WideString read Get_FreimName;
     property Source: AiSource1 read Get_Source1 write Set_Source1;
   end;
-
-  //IAiFrame2007 = IAiFrame;
 
   // Аналог - org.framerd.FDType
   IAiValue = IAiSlotList;

@@ -7,13 +7,13 @@
 }
 unit AiData2;
 
-// TODO: Use AiDataImpl.pas
+// TODO: Rename AiData2.pas -> AiDataImpl.pas
 
 interface
 
 uses
   ActiveX, XmlIntf,
-  {AiGlobals,} AiFrameIntf, AiIntf, AiTypes;
+  AiFrameIntf, AiIntf, AiTypes;
 
 type //** Данные
   TAIData = class(TInterfacedObject, IAIDataEx1)
@@ -59,6 +59,9 @@ type //** Данные
   end;
 
 implementation
+
+const
+  OLE_DATA_TYPE: array[TAiDataType] of AiDataTypeEnum = (edtNone, edtStream, edtText, edtXml, edtUncnown);
 
 { TAIData }
 
