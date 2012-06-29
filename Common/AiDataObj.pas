@@ -2,7 +2,7 @@
 @Abstract(Базовый тип данных для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2005)
-@LastMod(28.06.2012)
+@LastMod(29.06.2012)
 @Version(0.5)
 
 02.05.2012 - Added from Prof_AI_Base.pas
@@ -13,7 +13,7 @@ interface
 
 uses
   Classes,
-  ABase, AStreamObj, ATypes, AXml2006{AXml20060314}, AXmlObj,
+  ABase, AStreamObj, ATypes, AXml2007, AXmlObj,
   AiBase, AiTypes;
 
 type //** @abstract(Базовый тип данных для AI)
@@ -32,7 +32,7 @@ type //** @abstract(Базовый тип данных для AI)
       //** Данные в виде XML
     FXml: TProfXml; //FXml: IProfNode;
       // В виде параметров. Id=0 Source=nil
-    FXml2006: AXml2006{AXml20060314}.TProfXmlNode2;
+    FXml2006: AXml2007.TProfXmlNode2;
   protected
     //FType: TAIDataType; - Use FDataType {Тип даных}
   protected
@@ -56,7 +56,7 @@ type //** @abstract(Базовый тип данных для AI)
     function GetStreamMy(): AStreamObj.TProfStream; virtual;
     function GetType(): TAiDataType;
     function GetXml(): TProfXml;
-    function GetXml1(): AXml2006{AXml20060314}.TProfXmlNode2;
+    function GetXml1(): AXml2007.TProfXmlNode2;
     function LoadFromFileN(const FileName: WideString): AError; virtual;
     function LoadFromXml(Xml: TProfXml): TError;
     function Read(var A: TArrayByte; Count: UInt64): UInt64; virtual;
@@ -76,7 +76,7 @@ type //** @abstract(Базовый тип данных для AI)
     function SetOpened(Value: Boolean): TError;
     function SetStream(Value: AStreamObj.TProfStream): TError;
     function SetType(Value: TAiDataType): TError;
-    function SetXml(Value: AXml2006{AXml20060314}.TProfXmlNode2): TError;
+    function SetXml(Value: AXml2007.TProfXmlNode2): TError;
     function Write(A: TArrayByte; Count: UInt64): UInt64; virtual;
     function WriteId(Value: TAId): AError; virtual;
     function WriteInt08(Value: Int08): TError; virtual;
@@ -274,7 +274,7 @@ begin
   Result := FXml;
 end;
 
-function TAiDataObject.GetXml1(): AXml2006{AXml20060314}.TProfXmlNode2;
+function TAiDataObject.GetXml1(): AXml2007.TProfXmlNode2;
 begin
   {if not(Assigned(FXml)) then
     FXml := TMyXml.Create();}
@@ -488,7 +488,7 @@ begin
   Result := 0;
 end;
 
-function TAiDataObject.SetXml(Value: AXml2006{AXml20060314}.TProfXmlNode2): TError;
+function TAiDataObject.SetXml(Value: AXml2007.TProfXmlNode2): TError;
 begin
   FXml2006 := Value;
   FDataType := dtXml;
