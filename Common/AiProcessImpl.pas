@@ -2,7 +2,7 @@
 @Abstract(Процесс выполнения команд для агентов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(07.01.2006)
-@LastMod(26.06.2012)
+@LastMod(29.06.2012)
 @Version(0.5)
 }
 unit AiProcessImpl;
@@ -23,14 +23,14 @@ type //** Процесс выполнения какого-либо метода
     //** CallBack функция отсылки сообщения ядру
     //FOnSendMessageToCore: TProcMessage;
     //** Подпроцесс выполнения команд
-    FThread: TInterpretatorThread3;
+    FThread: TInterpretatorThread;
   protected
     function GetCodeString(): WideString;
     function GetInterpretator(): IAiInterpretator;
-    function GetThread: TInterpretatorThread3;
+    function GetThread(): TInterpretatorThread;
     procedure SetCodeString(const Value: WideString);
     procedure SetInterpretator(Value: IAiInterpretator);
-    procedure SetThread(Value: TInterpretatorThread3);
+    procedure SetThread(Value: TInterpretatorThread);
   protected
       //** Срабатывает при создании
     procedure DoCreate(); override; safecall;
@@ -53,7 +53,7 @@ type //** Процесс выполнения какого-либо метода
       //** CallBack функция отсылки сообщения ядру
     //property OnSendMessageToCore: TProcMessage read FOnSendMessageToCore write FOnSendMessageToCore;
       //** Подпроцесс выполнения команд
-    property Thread: TInterpretatorThread3 read GetThread write SetThread;
+    property Thread: TInterpretatorThread read GetThread write SetThread;
   end;
 
 implementation
@@ -70,7 +70,7 @@ procedure TAiProcess.DoCreate();
 begin
   inherited DoCreate();
   if not(Assigned(FThread)) then
-    FThread := TInterpretatorThread3.Create();
+    FThread := TInterpretatorThread.Create();
 end;
 
 function TAiProcess.GetCodeString(): WideString;
@@ -91,7 +91,7 @@ begin
     Result := FThread.OnProgress;
 end;
 
-function TAiProcess.GetThread(): TInterpretatorThread3;
+function TAiProcess.GetThread(): TInterpretatorThread;
 begin
   Result := FThread;
 end;
@@ -152,7 +152,7 @@ begin
     FThread.OnProgress := Value;
 end;
 
-procedure TAiProcess.SetThread(Value: TInterpretatorThread3);
+procedure TAiProcess.SetThread(Value: TInterpretatorThread);
 begin
   if Assigned(FThread) then
   begin

@@ -2,7 +2,7 @@
 @Abstract(Выполняемый код на языке AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(31.10.2006)
-@LastMod(28.06.2012)
+@LastMod(29.06.2012)
 @Version(0.5)
 }
 unit AiCode2;
@@ -69,7 +69,7 @@ begin
   try
     SelfFreim := IAIFreim(Self);
     Data := TAIData.Create(SelfFreim, dtXml);
-    xd := TProfXmlDocument.Create('', 'frame'); //('arcode.xml', 'frame');
+    xd := TProfXmlDocument.Create1('', 'frame'); //('arcode.xml', 'frame');
     xd.Initialize();
     Data.XmlDocument := xd.Controller;
     Data.XmlNode := xd.Controller.DocumentElement;

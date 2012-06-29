@@ -2,7 +2,7 @@
 @Abstract(Процесс выполнения команд для агентов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.03.2007)
-@LastMod(28.06.2012)
+@LastMod(29.06.2012)
 @Version(0.5)
 }
 unit AiAgentProcess;
@@ -14,7 +14,7 @@ uses
   AiCommandsImpl, AiInterpretatorThread, AiMessagesImpl, AiProcessImpl, AiTaskImpl, AiTaskListImpl;
 
 type //** Подпроцесс выполнения команд для агентов
-  TAgentThread = class(TInterpretatorThread3)
+  TAgentThread = class(TInterpretatorThread)
   private
       //** Конвеер команд
     FCommands: TAICommands;

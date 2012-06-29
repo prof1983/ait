@@ -2,7 +2,7 @@
 @Abstract(Интерпретатор кода на языке AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.10.2006)
-@LastMod(27.06.2012)
+@LastMod(29.06.2012)
 @Version(0.5)
 
 0.0.5.9 - 12.03.2012 - Объединил AiInterpretator2 и AiInterpretator4
@@ -13,7 +13,7 @@ interface
 
 uses
   Classes, SysUtils, Variants,
-  ANodeIntf, ATypes,
+  ABase, ANodeIntf, ATypes, AXmlNodeUtils,
   AiInterpretatorIntf, AiInterpretatorThread, AiObjectImpl;
 
 type
@@ -541,8 +541,9 @@ type
 
 // =============================================================================
 
-type // Интерпретатор кода на языке AR
-  TAIInterpretator = class(TAIObject, IAIInterpretator)
+type
+  {** Интерпретатор кода на языке AR }
+  TAiInterpretator = class(TAIObject, IAIInterpretator)
   private
     FThread: TInterpretatorThread;
     function GetCode(): TStrings;
@@ -553,21 +554,18 @@ type // Интерпретатор кода на языке AR
   public
     property Code: TStrings read GetCode write SetCode;
     function Run(): Integer; safecall;
-    function RunCode(ACode: IProfNode): Integer; virtual; safecall;
+      {** Выполняет указанный код }
+    function RunCode(ACode: AProfXmlNode): Integer; virtual;
+      {** Выполняет указанный код }
+    function RunCodeA(ACode: IArlCode): Integer; virtual;
     function Start(): WordBool; virtual; safecall;
     function Stop(): WordBool; virtual; safecall;
   end;
 
-const
-  INT_RUN_OK     = 0;
-  INT_RUN_NOCODE = -1;
-
-type
-  //** @abstract(Интерпретатор кода на языке AR)
-  TAIInterpretator3 = class(TAIObject, IAiInterpretator)
+  TAIInterpretator3 = class(TAIInterpretator)
   private
     //** Подпроцесс выполнения кода
-    FThread: TInterpretatorThread3;
+    FThread: TInterpretatorThread;
     function GetCode(): IArlCode;
     procedure SetCode(Value: IArlCode);
   protected
@@ -576,11 +574,6 @@ type
     //** Срабатывает при уничтожении
     procedure DoDestroy(); override; safecall;
   public
-    //function Run(): Integer; safecall;
-    //** Выполнить код
-    function RunCode(ACode: IProfNode): Integer; virtual; safecall;
-    //** Выполнить код
-    function RunCodeA(ACode: IArlCode): Integer; virtual; safecall;
     //** Старт
     function Start(): WordBool; virtual; safecall;
     //** Стоп
@@ -591,14 +584,17 @@ type
   end;
 
 const
-  ERR_RUN_OK     = 0;
-  ERR_RUN_NOCODE = -1;
+  INT_RUN_OK = 0;
+  INT_RUN_NOCODE = -1;
+  INT_RUN_NOWRITE = -2;
+  ERR_RUN_OK = INT_RUN_OK;
+  ERR_RUN_NOCODE = INT_RUN_NOCODE;
 
 implementation
 
 { TAIInterpretator }
 
-procedure TAIInterpretator.DoCreate();
+procedure TAiInterpretator.DoCreate();
 begin
   inherited DoCreate();
   // ...
@@ -606,7 +602,7 @@ begin
   FThread.OnAddToLog := AddToLog;
 end;
 
-procedure TAIInterpretator.DoDestroy();
+procedure TAiInterpretator.DoDestroy();
 begin
   if Assigned(FThread) then
   try
@@ -620,33 +616,48 @@ begin
   inherited DoDestroy();
 end;
 
-function TAIInterpretator.GetCode(): TStrings;
+function TAiInterpretator.GetCode(): TStrings;
 begin
   Result := nil;
 //  if Assigned(FThread) then
 //    Result := FThread.Code.Lines;
 end;
 
-function TAIInterpretator.Run(): Integer;
+function TAiInterpretator.Run(): Integer;
 begin
   Result := 0;
 //  if Assigned(FThread) then
 //    Result := FThread.Run();
 end;
 
-function TAIInterpretator.RunCode(ACode: IProfNode): Integer;
+function TAiInterpretator.RunCode(ACode: AProfXmlNode): Integer;
 var
-  i: Integer;
+  N: AXmlNode;
 begin
-  Result := INT_RUN_NOCODE;
-  if not(Assigned(ACode)) then Exit;
-  for i := 0 to ACode.ChildNodes.Count - 1 do
-    if ACode.ChildNodes.NodeByIndex[i].Name = 'write' then
-      AddToLog(lgAgent, ltNone, ''{ACode.ChildNodes.NodeByIndex[i].AsString});
+  if (ACode = 0) then
+  begin
+    Result := INT_RUN_NOCODE;
+    Exit();
+  end;
+
+  N := AXmlNode_GetChildNodeByName(ACode, 'write');
+  if (N = 0) then
+  begin
+    Result := INT_RUN_NOWRITE;
+    Exit();
+  end;
+
+  AddToLog(lgAgent, ltNone, AXmlNode_AsString(N));
   Result := INT_RUN_OK;
 end;
 
-procedure TAIInterpretator.SetCode(Value: TStrings);
+function TAiInterpretator.RunCodeA(ACode: IArlCode): Integer;
+begin
+  Result := ERR_RUN_NOCODE;
+  // ...
+end;
+
+procedure TAiInterpretator.SetCode(Value: TStrings);
 begin
 //  if Assigned(FThread) then
 //  begin
@@ -655,7 +666,7 @@ begin
 //  end;
 end;
 
-function TAIInterpretator.Start(): WordBool;
+function TAiInterpretator.Start(): WordBool;
 //var
 //  fm: TfmDialogMemo;
 begin
@@ -668,7 +679,7 @@ begin
 //  fm.AddMsg('Hello World!');
 end;
 
-function TAIInterpretator.Stop(): WordBool;
+function TAiInterpretator.Stop(): WordBool;
 begin
   Result := True; //inherited Stop();
   if Assigned(FThread) then
@@ -682,7 +693,7 @@ procedure TAIInterpretator3.DoCreate();
 begin
   inherited DoCreate();
   // ...
-  FThread := TInterpretatorThread3.Create();
+  FThread := TInterpretatorThread.Create();
   FThread.OnAddToLog := AddToLog;
 end;
 
@@ -712,24 +723,6 @@ begin
 //  if Assigned(FThread) then
 //    Result := FThread.Run();
 end;}
-
-function TAIInterpretator3.RunCode(ACode: IProfNode): Integer;
-var
-  i: Integer;
-begin
-  Result := ERR_RUN_NOCODE;
-  if not(Assigned(ACode)) then Exit;
-  for i := 0 to ACode.ChildNodes.NodeCount - 1 do
-    if ACode.ChildNodes.NodeByIndex[i].Name = 'write' then
-      AddToLog(lgAgent, ltNone, ''{ACode.ChildNodes.NodeByIndex[i].AsString});
-  Result := ERR_RUN_OK;
-end;
-
-function TAIInterpretator3.RunCodeA(ACode: IArlCode): Integer;
-begin
-  Result := ERR_RUN_NOCODE;
-  // ...
-end;
 
 procedure TAIInterpretator3.SetCode(Value: IArlCode);
 begin

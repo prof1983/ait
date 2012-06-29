@@ -2,7 +2,7 @@
 @Abstract(Интерфейс интерпретатора кода на языке AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(24.04.2012)
+@LastMod(29.06.2012)
 @Version(0.5)
 }
 unit AiInterpretatorIntf;
@@ -12,12 +12,12 @@ unit AiInterpretatorIntf;
 interface
 
 uses
-  {AiFrame,} ANodeIntf;
+  ABase, ANodeIntf;
 
 type //** Интерфейс интерпретатора кода на языке AR
-  IAiInterpretator = interface {(IAiFrame)}
+  IAiInterpretator = interface
     //function Run(): Integer; safecall;
-    function RunCode(ACode: IProfNode): Integer; safecall;
+    function RunCode(ACode: AProfXmlNode{AXmlNodeImpl.TProfXmlNode}): Integer;
     //function RunCodeA(ACode: IAICode): Integer; safecall;
     //function Start(): WordBool; safecall;
     //function Stop(): WordBool; safecall;

@@ -2,7 +2,7 @@
 @Abstract(Подпроцесс выполнения кода на языке AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(12.03.2007)
-@LastMod(26.06.2012)
+@LastMod(29.06.2012)
 @Version(0.5)
 
 Подпроцесс выполнения кода работает с TInterpretator.
@@ -18,11 +18,12 @@ interface
 
 uses
   ActiveX,
-  ANodeIntf, AThreadObj, AXmlDocumentImpl, 
+  ABase, ANodeIntf, AThreadObj, AXmlDocumentImpl, AXmlDocumentUtils,
+  AXmlNodeListUtils, AXmlNodeUtils,
   AiInterpretatorIntf;
 
 type //** Подпроцесс выполнения кода на языке AR
-  TInterpretatorThread3 = class(TProfThread)
+  TInterpretatorThread = class(TProfThread)
   private
     //FClasses: TXmlNodeList;
     //FObjects: TXmlNodeList;
@@ -68,19 +69,18 @@ type //** Подпроцесс выполнения кода на языке AR
     //** Режим отладки - подробные логи
     property IsDebug: WordBool read FIsDebug write FIsDebug;
   end;
-  TInterpretatorThread = TInterpretatorThread3;
 
 implementation
 
 { TInterpretatorThread }
 
-procedure TInterpretatorThread3.DoCreate();
+procedure TInterpretatorThread.DoCreate();
 begin
   inherited DoCreate();
   //FCode := TAICode.Create();
 end;
 
-procedure TInterpretatorThread3.DoDestroy();
+procedure TInterpretatorThread.DoDestroy();
 begin
 //  try
 //    FCode.Free();
@@ -91,59 +91,65 @@ begin
   inherited DoDestroy();
 end;
 
-procedure TInterpretatorThread3.Execute();
+procedure TInterpretatorThread.Execute();
 var
-  xml: TProfXmlDocument3;
-  nMethodMain: IProfNode;
-  nMethodMainCode: IProfNode;
-  nObject: IProfNode;
+  xml: AProfXmlDocument;
+  nMethodMain: AProfXmlNode;
+  nMethodMainCode: AProfXmlNode;
+  nObject: AProfXmlNode;
+  DocumentElement: AXmlNode;
+  ChildNodes: AXmlNodeList;
 begin
   CoInitialize(nil);
 
+  if (FCodeString = '') then
+    Exit();
+
   // Получаем список нодов - действий, которые нужно выполнить по порядку
-  xml := TProfXmlDocument3.Create();
+  xml := AXmlDocument_New();
   try
-    xml.Initialize();
-//    FCodeXml := xml;
-    if FCodeString <> '' then
+    AXmlDocument_Initialize(xml);
     try
-      xml.LoadFromString(FCodeString);
-      nObject := xml.DocumentElement.ChildNodes.NodeByName['object'];
-      if Assigned(nObject) then
+      AXmlDocument_LoadFromString(xml, FCodeString);
+      DocumentElement := AXmlDocument_GetDocumentElement(xml);
+      nObject := AXmlNode_GetChildNodeByName(DocumentElement, 'object');
+      if (nObject <> 0) then
       begin
-        nMethodMain := nObject.ChildNodes.NodeByName['method'];
-        if Assigned(nMethodMain) then
+        nMethodMain := AXmlNode_GetChildNodeByName(nObject, 'method');
+        if (nMethodMain <> 0) then
         begin
-          nMethodMainCode := nMethodMain.ChildNodes.NodeByName['code'];
-          if Assigned(nMethodMainCode) then
+          nMethodMainCode := AXmlNode_GetChildNodeByName(nMethodMain, 'code');
+          if (nMethodMainCode <> 0) then
           begin
             // Выполнить код нода DocumentElement
             //RunNode(de);
             FInterpretator.RunCode(nMethodMainCode);
           end;
+          AXmlNode_Free(nMethodMainCode);
         end;
+        AXmlNode_Free(nMethodMain);
       end;
+      AXmlNode_Free(nObject);
     finally
-      FCodeXml := nil;
-      xml.CloseDocument();
-      xml.Free();
+      AXmlDocument_CloseDocument(xml);
+      AXmlDocument_Free(xml);
     end;
   except
   end;
 end;
 
-function TInterpretatorThread3.GetCodeString(): WideString;
+function TInterpretatorThread.GetCodeString(): WideString;
 begin
   Result := FCodeString;
 end;
 
-function TInterpretatorThread3.Run(): WordBool;
+function TInterpretatorThread.Run(): WordBool;
 begin
   Execute();
   Result := True;
 end;
 
-procedure TInterpretatorThread3.RunNode(ANode: IProfNode);
+procedure TInterpretatorThread.RunNode(ANode: IProfNode);
 //var
 //  i: Integer;
 //  s: string;
@@ -175,7 +181,7 @@ begin
 //  end;
 end;
 
-procedure TInterpretatorThread3.RunProgram(ANode: IProfNode);
+procedure TInterpretatorThread.RunProgram(ANode: IProfNode);
 //var
 //  FProgramName: WideString;
 //  i: Integer;
@@ -192,7 +198,7 @@ begin
 //  end;
 end;
 
-procedure TInterpretatorThread3.SetCodeString(const Value: WideString);
+procedure TInterpretatorThread.SetCodeString(const Value: WideString);
 begin
   FCodeString := Value;
 end;
