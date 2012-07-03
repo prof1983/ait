@@ -2,7 +2,7 @@
 @Abstract(Источник знаний из БД ADO)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(14.09.2005)
-@LastMod(28.06.2012)
+@LastMod(03.07.2012)
 @Version(0.5)
 
 Структура описана в aiSourceAdoStruct.pas Необходимые фреймы описаны в aiGlobals.pas
@@ -53,7 +53,7 @@ type //** @abstract(БЗ ADO)
     function Open(): AError; override;
   public
     function Close(): AError; override;
-    constructor Create(ADBFileName: WideString = ''; AAddToLog: TProcAddToLog = nil);
+    constructor Create(ADBFileName: WideString = ''; AAddToLog: TAddToLogProc = nil);
     function Finalize(): TProfError; override;
     procedure Free(); override;
     function Initialize(): TProfError; override;
@@ -207,7 +207,7 @@ begin
   Result := inherited Close;
 end;
 
-constructor TAISourceAdo.Create(ADBFileName: WideString = ''; AAddToLog: TProcAddToLog = nil);
+constructor TAISourceAdo.Create(ADBFileName: WideString = ''; AAddToLog: TAddToLogProc = nil);
 var
   DllPath: WideString;
 begin
