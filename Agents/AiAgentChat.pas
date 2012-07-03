@@ -2,7 +2,7 @@
 @Abstract(AI Агент чат-бот)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.09.2005)
-@LastMod(28.06.2012)
+@LastMod(03.07.2012)
 @Version(0.5)
 }
 unit AiAgentChat;
@@ -161,7 +161,7 @@ var
   ConfigSource: IProfXmlNode;
   Count: Int32;
   I: Int32;
-  LogSource: TALogNode2;   // Log источника
+  LogSource: TALogNode;   // Log источника
   Name: WideString;      // Имя типа фреймов
   Select: TAI_Select;    // Выборка фреймов
 begin
