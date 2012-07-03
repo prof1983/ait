@@ -2,7 +2,7 @@
 @Abstract(Источник знаний в памяти)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(25.01.2006)
-@LastMod(22.05.2012)
+@LastMod(03.07.2012)
 @Version(0.5)
 }
 unit AiMemorySource2;
@@ -10,9 +10,8 @@ unit AiMemorySource2;
 interface
 
 uses
-  XmlIntf,
   ABase, AConsts2, ATypes,
-  AiBase, AiFrameImpl, AiIntf, AiGlobals, AiSourceImpl;
+  AiBase, AiFrameImpl, AiFrameIntf, AiSourceImpl;
 
 type //** @abstract(Источник знаний в памяти)
   TAISourceMemory = class(TAISource)

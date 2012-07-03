@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(27.06.2012)
+@LastMod(03.07.2012)
 @Version(0.5)
 }
 unit AiSourceImpl;
@@ -12,7 +12,7 @@ interface
 uses
   SysUtils,
   AConsts2, ATypes,
-  AiBase, AiFrameImpl, AiModuleImpl, AiSourceIntf;
+  AiBase, AiDataIntf, AiFrameIntf, AiModuleImpl, AiSourceIntf;
 
 type //** Запись для источника фреймов
   TAISourceRec3 = record
@@ -34,9 +34,9 @@ type //** Базовый класс для источника фреймов
   protected // IAiFreim
     function Get_FreimName(): WideString; safecall;
     function Get_FreimType(): TAId; safecall;
-    function Get_Source1(): IAiSource1; safecall;
+    function Get_Source1(): AiSource1; safecall;
     procedure Set_FreimType(Value: TAId); safecall;
-    procedure Set_Source1(const Value: IAiSource1); safecall;
+    procedure Set_Source1(const Value: AiSource1); safecall;
   protected // IAiSource1
     function Get_Freim(Id: TAId): IAiFreim;
   protected
@@ -72,6 +72,8 @@ type //** Базовый класс для источника фреймов
   public
     //** Проверяет и создает базовые фреймы AIFreims
     function CheckFreims(): Boolean;
+    function GetSelf1(): AiSource1;
+    function GetSelf2(): AiSource2;
     //** Закрыть источник
     procedure Close(); virtual; safecall;
     //** Освободить объект
@@ -186,6 +188,22 @@ begin
     Result := FParents[Index].ID;
 end;
 
+function TAISource.GetSelf1(): AiSource1;
+var
+  S: IAiSource1;
+begin
+  S := Self;
+  Result := AiSource1(S);
+end;
+
+function TAISource.GetSelf2(): AiSource2;
+var
+  S: IAiSource2;
+begin
+  S := Self;
+  Result := AiSource2(S);
+end;
+
 function TAISource.Get_FrameDateTimeCreate(ID: TAIID): TDateTime;
 begin
   Result := 0;
@@ -264,9 +282,9 @@ begin
   Inc(FNextFreeFreimID);
 end;
 
-function TAISource.Get_Source1(): IAiSource1;
+function TAISource.Get_Source1(): AiSource1;
 begin
-  Result := Self;
+  Result := GetSelf1();
 end;
 
 function TAISource.NewFrame(Typ: TAIID; ID: TAIID = 0): TAIID;
@@ -327,7 +345,7 @@ begin
   Self.FFrameType := Value;
 end;
 
-procedure TAISource.Set_Source1(const Value: IAiSource1);
+procedure TAISource.Set_Source1(const Value: AiSource1);
 begin
 end;
 
