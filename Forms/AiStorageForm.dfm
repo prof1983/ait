@@ -1,9 +1,9 @@
 object EntityStorageForm: TEntityStorageForm
   Left = 262
   Top = 74
-  Width = 558
-  Height = 394
   Caption = 'EntityStorage'
+  ClientHeight = 367
+  ClientWidth = 550
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -26,11 +26,12 @@ object EntityStorageForm: TEntityStorageForm
   end
   object CommandPanel: TPanel
     Left = 0
-    Top = 24
+    Top = 23
     Width = 550
     Height = 33
     Align = alTop
     TabOrder = 0
+    ExplicitTop = 24
     DesignSize = (
       550
       33)
@@ -75,7 +76,6 @@ object EntityStorageForm: TEntityStorageForm
       Width = 324
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      ItemHeight = 13
       TabOrder = 0
       OnKeyDown = CommandComboBoxKeyDown
       OnKeyUp = CommandComboBoxKeyUp
@@ -98,7 +98,6 @@ object EntityStorageForm: TEntityStorageForm
       Action = CloseAction
       Anchors = [akRight, akBottom]
       Caption = #1047#1072#1082#1088#1099#1090#1100
-      TabOrder = 2
       Glyph.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         2000000000000004000000000000000000000000000000000000FF00FF00FF00
@@ -134,6 +133,7 @@ object EntityStorageForm: TEntityStorageForm
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      TabOrder = 2
     end
     object NewGroupBitBtn: TBitBtn
       Left = 4
@@ -142,7 +142,6 @@ object EntityStorageForm: TEntityStorageForm
       Height = 25
       Action = NewGroupAction
       Caption = #1057#1086#1079#1076#1072#1090#1100' '#1075#1088#1091#1087#1087#1091
-      TabOrder = 3
       Glyph.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         2000000000000004000000000000000000000000000000000000FF00FF00FF00
@@ -178,6 +177,7 @@ object EntityStorageForm: TEntityStorageForm
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      TabOrder = 3
     end
     object RemoteGroupBitBtn: TBitBtn
       Left = 32
@@ -186,7 +186,6 @@ object EntityStorageForm: TEntityStorageForm
       Height = 25
       Action = RemoteGroupAction
       Caption = #1059#1076#1072#1083#1080#1090#1100' '#1075#1088#1091#1087#1087#1091
-      TabOrder = 4
       Glyph.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         2000000000000004000000000000000000000000000000000000FF00FF00FF00
@@ -222,6 +221,7 @@ object EntityStorageForm: TEntityStorageForm
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      TabOrder = 4
     end
   end
   object sbMain: TStatusBar
@@ -239,7 +239,7 @@ object EntityStorageForm: TEntityStorageForm
     Left = 0
     Top = 0
     Width = 550
-    Height = 24
+    Height = 23
     UseSystemFont = False
     ActionManager = ActionManager
     Caption = 'ActionMainMenuBar1'
@@ -252,29 +252,38 @@ object EntityStorageForm: TEntityStorageForm
     Font.Name = 'Tahoma'
     Font.Style = []
     Spacing = 0
+    ExplicitHeight = 24
   end
   object MainPageControl: TPageControl
     Left = 0
-    Top = 57
+    Top = 56
     Width = 550
-    Height = 223
+    Height = 224
     ActivePage = StorageTabSheet
     Align = alClient
     TabOrder = 3
+    ExplicitTop = 57
+    ExplicitHeight = 223
     object StorageTabSheet: TTabSheet
       Caption = #1061#1088#1072#1085#1080#1083#1080#1097#1077
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object EntityGroupSplitter: TSplitter
         Left = 137
         Top = 0
-        Height = 195
+        Height = 196
+        ExplicitHeight = 195
       end
       object pnButtons: TPanel
         Left = 453
         Top = 0
         Width = 89
-        Height = 195
+        Height = 196
         Align = alRight
         TabOrder = 0
+        ExplicitHeight = 195
         object bbNewTask: TBitBtn
           Left = 6
           Top = 8
@@ -282,9 +291,6 @@ object EntityStorageForm: TEntityStorageForm
           Height = 25
           Action = NewEntityAction
           Caption = #1057#1086#1079#1076#1072#1090#1100
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000000000000000000000000000000000000FF00FF00FF00
@@ -320,6 +326,9 @@ object EntityStorageForm: TEntityStorageForm
             FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
             FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
             FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
         end
         object bbDeleteTask: TBitBtn
           Left = 6
@@ -328,9 +337,6 @@ object EntityStorageForm: TEntityStorageForm
           Height = 25
           Action = RemoteEntityAction
           Caption = #1059#1076#1072#1083#1080#1090#1100
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000000000000000000000000000000000000FF00FF00FF00
@@ -366,28 +372,33 @@ object EntityStorageForm: TEntityStorageForm
             FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
             FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
             FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
         end
       end
       object EntityGroupTreeView: TTreeView
         Left = 0
         Top = 0
         Width = 137
-        Height = 195
+        Height = 196
         Align = alLeft
         Indent = 19
         TabOrder = 1
+        ExplicitHeight = 195
       end
       object EntityStringGrid: TStringGrid
         Left = 140
         Top = 0
         Width = 313
-        Height = 195
+        Height = 196
         Align = alClient
         ColCount = 3
         DefaultColWidth = 100
         DefaultRowHeight = 16
         RowCount = 2
         TabOrder = 2
+        ExplicitHeight = 195
       end
     end
   end

@@ -2,7 +2,7 @@
 @Abstract(Главная форма EntityStorage)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(06.07.2007)
-@LastMod(02.05.2012)
+@LastMod(03.07.2012)
 @Version(0.5)
 
 Главная форма программы EntityStorage.
@@ -327,10 +327,10 @@ uses
   Buttons, Classes, ComCtrls, Controls, Dialogs, ExtCtrls, Graphics, Grids, Forms,
   ImgList, Menus, Messages, StdActns, StdCtrls, SysUtils, ToolWin, Variants,
   Windows, XPStyleActnCtrls,
-  ACommandComboBoxControl, ALogRichEdit,
-  AiBase, AiBaseTypes, AiFilePoolImpl, AiIteratorIntf,
-  AiEntityGroup, AiEntityStoragePool, AiEntityStorageSettings, AiEntityStorageSettingsLoader,
-  fAbout1, fEntity, fEntityType;
+  ACommandComboBoxControl, AIteratorIntf, ALogRichEdit,
+  AiBase, AiBaseTypes, AiFilePoolImpl, AiEntityForm, AiEntityGroup,
+  AiEntityStoragePool, AiEntityStorageSettings, AiEntityStorageSettingsLoader, AiEntityTypeForm,
+  fAbout1;
 
 type //** @abstract(Главная форма EntityStorageForm)
   TEntityStorageForm = class(TForm)
@@ -749,7 +749,7 @@ end;
 procedure TEntityStorageForm.RefreshGroupTreeView();
 var
   //collection: TAICollection;
-  iterator: IAIIterator;
+  iterator: IAIterator;
   id: TAIID;
 //  group: TEntityGroup;
 begin
