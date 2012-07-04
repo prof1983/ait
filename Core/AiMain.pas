@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для создания локального AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(17.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiMain;
@@ -22,7 +22,7 @@ type
     FAgents: TAIAgents;
   public
     function ConfigureLoad(): Boolean; override;
-    constructor Create(Source: TAISource = nil; Id: TAI_Id = 0; AConfig: TConfig = nil; ALog: TLogNode = nil);
+    constructor Create(Source: TAISource = nil; Id: TAI_Id = 0; AConfig: TConfig = nil; ALog: TALogNode = nil);
     procedure Free(); override;
     function GetAgents(): TAIAgents;
     function GetSources(): TAISources;
@@ -46,7 +46,7 @@ begin
   FSources.ConfigureLoad();
 end;
 
-constructor TAiAr2006.Create(Source: TAISource = nil; Id: TAI_Id = 0; AConfig: TConfig = nil; ALog: TLogNode = nil);
+constructor TAiAr2006.Create(Source: TAISource = nil; Id: TAI_Id = 0; AConfig: TConfig = nil; ALog: TALogNode = nil);
 begin
   inherited Create(AConfig, ALog, Source, Id);
   FSources := TAISources.Create(AConfig, ALog, nil, 0);

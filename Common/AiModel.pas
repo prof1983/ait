@@ -139,7 +139,7 @@ implementation
 
 { TAIAgentModel }
 
-constructor TAIAgentModel1.Create(AConfig: TConfigNode1; {ALog: TLogNode;} ASource: TAISource = nil; AId: UInt64 = 0);
+constructor TAIAgentModel1.Create(AConfig: TConfigNode1; ASource: TAISource = nil; AId: UInt64 = 0);
 begin
   inherited Create(); //(AConfig, ALog, ASource, AId);
   FFormModel := TFormAIModel.Create(nil);

@@ -46,7 +46,7 @@ begin
   Result := Length(FItems);
 end;
 
-constructor TAiSelectObject.Create(AQuery: String {AConfig: TConfigNode = nil; ALog: TLogNode = nil});
+constructor TAiSelectObject.Create(AQuery: String);
 begin
   inherited Create();
   SetLength(FItems, 0);
