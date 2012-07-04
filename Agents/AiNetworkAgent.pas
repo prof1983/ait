@@ -2,7 +2,7 @@
 @Abstract(Агент следящий за работой сети)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.11.2005)
-@LastMod(03.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiNetworkAgent;
@@ -17,10 +17,10 @@ interface
 uses
   SysUtils, Windows,
   ATypes,
-  AiAgent3, AiModuleImpl;
+  AiAgentImpl, AiModuleImpl;
 
 type //** Агент следящий за работой сети
-  TAINetworkAgent = class(TAiAgent3)
+  TAINetworkAgent = class(TAiAgent)
   private
     FHttpModule: TAiModule{TAIHttpModule};
     FFtpModule: TAiModule{TAIFtpModule};
