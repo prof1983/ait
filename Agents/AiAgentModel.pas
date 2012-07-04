@@ -2,7 +2,7 @@
 @Abstract(AiAgentModel)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.03.2012)
-@LastMod(03.05.2012)
+@LastMod(04.05.2012)
 @Version(0.5)
 }
 unit AiAgentModel;
@@ -11,7 +11,7 @@ interface
 
 uses
   ABase,
-  AiAnalyser, AiAgent, AiAgentProcess, AiBase, AiModel, AiSceneMobile, AiTypes;
+  AiAnalyser, {AiAgent,} AiAgentProcess, AiBase, AiModel, AiSceneMobile, AiTypes;
 
 type //** Агент-модель - для расположения на сцене
   TAIAgentModel = class(TAiAgent)

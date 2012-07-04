@@ -2,7 +2,7 @@
 @Abstract(Агент в системе AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(13.11.2007)
-@LastMod(28.06.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 
 Агент - это отдельная программа или отдельный подпроцесс.
@@ -21,32 +21,17 @@ interface
 
 uses
   Forms, SysUtils,
-  AConfigObj, ALogObj, ATypes,
-  AiAgentBase, AiBase, AiNamedFrameObj, AiProcessObj, AiTypes;
+  ABase, AConfigObj, ALogObj, ATypes,
+  AiAgentBase, AiProcessObj;
 
 type
-  TAiAgent2007 = class // LastMod(01.12.2007)
-  private
+  TAiAgentObject = class //(TAiNamedFrameObject)
+  protected
+    FId: AId;
     // Работы (задания) агента
     //FJobs: array of TARJob;
     // Онтология агента
     //FOntology: TAROntology;
-  protected
-    //function GetJobByIndex(Index: Integer): TARJob;
-    //function GetJobCount(): Integer;
-  public
-    // Приостановить выполнение агента
-    procedure Pause();
-    // Начать/продолжить выполнение агента
-    procedure Start();
-    // Остановить выполнение агента
-    procedure Stop();
-  public
-    //property JobByIndex[Index: Integer]: TARJob read GetJobByIndex;
-    //property JobCount: Integer read GetJobCount;
-  end;
-
-  TAiAgent2006 = class(TAiNamedFrameObject)
   protected
     {FNeuro: TAINeuroNetwork;
     FLogic: TAILogic;
@@ -64,126 +49,158 @@ type
       {** Статус процесса }
     FStatus: TAiAgentStatus;
   protected
-      // Запущен ли агент
+      //** Запущен ли агент
     FActive: Boolean;
-      // Главное окно
+      //** Главное окно
     FFormMain: TForm;
-      // Имя агента короткое
+      //** Имя агента короткое
     FName: String;
-      // Отображаемое название агента длиное
+      //** Отображаемое название агента длиное
     FTitle: String;
-      // Окно агента видимо
+      //** Окно агента видимо
     FVisible: Boolean;
-    //F_AR: TAiAr20050915;
+  protected
+    //function GetJobByIndex(Index: Integer): TARJob;
+    //function GetJobCount(): Integer;
   public
-    constructor Create(Source: AiSourceObject2005; Id: TAId = 0);
     function GetActive(): Boolean;
     function GetName(): String;
     function GetProcess(): TAiProcess2005;
     function GetStatus(): TAiAgentStatus;
     function GetTitle(): String;
     function GetVisible(): Boolean;
-    function Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; {AAR: TAIAR;} AFormMain: TForm): TError; virtual;
-    function Pause(): TError; virtual;
-    function Run(): TError; virtual;
     procedure SetActive(Value: Boolean);
     procedure SetName(Value: String);
-    function SetProcess(Value: TAiProcess2005): TError;
-    function SetStatus(Value: TAiAgentStatus): TError;
-    function SetTitle(Value: String): TError;
     procedure SetVisible(Value: Boolean);
-    function Show(): TError; virtual;
-    function Stop(): TError; virtual;
+  public
+    function Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; AFormMain: TForm): AError; virtual;
+    function Run(): AError; virtual;
+    function SetProcess(Value: TAiProcess2005): AError;
+    function SetStatus(Value: TAiAgentStatus): AError;
+    function SetTitle(Value: String): AError;
+    function Show(): AError; virtual;
+  public
+      //** Приостанавливает выполнение агента
+    function Pause(): AError; virtual;
+      //** Запуск выполнения агента
+    function Start(): AError; virtual;
+      //** Останавливает выполнение агента
+    function Stop(): AError; virtual;
+  public
+    constructor Create({Source: AiSourceObject; Id: AId = 0});
+    procedure Free(); virtual;
+  public
+    property Id: AId read FId write FId;
+    //property JobByIndex[Index: Integer]: TARJob read GetJobByIndex;
+    //property JobCount: Integer read GetJobCount;
   end;
 
-  TAiAgent2005 = TAiAgent2006;
+  TAiAgent2005 = TAiAgentObject;
+  TAiAgent2006 = TAiAgentObject;
+  TAiAgent2007 = TAiAgentObject;
 
-  //TAiAgent = TAiAgent2007;
-  //TArAgent = TAiAgent
+  //TAiAgent = TAiAgentObject;
+  //TArAgent = TAiAgenObjectt
 
 implementation
 
-{ TAiAgent2006 }
+{ TAiAgentObject }
 
-constructor TAiAgent2006.Create(Source: AiSourceObject2005; Id: TAId = 0);
+constructor TAiAgentObject.Create({Source: AiSourceObject; Id: AId = 0});
 begin
-  inherited Create(Source, Id);
+  inherited Create({Source, Id});
   FStatus := AgentStatusStoped;
 end;
 
-function TAiAgent2006.GetActive(): Boolean;
+procedure TAiAgentObject.Free();
+begin
+end;
+
+function TAiAgentObject.GetActive(): Boolean;
 begin
   Result := FActive;
 end;
 
-function TAiAgent2006.GetName(): String;
+{function TAiAgentObject.GetJobByIndex(Index: Integer): TARJob;
+begin
+  if (Index >= 0) and (Index < Length(FJobs)) then
+    Result := FJobs[Index]
+  else
+    Result := nil;
+end;}
+
+{function TAiAgentObject.GetJobCount(): Integer;
+begin
+  Result := Length(FJobs);
+end;}
+
+function TAiAgentObject.GetName(): String;
 var
   Id: TAId;
 begin
   Result := FName;
-  Id := GetId();
+  Id := FId;
   if (Result = '') and (Id > 0) then
     Result := IntToStr(Id);
 end;
 
-function TAiAgent2006.GetProcess(): TAiProcess2005;
+function TAiAgentObject.GetProcess(): TAiProcess2005;
 begin
   Result := FProcess;
 end;
 
-function TAiAgent2006.GetStatus(): TAiAgentStatus;
+function TAiAgentObject.GetStatus(): TAiAgentStatus;
 begin
   Result := FStatus;
 end;
 
-function TAiAgent2006.GetTitle(): String;
+function TAiAgentObject.GetTitle(): String;
 begin
   Result := FTitle;
 end;
 
-function TAiAgent2006.GetVisible(): Boolean;
+function TAiAgentObject.GetVisible(): Boolean;
 begin
   Result := FVisible;
 end;
 
-function TAiAgent2006.Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; {AAR: TAIAR;} AFormMain: TForm): TError;
+function TAiAgentObject.Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; AFormMain: TForm): AError;
 begin
   FActive := True;
-  //F_AR := AAR;
   FFormMain := AFormMain;
-  Result := inherited Init(APath, ALog, AConfig, APrefix);
+  Result := 0; //inherited Init(APath, ALog, AConfig, APrefix);
 end;
 
-function TAiAgent2006.Pause(): TError;
+function TAiAgentObject.Pause(): AError;
 begin
   FStatus := AgentStatusPaused;
   Result := 0;
 end;
 
-function TAiAgent2006.Run(): TError;
+function TAiAgentObject.Run(): AError;
 begin
   FStatus := AgentStatusRuned;
   Result := 0;
 end;
 
-procedure TAiAgent2006.SetActive(Value: Boolean);
+procedure TAiAgentObject.SetActive(Value: Boolean);
 begin
   FActive := Value;
 end;
 
-procedure TAiAgent2006.SetName(Value: String);
+procedure TAiAgentObject.SetName(Value: String);
 begin
   FName := Value;
 end;
 
-function TAiAgent2006.SetProcess(Value: TAiProcess2005): TError;
+function TAiAgentObject.SetProcess(Value: TAiProcess2005): AError;
 begin
   Result := Stop;
   if Result <> 0 then Exit;
   FProcess := Value;
 end;
 
-function TAiAgent2006.SetStatus(Value: TAiAgentStatus): TError;
+function TAiAgentObject.SetStatus(Value: TAiAgentStatus): AError;
 begin
   case Value of
     AgentStatusPaused: Pause;
@@ -193,53 +210,31 @@ begin
   Result := 0;
 end;
 
-function TAiAgent2006.SetTitle(Value: String): TError;
+function TAiAgentObject.SetTitle(Value: String): AError;
 begin
   FTitle := Value;
   Result := 0;
 end;
 
-procedure TAiAgent2006.SetVisible(Value: Boolean);
+procedure TAiAgentObject.SetVisible(Value: Boolean);
 begin
   FVisible := Value;
 end;
 
-function TAiAgent2006.Show(): TError;
+function TAiAgentObject.Show(): AError;
 begin
   Result := 0;
 end;
 
-function TAiAgent2006.Stop(): TError;
+function TAiAgentObject.Start(): AError;
+begin
+  Result := 0;
+end;
+
+function TAiAgentObject.Stop(): AError;
 begin
   FStatus := AgentStatusStoped;
   Result := 0;
-end;
-
-{ TAiAgent2007 }
-
-{function TAiAgent.GetJobByIndex(Index: Integer): TARJob;
-begin
-  if (Index >= 0) and (Index < Length(FJobs)) then
-    Result := FJobs[Index]
-  else
-    Result := nil;
-end;}
-
-{function TAiAgent.GetJobCount(): Integer;
-begin
-  Result := Length(FJobs);
-end;}
-
-procedure TAiAgent2007.Pause();
-begin
-end;
-
-procedure TAiAgent2007.Start();
-begin
-end;
-
-procedure TAiAgent2007.Stop();
-begin
 end;
 
 end.

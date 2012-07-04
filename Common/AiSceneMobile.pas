@@ -2,7 +2,7 @@
 @Abstract(AiSceneMobile)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.03.2012)
-@LastMod(03.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiSceneMobile;
@@ -12,14 +12,14 @@ interface
 uses
   ExtCtrls,
   ABase,
-  AiFrameObj, {AiModel,} AiScene; {AiSourceObj;}
+  AiFrameObj, AiScene;
 
 type //** Сцена действия для модели машинки TAIModelMobile
   TAiSceneMobile = class(TAIScene)
   private
     FImage: TImage;
   public
-    constructor Create({KB: TAISource;} Model: TAiFreim{TAIModel});
+    constructor Create(Model: TAiFrameObject);
     property Image: TImage read FImage write FImage;
     function Paint: AError; override;
     function Step: AError;
@@ -29,9 +29,9 @@ implementation
 
 { TAiSceneMobile }
 
-constructor TAiSceneMobile.Create({KB: TAISource;} Model: TAiFreim{TAIModel});
+constructor TAiSceneMobile.Create(Model: TAiFrameObject);
 begin
-  inherited Create({KB,} Model);
+  inherited Create(Model);
   {Canvas.Height := 200;
   Canvas.Width := 200;
   ModelPosX := 100;

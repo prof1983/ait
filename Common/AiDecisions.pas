@@ -2,7 +2,7 @@
 @Abstract()
 @Author(Prof1983 prof1983@ya.ru)
 @Created(24.05.2012)
-@LastMod(24.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiDecisions;
@@ -15,7 +15,7 @@ uses
 
 type
   // Решение
-  TAiDecision2006 = class(TAiFreim)
+  TAiDecision2006 = class(TAiFrameObject)
   private
       // Зависимости
     FDependences: TAiDependences2006;
@@ -27,7 +27,7 @@ type
   end;
 
   // Решения, связанные между собой
-  TAiDecisions2006 = class(TAiFreim)
+  TAiDecisions2006 = class(TAiFrameObject)
   private
     FDecisions: array of TAiDecision2006;
   public
@@ -38,7 +38,6 @@ type
   end;
 
 implementation
-
 
 { TAiDecision2006 }
 

@@ -2,7 +2,7 @@
 @Abstract(AiScene)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.09.2006)
-@LastMod(03.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiScene;
@@ -14,26 +14,27 @@ uses
   AiCanvas, AiFrameObj, AiModelBase, AiSourceObj, AiTypes;
 
 type
-  TAIScene = class(TAIFreim)
+  TAIScene = class(TAiFrameObject)
   private
     FCanvas: TAICanvas;
-    FModel: TAiFreim{TAIModel};
+      // TAiModel
+    FModel: TAiFrameObject;
     FModelAlpha: AFloat32;
     FModelPosX: Int32;
     FModelPosY: Int32;
     FObstacles: TAIModelObstacles; {Препятствия}
   public
-    constructor Create({KB: TAISource;} Model: TAiFreim{TAIModel});
+    constructor Create(Model: TAiFrameObject);
     procedure Free;
     function GetCanvas: TAICanvas;
-    function GetModel: TAiFreim{TAIModel};
+    function GetModel(): TAiFrameObject;
     function GetModelAlpha: AFloat32;
     function GetModelPosX: Int32;
     function GetModelPosY: Int32;
     function GetObstacles: TAIModelObstacles;
     function Paint: AError; virtual;
     function PointA(X, Y: Int32): Boolean;
-    function SetModel(Value: TAiFreim{TAIModel}): AError;
+    function SetModel(Value: TAiFrameObject): AError;
     function SetModelAlpha(Value: Single): AError;
     function SetModelPosX(Value: Int32): AError;
     function SetModelPosY(Value: Int32): AError;
@@ -42,11 +43,11 @@ type
   end;
 
   // Изображение сцены модели
-  TAIImageScene = class(TAIFreim)
+  TAIImageScene = class(TAiFrameObject)
   private
     FScene: TAIScene;
   public
-    constructor Create({Source: TAISource; Id: TAI_Id;} Scene: TAIScene);
+    constructor Create(Scene: TAIScene);
     procedure Free;
     function GetScene: TAIScene;
     function Refresh: AError; virtual;
@@ -58,9 +59,9 @@ implementation
 uses
   AiModel;
 
-{TAIScene}
+{ TAiScene }
 
-constructor TAIScene.Create({KB: TAISource;} Model: TAiFreim{TAIModel});
+constructor TAIScene.Create(Model: TAiFrameObject);
 begin
   inherited Create();
   FCanvas := TAICanvas.Create();

@@ -2,7 +2,7 @@
 @Abstract()
 @Author(Prof1983 prof1983@ya.ru)
 @Created(24.05.2012)
-@LastMod(30.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiDependences;
@@ -14,12 +14,12 @@ uses
 
 type
   // Зависимости, связанные между собой. Рассматривается как единая зависимость.
-  TAiDependences2006 = class(TAiFreim)
+  TAiDependences2006 = class(TAiFrameObject)
   private
-    FItems: array of TAiFreim{TAiDependence};
+    FItems: array of TAiFrameObject;
   public
     procedure Free(); override;
-    function GetItem(Index: Integer): TAiFreim;
+    function GetItem(Index: Integer): TAiFrameObject;
     //function New(Decision: TAiDecision; Format: TAiDependenceFormat): TAiDependence;
   end;
 
@@ -36,7 +36,7 @@ begin
   inherited Free();
 end;
 
-function TAiDependences2006.GetItem(Index: Integer): TAiFreim;
+function TAiDependences2006.GetItem(Index: Integer): TAiFrameObject;
 begin
   if (Index >= Length(FItems)) then
   begin

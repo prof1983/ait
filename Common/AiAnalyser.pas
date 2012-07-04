@@ -2,7 +2,7 @@
 @Abstract(AiAnalyser)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(20.09.2006)
-@LastMod(24.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiAnalyser;
@@ -17,11 +17,11 @@ type
   UInt32 = Integer;
 
 type
-  TAIAnalysis = class(TAIFreim)
+  TAIAnalysis = class(TAiFrameObject)
   end;
 
 type // Данные для анализа
-  TAIAnalysisData = class(TAIFreim)
+  TAIAnalysisData = class(TAiFrameObject)
   end;
 
 type // Анализатор

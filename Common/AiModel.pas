@@ -2,7 +2,7 @@
 @Abstarct(Агент модели)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.11.2005)
-@LastMod(28.06.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 
 0.0.0.2 - 03.02.2006
@@ -14,22 +14,24 @@ unit AiModel;
 
 interface
 
+TODO: Create AiAgentProcessObj
+
 uses
   SysUtils,
   ABase, AConfig2007, ATypes,
-  AiAgent, AiAgentProcess, AiAnalyser, AiBase, AiBody,
+  AiAgentObj, AiAgentProcess, AiAnalyser, AiBase, AiBody,
   AiFrameObj, AiModelForm, AiSceneMobile, AiSensors, AiSourceObj;
 
 type
   //TAIModelMobile = class;
 
-  TAIAgentModel1 = class(TAIAgent)
+  TAIAgentModel1 = class(TAiAgentObject)
   private
     FFormModel: TFormAIModel;
   public
     constructor Create(AConfig: TConfigNode1; ASource: TAISource = nil; AId: UInt64 = 0);
     property FormModel: TFormAIModel read FFormModel;
-    procedure Free; override;
+    procedure Free(); override;
   end;
 
   // Агент управления мобильмым объектом с датчиками и действиями
@@ -39,7 +41,7 @@ type
     function Initialize: WordBool; override;
   end;}
 
-  TAIModelDrive = class(TAIFreim)
+  TAIModelDrive = class(TAiFrameObject)
   private
     FName: String;
     FSpeed: Int32;
@@ -65,7 +67,7 @@ type
   end;
 
   //** Модель машинки
-  TAIModel = class(TAIFreim)
+  TAIModel = class(TAiFrameObject)
   private
     FBody: TAIBody;            {Тело модели}
     FDrives: TAIModelDrives;   {Двигатели}
@@ -116,7 +118,7 @@ type
   end;
 
 type //** Агент-модель - для расположения на сцене
-  TAIAgentModel2 = class(TAIAgent)
+  TAIAgentModel2 = class(TAiAgentObject)
   private
     FAnalyzer: TAIAnalyzerMobile;
     {FForm: TAIFormModel;}
