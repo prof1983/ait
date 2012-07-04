@@ -2,19 +2,21 @@
 @Abstract(AiAgentModel)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.03.2012)
-@LastMod(04.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiAgentModel;
+
+// TODO: Rename to AiAgentModelObj.pas
 
 interface
 
 uses
   ABase,
-  AiAnalyser, {AiAgent,} AiAgentProcess, AiBase, AiModel, AiSceneMobile, AiTypes;
+  AiAnalyser, AiAgentObj, AiAgentProcessObj, AiBase, AiModel, AiSceneMobile, AiTypes;
 
 type //** Агент-модель - для расположения на сцене
-  TAIAgentModel = class(TAiAgent)
+  TAIAgentModel = class(TAiAgentObject)
   private
     FAnalyzer: TAIAnalyzerMobile;
     {FForm: TAIFormModel;}
@@ -24,7 +26,7 @@ type //** Агент-модель - для расположения на сце�
     {procedure SetForm(Value: TAIFormModel);}
   public
     property Analyzer: TAIAnalyzerMobile read FAnalyzer;
-    constructor Create(Source: AiSource2005; Id: TAI_Id);
+    constructor Create(Source: AiSource2005; Id: AId);
     {property Form: TAIFormModel read FForm write SetForm;}
     procedure Free; override;
     property Mobile: TAIModelMobile read FMobile;
@@ -41,7 +43,7 @@ implementation
 
 { TAIAgentModel }
 
-constructor TAIAgentModel.Create(Source: AiSource2005; Id: TAI_Id);
+constructor TAIAgentModel.Create(Source: AiSource2005; Id: AId);
 begin
   inherited Create();
   FMobile := TAIModelMobile.Create(Source);
@@ -49,7 +51,7 @@ begin
 
   FAnalyzer := TAIAnalyzerMobile.Create(Source);
 
-  FProcess := TAiAgentProcess.Create(); //(nil, nil, Source, 0);
+  FProcess := TAiAgentProcessObject.Create();
   {FProcess.Analyzer := FAnalyzer;}
   {FProcess.Model := FMobile;}
   {FProcess.Scene := FScene;}

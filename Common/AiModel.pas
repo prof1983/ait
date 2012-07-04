@@ -11,15 +11,14 @@
 unit AiModel;
 
 // TODO: Разобраться с ненужными классами
+// TODO: Rename to AiModelObj.pas
 
 interface
-
-TODO: Create AiAgentProcessObj
 
 uses
   SysUtils,
   ABase, AConfig2007, ATypes,
-  AiAgentObj, AiAgentProcess, AiAnalyser, AiBase, AiBody,
+  AiAgentObj, AiAgentProcessObj, AiAnalyser, AiBase, AiBody,
   AiFrameObj, AiModelForm, AiSceneMobile, AiSensors, AiSourceObj;
 
 type
@@ -163,7 +162,7 @@ begin
 
   FAnalyzer := TAIAnalyzerMobile.Create(AiSource2005(Source));
 
-  FProcess := TAiAgentProcess.Create();
+  FProcess := TAiAgentProcessObject.Create();
   {FProcess.Analyzer := FAnalyzer;}
   {FProcess.Model := FMobile;}
   {FProcess.Scene := FScene;}

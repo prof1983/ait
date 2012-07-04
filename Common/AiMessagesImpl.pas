@@ -2,7 +2,7 @@
 @Abstract(Конвеер сообщений)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.11.2005)
-@LastMod(27.06.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 
 24.02.2012 - Объединил AiMessages.pas и AiMessagesImpl.pas
@@ -24,7 +24,7 @@ type //** Сообщение
 type //** Конвеер сообщений
   TAIMessages = class(TProfObject)
   private
-    FMessages: TProfMessages3;
+    FMessages: TAMessages;
   protected
     function Get_Count(): Integer;
     function Get_NextRunMessage(): WideString;
@@ -74,7 +74,7 @@ end;
 constructor TAIMessages.Create(StekSize: Int32);
 begin
   inherited Create();
-  FMessages := TProfMessages3.Create();
+  FMessages := TAMessages.Create();
 end;
 
 function TAIMessages.FindMsgAnswer(AConnectionId: UInt64; AIdent: Integer; AComId: UInt64;

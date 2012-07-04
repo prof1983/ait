@@ -85,7 +85,7 @@ begin
   Result := FCanvas;
 end;
 
-function TAIScene.GetModel(): TAiFreim{TAIModel};
+function TAIScene.GetModel(): TAiFrameObject;
 begin
   Result := FModel;
 end;
@@ -128,7 +128,7 @@ begin
   Result := False;
 end;
 
-function TAIScene.SetModel(Value: TAiFreim{TAIModel}): AError;
+function TAIScene.SetModel(Value: TAiFrameObject): AError;
 begin
   FModel := Value;
   Result := 0;

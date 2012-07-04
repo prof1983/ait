@@ -45,7 +45,7 @@ type
     {FModules: array of TAIModule;}
 
       {** Процесс }
-    FProcess: TAiProcess2005;
+    FProcess: TAiProcessObject;
       {** Статус процесса }
     FStatus: TAiAgentStatus;
   protected
@@ -65,7 +65,7 @@ type
   public
     function GetActive(): Boolean;
     function GetName(): String;
-    function GetProcess(): TAiProcess2005;
+    function GetProcess(): TAiProcessObject;
     function GetStatus(): TAiAgentStatus;
     function GetTitle(): String;
     function GetVisible(): Boolean;
@@ -75,7 +75,7 @@ type
   public
     function Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; AFormMain: TForm): AError; virtual;
     function Run(): AError; virtual;
-    function SetProcess(Value: TAiProcess2005): AError;
+    function SetProcess(Value: TAiProcessObject): AError;
     function SetStatus(Value: TAiAgentStatus): AError;
     function SetTitle(Value: String): AError;
     function Show(): AError; virtual;
@@ -144,7 +144,7 @@ begin
     Result := IntToStr(Id);
 end;
 
-function TAiAgentObject.GetProcess(): TAiProcess2005;
+function TAiAgentObject.GetProcess(): TAiProcessObject;
 begin
   Result := FProcess;
 end;
@@ -193,7 +193,7 @@ begin
   FName := Value;
 end;
 
-function TAiAgentObject.SetProcess(Value: TAiProcess2005): AError;
+function TAiAgentObject.SetProcess(Value: TAiProcessObject): AError;
 begin
   Result := Stop;
   if Result <> 0 then Exit;

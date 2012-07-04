@@ -1,8 +1,8 @@
 {**
-@Abstract()
+@Abstract(Ahent thread)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(31.01.2008)
-@LastMod(24.05.2012)
+@LastMod(04.07.2012)
 @Version(0.5)
 }
 unit AiAgentThread;
@@ -10,34 +10,37 @@ unit AiAgentThread;
 interface
 
 uses
-  Classes;
+  Classes,
+  AMessagesObj;
 
 type
   TAgentThread = class(TThread)
   private
+    FMessages: TAMessages;
   protected
     procedure Execute(); override;
+  public
+    function GetMessages(): TAMessages;
+    procedure SetMessages(Value: TAMessages);
   end;
 
 implementation
-
-{ Important: Methods and properties of objects in visual components can only be
-  used in a method called using Synchronize, for example,
-
-      Synchronize(UpdateCaption);
-
-  and UpdateCaption could look like,
-
-    procedure AgentThread.UpdateCaption;
-    begin
-      Form1.Caption := 'Updated in a thread';
-    end; }
 
 { TAgentThread }
 
 procedure TAgentThread.Execute();
 begin
   // ...
+end;
+
+function TAgentThread.GetMessages(): TAMessages;
+begin
+  Result := FMessages;
+end;
+
+procedure TAgentThread.SetMessages(Value: TAMessages);
+begin
+  FMessages := Value;
 end;
 
 end.
