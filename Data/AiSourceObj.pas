@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(13.06.2012)
+@LastMod(05.07.2012)
 @Version(0.5)
 }
 unit AiSourceObj;

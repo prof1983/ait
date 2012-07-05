@@ -2,7 +2,7 @@
 @Abstract(Контрол формы для агента)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(05.04.2007)
-@LastMod(01.06.2012)
+@LastMod(05.07.2012)
 @Version(0.5)
 
 01.06.2012 - Renamed AgentControl.pas -> AiAgentControl.pas
@@ -41,7 +41,7 @@ type
     reOut: TRichEdit;
   private
     //** Контрол вывода лог-сообщений в RichEdit
-    FLogControl: TProfLogRichEditControl3;
+    FLogControl: TALogRichEditControl;
     procedure memInputKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btSendClick(Sender: TObject);
   protected
@@ -49,7 +49,7 @@ type
   public
     function AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: WideString): Integer; override;
     //** Контрол вывода лог-сообщений в RichEdit
-    property LogControl: TProfLogRichEditControl3 read FLogControl;
+    property LogControl: TALogRichEditControl read FLogControl;
   end;
 
 implementation
@@ -150,7 +150,7 @@ begin
   reOut.ReadOnly := True;
 
   // Создаем контрол вывода лог-сообщений в RichEdit
-  FLogControl := TProfLogRichEditControl3.Create();
+  FLogControl := TALogRichEditControl.Create();
   FLogControl.Controller := reOut;
 //  TProfForm(FControl).Log := FLogControl;
 

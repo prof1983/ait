@@ -2,7 +2,7 @@
 @Abstract(Описание интерфейсов для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(02.01.2006)
-@LastMod(28.06.2012)
+@LastMod(05.07.2012)
 @Version(0.5)
 }
 unit AiIntf;
@@ -74,7 +74,7 @@ type
 type // Интерфейс для форм
   IAIForm = interface
       // Послать сообщения ядру
-    function SendMessageToCore(const AMsg: WideString): Integer; safecall;
+    function SendMessageToCore(const AMsg: WideString): Integer;
   end;
 
 implementation

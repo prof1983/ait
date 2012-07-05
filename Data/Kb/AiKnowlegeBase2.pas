@@ -2,7 +2,7 @@
 @Abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(14.02.2006)
-@LastMod(03.05.2012)
+@LastMod(05.07.2012)
 @Version(0.5)
 
 Может работать с несколькими источниками знаний. (пока не реализовано)
@@ -15,7 +15,7 @@ interface
 uses
   SysUtils,
   ATypes,
-  AiBase, AiBaseObj, AiIntf, AiSourceImpl;
+  AiBase, AiIntf, AiSourceImpl;
 
 type //** @abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
   TAIKnowlegeBase = class(TAISource)
