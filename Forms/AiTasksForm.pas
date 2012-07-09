@@ -2,7 +2,7 @@
 @Abstract(Главная форма агента управления заданиями)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(21.10.2005)
-@LastMod(04.05.2012)
+@LastMod(09.07.2012)
 @Version(0.5)
 }
 unit AiTasksForm;
@@ -33,7 +33,7 @@ implementation
 constructor TFormTasks.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  AddToLog(lgGeneral, ltInformation, 'TFormTasks: Create', []);
+  AddToLog(lgGeneral, ltInformation, 'TFormTasks: Create');
 end;
 
 function TFormTasks.Initialize(): WordBool;
