@@ -1,19 +1,16 @@
 ﻿{**
-@Abstract()
+@Abstract(Ai lang namespace)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.08.2007)
-@LastMod(05.05.2012)
+@LastMod(10.07.2012)
 @Version(0.5)
-
-История изменений:
-0.0.0.2 - 14.08.2007 - Добавил коментарии
 }
 unit AilNamespace;
 
 interface
 
 uses
-  AilClass, AilIndividual, AilMethod, AilProperty;
+  AilClass, AilIndividual; {AilMethodObj, AilProperty;}
 
 type
   TAilNamespace = class
@@ -30,7 +27,7 @@ type
 
 implementation
 
-{ TAssistantNamespace }
+{ TAilNamespace }
 
 function TAilNamespace.AddClass(AssistantClass: TAilClass): Integer;
 begin
