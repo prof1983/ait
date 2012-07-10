@@ -2,7 +2,7 @@
 @Abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(14.02.2006)
-@LastMod(05.07.2012)
+@LastMod(10.07.2012)
 @Version(0.5)
 
 Может работать с несколькими источниками знаний. (пока не реализовано)
@@ -14,18 +14,18 @@ interface
 
 uses
   SysUtils,
-  ATypes,
-  AiBase, AiIntf, AiSourceImpl;
+  ABase, ATypes,
+  AiBase, AiFrameImpl, AiIntf, AiSourceImpl, AiSourceListImpl;
 
 type //** @abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
   TAIKnowlegeBase = class(TAISource)
-  private
-    //FSources: TAISourceList;
-
-    //FF: TFileProfKB;
-    // Путь для расположения файлов N.xml
+  protected
+    FSources: TAISourceList3;
+      //** Путь для расположения файлов N.xml
     FFilePath: WideString;
     function GetFreimStringById(Id: TAiId): WideString;
+  protected
+    function Get_FrameCount(): Integer; override; safecall;
   protected
     //function GetCountFreims(): Integer; override; safecall;
     //procedure SetFreimType(ID, Typ: TAIID); override; safecall;
@@ -34,22 +34,25 @@ type //** @abstract(База Знаний. Работает с фреймами 
     //function GetFreimDTCreate(ID: TAIID): TDateTime;
     //function GetFreimType(Id: TAIID): TAIID; override;
     function NewFrame(Typ: TAIID; ID: TAIID = 0): TAIID; override; safecall;
-    function Open(): TProfError; virtual; safecall;
+    function Open(): AError; override; safecall;
     ///function OpenCreate: Boolean;
   public
     property FilePath: WideString read FFilePath write FFilePath;
     property FreimStringByID[ID: TAIID]: WideString read GetFreimStringByID;
+    property Sources: TAISourceList3 read FSources;
   end;
 
 implementation
 
-{ TAIKnowlegeBase }
+{ TAiKnowlegeBase }
 
-procedure TAIKnowlegeBase.Close();
+procedure TAiKnowlegeBase.Close();
+var
+  i: Integer;
 begin
-  {if Assigned(FF) then FF.Free;
-  FF := nil;
-  Result := inherited Close;}
+  for i := 0 to FSources.Count - 1 do
+    FSources.SourceByIndex[i].Close();
+  inherited Close();
 end;
 
 {function TAIKnowlegeBase.GetCountFreims(): Integer;
@@ -103,6 +106,38 @@ end;
 //  Result := Rec.DTCreate;
 //end;
 
+(*function TAIKnowlegeBase3.GetFreimStringByID(ID: TAIID): WideString;
+var
+  f: file;
+  r: Integer;
+  s: ShortString;
+  ws: WideString;
+  i: Integer;
+  p: PChar;
+begin
+  Result := '';
+  ws := '';
+  {$I-}
+  GetMem(p, 200);
+  AssignFile(f, FFilePath + IntToStr(ID) + '.ar');
+  Reset(f, 1);
+  while not(Eof(f)) do
+  begin
+    //BlockRead(f, s[1], 100, r);
+    BlockRead(f, p^, 100, r);
+    s := string(p);
+    ws := ws + Copy(s, 1, r);
+  end;
+  CloseFile(f);
+  FreeMem(p);
+  {$I+}
+
+  // Избавляемся от символов #10 #13
+  for i := 1 to Length(ws) do
+    if (ws[i] <> #10) and (ws[i] <> #13) then
+      Result := Result + ws[i];
+end;*)
+
 //function TAIKnowlegeBase.GetFreimType(Id: TAI_Id): TAI_Id;
 //var
 //  Rec: TAIFreimRecF64;
@@ -115,6 +150,23 @@ end;
 //  Result := Rec.Typ;
 //end;
 
+function TAiKnowlegeBase.Get_FrameCount(): Integer;
+var
+  i: Integer;
+begin
+  Result := 0;
+  for i := 0 to FSources.Count - 1 do
+    Result := Result + FSources.SourceByIndex[i].FrameCount;
+end;
+
+{function TAIKnowlegeBase.Get_FrameData(ID: TAIID): IAIData;
+begin
+//  Result := inherited FreimDataGet(Id);
+  Result := nil;
+//  if Id >= FreimCount then Exit;
+//  Result := nil;
+end;}
+
 function TAIKnowlegeBase.NewFrame(Typ: TAIID; ID: TAIID = 0): TAIID;
 begin
   Result := 0;
@@ -122,15 +174,18 @@ begin
 //  Result := FF.FreimNew(Typ);
 end;
 
-function TAIKnowlegeBase.Open(): TProfError;
+function TAiKnowlegeBase.Open(): AError;
+var
+  i: Integer;
+  r: Integer;
 begin
-  Result := -1;
-//  Close;
-//  Result := False;
-//  if (FFileName = '') or (FFilePath = '') then Exit;
-//  FF := TFileProfKB.Create;
-//  Result := FF.Open(FFileName);
-//  Result := inherited Open;
+  Result := inherited Open();
+  for i := 0 to FSources.Count - 1 do
+  begin
+    r := FSources.SourceByIndex[i].Open();
+    if r < 0 then
+      Result := -1;
+  end;
 end;
 
 //function TAIKnowlegeBase.OpenCreate: Boolean;

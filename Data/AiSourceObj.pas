@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(05.07.2012)
+@LastMod(10.07.2012)
 @Version(0.5)
 }
 unit AiSourceObj;
@@ -52,8 +52,6 @@ type
     // Возвращает фрейм
     function Get_Freim(Id: TAId): TAiFrameObject; virtual;
   public
-    constructor Create();
-  public
     function AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage;
         const AStrMsg: WideString): Integer; virtual;
     //** Проверяет и создает базовые фреймы Prof_AI_GLobals.AIFreims
@@ -69,7 +67,6 @@ type
     function DataClear(Id: TAId): TError; virtual; deprecated; // Use Clear()
     function DataSize(Id: TAId): AUInt64; virtual; // deprecated
     function Finalize(): TProfError; virtual;
-    procedure Free(); virtual;
     function FreimFree(Id: TAId): Boolean; virtual; // deprecated
     function GetActive(): Boolean;
     function GetCountFreims(): UInt64; virtual;
@@ -117,6 +114,9 @@ type
   public
     function Activate(): Boolean; deprecated; // Delete
     function Deactivate(): Boolean; deprecated; // Delete
+  public
+    constructor Create();
+    procedure Free(); virtual;
   public
     property CountFreims: UInt64 read GetCountFreims;
     property FreimByID[ID: TAId]: TAiFrameObject read GetFreim write SetFreim;

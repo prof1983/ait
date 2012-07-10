@@ -2,7 +2,7 @@
 @Abstract(Источник знаний в памяти)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(25.01.2006)
-@LastMod(25.05.2012)
+@LastMod(10.07.2012)
 @Version(0.5)
 }
 unit AiMemorySourceObj;
@@ -10,33 +10,63 @@ unit AiMemorySourceObj;
 interface
 
 uses
-  ABaseUtils2, AConfigObj, ATypes,
+  ABase, ABase2, ABaseUtils2, AConfigObj, ATypes,
   AiBase, AiFrameObj, AiSourceObj, AiTypes;
 
 type
-  TAiSourceMemory2005 = class(TAiSource2005)
-  private
-    FItems: array of TAiFrame2005;
-    FNil: TAiFrame2005;             {Заглушка от неправильного Id}
+  TAiMemorySourceObject = class(TAiSourceObject)
+  protected
+    FItems: array of TAiFrameObject;
+      //** Заглушка от неправильного Id
+    FNil: TAiFrameObject;
     {FItemsRec: array of TAIFreimRec;}
   public
-    function Clear: TError; override;
-    constructor Create(Source: AiSource2005 = 0; Id: TAId = 0);
-    procedure Free; {override;}
-    function GetFreim(Id: TAI_Id): TAiFrame2005; override;
-    function GetItem(Index: UInt32): TAiFrame2005;
-    function GetItemId(Index: UInt32): TAI_Id; override;
-    function GetCountFreims: UInt64; override;
-    function GetCountItems: UInt32;
+    function Clear(): TError; override;
+    function GetCountFreims(): UInt64; override;
+    function GetCountItems(): AUInt32;
+    function GetFreim(Id: AId): TAiFrameObject; override;
+    function GetItem(Index: AUInt32): TAiFrameObject;
+    function GetItemId(Index: AInt): AId; override;
     function LoadFromConfig(Config: TConfig; Prefix: String): TError;
-    function NewFreim(Typ: TAI_Id; Id: TAI_Id = 0): TAI_Id; override;
+    function NewFreim(Typ: AId; Id: AId = 0): AId; override;
+  public
+    constructor Create();
+    procedure Free(); override;
+  end;
+
+  // БЗ в памяти (тип 2)
+  TAiSourceMemory2 = class(TAiSourceObject)
+  private
+      //** Произвольный порядок.
+    FArbitrary: Boolean;
+    FBase: array[0..1023] of TAiFrameObject;
+      // 1024..2047
+    FLocal: array[0..1023] of TAiFrameObject;
+      // Все остальные. Не упорядоченные.
+    FItems: array of TAiFrameObject;
+    {FOrder: TKBMemoryOrder;}   {Порядок. Очередность.}
+  public
+    procedure SetArbitrary(Value: Boolean);
+  public
+    function GetCountFreims(): UInt64; override;
+    function GetFreeIndexCashe(): UInt32;
+    function GetFreim(Id: AId): TAiFrameObject; override;
+    function GetFreimCashe(Id: AId): TAiFrameObject;
+    function GetItem(Index: UInt32): TAiFrameObject;
+    function Initialize: TError; override;
+    function NewFreim(Typ: AId; Id: AId = 0): AId; override;
+    function Open(): TError; override;
+    function SetFreim2(Id: AId; Freim: TAiFrameObject): TError; override;
+  public
+    constructor Create();
+    procedure Free(); override;
   end;
 
 implementation
 
-{ TAiSourceMemory2005 }
+{ TAiMemorySourceObject }
 
-function TAiSourceMemory2005.Clear(): TError;
+function TAiMemorySourceObject.Clear(): TError;
 var
   I: Int32;
 begin
@@ -45,41 +75,44 @@ begin
   SetLength(FItems, 0);
 end;
 
-constructor TAiSourceMemory2005.Create(Source: AiSource2005; Id: TAId);
+constructor TAiMemorySourceObject.Create();
 var
   I: Int32;
 begin
-  inherited Create(Source, Id);
+  inherited Create();
   FName := 'Memory';
   FTitle := 'SourceMemory';
-  FNil := TAiFrame2005.Create();
+  FNil := TAiFrameObject.Create();
   SetLength(FItems, 1024);
-  for I := 0 to High(FItems) do FItems[I] := nil;
+  for I := 0 to High(FItems) do
+    FItems[I] := nil;
 end;
 
-procedure TAiSourceMemory2005.Free();
+procedure TAiMemorySourceObject.Free();
 var
   I: Int32;
 begin
   for I := 0 to High(FItems) do
+  begin
     if Assigned(FItems[I]) then
-      FItems[I].Free;
+      FItems[I].Free();
+  end;
   SetLength(FItems, 0);
-  FNil.Free;
-  inherited Free;
+  FNil.Free();
+  inherited Free();
 end;
 
-function TAiSourceMemory2005.GetCountFreims(): UInt64;
+function TAiMemorySourceObject.GetCountFreims(): UInt64;
 begin
   Result := Length(FItems);
 end;
 
-function TAiSourceMemory2005.GetCountItems(): UInt32;
+function TAiMemorySourceObject.GetCountItems(): UInt32;
 begin
   Result := Length(FItems);
 end;
 
-function TAiSourceMemory2005.GetFreim(Id: TAI_Id): TAiFrame2005;
+function TAiMemorySourceObject.GetFreim(Id: AId): TAiFrameObject;
 begin
   if Id >= Length(FItems) then
     Result := FNil {Заглушка}
@@ -87,7 +120,7 @@ begin
     Result := FItems[Id];
 end;
 
-function TAiSourceMemory2005.GetItem(Index: UInt32): TAiFrame2005;
+function TAiMemorySourceObject.GetItem(Index: UInt32): TAiFrameObject;
 begin
   if Index >= UInt32(Length(FItems)) then
     Result := nil
@@ -95,7 +128,7 @@ begin
     Result := FItems[Index];
 end;
 
-function TAiSourceMemory2005.GetItemId(Index: UInt32): TAI_Id;
+function TAiMemorySourceObject.GetItemId(Index: AInt): AId;
 begin
   if (Index >= UInt32(Length(FItems))) or not(Assigned(FItems[Index])) then
     Result := 0
@@ -103,12 +136,12 @@ begin
     Result := FItems[Index].GetId;
 end;
 
-function TAiSourceMemory2005.LoadFromConfig(Config: TConfig; Prefix: String): TError;
+function TAiMemorySourceObject.LoadFromConfig(Config: TConfig; Prefix: String): TError;
 var
   Count: Int32;
   //Freim: TAiFrame2005;
   I: Int32;
-  Id: TAI_Id;
+  Id: AId;
   S: String;
 begin
   Result := 1;
@@ -124,14 +157,14 @@ begin
   Result := 0;
 end;
 
-function TAiSourceMemory2005.NewFreim(Typ: TAI_Id; Id: TAI_Id = 0): TAI_Id;
+function TAiMemorySourceObject.NewFreim(Typ: AId; Id: AId = 0): AId;
 var
-  Freim: TAiFrame2005;
+  Freim: TAiFrameObject;
 {var
   I: Int32;}
 begin
   Result := 0;
-  Freim := TAiFrame2005.Create(Self.GetId(), 0);
+  Freim := TAiFrameObject.Create(Self.GetId(), 0);
   {Снятие инициализации фрейма}
   {if Freim.GetInitialized then Freim.SetInitialized(False);}
   {Присоединение объекта к БЗ}
@@ -161,6 +194,211 @@ begin
   Result := Length(FItems);
   SetLength(FItems, Result + 1);
   FItems[Result] := nil;*)
+end;
+
+{ TAiSourceMemory2 }
+
+constructor TAiSourceMemory2.Create();
+begin
+  inherited Create();
+  {FArbitrary := Arbitrary;}
+  FArbitrary := True;
+end;
+
+procedure TAiSourceMemory2.Free();
+var
+  I: Int32;
+begin
+  for I := 0 to High(FItems) do
+    FItems[I].Free();
+  SetLength(FItems, 0);
+  inherited Free();
+end;
+
+function TAiSourceMemory2.GetCountFreims: UInt64;
+var
+  I: Int32;
+begin
+  Result := 0;
+  if FArbitrary then
+  begin
+    for I := 0 to High(FItems) do if Result < FItems[I].GetId then
+    begin
+      Result := FItems[I].GetId;
+    end;
+  end
+  else
+    Result := Length(FItems);
+end;
+
+function TAiSourceMemory2.GetFreeIndexCashe(): UInt32;
+var
+  I: Int32;
+begin
+  for I := 0 to High(FItems) do
+  begin
+    if not(Assigned(FItems[I])) then
+    begin
+      Result := I;
+      Exit;
+    end;
+  end;
+  Result := Length(FItems);
+  SetLength(FItems, Result + 1024);
+end;
+
+function TAiSourceMemory2.GetFreim(Id: AId): TAiFrameObject;
+begin
+  case Id of
+    0..1023: Result := FBase[Id];
+    1024..2047: Result := FLocal[Id-1024];
+  else
+    {Result := nil;}
+    {Поиск в локальном кеше}
+    Result := GetFreimCashe(Id);
+    if Assigned(Result) then
+    begin
+      {Result := FItems[I];}
+      {Result.Used := Result.Used + 1;}
+      Exit;
+    end;
+    {Запрос у родительской БЗ}
+    {...}
+    {Запросы в других БЗ}
+    {...}
+  end;
+end;
+
+function TAiSourceMemory2.GetFreimCashe(Id: AId): TAiFrameObject;
+var
+  I: Int32;
+begin
+  Result := nil;
+  for I := 0 to High(FItems) do
+  begin
+    if (Assigned(FItems[I])) and (FItems[I].GetId = Id) then
+    begin
+      Result := FItems[I];
+      Exit;
+    end;
+  end;
+end;
+
+function TAiSourceMemory2.GetItem(Index: UInt32): TAiFrameObject;
+begin
+  if Index >= UInt32(Length(FItems)) then
+    Result := nil
+  else
+    Result := FItems[Index];
+end;
+
+function TAiSourceMemory2.Initialize(): TError;
+begin
+  Result := inherited Initialize;
+  {Инициализация базовых фреймов}
+  {...}
+end;
+
+function TAiSourceMemory2.NewFreim(Typ: AId; Id: AId = 0): AId;
+begin
+  {Result := NewFreimLocal(Freim);
+  if Result > 0 then Exit;
+  Result := NewFreimExternal(Freim);}
+  Result := 0;
+end;
+
+function TAiSourceMemory2.Open(): TError;
+begin
+  {Result := inherited Open;}
+  Result := 0;
+  SetLength(FItems, 1);
+  FItems[0] := TAiFrameObject.Create(0, 0);
+end;
+
+procedure TAiSourceMemory2.SetArbitrary(Value: Boolean);
+var
+  I: Int32;
+  {I2: Int32;}
+  It: array of TAiFrameObject;
+begin
+  if FArbitrary = Value then Exit;
+  if GetOpened then
+  begin
+    if FArbitrary then
+    begin
+      {Сортируем по порядку}
+      {Метод пузырька}
+      {for I2 := 0 to High(FItems) do for I := 0 to High(FItems)-1 do begin
+        if FItems[I].FreimId > FItems[I + 1].FreimId then begin
+          F := FItems[I];
+          FItems[I] := FItems[I + 1];
+          Freim[I + 1] := F;
+        end;
+      end;}
+      {Другой метод}
+      for I := 0 to High(FItems) do
+      begin
+        if FItems[I].GetId >= UInt32(Length(It)) then
+        begin
+          SetLength(It, FItems[I].GetId + 1);
+        end;
+        It[FItems[I].GetId] := FItems[I];
+      end;
+      SetLength(FItems, Length(It));
+      for I := 0 to High(It) do
+      begin
+        FItems[I] := It[I];
+      end;
+    end;
+  end
+  else
+    FArbitrary := Value;
+end;
+
+function TAiSourceMemory2.SetFreim2(Id: AId; Freim: TAiFrameObject): TError;
+var
+  F2: TAiFrameObject;
+  I: UInt32;
+  Source: AiSourceObject2005;
+begin
+  {Result := inherited SetFreim(Id, Freim);}
+  {if Result <> 0 then Exit;}
+  Result := 1;
+  case Id of
+    0..1023: begin
+      FBase[Id] := Freim;
+      Result := 0;
+    end;
+    1024..2047: begin
+      Source := Freim.GetSource;
+      if (Source <> 0) and (Source <> Self.GetId()) then Exit;
+      {if not(Assigned(Source)) then Source := Self;}
+      Freim.SetId(Id);
+      FLocal[Id-1024] := Freim;
+      Result := 0;
+    end;
+  else
+    {Проверка - не занят ли идентификатор}
+    {В локальной БЗ}
+    F2 := GetFreim(Id);
+    if Assigned(F2) then begin
+      {В родительской БЗ}
+      {...}
+      {Если идентификатор занят, то проверка соответствия фрейма
+      с фреймом в родительской БЗ}
+      {...}
+      Result := 0;
+      Exit;
+    end;
+    {Если идентификатор свободен, то запись фрейма}
+    {в локальную БЗ}
+    I := GetFreeIndexCashe;
+    if (I = HighUInt32) then Exit;
+    FItems[I] := Freim;
+    {в родительскую БЗ}
+    {...}
+    Result := 0;
+  end;
 end;
 
 end.

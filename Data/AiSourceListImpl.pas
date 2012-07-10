@@ -2,7 +2,7 @@
 @Abstract(Список источников фреймов)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(16.04.2007)
-@LastMod(27.06.2012)
+@LastMod(10.07.2012)
 @Version(0.5)
 }
 unit AiSourceListImpl;
@@ -10,7 +10,7 @@ unit AiSourceListImpl;
 interface
 
 uses
-  AiBase, AiIntf;
+  AiBase, AiSourceIntf;
 
 type //** @abstract(Список источников фреймов)
   TAISourceList3 = class(TInterfacedObject, IAISourceList3)
