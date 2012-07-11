@@ -2,7 +2,7 @@
 @Abstract(Интерпретатор кода на языке AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.10.2006)
-@LastMod(29.06.2012)
+@LastMod(11.07.2012)
 @Version(0.5)
 
 0.0.5.9 - 12.03.2012 - Объединил AiInterpretator2 и AiInterpretator4
@@ -544,44 +544,35 @@ type
 type
   {** Интерпретатор кода на языке AR }
   TAiInterpretator = class(TAIObject, IAIInterpretator)
-  private
+  protected
+      //** Подпроцесс выполнения кода
     FThread: TInterpretatorThread;
     function GetCode(): TStrings;
+    function GetCode1(): IArlCode;
     procedure SetCode(Value: TStrings);
+    procedure SetCode1(Value: IArlCode);
   protected
+      //** Срабатывает при создании
     procedure DoCreate(); override; safecall;
+      //** Срабатывает при уничтожении
     procedure DoDestroy(); override; safecall;
   public
-    property Code: TStrings read GetCode write SetCode;
     function Run(): Integer; safecall;
       {** Выполняет указанный код }
     function RunCode(ACode: AProfXmlNode): Integer; virtual;
       {** Выполняет указанный код }
     function RunCodeA(ACode: IArlCode): Integer; virtual;
+      //** Start
     function Start(): WordBool; virtual; safecall;
+      //** Stop
     function Stop(): WordBool; virtual; safecall;
+  public
+    property Code: TStrings read GetCode write SetCode;
+    //** Выполняемый код
+    property Code1: IArlCode read GetCode1 write SetCode1;
   end;
 
-  TAIInterpretator3 = class(TAIInterpretator)
-  private
-    //** Подпроцесс выполнения кода
-    FThread: TInterpretatorThread;
-    function GetCode(): IArlCode;
-    procedure SetCode(Value: IArlCode);
-  protected
-    //** Срабатывает при создании
-    procedure DoCreate(); override; safecall;
-    //** Срабатывает при уничтожении
-    procedure DoDestroy(); override; safecall;
-  public
-    //** Старт
-    function Start(): WordBool; virtual; safecall;
-    //** Стоп
-    function Stop(): WordBool; virtual; safecall;
-  public
-    //** Выполняемый код
-    property Code: IArlCode read GetCode write SetCode;
-  end;
+  TAiInterpretator3 = TAiInterpretator;
 
 const
   INT_RUN_OK = 0;
@@ -592,7 +583,7 @@ const
 
 implementation
 
-{ TAIInterpretator }
+{ TAiInterpretator }
 
 procedure TAiInterpretator.DoCreate();
 begin
@@ -621,6 +612,12 @@ begin
   Result := nil;
 //  if Assigned(FThread) then
 //    Result := FThread.Code.Lines;
+end;
+
+function TAiInterpretator.GetCode1(): IArlCode;
+begin
+  Result := nil;
+  // ...
 end;
 
 function TAiInterpretator.Run(): Integer;
@@ -666,6 +663,11 @@ begin
 //  end;
 end;
 
+procedure TAiInterpretator.SetCode1(Value: IArlCode);
+begin
+  // ...
+end;
+
 function TAiInterpretator.Start(): WordBool;
 //var
 //  fm: TfmDialogMemo;
@@ -686,81 +688,6 @@ begin
     FThread.Stop();
   // ...
 end;
-
-{ TAIInterpretator3 }
-
-procedure TAIInterpretator3.DoCreate();
-begin
-  inherited DoCreate();
-  // ...
-  FThread := TInterpretatorThread.Create();
-  FThread.OnAddToLog := AddToLog;
-end;
-
-procedure TAIInterpretator3.DoDestroy();
-begin
-  if Assigned(FThread) then
-  try
-    FThread.Stop();
-    //FThread.Free();
-    FThread := nil;
-  except
-    FThread := nil;
-  end;
-  // ...
-  inherited DoDestroy();
-end;
-
-function TAIInterpretator3.GetCode(): IArlCode{IAICode};
-begin
-  Result := nil;
-  // ...
-end;
-
-{function TAIInterpretator.Run(): Integer;
-begin
-  Result := 0;
-//  if Assigned(FThread) then
-//    Result := FThread.Run();
-end;}
-
-procedure TAIInterpretator3.SetCode(Value: IArlCode);
-begin
-  // ...
-end;
-
-function TAIInterpretator3.Start(): WordBool;
-//var
-//  fm: TfmDialogMemo;
-begin
-//  Result := inherited Start();
-//  if Assigned(FThread) then
-//    FThread.Start();
-//  // ...
-//  fm := TfmDialogMemo.Create(nil);
-//  fm.Show();
-//  fm.AddMsg('Hello World!');
-end;
-
-function TAIInterpretator3.Stop(): WordBool;
-begin
-  Result := True; //inherited Stop();
-  if Assigned(FThread) then
-    FThread.Stop();
-  // ...
-end;
-
-{ TArlCode }
-
-{function TArlCode.GetEnviroment(): IArlEnviroment;
-begin
-  Result := FEnviroment;
-end;
-
-procedure TArlCode.SetEnviroment(Value: IArlEnviroment);
-begin
-  FEnviroment := Value;
-end;}
 
 { TArlEntity }
 
