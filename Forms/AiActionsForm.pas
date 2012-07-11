@@ -16,7 +16,7 @@ uses
   AiAction, AiActionForm;
 
 type
-  TFormActions = class(TProfForm)
+  TFormActions = class(TAFormObject)
   private
     FListBox: TListBox;
     FStatusBar: TStatusBar;
