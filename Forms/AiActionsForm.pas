@@ -1,5 +1,5 @@
-﻿{**
-@Abstract(Форма управления действиями)
+{**
+@Abstract(AiActionsForm)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(21.10.2005)
 @LastMod(26.06.2012)
