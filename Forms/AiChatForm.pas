@@ -2,7 +2,7 @@
 @Abstract(Главная форма для агента чат-бот)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(24.03.2005)
-@LastMod(28.06.2012)
+@LastMod(11.07.2012)
 @Version(0.5)
 }
 unit AiChatForm;
@@ -12,7 +12,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls,
-  ABase, ABaseUtils2, AEventObj, AForm2007, ATypes,
+  ABase, ABaseUtils2, AEventObj, AFormObj, ATypes,
   AiBase, AiForm2006;
 
 type

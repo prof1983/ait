@@ -1,9 +1,9 @@
 object FormActions: TFormActions
   Left = 201
   Top = 103
-  Width = 339
-  Height = 268
   Caption = 'FormActions'
+  ClientHeight = 241
+  ClientWidth = 331
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

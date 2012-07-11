@@ -2,7 +2,7 @@
 @Abstract(AiActionsForm)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(21.10.2005)
-@LastMod(26.06.2012)
+@LastMod(11.07.2012)
 @Version(0.5)
 }
 unit AiActionsForm;
@@ -12,7 +12,7 @@ interface
 uses
   Classes, ComCtrls, Controls, Dialogs, ExtCtrls, Graphics, Forms, Messages, StdCtrls, SysUtils,
   Windows,
-  ABase, AForm2007,
+  ABase, AFormObj,
   AiAction, AiActionForm;
 
 type
