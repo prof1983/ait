@@ -2,7 +2,7 @@
 @Abstract(Базовый класс для источника)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(10.07.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 }
 unit AiSourceObj;
@@ -70,6 +70,7 @@ type
     function FreimFree(Id: TAId): Boolean; virtual; // deprecated
     function GetActive(): Boolean;
     function GetCountFreims(): UInt64; virtual;
+    function GetFrameData(Id: AId; NotSeeDataFromFrame: Boolean): TAiDataObject;
     function GetFreim(Id: TAId): TAiFrameObject; virtual;
     function GetFreimConnects(Id: TAId): TAiConnectsObject; virtual;
     function GetFreimData(Id: TAId): TAiDataObject; virtual;
@@ -452,6 +453,24 @@ begin
   Result := 0;
 end;
 
+function TAiSourceObject.GetFrameData(Id: AId; NotSeeDataFromFrame: Boolean): TAiDataObject;
+var
+  Frame: TAiFrameObject;
+begin
+  if NotSeeDataFromFrame then
+    Result := TAiDataObject.Create(Id, dtNone)
+  else
+  begin
+    Frame := GetFreim(Id);
+    if not(Assigned(Frame)) then
+    begin
+      Result := TAiDataObject.Create(Id, dtNone);
+      Exit;
+    end;
+    Result := Frame.GetData();
+  end;
+end;
+
 function TAiSourceObject.GetFreim(Id: TAId): TAiFrameObject;
 begin
   Result := nil;
@@ -464,17 +483,8 @@ begin
 end;
 
 function TAiSourceObject.GetFreimData(Id: TAId): TAiDataObject;
-var
-  Freim: TAiFrameObject;
 begin
-  Freim := GetFreim(Id);
-  if not(Assigned(Freim)) then
-  begin
-    Result := TAiDataObject.Create(Id, dtNone);
-    Exit;
-  end;
-  Result := Freim.GetData;
-  AddToLog(lgDataBase, ltInformation, Format(stNotOverrideA, ['GetFreimData']));
+  Result := GetFrameData(Id, False);
 end;
 
 function TAiSourceObject.GetFreimDateTimeCreate(Id: TAId): TDateTime;

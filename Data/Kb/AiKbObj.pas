@@ -2,7 +2,7 @@
 @Abstract(Ai knowledge base object)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.06.2012)
-@LastMod(13.06.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 }
 unit AiKbObj;
@@ -68,15 +68,17 @@ type
     FItems: array of TAiFrameObject;
     FItemsRec: array of TAIFreimRec;
   public
-    constructor Create();
-    procedure Free();
     function GetFreim(Id: TAId): TAiFrameObject; override;
     function GetItem(Index: AUInt32): TAiFrameObject;
     function GetCountFreims(): UInt64; override;
     function GetCountItems(): AUInt32;
     function Initialize(): AError; override;
-    function NewFreim(Freim: TAiFrameObject): TAId; {override;}
+    function NewFreim(Frame: TAiFrameObject): AId; deprecated; // Use NewFreim2()
+    function NewFreim2(Frame: TAiFrameObject): AId; override;
     function LoadFromFileN(FileName, Path: String): AError;
+  public
+    constructor Create();
+    procedure Free();
   end;
 
   TAiKbMemory2 = class(TAiKb)
@@ -93,14 +95,15 @@ type
     function GetFreimCashe(Id: TAId): TAiFrameObject;
     function NewFreim(Freim: TAiFrameObject): TAId; {override;}
   public
-    constructor Create();
-    procedure Free();
     function GetCountFreims(): UInt64; override;
     function GetFreeIndexCashe(): AUInt32;
     function GetItem(Index: AUInt32): TAiFrameObject;
     function SaveToFile(FileName, Path: String): AError;
     procedure SetArbitrary(Value: Boolean);
     function Open(): AError;
+  public
+    constructor Create();
+    procedure Free();
   end;
 
 implementation
@@ -616,30 +619,41 @@ begin
   Result := 0;
 end;
 
-function TAiKbMemory.NewFreim(Freim: TAiFrameObject): TAId;
+function TAiKbMemory.NewFreim(Frame: TAiFrameObject): AId;
+begin
+  Result := NewFreim2(Frame);
+end;
+
+function TAiKbMemory.NewFreim2(Frame: TAiFrameObject): AId;
 var
   Id: TAId;
 begin
-  Result := 0;
-  {Снятие инициализации фрейма}
-  if Freim.GetInitialized then
-    Freim.SetInitialized(False);
-  {Присоединение объекта к БЗ}
-  Id := Length(FItems);
-  SetLength(FItems, Id + 1);
-  FItems[Id] := Freim;
-  {Установка параметров фрейма, как принадлежащего к этой БЗ}
-  Freim.SetId(Id);
-  Freim.SetSource(AiSource2005(Self));
-  {Freim.FreimTypeId := Self.FreimId;}
-
-  {Инициализация объекта}
-  if Freim.Initialize <> 0 then begin
-    {Result := 0;}
+  if not(Assigned(Frame)) then
+  begin
+    Result := 0;
     Exit;
   end;
 
-  Result := Freim.GetId;
+  {Снятие инициализации фрейма}
+  if (Frame.GetInitialized()) then
+    Frame.SetInitialized(False);
+  {Присоединение объекта к БЗ}
+  Id := Length(FItems);
+  SetLength(FItems, Id + 1);
+  FItems[Id] := Frame;
+  {Установка параметров фрейма, как принадлежащего к этой БЗ}
+  Frame.SetId(Id);
+  Frame.SetSource(AiSource2005(Self));
+  {Freim.FreimTypeId := Self.FreimId;}
+
+  {Инициализация объекта}
+  if (Frame.Initialize() <> 0) then
+  begin
+    Result := 0;
+    Exit;
+  end;
+
+  Result := Frame.GetId();
 end;
 
 { TAiKbMemory2 }

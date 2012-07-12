@@ -2,7 +2,7 @@
 @Abstract(Базовые типы для AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(26.04.2006)
-@LastMod(28.06.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 
 Prototype: org.framerd.OID
@@ -435,7 +435,7 @@ begin
   begin
     if (FInitialized) and (FSource <> 0) then
     try
-      FData := (TObject(FSource) as TAiSourceObject).GetFreimData(FId);
+      FData := (TObject(FSource) as TAiSourceObject).GetFrameData(FId, True);
     except
       FData := nil;
     end;
@@ -589,15 +589,18 @@ end;
 
 function TAiFrameObject.Initialize(): TProfError;
 begin
-  Result := 0;
-  if FInitialized then Exit;
+  if FInitialized then
+  begin
+    Result := 0;
+    Exit;
+  end;
   FInitialized := True;
   Result := Load();
 end;
 
 function TAiFrameObject.Load(): TProfError;
 begin
-  if (LoadFromData(Get_Data()) >= 0) then
+  if (LoadFromData(GetData()) >= 0) then
   begin
     Result := 0;
     Exit;
@@ -846,8 +849,11 @@ end;
 
 function TAiFrameObject.SetSource(Value: AiSource2005): AError;
 begin
-  Result := -1;
-  if FInitialized then Exit;
+  if FInitialized then
+  begin
+    Result := -1;
+    Exit;
+  end;
   FSource := Value;
   Result := 0;
 end;
