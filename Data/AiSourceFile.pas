@@ -203,7 +203,7 @@ end;
 constructor TAiSourceFile2004.Create(const FileName, Path: string);
 begin
   inherited Create();
-  FSource := TAiSourceFile.Create(FileName, Path);
+  FSource := TAiSourceFileObject.Create(FileName, Path);
 end;
 
 end.
