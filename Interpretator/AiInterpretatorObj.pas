@@ -2,7 +2,7 @@
 @Abstract(AiInterpretator)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(11.07.2012)
-@LastMod(11.07.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 }
 unit AiInterpretatorObj;
@@ -10,222 +10,141 @@ unit AiInterpretatorObj;
 interface
 
 uses
+  Classes,
   ABase, AXmlObj,
-  AiFrameObj, AiObjectObj, AiParamsObj;
+  AiBase, AiFrameObj, AiObjectObj, AiParamsObj, AiXmlParamObj;
 
 type
-  TAiInterpretator20050915 = class(TAiFrameObject)
+  TAiInterpretatorObject = class(TAiFrameObject)
   protected
-    FCode: TProfXml;         {Выполняемый код}
-    FParams: TAiParams;         {Параметры}
-    FParamsIn: TAiParams;       {Входные данные}
-    FParamsOut: TAiParams;      {Выходные данные}
-    FSystem: TAiSystem;         {Глобальный системный объект для кода}
+      //** Выполняемый код
+    FCode: TProfXml;
+      //** Выполняемый код
+    FCode1: TAiXmlParamObject;
+      //** Параметры
+    FParams: TAiParams;
+      //** Входные данные
+    FParamsIn: TAiParams;
+      //** Выходные данные
+    FParamsOut: TAiParams;
+      //** Глобальный системный объект для кода
+    FSystem: TAiSystem;
   public
-    function GetCode: TProfXml;
-    function GetParams: TAiParams;
-    function GetParamsIn: TAiParams;
-    function GetParamsOut: TAiParams;
-    function GetSystem: TAiSystem;
-    function Initialize: AError; override;
-    function Run: AError;
-    function SetCode(Value: TProfXml): TError;
-    function SetParams(Value: TAiParams): TError;
-    function SetParamsIn(Value: TAiParams): TError;
-    function SetParamsOut(Value: TAiParams): TError;
-    function SetSystem(Value: TAiSystem): TError;
-  end;
-
-  TAiInterpretator20050830 = class(TAiInterpretator20050915)
-  public
-    function GetCode: TProfXml;
-    function Initialize: AError; override;
-    function SetCode(Value: TProfXml): TError;
-  end;
-
-  TAiInterpretator20050526 = class(TAiInterpretator20050830)
-  private
-    FCode: TAiXmlParamObject;         {Выполняемый код}
-  public
-    function GetCode: TAiXmlParamObject;
-    function Initialize: AError; override;
-    function SetCode(Value: TAiXmlParamObject): TError;
-  end;
-
-  TAiInterpretator20050525 = class(TAiInterpretator20050526)
-  private
-    FCode: AXmlObj.TProfXml;         {Выполняемый код}
-  public
-    function GetCode(): AXmlObj.TProfXml;
+    function GetCode(): TProfXml;
+    function GetCode1(): TAiXmlParamObject;
+    function GetParams(): TAiParams;
+    function GetParamsIn(): TAiParams;
+    function GetParamsOut(): TAiParams;
+    function GetSystem(): TAiSystem;
     function Initialize(): AError; override;
-    function SetCode(Value: AXmlObj.TProfXml): AError;
+    function Run(): AError;
+    function SetCode(Value: TProfXml): AError;
+    function SetCode1(Value: TAiXmlParamObject): AError;
+    function SetParams(Value: TAiParams): AError;
+    function SetParamsIn(Value: TAiParams): AError;
+    function SetParamsOut(Value: TAiParams): AError;
+    function SetSystem(Value: TAiSystem): AError;
   end;
 
-  TAiInterpretatorObject = TAiInterpretator20050525;
+function AiInterpretator_LoadFromStrings(Interpretator: TAiInterpretatorObject;
+    Strings: TStrings): AError;
 
 implementation
 
-{ TAiInterpretator20050525 }
+function AiInterpretator_LoadFromStrings(Interpretator: TAiInterpretatorObject;
+    Strings: TStrings): AError;
+begin
+  Interpretator.FCode1.LoadFromStrings(Strings);
+  Result := 0;
+end;
 
-function TAiInterpretator20050525.GetCode: TMyXml;
+{ TAiInterpretatorObject }
+
+function TAiInterpretatorObject.GetCode(): TProfXml;
 begin
   Result := FCode;
 end;
 
-function TAiInterpretator20050525.Initialize: TError;
-var
-  Source: TAiSource2005;
+function TAiInterpretatorObject.GetCode1(): TAiXmlParam;
 begin
-  Source := TObject(GetSource) as TAiSource2005;
-  if not(Assigned(FCode)) then
-    FCode := TMyXml.Create;
-  if not(Assigned(FParams)) then
-    FParams := TAIParams.Create(AiSource2005(Source), 0);
-  if not(Assigned(FParamsIn)) then
-    FParamsIn := TAIParams.Create(AiSource2005(Source), 0);
-  if not(Assigned(FParamsOut)) then
-    FParamsOut := TAIParams.Create(AiSource2005(Source), 0);
-  Result := 0;
+  Result := FCode1;
 end;
 
-function TAiInterpretator20050525.SetCode(Value: TMyXml): TError;
-begin
-  FCode := Value;
-  Result := 0;
-end;
-
-{ TAiInterpretator20050526 }
-
-function TAiInterpretator20050526.GetCode: TAIXmlParam;
-begin
-  Result := FCode;
-end;
-
-function TAiInterpretator20050526.Initialize: TError;
-var
-  Source: AiSource2005;
-begin
-  Source := GetSource;
-  if not(Assigned(FCode)) then
-    FCode := TAIXmlParam.Create(Source, 0);
-  if not(Assigned(FParams)) then
-    FParams := TAIParams.Create(Source, 0);
-  if not(Assigned(FParamsIn)) then
-    FParamsIn := TAIParams.Create(Source, 0);
-  if not(Assigned(FParamsOut)) then
-    FParamsOut := TAIParams.Create(Source, 0);
-  Result := 0;
-end;
-
-function TAiInterpretator20050526.SetCode(Value: TAIXmlParam): TError;
-begin
-  FCode := Value;
-  Result := 0;
-end;
-
-{ TAiInterpretator20050830 }
-
-function TAiInterpretator20050830.GetCode: TProfXml;
-begin
-  Result := FCode;
-end;
-
-function TAiInterpretator20050830.Initialize: TError;
-var
-  Source: AiSource2005;
-begin
-  Source := GetSource;
-  if not(Assigned(FCode)) then
-    FCode := TProfXml.Create;
-  if not(Assigned(FParams)) then
-    FParams := TAIParams.Create(Source, 0);
-  if not(Assigned(FParamsIn)) then
-    FParamsIn := TAIParams.Create(Source, 0);
-  if not(Assigned(FParamsOut)) then
-    FParamsOut := TAIParams.Create(Source, 0);
-  Result := 0;
-end;
-
-function TAiInterpretator20050830.SetCode(Value: TProfXml): TError;
-begin
-  FCode := Value;
-  Result := 0;
-end;
-
-{ TAiInterpretator20050915 }
-
-function TAiInterpretator20050915.GetCode: TProfXml;
-begin
-  Result := FCode;
-end;
-
-function TAiInterpretator20050915.GetParams: TAIParams;
+function TAiInterpretatorObject.GetParams(): TAiParams;
 begin
   Result := FParams;
 end;
 
-function TAiInterpretator20050915.GetParamsIn: TAIParams;
+function TAiInterpretatorObject.GetParamsIn(): TAiParams;
 begin
   Result := FParamsIn;
 end;
 
-function TAiInterpretator20050915.GetParamsOut: TAIParams;
+function TAiInterpretatorObject.GetParamsOut(): TAiParams;
 begin
   Result := FParamsOut;
 end;
 
-function TAiInterpretator20050915.GetSystem: TAISystem;
+function TAiInterpretatorObject.GetSystem(): TAiSystem;
 begin
   Result := FSystem;
 end;
 
-function TAiInterpretator20050915.Initialize: TError;
+function TAiInterpretatorObject.Initialize(): AError;
 var
   Source: AiSourceObject2005;
 begin
   Source := GetSource;
   if not(Assigned(FCode)) then
     FCode := TProfXml.Create;
+  if not(Assigned(FCode1)) then
+    FCode1 := TAiXmlParam.Create(Source, 0);
   if not(Assigned(FParams)) then
-    FParams := TAIParams.Create(Source, 0);
+    FParams := TAiParams.Create(Source, 0);
   if not(Assigned(FParamsIn)) then
-    FParamsIn := TAIParams.Create(Source, 0);
+    FParamsIn := TAiParams.Create(Source, 0);
   if not(Assigned(FParamsOut)) then
-    FParamsOut := TAIParams.Create(Source, 0);
+    FParamsOut := TAiParams.Create(Source, 0);
   Result := 0;
 end;
 
-function TAiInterpretator20050915.Run: TError;
+function TAiInterpretatorObject.Run(): AError;
 begin
   {}
   Result := 1;
 end;
 
-function TAiInterpretator20050915.SetCode(Value: TProfXml): TError;
+function TAiInterpretatorObject.SetCode(Value: TProfXml): AError;
 begin
   FCode := Value;
   Result := 0;
 end;
 
-function TAiInterpretator20050915.SetParams(Value: TAIParams): TError;
+function TAiInterpretatorObject.SetCode1(Value: TAiXmlParam): AError;
+begin
+  FCode1 := Value;
+  Result := 0;
+end;
+
+function TAiInterpretatorObject.SetParams(Value: TAiParams): AError;
 begin
   FParams := Value;
   Result := 0;
 end;
 
-function TAiInterpretator20050915.SetParamsIn(Value: TAIParams): TError;
+function TAiInterpretatorObject.SetParamsIn(Value: TAiParams): AError;
 begin
   FParamsIn := Value;
   Result := 0;
 end;
 
-function TAiInterpretator20050915.SetParamsOut(Value: TAIParams): TError;
+function TAiInterpretatorObject.SetParamsOut(Value: TAiParams): AError;
 begin
   FParamsOut := Value;
   Result := 0;
 end;
 
-function TAiInterpretator20050915.SetSystem(Value: TAISystem): TError;
+function TAiInterpretatorObject.SetSystem(Value: TAiSystem): AError;
 begin
   FSystem := Value;
   Result := 0;

@@ -2,7 +2,7 @@
 @Abstract(Объект AI)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(25.09.2006)
-@LastMod(21.06.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 }
 unit AiObjectObj;
@@ -10,7 +10,7 @@ unit AiObjectObj;
 interface
 
 uses
-  AXml2007, AXmlObj,
+  {AXml2007,} AXmlObj,
   AiEventsObj, AiFrameObj, AiMethodsObj, AiNamedFrameObj, AiPropertyObj;
 
 type
@@ -25,6 +25,24 @@ type
     FMajorVersion: Integer;
     FMinorVersion: Integer;
     FRevisionVersion: Integer;
+  protected // --- from TAiObject2006 ---
+    {** События }
+    FEvents: TAiEvents;
+    {** Исключительные события }
+    FExceptions: TAiExceptions;
+    {** Методы, действия }
+    FMethods: TAiMethodsObject;
+      //** Свойства
+    FPropertys: TAiPropertys;
+      //** Свойства
+    FPropertys1: TAiPropertys2006;
+  public // --- from TAiObject2006 ---
+    function GetEvents(): TAiEvents;
+    function GetExceptions(): TAiExceptions;
+    function GetMethods(): TAiMethodsObject;
+    function GetPropertys(): TAiPropertys;
+    function GetPropertys1(): TAiPropertys2006;
+    function ToXml(Name: String): TProfXml;
   public
     property Author: WideString read FAuthor write FAuthor;
     property BuildVersion: Integer read FBuildVersion write FBuildVersion;
@@ -37,75 +55,41 @@ type
     property RevisionVersion: Integer read FRevisionVersion write FRevisionVersion;
   end;
 
-  TAiObject2006 = class(TAiFrameObject)
-  protected
-    {** События }
-    FEvents: TAiEvents;
-    {** Исключительные события }
-    FExceptions: TAiExceptions;
-    {** Методы, действия }
-    FMethods: TAiMethodsObject;
-  private
-    {** Свойства }
-    FPropertys: TAiPropertys2006;
-  public
-    function GetEvents(): TAiEvents;
-    function GetExceptions(): TAiExceptions;
-    function GetMethods(): TAiMethodsObject;
-    function GetPropertys(): TAiPropertys2006;
-    function ToXml(Name: String): TProfXmlNode1;
-  end;
-
-  TAiObject20050915 = class(TAiObject2006)
-  protected
-    {** Свойства }
-    FPropertys: TAiPropertys;
-  public
-    function GetPropertys(): TAiPropertys;
-    function ToXml(Name: String): TProfXml;
-  end;
-
-  TAiSystem = TAiObject20050915;
+  TAiSystem = TAiObject;
 
 implementation
 
-{ TAiObject20050915 }
+{ TAiObject }
 
-function TAiObject20050915.GetPropertys(): TAiPropertys;
-begin
-  Result := FPropertys;
-end;
-
-function TAiObject20050915.ToXml(Name: String): TProfXml;
-begin
-  Result := TProfXml.Create;
-end;
-
-{ TAiObject2006 }
-
-function TAiObject2006.GetEvents(): TAiEvents;
+function TAiObject.GetEvents(): TAiEvents;
 begin
   Result := FEvents;
 end;
 
-function TAiObject2006.GetExceptions: TAiExceptions;
+function TAiObject.GetExceptions: TAiExceptions;
 begin
   Result := FExceptions;
 end;
 
-function TAiObject2006.GetMethods(): TAiMethodsObject;
+function TAiObject.GetMethods(): TAiMethodsObject;
 begin
   Result := FMethods;
 end;
 
-function TAiObject2006.GetPropertys(): TAiPropertys2006;
+function TAiObject.GetPropertys(): TAiPropertys;
 begin
   Result := FPropertys;
 end;
 
-function TAiObject2006.ToXml(Name: String): TProfXmlNode1;
+function TAiObject.GetPropertys1(): TAiPropertys2006;
+begin
+  Result := FPropertys1;
+end;
+
+function TAiObject.ToXml(Name: String): TProfXml;
 begin
   //Result := TProfXmlNode1.Create;
+  //Result := TProfXml.Create;
   Result := nil;
 end;
 
