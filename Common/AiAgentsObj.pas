@@ -2,7 +2,7 @@
 @Abstract(Агенты)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(22.09.2005)
-@LastMod(28.06.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 }
 unit AiAgentsObj;
@@ -10,50 +10,63 @@ unit AiAgentsObj;
 interface
 
 uses
-  ABaseUtils2, AConfigObj, ATypes,
+  ABase, ABaseUtils2, AConfigObj, ATypes,
   AiAgentObj, AiBase, AiConfigUtils, AiFrameObj, AiTypes;
 
 type
   TAiRecAgent2005 = record
-    Id: TAI_Id;
-    Agent: TAiAgent2005;
+    Id: AId;
+    Agent: TAiAgentObject;
   end;
 
 type
     // Агенты
-  TAiAgents2006 = class(TAiFrameObject)
+  TAiAgents2006 = class //(TAiFrameObject)
+  protected // --- from TAiFrameObject ---
+      //** Класс конфигураций (deprecated)
+    FConfig: TConfig;
   protected
     FAgents: array of TAiRecAgent2005;
     FAgentsName: array of String;
   public
-    function AddAgent(Value: TAiAgent2005): Int32;
+    function AddAgent(Value: TAiAgentObject): Int32;
     function ConfigureLoad(Config: TConfig; Prefix: String): TError;
-    function ConfigureLoad1(): Boolean; override;
-    function ConfigureSave(Config: TConfig; Prefix: String): TError; override;
-    function ConfigureSave1(): Boolean; override;
+    function ConfigureLoad1(): Boolean; {override;}
+    function ConfigureSave(Config: TConfig; Prefix: String): TError; {override;}
+    function ConfigureSave1(): Boolean; {override;}
     function DeleteAgent(Index: Int32): TError;
-    procedure Free; override;
     function FreeAgent(Index: Int32): TError;
-    function GetAgent(Index: UInt32): TAiAgent2005;
-    function GetAgentById(Id: TAI_Id): TAiAgent2005;
+    function GetAgent(Index: UInt32): TAiAgentObject;
+    function GetAgentById(Id: AId): TAiAgentObject;
     function GetAgentName(Index: Int32): String;
     function GetCountAgents(): UInt32;
-    function SetAgentId(Index: UInt32; Value: TAI_Id): Boolean;
+    function SetAgentId(Index: UInt32; Value: AId): Boolean;
     function SetAgentName(Index: UInt32; Value: String): Boolean;
+  public
+    procedure Free; {override;}
   end;
 
   TAiAgents20050915 = TAiAgents2006;
 
     {Несколько связанных агентов}
-  TAiAgents20050526 = class(TAiAgent2005)
+  TAiAgents20050526 = class //(TAiAgentObject)
   private
-    FItems: array of TAiAgent2005;
+    FItems: array of TAiAgentObject;
   public
-    function AddAgent(Agent: TAiAgent2005): UInt32;
-    function GetAgent(Index: UInt32): TAiAgent2005;
+    function AddAgent(Agent: TAiAgentObject): UInt32;
+    function GetAgent(Index: UInt32): TAiAgentObject;
     function GetCountAgents: UInt32;
-    function Load: TError; override;
-    function Save: TError; override;
+  end;
+
+  TAiAgents_Rep = class //(TAiAgentObject)
+  private
+    FAgents: array of TAId;
+  public
+    function AddAgent(Agent: AId): AError;
+    function Clear(): AError; {override;}
+    function GetCountAgents: UInt32;
+  public
+    procedure Free; {override;}
   end;
 
   //TAiAgents = TAiAgents2006;
@@ -62,14 +75,14 @@ implementation
 
 { TAiAgents20050526 }
 
-function TAiAgents20050526.AddAgent(Agent: TAiAgent2005): UInt32;
+function TAiAgents20050526.AddAgent(Agent: TAiAgentObject): UInt32;
 begin
   Result := Length(FItems);
   SetLength(FItems, Result + 1);
   FItems[Result] := Agent;
 end;
 
-function TAiAgents20050526.GetAgent(Index: UInt32): TAiAgent2005;
+function TAiAgents20050526.GetAgent(Index: UInt32): TAiAgentObject;
 {var
   Source: AiSourceObj.TAiSource2005;}
 begin
@@ -89,21 +102,9 @@ begin
   Result := Length(FItems);
 end;
 
-function TAiAgents20050526.Load(): TError;
-begin
-  Result := inherited Load;
-  if Result <> 0 then Exit;
-end;
-
-function TAiAgents20050526.Save(): TError;
-begin
-  Result := inherited Save;
-  if Result <> 0 then Exit;
-end;
-
 { TAiAgents2006 }
 
-function TAiAgents2006.AddAgent(Value: TAiAgent2005): Int32;
+function TAiAgents2006.AddAgent(Value: TAiAgentObject): Int32;
 begin
   Result := Length(FAgents);
   SetLength(FAgents, Result + 1);
@@ -113,12 +114,12 @@ end;
 
 function TAiAgents2006.ConfigureLoad(Config: TConfig; Prefix: String): TError;
 var
-  Agent: TAiAgent2005;
+  Agent: TAiAgentObject;
   AName: String; {Префикс для чтения имени и Id агента из конфигураций}
   {B: Boolean;}
   Count: Int32;  {Колличество агентов из конфигураций}
   I: Int32;
-  Id: TAI_Id;    {Id агента из конфигураций}
+  Id: AId;    {Id агента из конфигураций}
   Name: String;  {Имя агента из конфигураций}
 begin
   Result := 1;
@@ -137,7 +138,7 @@ begin
       if Config.ReadParamValueByName(AName + 'Name', Name) then SetAgentName(I, Name);
       Continue;
     end;
-    Agent.ConfigureLoad(Config, Prefix + 'Agent' + cInt32ToStr(I));
+    //Agent.ConfigureLoad(Config, Prefix + 'Agent' + cInt32ToStr(I));
 
     {if Config.GetParamValueByNameAsBoolean(AName + 'Active', B) then Agent.SetActive(B);
     if Config.GetParamValueByNameAsBoolean(AName + 'Visible', B) then Agent.SetVisible(B);}
@@ -147,15 +148,15 @@ end;
 
 function TAiAgents2006.ConfigureLoad1(): Boolean;
 var
-  Agent: TAiAgent2005;
+  Agent: TAiAgentObject;
   AName: String; {Префикс для чтения имени и Id агента из конфигураций}
   {B: Boolean;}
   Count: Int32;  {Колличество агентов из конфигураций}
   I: Int32;
-  Id: TAI_Id;    {Id агента из конфигураций}
+  Id: AId;    {Id агента из конфигураций}
   Name: string;  {Имя агента из конфигураций}
 begin
-  Result := inherited ConfigureLoad1();
+  Result := Assigned(FConfig); //inherited ConfigureLoad1();
   if not(Result) then Exit;
   if not(Assigned(FConfig)) then Exit;
   if not(FConfig.ReadInt32('', 'AgentsCount', Count)) then Exit;
@@ -171,7 +172,7 @@ begin
       if FConfig.ReadString('', 'Name', Name) then SetAgentName(I, Name);
       Continue;
     end;
-    Agent.ConfigureLoad1();
+    //Agent.ConfigureLoad1();
 
     {if Config.GetParamValueByNameAsBoolean(AName + 'Active', B) then Agent.SetActive(B);
     if Config.GetParamValueByNameAsBoolean(AName + 'Visible', B) then Agent.SetVisible(B);}
@@ -184,13 +185,20 @@ var
   AName: String;
   I: Int32;
 begin
-  Result := inherited ConfigureSave(Config, Prefix);
-  if Result <> 0 then Exit;
+  if not(Assigned(FConfig)) then
+  begin
+    Result := -2;
+    Exit;
+  end;
+  Result := 0; //inherited ConfigureSave(Config, Prefix);
   Config.SetParamValueByNameAsInt32(Prefix + 'Count', Length(FAgents));
   for I := 0 to High(FAgents) do begin
     if Assigned(FAgents[I].Agent) then
-      FAgents[I].Agent.ConfigureSave(Config, Prefix + 'Agent' + cInt32ToStr(I))
-    else begin
+    begin
+      //FAgents[I].Agent.ConfigureSave(Config, Prefix + 'Agent' + cInt32ToStr(I))
+    end
+    else
+    begin
       AName := Prefix + 'Agent[' + cInt32ToStr(I) + ']';
       Config.SetParamValueByNameAsInt32(AName + '.Id', FAgents[I].Id);
       Config.SetParamValueByName(AName + '.Name', FAgentsName[I]);
@@ -203,7 +211,7 @@ var
   AName: String;
   I: Int32;
 begin
-  Result := inherited ConfigureSave1();
+  Result := Assigned(FConfig); //inherited ConfigureSave1();
   if not(Result) then Exit;
   FConfig.WriteInt32('', 'Count', Length(FAgents));
   for I := 0 to High(FAgents) do
@@ -254,7 +262,7 @@ begin
   Result := 0;
 end;
 
-function TAiAgents2006.GetAgent(Index: UInt32): TAiAgent2005;
+function TAiAgents2006.GetAgent(Index: UInt32): TAiAgentObject;
 begin
   if (Index >= UInt32(Length(FAgents))) then
     Result := nil
@@ -262,7 +270,7 @@ begin
     Result := FAgents[Index].Agent;
 end;
 
-function TAiAgents2006.GetAgentById(Id: TAI_Id): TAiAgent2005;
+function TAiAgents2006.GetAgentById(Id: AId): TAiAgentObject;
 var
   I: Int32;
 begin
@@ -293,7 +301,7 @@ begin
   Result := Length(FAgents);
 end;
 
-function TAiAgents2006.SetAgentId(Index: UInt32; Value: TAI_Id): Boolean;
+function TAiAgents2006.SetAgentId(Index: UInt32; Value: AId): Boolean;
 begin
   Result := False;
   if Index >= Length(FAgents) then Exit;
@@ -311,6 +319,30 @@ begin
     Result := True;
   end else
     FAgentsName[Index] := Value;
+end;
+
+{ TAiAgents_Rep }
+
+function TAiAgents_Rep.AddAgent(Agent: AId): AError;
+begin
+  Result := -1;
+end;
+
+function TAiAgents_Rep.Clear(): AError;
+begin
+  SetLength(FAgents, 0);
+  Result := 0;
+end;
+
+procedure TAiAgents_Rep.Free();
+begin
+  Clear();
+  inherited Free();
+end;
+
+function TAiAgents_Rep.GetCountAgents(): UInt32;
+begin
+  Result := Length(FAgents);
 end;
 
 end.

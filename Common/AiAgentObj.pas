@@ -2,7 +2,7 @@
 @Abstract(Агент в системе AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(13.11.2007)
-@LastMod(04.07.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 
 Агент - это отдельная программа или отдельный подпроцесс.
@@ -64,6 +64,7 @@ type
     //function GetJobCount(): Integer;
   public
     function GetActive(): Boolean;
+    function GetId(): AId;
     function GetName(): String;
     function GetProcess(): TAiProcessObject;
     function GetStatus(): TAiAgentStatus;
@@ -95,10 +96,6 @@ type
     //property JobCount: Integer read GetJobCount;
   end;
 
-  TAiAgent2005 = TAiAgentObject;
-  TAiAgent2006 = TAiAgentObject;
-  TAiAgent2007 = TAiAgentObject;
-
   //TAiAgent = TAiAgentObject;
   //TArAgent = TAiAgenObjectt
 
@@ -119,6 +116,11 @@ end;
 function TAiAgentObject.GetActive(): Boolean;
 begin
   Result := FActive;
+end;
+
+function TAiAgentObject.GetId(): AId;
+begin
+  Result := FId;
 end;
 
 {function TAiAgentObject.GetJobByIndex(Index: Integer): TARJob;

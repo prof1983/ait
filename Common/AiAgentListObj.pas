@@ -2,7 +2,7 @@
 @Abstract(AiAgentList)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(04.12.2007)
-@LastMod(18.05.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 }
 unit AiAgentListObj;
@@ -16,12 +16,12 @@ type
   TArAgentList = class
   private
       //** Зарегистрированные агенты
-    FItems: array of TAiAgent2007;
+    FItems: array of TAiAgentObject;
   protected
-    function GetAgentByIndex(Index: Integer): TAiAgent2007;
+    function GetAgentByIndex(Index: Integer): TAiAgentObject;
     function GetAgentCount(): Integer;
   public
-    property AgentByIndex[Index: Integer]: TAiAgent2007 read GetAgentByIndex;
+    property AgentByIndex[Index: Integer]: TAiAgentObject read GetAgentByIndex;
     property AgentCount: Integer read GetAgentCount;
   end;
 
@@ -31,7 +31,7 @@ implementation
 
 { TArAgentList }
 
-function TArAgentList.GetAgentByIndex(Index: Integer): TAiAgent2007;
+function TArAgentList.GetAgentByIndex(Index: Integer): TAiAgentObject;
 begin
   if (Index >= 0) and (Index < Length(FItems)) then
     Result := FItems[Index]
