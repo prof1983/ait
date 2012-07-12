@@ -2,7 +2,7 @@
 @Abstract(AiKbLocalObj)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(10.07.2012)
-@LastMod(10.07.2012)
+@LastMod(12.07.2012)
 @Version(0.5)
 }
 unit AiKbLocalObj;
@@ -20,14 +20,9 @@ type
     //FBaseLocal: TAIBaseLocal;
     //FMashineLocal: TAIMashineLocal;
     //FWorldLocal: TAIWorldLocal;
-    //procedure SetARLocal(Value: TAIARLocal);
-    //procedure SetMashineLocal(Value: TAIMashineLocal);
-    //procedure SetWorldLocal(Value: TAIWorldLocal);
   public
     function Initialize(): AError; override;
-    function LoadFromFileN(FileName, Path: String): AError;
-    function SaveToFileN(FileName, Path: String{; Mode: TAIKBLocalSaveMode = SaveAll}): AError;
-    function Clear(): AError;
+    function Clear(): AError; override;
     //function GetARLocal: TAIARLocal;
     //function GetBaseLocal: TAIBaseLocal;
     //function GetMashineLocal: TAIMashineLocal;
@@ -40,8 +35,8 @@ implementation
 
 function TAiKbLocal.Clear(): AError;
 begin
-  {Result := inherited Clear;
-  if Result <> 0 then Exit;}
+  Result := inherited Clear();
+  if Result <> 0 then Exit;
   {FARLocal := nil;
   FBaseLocal := nil;
   FMashineLocal := nil;
@@ -138,29 +133,5 @@ begin
   FWorldLocal.Initialize;
   *)
 end;
-
-function TAiKbLocal.LoadFromFileN(FileName, Path: String): AError;
-begin
-  {Result := inherited LoadFromFileN(FileName, Path);}
-  Result := 1000;
-end;
-
-function TAiKbLocal.SaveToFileN(FileName, Path: String{; Mode: TAIKBLocalSaveMode = SaveAll}): AError;
-begin
-  {Result := inherited SaveToFileN(FileName, Path);}
-  Result := 1000;
-end;
-
-{procedure TAiKbLocal.SetARLocal(Value: TAIARLocal);
-begin
-end;}
-
-{procedure TAiKbLocal.SetMashineLocal(Value: TAIMashineLocal);
-begin
-end;}
-
-{procedure TAiKbLocal.SetWorldLocal(Value: TAIWorldLocal);
-begin
-end;}
 
 end.

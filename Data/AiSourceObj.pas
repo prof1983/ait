@@ -88,7 +88,7 @@ type
     function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
     function Initialize(): AError; virtual;
     function LoadFromFile(F: TFileProfKB; Path: String): TError;
-    function LoadFromFileN(Path, FileName: String): Boolean;
+    function LoadFromFileN(Path, FileName: String): Boolean; virtual;
     function LoadFromFileXml(FileName: String): TError;
     function LoadFromRecF64(Rec: TAiFreimRecF64): WordBool;
       //** Создает новый фрейм
