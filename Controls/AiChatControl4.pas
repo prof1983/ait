@@ -1,9 +1,14 @@
 ﻿{**
 @Abstract(Пример программы чат-бот: Окно для агента чат-бот)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(14.04.2005)
-@LastMod(26.04.2012)
-@Version(0.5)
+@LastMod(13.07.2012)
+
+Uses
+  @link ABase
+  @link ANodeImpl
+  @link AclMessageImpl
+  @link AiMemoControl
 }
 unit AiChatControl4;
 
@@ -11,7 +16,7 @@ interface
 
 uses
   SysUtils,
-  ANodeImpl,
+  ABase, ANodeImpl,
   AclMessageImpl, AiMemoControl;
 
 type // Пример программы чат-бот: Окно для агента чат-бот
@@ -20,7 +25,7 @@ type // Пример программы чат-бот: Окно для аген�
     // Процедура реакции на ввод текта. Как пример - простейший движек чат бота.
     function SendMessage(const Msg: WideString): Integer; override; safecall;
   public
-    function AddMessage(const Msg: WideString): Integer; override; safecall;
+    function AddMessage(const Msg: WideString): AInt; override;
   end;
 
 implementation
