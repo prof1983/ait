@@ -2,7 +2,7 @@
 @Abstract(Агент в системе AR)
 @Author(Prof1983 prof1983@ya.ru)
 @Created(13.11.2007)
-@LastMod(12.07.2012)
+@LastMod(13.07.2012)
 @Version(0.5)
 
 Агент - это отдельная программа или отдельный подпроцесс.
@@ -81,6 +81,10 @@ type
     function SetTitle(Value: String): AError;
     function Show(): AError; virtual;
   public
+      //** Финализирует
+    function Finalize(): AError; virtual;
+      //** Производит инициализацию
+    function Initialize(): AError; virtual;
       //** Приостанавливает выполнение агента
     function Pause(): AError; virtual;
       //** Запуск выполнения агента
@@ -107,6 +111,11 @@ constructor TAiAgentObject.Create({Source: AiSourceObject; Id: AId = 0});
 begin
   inherited Create({Source, Id});
   FStatus := AgentStatusStoped;
+end;
+
+function TAiAgentObject.Finalize(): AError;
+begin
+  Result := 0;
 end;
 
 procedure TAiAgentObject.Free();
@@ -171,6 +180,11 @@ begin
   FActive := True;
   FFormMain := AFormMain;
   Result := 0; //inherited Init(APath, ALog, AConfig, APrefix);
+end;
+
+function TAiAgentObject.Initialize(): AError;
+begin
+  Result := 0;
 end;
 
 function TAiAgentObject.Pause(): AError;
