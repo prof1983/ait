@@ -1,9 +1,8 @@
 {**
 @Abstract(TaskTreeView)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(21.10.2005)
-@LastMod(04.05.2012)
-@Version(0.5)
+@LastMod(13.07.2012)
 }
 unit AiTasksTreeView;
 
@@ -14,7 +13,7 @@ uses
   AiTaskListImpl;
 
 type
-  TTasksTreeView = class(TProfTreeView2006)
+  TTasksTreeView = class(TProfTreeView)
   private
     FTasks: TAiTaskList;
   public
