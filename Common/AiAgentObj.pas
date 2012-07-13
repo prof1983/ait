@@ -1,9 +1,8 @@
 ﻿{**
 @Abstract(Агент в системе AR)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(13.11.2007)
 @LastMod(13.07.2012)
-@Version(0.5)
 
 Агент - это отдельная программа или отдельный подпроцесс.
 Агент - это служба/демон.
@@ -28,8 +27,10 @@ type
   TAiAgentObject = class //(TAiNamedFrameObject)
   protected
     FId: AId;
+    FInitialized: ABoolean;
     // Работы (задания) агента
     //FJobs: array of TARJob;
+    FOnAddToLog: TAddToLogProc;
     // Онтология агента
     //FOntology: TAROntology;
   protected
@@ -74,6 +75,8 @@ type
     procedure SetName(Value: String);
     procedure SetVisible(Value: Boolean);
   public
+    function AddToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
+        const StrMsg: WideString): AInt; virtual;
     function Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; AFormMain: TForm): AError; virtual;
     function Run(): AError; virtual;
     function SetProcess(Value: TAiProcessObject): AError;
@@ -98,6 +101,7 @@ type
     property Id: AId read FId write FId;
     //property JobByIndex[Index: Integer]: TARJob read GetJobByIndex;
     //property JobCount: Integer read GetJobCount;
+    property OnAddToLog: TAddToLogProc read FOnAddToLog write FOnAddToLog;
   end;
 
   //TAiAgent = TAiAgentObject;
@@ -107,6 +111,15 @@ implementation
 
 { TAiAgentObject }
 
+function TAiAgentObject.AddToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
+  const StrMsg: WideString): AInt;
+begin
+  if Assigned(FOnAddToLog) then
+    Result := FOnAddToLog(LogGroup, LogType, StrMsg)
+  else
+    Result := 0;
+end;
+
 constructor TAiAgentObject.Create({Source: AiSourceObject; Id: AId = 0});
 begin
   inherited Create({Source, Id});
@@ -115,6 +128,7 @@ end;
 
 function TAiAgentObject.Finalize(): AError;
 begin
+  FInitialized := False;
   Result := 0;
 end;
 
@@ -184,6 +198,7 @@ end;
 
 function TAiAgentObject.Initialize(): AError;
 begin
+  FInitialized := True;
   Result := 0;
 end;
 

@@ -1,9 +1,8 @@
 ﻿{**
 @Abstract(Главная форма для агента чат-бот)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(24.03.2005)
-@LastMod(11.07.2012)
-@Version(0.5)
+@LastMod(13.07.2012)
 }
 unit AiChatForm;
 
@@ -39,7 +38,7 @@ type
     procedure Free; override;
   end;
 
-  TFormChat = class(TProfForm)
+  TFormChat = class(TAFormObject)
     ButtonInfo: TButton;
     ButtonOk: TButton;
     EditIn: TEdit;
@@ -75,7 +74,7 @@ begin
 
   MemoDialog.Lines.Add('You: '+EditIn.Text);
   FEventNewText.Run(Self, '<Text>'+EditIn.Text+'</Text>');
-  AddToLog(lgGeneral, ltInformation, 'Добавлено новое сообщение "%s"', [EditIn.Text]);
+  AddToLog(lgGeneral, ltInformation, Format('Добавлено новое сообщение "%s"', [EditIn.Text]));
   EditIn.Text := '';
 end;
 

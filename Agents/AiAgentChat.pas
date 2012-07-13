@@ -1,9 +1,8 @@
 ﻿{**
 @Abstract(AI Агент чат-бот)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(04.09.2005)
-@LastMod(12.07.2012)
-@Version(0.5)
+@LastMod(13.07.2012)
 }
 unit AiAgentChat;
 
@@ -43,15 +42,15 @@ type
     function Finalize(): TProfError; override;
     function GetAgentWordId(): TAId;
     function GetForm(): TFormChat;
-    function GetFormAi(): TAiFormChat;
+    //function GetFormAi(): TAiFormChat;
     function GetModuleTextId(): AId;
     function Hide(): WordBool; virtual;
     function Initialize(): TProfError; override;
-    function Load(): AError; override;
-    function Save(): AError; override;
+    function Load(): AError; //override;
+    function Save(): AError; //override;
     function Show(): AError; virtual;
   public
-    constructor Create(Source: AiSourceObject2005; Id: AId);
+    constructor Create();
     procedure Free(); override;
   public
     property Form: TFormChat read FForm write SetFormChat;
@@ -71,13 +70,13 @@ begin
     AddToLog(lgGeneral, ltError, Format(stNotAssignedForm, [ClassName]));
 end;
 
-constructor TAiAgentChat.Create(Source: AiSourceObject2005; Id: AId);
+constructor TAiAgentChat.Create();
 {var
   Typ: TAIType;}
 begin
-  inherited Create(Source, Id);
-  Self.Name := 'Chat';
-  Self.Title := 'AgentChat';
+  inherited Create();
+  Self.FName := 'Chat';
+  Self.FTitle := 'AgentChat';
   (*FAgentWordId := 0;
   FFormId := 0;
   FModuleTextId := 0;
@@ -143,7 +142,7 @@ begin
   Result := FForm;
 end;
 
-function TAiAgentChat.GetFormAi(): TAiFormChat;
+{function TAiAgentChat.GetFormAi(): TAiFormChat;
 var
   Source: TAiSource2005;
 begin
@@ -155,7 +154,7 @@ begin
       FFormId := Source.NewFreim(0);
   end;
   Result := FForm;
-end;
+end;}
 
 function TAiAgentChat.GetModuleTextId(): AId;
 begin
@@ -271,7 +270,8 @@ begin
     {Xml.GetParamValueByNameAsUInt64('FormId', FFormId);}
     //Xml.ReadAIId('ModuleTextId', FModuleTextId);
   end;*)
-  Result := inherited Load;
+
+  {Result := inherited Load;
   if Result <> 0 then Exit;
   Data := GetData;
   Data.ReadId(Id);
@@ -279,7 +279,8 @@ begin
   Data.ReadId(Id);
   FFormId := Id;
   Data.ReadId(Id);
-  FModuleTextId := Id;
+  FModuleTextId := Id;}
+  Result := 0;
 end;
 
 function TAiAgentChat.Save(): AError;
@@ -291,7 +292,7 @@ var
   Id: AId;
   Data: TAiDataObject;
 begin
-  Result := inherited Save();
+  //Result := inherited Save();
   (*if not(Result) then Exit;
   Data := GetData;
   if Data.GetType = dtStream then begin
@@ -307,14 +308,15 @@ begin
     {Xml.SetParamValueByNameAsUInt64('FormId', FFormId);}
     //Xml.ReadAIId('ModuleTextId', FModuleTextId);
   end;*)
-  if Result <> 0 then Exit;
+  {if Result <> 0 then Exit;
   Data := GetData;
   Id := FAgentWordId;
   Data.WriteId(Id);
   Id := FFormId;
   Data.WriteId(Id);
   Id := FModuleTextId;
-  Data.WriteId(Id);
+  Data.WriteId(Id);}
+  Result := 0;
 end;
 
 procedure TAiAgentChat.SetFormChat(Value: TFormChat);
