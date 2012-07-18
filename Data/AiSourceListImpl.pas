@@ -1,9 +1,8 @@
 ﻿{**
 @Abstract(Список источников фреймов)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(16.04.2007)
-@LastMod(10.07.2012)
-@Version(0.5)
+@LastMod(18.07.2012)
 }
 unit AiSourceListImpl;
 
@@ -13,7 +12,7 @@ uses
   AiBase, AiSourceIntf;
 
 type //** @abstract(Список источников фреймов)
-  TAISourceList3 = class(TInterfacedObject, IAISourceList3)
+  TAiSourceList = class(TInterfacedObject, IAiSourceList)
   private
     FSources: array of IAiSource2;
   private
@@ -28,28 +27,30 @@ type //** @abstract(Список источников фреймов)
     property SourceByName[const Name: WideString]: IAiSource2 read GetSourceByName;
   end;
 
+  TAiSourceList3 = TAiSourceList;
+
 implementation
 
-{ TAISourceList3 }
+{ TAiSourceList }
 
-function TAISourceList3.GetCount(): Integer;
+function TAiSourceList.GetCount(): Integer;
 begin
   Result := Length(FSources);
 end;
 
-function TAISourceList3.GetSourceByID(ID: TAIID): IAiSource2;
+function TAiSourceList.GetSourceByID(ID: TAIID): IAiSource2;
 begin
   Result := nil;
   // ...
 end;
 
-function TAISourceList3.GetSourceByIndex(Index: Integer): IAiSource2;
+function TAiSourceList.GetSourceByIndex(Index: Integer): IAiSource2;
 begin
   Result := nil;
   // ...
 end;
 
-function TAISourceList3.GetSourceByName(const Name: WideString): IAiSource2;
+function TAiSourceList.GetSourceByName(const Name: WideString): IAiSource2;
 begin
   Result := nil;
   // ...

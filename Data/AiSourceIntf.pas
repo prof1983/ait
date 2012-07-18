@@ -1,11 +1,12 @@
 {**
 @Abstract(AiSource interface)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(27.06.2012)
-@LastMod(27.06.2012)
-@Version(0.5)
+@LastMod(18.07.2012)
 }
 unit AiSourceIntf;
+
+// TODO: Intergate IAiSource2 to IAiSource1
 
 interface
 
@@ -50,7 +51,7 @@ type
     property NextFreeFrameId: AId read Get_NextFreeFrameId;
   end;
 
-  IAiSourceList3 = interface
+  IAiSourceList = interface
     function GetSourceById(Id: AId): IAiSource2; safecall;
     function GetSourceByIndex(Index: Integer): IAiSource2; safecall;
     function GetSourceByName(const Name: WideString): IAiSource2; safecall;

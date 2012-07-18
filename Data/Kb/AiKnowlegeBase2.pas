@@ -1,9 +1,8 @@
 ﻿{**
 @Abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(14.02.2006)
-@LastMod(10.07.2012)
-@Version(0.5)
+@LastMod(18.07.2012)
 
 Может работать с несколькими источниками знаний. (пока не реализовано)
 Обмен даными осуществляется сообщениями на языке AQL.
@@ -20,7 +19,7 @@ uses
 type //** @abstract(База Знаний. Работает с фреймами в виде отдельных файлов N.xml)
   TAIKnowlegeBase = class(TAISource)
   protected
-    FSources: TAISourceList3;
+    FSources: TAiSourceList;
       //** Путь для расположения файлов N.xml
     FFilePath: WideString;
     function GetFreimStringById(Id: TAiId): WideString;
@@ -37,9 +36,11 @@ type //** @abstract(База Знаний. Работает с фреймами 
     function Open(): AError; override; safecall;
     ///function OpenCreate: Boolean;
   public
+    constructor Create();
+  public
     property FilePath: WideString read FFilePath write FFilePath;
     property FreimStringByID[ID: TAIID]: WideString read GetFreimStringByID;
-    property Sources: TAISourceList3 read FSources;
+    property Sources: TAiSourceList read FSources;
   end;
 
 implementation
@@ -61,6 +62,12 @@ begin
 //  if not(Assigned(FF)) then Exit;
 //  Result := FF.GetHeaderKB.CountF;
 end;}
+
+constructor TAIKnowlegeBase.Create();
+begin
+  inherited Create();
+  FSources := TAiSourceList.Create();
+end;
 
 function TAIKnowlegeBase.GetFreimStringByID(ID: TAIID): WideString;
 var
