@@ -1,8 +1,8 @@
 ﻿{**
 @Abstract(Выполняемый код на языке AR)
-@Author(Prof1983 prof1983@ya.ru)
+@Author(Prof1983 <prof1983@ya.ru>)
 @Created(31.10.2006)
-@LastMod(29.06.2012)
+@LastMod(18.07.2012)
 @Version(0.5)
 }
 unit AiCode2;
@@ -11,7 +11,7 @@ interface
 
 uses
   Classes, XmlIntf,
-  ATypes, AXml3,
+  ATypes, AXmlDocumentImpl,
   AiData2, AiDataIntf, AiFrameImpl, AiFrameIntf, AiIntf, AiTypes;
 
 type //** @abstract(Выполняемый код на языке AR)
