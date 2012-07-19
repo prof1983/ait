@@ -1,13 +1,8 @@
 ﻿{**
-@Abstract(Коллекция)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(07.05.2007)
-@LastMod(25.06.2012)
-@Version(0.5)
-
-History:
-0.0.5.5 - 14.07.2011 - [+] ACollection, AIterator, Collection_GetCount, Collection_GetIterator
-0.0.1.1 - 01.06.2007 - IAICollection.Iterator
+@abstract Коллекция
+@author Prof1983 <prof1983@ya.ru>
+@created 07.05.2007
+@lastmod 19.07.2012
 }
 unit AiCollection;
 
@@ -56,9 +51,6 @@ type
 //    function ReadBool16(): Boolean;
 //    function ReadBool32(): Boolean;
   end;}
-
-type
-  AIterator = IAIterator;
 
 function Collection_GetCount(Collection: ACollection): AInteger;
 // Создает и возвращает итератор
