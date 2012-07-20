@@ -1,8 +1,8 @@
 ﻿{**
-@abstract Коллекция
+@abstract Collection
 @author Prof1983 <prof1983@ya.ru>
 @created 07.05.2007
-@lastmod 19.07.2012
+@lastmod 20.07.2012
 }
 unit AiCollection;
 
@@ -65,7 +65,7 @@ end;
 
 function Collection_GetIterator(Collection: ACollection): AIterator;
 begin
-  Result := IACollection(Collection).GetIterator();
+  Result := 0; //TACollection(Collection).GetIterator();
 end;
 
 end.

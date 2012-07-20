@@ -1,15 +1,8 @@
 ﻿{**
-@Abstract(Базовые типы сущностей)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(23.05.2007)
-@LastMod(12.07.2012)
-@Version(0.5)
-
-История версий:
-0.0.2.2 - 04.07.2007
-0.0.2.1 - 10.06.2007 - Добавил AISlot, AIFrame, AIID
-0.0.2.0 - 31.05.2007 - Добавил AIType
-0.0.1.1 - 25.05.2007 - Добавил AILocalSettings
+@abstract Базовые типы сущностей
+@author Prof1983 <prof1983@ya.ru>
+@created 23.05.2007
+@lastmod 20.07.2012
 }
 unit AiConsts;
 
@@ -151,11 +144,11 @@ const // Типы передаваемых сообщений - имя верх�
 
 const
     // See DIR_CONFIGS
-  AiConfigDir = '..\Configs\';
+  AiConfigDir = '..\Config';
     // See DIR_DATA
-  AiDataDir = '..\Data\';
+  AiDataDir = '..\Data';
     // See DIR_LOGS
-  AiLogDir = '..\Logs\';
+  AiLogDir = '..\Log';
 
 implementation
 
