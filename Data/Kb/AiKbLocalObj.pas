@@ -1,9 +1,8 @@
 {**
-@Abstract(AiKbLocalObj)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(10.07.2012)
-@LastMod(12.07.2012)
-@Version(0.5)
+@Abstract AiKbLocalObj
+@Author Prof1983 <prof1983@ya.ru>
+@Created 10.07.2012
+@LastMod 09.08.2012
 }
 unit AiKbLocalObj;
 
@@ -16,14 +15,12 @@ uses
 type
   TAiKbLocal = class(TAIKBMemory)
   private
-    //FARLocal: TAIARLocal;
     //FBaseLocal: TAIBaseLocal;
     //FMashineLocal: TAIMashineLocal;
     //FWorldLocal: TAIWorldLocal;
   public
     function Initialize(): AError; override;
     function Clear(): AError; override;
-    //function GetARLocal: TAIARLocal;
     //function GetBaseLocal: TAIBaseLocal;
     //function GetMashineLocal: TAIMashineLocal;
     //function GetWorldLocal: TAIWorldLocal;
@@ -42,11 +39,6 @@ begin
   FMashineLocal := nil;
   FWorldLocal := nil;}
 end;
-
-{function TAiKbLocal.GetARLocal: TAIARLocal;
-begin
-  Result := FARLocal;
-end;}
 
 {function TAiKbLocal.GetBaseLocal: TAIBaseLocal;
 begin
