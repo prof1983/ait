@@ -1,9 +1,8 @@
 {**
-@Abstract(AiFrame functions)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(06.06.2012)
-@LastMod(19.06.2012)
-@Version(0.5)
+@Abstract AiFrame functions
+@Author Prof1983 <prof1983@ya.ru>
+@Created 06.06.2012
+@LastMod 09.08.2012
 
 Recovered
 }

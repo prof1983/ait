@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(AiConnects)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(12.03.2012)
-@LastMod(09.06.2012)
-@Version(0.5)
+@Abstract AiConnects
+@Author Prof1983 <prof1983@ya.ru>
+@Created 12.03.2012
+@LastMod 09.08.2012
 }
 unit AiConnectsObj;
 
@@ -82,8 +81,6 @@ type //** Связи
   end;
 
   TAiConnects = TAiConnectsObject;
-  //TAIConnects2 = TAiConnectsObject; (From AiBaseObj.pas)
-  //TAI_Connects = TAiConnectsObject; (From AiBaseObj2006.pas)
 
 implementation
 

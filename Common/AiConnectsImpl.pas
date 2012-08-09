@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(AiConnects)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(12.03.2012)
-@LastMod(20.06.2012)
-@Version(0.5)
+@Abstract AiConnects
+@Author Prof1983 <prof1983@ya.ru>
+@Created 12.03.2012
+@LastMod 09.08.2012
 }
 unit AiConnectsImpl;
 
@@ -62,9 +61,6 @@ type //** Связи
     //** Идетификаторы связвных фреймов
     property Connects[Index: Integer]: TAIID read GetConnect write SetConnect;
   end;
-
-type //** Связи (From AiBaseObj.pas)
-  TAIConnects2 = TAIConnects;
 
 implementation
 

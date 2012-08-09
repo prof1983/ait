@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовые типы для AI)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(26.04.2006)
-@LastMod(27.06.2012)
-@Version(0.5)
+@Abstract Базовые типы для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 26.04.2006
+@LastMod 09.08.2012
 
 Prototype: org.framerd.OID
 Каждый фрейм является некоторой сущностью.
@@ -14,17 +13,12 @@ interface
 
 uses
   SysUtils, XmlIntf,
-  ABase, AConsts2, AEntityImpl, AIteratorIntf, ANodeIntf, {AObjectImpl,} ATypes, AXmlUtils,
+  ABase, AConsts2, AEntityImpl, AIteratorIntf, ANodeIntf, ATypes, AXmlUtils,
   AiBase, AiBaseTypes, AiCollectionImpl, AiConnectsIntf, AiDataIntf, AiEntityImpl,
   AiFrameIntf, AiFramePoolIntf, AiFrameUtils, AiSlotIntf, AiSlotImpl, AiTypes;
 
-  {Classes, ComObj, Forms, SysUtils,
-  AConsts2, ANodeIntf, AObjectImpl, ATypes,
-  AiBase, AiBaseTypes, AiConnectsIntf, AiDataIntf, AiFrameIntf, AiFramePoolIntf,
-  AiSlotIntf, AiSourceIntf;}
-
 type //** Фрейм
-  TAIFrame = class(TAiEntity{TProfObject}, IAiFrame)
+  TAiFrame = class(TAiEntity, IAiFrame)
   protected
       //** Данные - объект источника. Если источника нет - локальный объект
     FData: IAiData2;
@@ -78,8 +72,13 @@ type //** Фрейм
     procedure Set_FrameID(Value: TAIID); safecall;
     //** Установить тип
     procedure Set_FrameType(Value: TAIID); safecall;
+    procedure Set_Source2(const Value: AiSource2); safecall;
     //** Установить источник. Только если не инициализирован.
     procedure Set_Pool(const Value: IAIFramePool); safecall;
+  protected // IAiFreim
+    function Get_FreimName(): WideString; safecall; deprecated 'Use Get_FrameName()';
+    function Get_FreimType(): TAIID; safecall; deprecated 'Use Get_FrameType()';
+    procedure Set_FreimType(Value: TAiId); safecall; deprecated 'Use Set_FrameType()';
   public // IAiFrame
       {** Добавляет слот }
     function AddSlot(Slot: IAiSlot): Integer;
@@ -312,21 +311,18 @@ type //** Фрейм
 
   TAiFrame2007 = class(TAIFrame)
   protected
-    function Get_Connects(): IAIConnects; safecall;
-      //** Возвращает объект работы с данными
-    function Get_Data(): IAIData; virtual; safecall;
-    function Get_DateTimeCreate(): TDateTime; safecall;
-    function Get_FrameId(): TAiId; safecall;
-    function Get_FrameName(): WideString; safecall;
-    function Get_FrameType(): TAiId; safecall;
-    function Get_FreimName(): WideString; safecall;
-    function Get_FreimType(): TAIID; safecall;
-    function Get_Source2(): AiSource2{IAiSource2}; safecall;
-    procedure Set_DateTimeCreate(Value: TDateTime); safecall;
-    procedure Set_FrameId(Value: TAiId); safecall;
-    procedure Set_FrameType(Value: TAiId); safecall;
-    procedure Set_FreimType(Value: TAiId); safecall;
-    procedure Set_Source2(const Value: AiSource2); safecall;
+      //** Слоты
+    FSlots: array of IAiSlot;
+  protected
+    procedure SetSlotValue(SlotName: WideString; SlotValue: Variant);
+  protected
+      //** Возвращает слот по индексу
+    function GetSlotByIndex(Index: Integer): IAiSlot;
+      //** Возвращает слот по имени
+    function GetSlotByName(Name: WideString): IAiSlot;
+      //** Возвращает количество слотов
+    function GetSlotCount(): Integer;
+    function GetSlotValueAsString(SlotName: WideString): WideString;
   public
       //** Возвращает объект работы со связями
     function GetConnects(): IAiConnects;
@@ -340,12 +336,12 @@ type //** Фрейм
     function GetFrameID(): TAIID; safecall;
       //** Возвращает тип фрейма
     function GetFreimType(): TAId;
-    {**
-      Return frame identifier
-    }
+      //** Return frame identifier
     function GetId(): AId;
       //** Инициализирован?
     function GetInitialized(): Boolean;
+      //** Возвращает источник
+    function GetSource(): AiSource2;
       //** Возвращает фрейм в виде XML строки
     function GetXml(): WideString; virtual;
       //** Задать дату и время создания фрейма
@@ -354,12 +350,16 @@ type //** Фрейм
     procedure SetFrameType(Value: TAIID); safecall;
       //** Установить Id. Если не инициализирован.
     procedure SetFrameID(Value: TAIID); safecall;
-      // Установить тип
+      //** Установить тип
     procedure SetFreimType(Value: TAId);
+      //** Установить Id. Если не инициализирован.
+    procedure SetId(Value: TAId);
       //** Инициализировать/Финализировать
     procedure SetInitialized(Value: Boolean);
     procedure SetXml(Value: WideString);
   public
+      //** Добавить слот
+    function AddSlot(Slot: IAiSlot): Integer;
       //** Очистить объект
     function Clear(): WordBool; virtual; safecall;
       //** Загрузить конфигурации
@@ -368,10 +368,10 @@ type //** Фрейм
     //function ConfigureSave: WordBool; override;
       //** Финализировать. Разорвать связь объекта с источником.
     function Finalize(): TProfError; override;
-      //** Освободить
-    procedure Free(); override;
       //** Произвести инициализацию. Установить связь с источником.
     function Initialize(): TProfError; override;
+      //** Новый слот
+    function NewSlot(Name: WideString): IAiSlot;
       //** Зарегистрировать тип фрейма в источнике
     function Regist(): Boolean; virtual; safecall;
   public
@@ -379,22 +379,21 @@ type //** Фрейм
     function Load(): Boolean; virtual;
       //** Загрузить из файла
     function LoadFromFile(const AFileName: WideString): WordBool; virtual; safecall;
-    {**
-      Load frame data from xml
-    }
+    function LoadFromRecF64(Rec: TAIFreimRecF64): WordBool; safecall;
+      //** Load frame data from xml
     function LoadFromXml(Xml: IXmlNode): WordBool; virtual;
       //** Сохранить в источник
     function Save(): WordBool; virtual;
       //** Сохранить в файл
     function SaveToFile(const AFileName: WideString): WordBool; virtual; safecall;
-    {**
-      Save frame data to FrameRec64
-    }
+      //** Save frame data to FrameRec64
     function SaveToRecF64(var Rec: TAIFreimRecF64): Boolean;
       //** Сохранить в XML
     function SaveToXml(Xml: IXmlNode): WordBool; virtual;
   public
     constructor Create(ASource: AiSource2 = 0; AId: TAId = 0);
+      //** Освободить
+    procedure Free(); override;
   public
       //** Связи
     property Connects: IAiConnects read GetConnects;
@@ -412,84 +411,39 @@ type //** Фрейм
     property FreimId: TAId read FId write FId;
       //** Frame type
     property FreimType: TAId read GetFreimType write SetFreimType;
+      //** Слот по индексу
+    property SlotByIndex[Index: Integer]: IAiSlot read GetSlotByIndex;
+      //** Слот по имени
+    property SlotByName[Name: WideString]: IAiSlot read GetSlotByName;
+      //** Количество слотов
+    property SlotCount: Integer read GetSlotCount;
       //** Фрейм в виде XML строки
     property Xml: WideString read GetXml write SetXml;
   end;
 
-  TAiFrame20070620 = class(TAiFrame2007)
-  private
-    // Слоты
-    FSlots: array of IAiSlot;
-    // Возвращает слот по индексу
-    function GetSlotByIndex(Index: Integer): IAiSlot;
-    // Возвращает слот по имени
-    function GetSlotByName(Name: WideString): IAiSlot;
-    // Возвращает количество слотов
-    function GetSlotCount(): Integer;
-  protected
-    function GetSlotValueAsString(SlotName: WideString): WideString;
-    procedure SetSlotValue(SlotName: WideString; SlotValue: Variant);
-  public
-    // Добавить слот
-    function AddSlot(Slot: IAiSlot): Integer;
-    // Сохранить в БЗ
-    function Commit(): Boolean; override;
-    // Новый слот
-    function NewSlot(Name: WideString): IAiSlot;
-    // Загрузить из БЗ
-    function Update(): Boolean; override;
-  public
-    // Слот по индексу
-    property SlotByIndex[Index: Integer]: IAiSlot read GetSlotByIndex;
-    // Слот по имени
-    property SlotByName[Name: WideString]: IAiSlot read GetSlotByName;
-    // Количество слотов
-    property SlotCount: Integer read GetSlotCount;
-  end;
+  TAiFrame20070620 = TAiFrame2007;
 
 type // Фрейм
-  TAIFreim = class(TAiFrame20070620, IAIFreim)
-  protected // IAiFrame
-    function Get_Data(): IAiData; virtual; safecall;
-    function Get_DateTimeCreate(): TDateTime; safecall;
-    function Get_FrameId(): TAiId; safecall;
-    function Get_FrameName(): WideString; safecall;
-    function Get_FrameType(): TAiId; safecall;
-    function Get_Source2(): AiSource2; safecall;
-    procedure Set_FrameId(Value: TAiId); safecall;
-    procedure Set_FrameType(Value: TAiId); safecall;
+  TAIFreim = class(TAiFrame2007, IAIFreim)
   protected // IAiFreim
     function Get_Connects(): IAiConnects; safecall;
     function Get_FreimName(): WideString; safecall;
     function Get_FreimType(): TAId; safecall;
     function Get_Source1(): AiSource1; safecall;
-    procedure Set_DateTimeCreate(Value: TDateTime); safecall;
     procedure Set_FreimType(Value: TAId); safecall;
     procedure Set_Source1(const Value: AiSource1); safecall;
-  protected
-    procedure SetDateTimeCreate(Value: TDateTime);
-    procedure SetId(Value: TAId);             // Установить Id. Если не инициализирован.
-    procedure SetInitialized(Value: Boolean); // Инициализировать/Финализировать
-    procedure SetXml(Value: WideString);
-  public // IAIFreim
-    function LoadFromRecF64(Rec: TAIFreimRecF64): WordBool; safecall;
-  public
-    function GetInitialized(): Boolean;       // Инициализирован?
-      // Возвращает источник
-    function GetSource(): AiSource2;
-    function GetXml(): WideString; virtual;
   end;
 
 implementation
 
-{ TAIFrame }
+{ TAiFrame }
 
-function TAIFrame.AddSlot(Slot: IAiSlot): Integer;
+function TAiFrame.AddSlot(Slot: IAiSlot): Integer;
 begin
   Result := 0;
 end;
 
-function TAIFrame.Clear(): WordBool;
+function TAiFrame.Clear(): WordBool;
 begin
 //  if Assigned(FConnects) then FreeAndNil(FConnects);
   if Assigned(FData) then
@@ -505,13 +459,13 @@ begin
   Result := True;
 end;
 
-constructor TAIFrame.Create();
+constructor TAiFrame.Create();
 begin
   inherited Create();
   DoCreate();
 end;
 
-procedure TAIFrame.DoCreate();
+procedure TAiFrame.DoCreate();
 begin
 //  FConnects := nil;
   FData := nil;
@@ -522,11 +476,11 @@ begin
   FFrameType := 0;
 end;
 
-procedure TAIFrame.DoDestroy();
+procedure TAiFrame.DoDestroy();
 begin
 end;
 
-function TAIFrame.Finalize(): TProfError;
+function TAiFrame.Finalize(): TProfError;
 begin
   if not(Assigned(FPool)) then
   begin
@@ -546,14 +500,14 @@ begin
   Result := 0;
 end;
 
-procedure TAIFrame.Free();
+procedure TAiFrame.Free();
 begin
   {Finalize;}
   DoDestroy();
   inherited Free();
 end;
 
-function TAIFrame.GetConfig(): IProfNode;
+function TAiFrame.GetConfig(): IProfNode;
 begin
   Result := nil;
 end;
@@ -564,17 +518,17 @@ begin
     if (FInitialized) and Assigned(FSource) then
       FConnects := FSource.GetFreimConnects(FId);
     if not(Assigned(FConnects)) then
-      FConnects := TAI_Connects.Create;
+      FConnects := TAiConnects.Create();
   end;}
   Result := FConnects;
 end;*)
 
-function TAIFrame.GetDateTimeCreate(): TDateTime;
+function TAiFrame.GetDateTimeCreate(): TDateTime;
 begin
   Result := FDateCreate;
 end;
 
-function TAIFrame.GetInitialized(): Boolean;
+function TAiFrame.GetInitialized(): Boolean;
 begin
   Result := FInitialized;
 end;
@@ -584,12 +538,12 @@ begin
   Result := FSource;
 end;
 
-function TAIFrame.GetValue(): IAIValue;
+function TAiFrame.GetValue(): IAIValue;
 begin
   Result := nil;
 end;
 
-function TAIFrame.GetXml(): WideString;
+function TAiFrame.GetXml(): WideString;
 {var
   Xml: TProfXmlNode;}
 begin
@@ -618,12 +572,12 @@ begin
   Result := True;}
 end;
 
-function TAIFrame.Get_Connects(): IAIConnects;
+function TAiFrame.Get_Connects(): IAiConnects;
 begin
-  Result := nil{FConnects};
+  Result := FConnects;
 end;
 
-function TAIFrame.Get_Data(): IAiData2;
+function TAiFrame.Get_Data(): IAiData2;
 begin
   {if not(Assigned(FData)) then
   begin
@@ -643,49 +597,62 @@ begin
   Result := FData;
 end;
 
-function TAIFrame.Get_DateTimeCreate(): TDateTime;
+function TAiFrame.Get_DateTimeCreate(): TDateTime;
 begin
   Result := FDateCreate;
 end;
 
-function TAIFrame.Get_FrameID(): TAIID;
+function TAiFrame.Get_FrameId(): AId;
 begin
-  Result := FID;
+  Result := Self.FId;
 end;
 
-function TAIFrame.Get_FrameName(): WideString;
+function TAiFrame.Get_FrameName(): WideString;
 begin
-  Result := IntToStr(FId);
+  if (Self.FName = '') then
+    Result := IntToStr(Self.FId)
+  else
+    Result := Self.FName;
 end;
 
-function TAIFrame.Get_FrameType(): TAIID;
+function TAiFrame.Get_FrameType(): AId;
 begin
-  Result := FFrameType;
+  Result := Self.FFrameType;
 end;
 
-function TAIFrame.Get_IsReadOnly(): WordBool;
+function TAiFrame.Get_FreimName(): WideString;
+begin
+  Result := Get_FrameName();
+end;
+
+function TAiFrame.Get_FreimType(): AId;
+begin
+  Result := Get_FrameType();
+end;
+
+function TAiFrame.Get_IsReadOnly(): WordBool;
 begin
   Result := False;
 end;
 
-function TAIFrame.Get_Pool(): IAIFramePool;
+function TAiFrame.Get_Pool(): IAIFramePool;
 begin
   Result := FPool;
 end;
 
-function TAIFrame.Get_Source2(): AiSource2;
+function TAiFrame.Get_Source2(): AiSource2;
 begin
-  Result := 0;
+  Result := FSource;
 end;
 
-function TAIFrame.Initialize(): TProfError;
+function TAiFrame.Initialize(): TProfError;
 begin
   Result := 0;
   if FInitialized then Exit;
   Result := Load();
 end;
 
-function TAIFrame.Load(): TAIError;
+function TAiFrame.Load(): TAIError;
 begin
   Result := LoadFromData(Get_Data());
 
@@ -696,17 +663,17 @@ begin
   //FFreimType := FSource.GetFreimType(FId);
 end;
 
-function TAIFrame.LoadFromData(Data: IAIData): TAIError;
+function TAiFrame.LoadFromData(Data: IAIData): TAIError;
 begin
   Result := -1;
 end;
 
-function TAIFrame.LoadFromFile(const AFileName: WideString): TProfError;
+function TAiFrame.LoadFromFile(const AFileName: WideString): TProfError;
 begin
   Result := -1; //False;
 end;
 
-function TAIFrame.NewSlot(Name: WideString): IAiSlot;
+function TAiFrame.NewSlot(Name: WideString): IAiSlot;
 begin
   Result := nil;
 end;
@@ -724,13 +691,13 @@ begin
   Result := True;
 end;}
 
-function TAIFrame.Regist(): Boolean;
+function TAiFrame.Regist(): Boolean;
 begin
   Result := False;
   AddToLog(lgGeneral, ltError, stNotOverrideA);
 end;
 
-function TAIFrame.Save(): TAIError;
+function TAiFrame.Save(): TAIError;
 begin
   {if (FInitialized) and Assigned(FSource) and (FId > 0) then begin
     FSource.SetFreimType(FId, FFreimType);
@@ -739,12 +706,12 @@ begin
   Result := -1;
 end;
 
-function TAIFrame.SaveToFile(const AFileName: WideString): WordBool;
+function TAiFrame.SaveToFile(const AFileName: WideString): WordBool;
 begin
   Result := False;
 end;
 
-function TAIFrame.SaveToXml(Xml: IXmlNode): WordBool;
+function TAiFrame.SaveToXml(Xml: IXmlNode): WordBool;
 {var
   con: TAiConnects;}
 begin
@@ -760,7 +727,7 @@ begin
   Result := False;
 end;
 
-procedure TAIFrame.SetDateTimeCreate(Value: TDateTime);
+procedure TAiFrame.SetDateTimeCreate(Value: TDateTime);
 begin
   if FInitialized then Exit;
   FDateCreate := Value;
@@ -772,12 +739,12 @@ begin
   FSource := Value;
 end;
 
-procedure TAIFrame.SetValue(Value: IAIValue);
+procedure TAiFrame.SetValue(Value: IAIValue);
 begin
   // ...
 end;
 
-procedure TAIFrame.SetXml(Value: WideString);
+procedure TAiFrame.SetXml(Value: WideString);
 //var
 //  Xml: IProfXmlNode;
 begin
@@ -787,24 +754,34 @@ begin
   Xml.Free();}
 end;
 
-procedure TAIFrame.Set_DateTimeCreate(Value: TDateTime);
+procedure TAiFrame.Set_DateTimeCreate(Value: TDateTime);
 begin
   FDateCreate := Value;
 end;
 
-procedure TAIFrame.Set_FrameID(Value: TAIID);
+procedure TAiFrame.Set_FrameId(Value: AId);
 begin
   if FInitialized then Exit;
-  FID := Value;
+  Self.FId := Value;
 end;
 
-procedure TAIFrame.Set_FrameType(Value: TAIID);
+procedure TAiFrame.Set_FrameType(Value: AId);
 begin
   if FInitialized then Exit;
-  FFrameType := Value;
+  Self.FFrameType := Value;
 end;
 
-procedure TAIFrame.Set_Pool(const Value: IAIFramePool);
+procedure TAiFrame.Set_FreimType(Value: TAiId);
+begin
+  FFrameType := Set_FrameType(Value);
+end;
+
+procedure TAiFrame.Set_Source2(const Value: AiSource2);
+begin
+  FSource := Value;
+end;
+
+procedure TAiFrame.Set_Pool(const Value: IAIFramePool);
 begin
   FPool := Value;
 end;
@@ -1134,6 +1111,13 @@ end;
 
 { TAiFrame2007 }
 
+function TAiFrame2007.AddSlot(Slot: IAiSlot): Integer;
+begin
+  Result := Length(FSlots);
+  SetLength(FSlots, Result + 1);
+  FSlots[Result] := Slot;
+end;
+
 function TAiFrame2007.Clear: WordBool;
 begin
   if Assigned(FConnects) then FreeAndNil(FConnects);
@@ -1186,7 +1170,7 @@ begin
     if (FInitialized) and Assigned(FSource) then
       FConnects := FSource.GetFreimConnects(FId);
     if not(Assigned(FConnects)) then
-      FConnects := TAI_Connects.Create;
+      FConnects := TAiConnects.Create();
   end;}
   Result := FConnects;
 end;
@@ -1232,6 +1216,50 @@ begin
   Result := FFrameType;
 end;
 
+function TAiFrame2007.GetSlotByIndex(Index: Integer): IAiSlot;
+begin
+  if (Index >= 0) and (Index < Length(FSlots)) then
+    Result := FSlots[Index]
+  else
+    Result := nil;
+end;
+
+function TAiFrame2007.GetSlotByName(Name: WideString): IAiSlot;
+var
+  i: Integer;
+begin
+  Result := nil;
+  for i := 0 to High(FSlots) do
+    if TAISlot(FSlots[i]).Name = Name then
+    begin
+      Result := FSlots[i];
+      Exit;
+    end;
+end;
+
+function TAiFrame2007.GetSlotCount(): Integer;
+begin
+  Result := Length(FSlots);
+end;
+
+function TAiFrame2007.GetSlotValueAsString(SlotName: WideString): WideString;
+var
+  Slot: IAiSlot;
+begin
+  Result := '';
+  slot := GetSlotByName(SlotName);
+  if Assigned(slot) then
+  try
+    Result := slot.Value;
+  except
+  end;
+end;
+
+function TAiFrame2007.GetSource(): AiSource2;
+begin
+  Result := FSource;
+end;
+
 function TAiFrame2007.GetXml(): WideString;
 {var
   Xml: TProfXmlNode;}
@@ -1261,66 +1289,6 @@ begin
   Result := True;}
 end;
 
-function TAiFrame2007.Get_Connects(): IAIConnects;
-begin
-  Result := FConnects;
-end;
-
-function TAiFrame2007.Get_Data(): IAIData;
-begin
-  {if not(Assigned(FData)) then
-  begin
-    if (FInitialized) and Assigned(FSource) then
-    try
-      FData := FSource.GetFreimData(FId);
-    except
-      FData := nil;
-    end;
-    if not(Assigned(FData)) then
-    try
-      FData := TAI_Data.Create(Self, dtNone, AddToLog);
-    except
-      FData := nil;
-    end;
-  end;}
-  Result := FData;
-end;
-
-function TAiFrame2007.Get_DateTimeCreate(): TDateTime;
-begin
-  Result := FDateCreate;
-end;
-
-function TAiFrame2007.Get_FrameId: TAiId;
-begin
-  Result := Self.FID;
-end;
-
-function TAiFrame2007.Get_FrameName: WideString;
-begin
-  Result := Self.FName;
-end;
-
-function TAiFrame2007.Get_FrameType(): TAiId;
-begin
-  Result := Self.FFrameType;
-end;
-
-function TAiFrame2007.Get_FreimName(): WideString;
-begin
-  Result := IntToStr(FID);
-end;
-
-function TAiFrame2007.Get_FreimType(): TAiId;
-begin
-  Result := FFrameType;
-end;
-
-function TAiFrame2007.Get_Source2(): AiSource2;
-begin
-  Result := FSource;
-end;
-
 function TAiFrame2007.Initialize(): TProfError;
 begin
   Result := 0;
@@ -1344,17 +1312,27 @@ begin
   Result := False;
 end;
 
-{function TAIFreim.LoadFromRecF64(Rec: TAIFreimRecF64): WordBool;
+function TAiFrame2007.LoadFromRecF64(Rec: TAIFreimRecF64): WordBool;
 begin
   FId := Rec.Id;
-  FFreimType := Rec.Typ;
-  FDateTimeCreate := Rec.DTCreate;
+  FFrameType := Rec.Typ;
+  FDateCreate := Rec.DTCreate;
   Result := True;
-end;}
+end;
 
 function TAiFrame2007.LoadFromXml(Xml: IXmlNode): WordBool;
 begin
   Result := (AiFrameUtils.AiFrame_LoadFromXml(Self, Xml) >= 0);
+end;
+
+function TAiFrame2007.NewSlot(Name: WideString): IAiSlot;
+var
+  slot: TAISlot;
+begin
+  slot := TAISlot.Create();
+  slot.Name := Name;
+  AddSlot(slot);
+  Result := slot;
 end;
 
 function TAiFrame2007.Regist(): Boolean;
@@ -1401,6 +1379,11 @@ begin
   FDateCreate := Value;
 end;
 
+procedure TAiFrame2007.SetId(Value: TAId);
+begin
+  SetFrameId(Value);
+end;
+
 procedure TAiFrame2007.SetInitialized(Value: Boolean);
 begin
   FInitialized := Value;
@@ -1424,6 +1407,19 @@ begin
   FFrameType := Value;
 end;
 
+procedure TAiFrame2007.SetSlotValue(SlotName: WideString; SlotValue: Variant);
+var
+  Slot: IAiSlot;
+begin
+  try
+    slot := GetSlotByName(SlotName);
+    if not(Assigned(slot)) then
+      slot := NewSlot(SlotName);
+    slot.Value := SlotValue;
+  except
+  end;
+end;
+
 procedure TAiFrame2007.SetXml(Value: WideString);
 //var
 //  Xml: IProfXmlNode;
@@ -1432,31 +1428,6 @@ begin
   Xml.Xml := Value;
   LoadFromXml(Xml);
   Xml.Free();}
-end;
-
-procedure TAiFrame2007.Set_DateTimeCreate(Value: TDateTime);
-begin
-  FDateCreate := Value;
-end;
-
-procedure TAiFrame2007.Set_FrameId(Value: TAiId);
-begin
-  Self.FId := Value;
-end;
-
-procedure TAiFrame2007.Set_FrameType(Value: TAiId);
-begin
-  Self.FFrameType := Value;
-end;
-
-procedure TAiFrame2007.Set_FreimType(Value: TAiId);
-begin
-  FFrameType := Value;
-end;
-
-procedure TAiFrame2007.Set_Source2(const Value: AiSource2);
-begin
-  FSource := Value;
 end;
 
 {function TAIFreim.AddToLog(AGroup: TLogGroupMessage; AType: TLogTypeMessage; const AStrMsg: string; AParams: array of const): Boolean;
@@ -1479,156 +1450,11 @@ begin
   end;
 end;}
 
-{ TAiFrame20070620 }
-
-function TAiFrame20070620.AddSlot(Slot: IAiSlot): Integer;
-begin
-  Result := Length(FSlots);
-  SetLength(FSlots, Result + 1);
-  FSlots[Result] := Slot;
-end;
-
-function TAiFrame20070620.Commit: Boolean;
-begin
-  Result := inherited Commit;
-end;
-
-function TAiFrame20070620.GetSlotByIndex(Index: Integer): IAiSlot;
-begin
-  if (Index >= 0) and (Index < Length(FSlots)) then
-    Result := FSlots[Index]
-  else
-    Result := nil;
-end;
-
-function TAiFrame20070620.GetSlotByName(Name: WideString): IAiSlot;
-var
-  i: Integer;
-begin
-  Result := nil;
-  for i := 0 to High(FSlots) do
-    if TAISlot(FSlots[i]).Name = Name then
-    begin
-      Result := FSlots[i];
-      Exit;
-    end;
-end;
-
-function TAiFrame20070620.GetSlotCount(): Integer;
-begin
-  Result := Length(FSlots);
-end;
-
-function TAiFrame20070620.GetSlotValueAsString(SlotName: WideString): WideString;
-var
-  Slot: IAiSlot;
-begin
-  Result := '';
-  slot := GetSlotByName(SlotName);
-  if Assigned(slot) then
-  try
-    Result := slot.Value;
-  except
-  end;
-end;
-
-function TAiFrame20070620.NewSlot(Name: WideString): IAiSlot;
-var
-  slot: TAISlot;
-begin
-  slot := TAISlot.Create();
-  slot.Name := Name;
-  AddSlot(slot);
-  Result := slot;
-end;
-
-procedure TAiFrame20070620.SetSlotValue(SlotName: WideString; SlotValue: Variant);
-var
-  Slot: IAiSlot;
-begin
-  try
-    slot := GetSlotByName(SlotName);
-    if not(Assigned(slot)) then
-      slot := NewSlot(SlotName);
-    slot.Value := SlotValue;
-  except
-  end;
-end;
-
-function TAiFrame20070620.Update(): Boolean;
-begin
-  Result := inherited Update();
-end;
-
 { TAiFreim }
-
-function TAIFreim.GetInitialized(): Boolean;
-begin
-  Result := FInitialized;
-end;
-
-function TAIFreim.GetSource(): AiSource2;
-begin
-  Result := FSource;
-end;
-
-function TAIFreim.GetXml(): WideString;
-{var
-  Xml: TProfXmlNode;}
-begin
-  (*Result := '<Freim>'+#13#10+
-    '  <Id>'+cInt64ToStr(FId)+'</Id>'+#13#10+
-    '  <Type>'+cInt32ToStr(FType)+'</Type>'+#13#10+
-    '  <DateTimeCreate>'+cDateTimeToStr(FDateTimeCreate)+'</DateTimeCreate>'+#13#10+
-    {FConnects.Xml+#13#10+
-    FData.Xml+#13#10+}
-    '</Freim>';*)
-
-  {Result := '';
-  Xml := TProfXmlNode.Create(nil);
-  if not(SaveToXml(Xml)) then Exit;
-  Result := Xml.Xml;
-  Xml.Free;}
-
-  {Result := False;
-  if not(Assigned(Xml)) then Exit;
-  GetConnects.SaveToXml(Xml.GetNodeByName('Connects'));
-  Node := Xml.GetNodeByName('Data');
-  GetData.SaveToXml(Node);
-  Xml.WriteString('DateTimeCreate', DateTimeToStr(FDateTimeCreate));
-  Xml.WriteString('Id', IntToStr(FId));
-  Xml.WriteString('Type', IntToStr(FFreimType));
-  Result := True;}
-end;
 
 function TAIFreim.Get_Connects(): IAiConnects;
 begin
   Result := FConnects;
-end;
-
-function TAIFreim.Get_Data(): IAiData;
-begin
-  Result := FData;
-end;
-
-function TAIFreim.Get_DateTimeCreate: TDateTime;
-begin
-  Result := FDateCreate;
-end;
-
-function TAIFreim.Get_FrameId(): TAiId;
-begin
-  Result := Self.FId;
-end;
-
-function TAIFreim.Get_FrameName(): WideString;
-begin
-  Result := Self.FName;
-end;
-
-function TAIFreim.Get_FrameType(): TAiId;
-begin
-  Result := Self.FFrameType;
 end;
 
 function TAIFreim.Get_FreimName: WideString;
@@ -1644,61 +1470,6 @@ end;
 function TAIFreim.Get_Source1(): AiSource1;
 begin
   Result := FSource;
-end;
-
-function TAIFreim.Get_Source2(): AiSource2;
-begin
-  Result := FSource;
-end;
-
-function TAIFreim.LoadFromRecF64(Rec: TAIFreimRecF64): WordBool;
-begin
-  FId := Rec.Id;
-  FFrameType := Rec.Typ;
-  FDateCreate := Rec.DTCreate;
-  Result := True;
-end;
-
-procedure TAIFreim.SetDateTimeCreate(Value: TDateTime);
-begin
-  if FInitialized then Exit;
-  FDateCreate := Value;
-end;
-
-procedure TAIFreim.SetId(Value: TAId);
-begin
-  if FInitialized then Exit;
-  FId := Value;
-end;
-
-procedure TAIFreim.SetInitialized(Value: Boolean);
-begin
-  FInitialized := Value;
-end;
-
-procedure TAIFreim.SetXml(Value: WideString);
-{var
-  Xml: IProfXmlNode;}
-begin
-  {Xml := TProfXmlNode.Create(nil, nil, nil);
-  Xml.Xml := Value;
-  LoadFromXml(Xml);
-  Xml.Free();}
-end;
-
-procedure TAIFreim.Set_DateTimeCreate(Value: TDateTime);
-begin
-  FDateCreate := Value;
-end;
-
-procedure TAIFreim.Set_FrameId(Value: TAiId);
-begin
-  Self.FId := Value;
-end;
-
-procedure TAIFreim.Set_FrameType(Value: TAiId);
-begin
-  Self.FFrameType := Value;
 end;
 
 procedure TAIFreim.Set_FreimType(Value: TAId);

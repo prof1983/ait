@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовый класс для источника)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(22.09.2005)
-@LastMod(12.07.2012)
-@Version(0.5)
+@Abstract Базовый класс для источника
+@Author Prof1983 <prof1983@ya.ru>
+@Created 22.09.2005
+@LastMod 09.08.2012
 }
 unit AiSourceObj;
 
@@ -87,7 +86,7 @@ type
       // Произвести инициализацию с установкой параметров
     function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
     function Initialize(): AError; virtual;
-    function LoadFromFile(F: TFileProfKB; Path: String): TError;
+    function LoadFromFile(F: TFileProfKB; Path: String): TError; deprecated 'Make function';
     function LoadFromFileN(Path, FileName: String): Boolean; virtual;
     function LoadFromFileXml(FileName: String): TError;
     function LoadFromRecF64(Rec: TAiFreimRecF64): WordBool;
