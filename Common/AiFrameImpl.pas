@@ -397,8 +397,6 @@ type //** Фрейм
   public
       //** Связи
     property Connects: IAiConnects read GetConnects;
-      //** Данные
-    property Data: IAIData read {GetData}Get_Data;
       //** Дата и время создания фрейма
     property DateTimeCreate: TDateTime read GetDateTimeCreate write SetDateTimeCreate;
       //** ID фрейма
@@ -773,7 +771,7 @@ end;
 
 procedure TAiFrame.Set_FreimType(Value: TAiId);
 begin
-  FFrameType := Set_FrameType(Value);
+  Set_FrameType(Value);
 end;
 
 procedure TAiFrame.Set_Source2(const Value: AiSource2);
