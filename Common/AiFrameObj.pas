@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовые типы для AI)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(26.04.2006)
-@LastMod(12.07.2012)
-@Version(0.5)
+@Abstract Базовые типы для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 26.04.2006
+@LastMod 09.08.2012
 
 Prototype: org.framerd.OID
 Каждый фрейм является некоторой сущностью.
@@ -71,7 +70,7 @@ type //** Фрейм
       //** Пул (Источник)
     FPool: AiPool;
       //** Источник
-    FSource: AiSourceObject2005;
+    FSource: AiSourceObject;
       //** Версия фрейма
     FVersion: TAiVersion;
   protected
@@ -161,7 +160,7 @@ type //** Фрейм
           @return(frame identifier) }
     function GetHandle(): AInt32;
       //** Возвращает источник
-    function GetSource(): AiSourceObject2005;
+    function GetSource(): AiSourceObject;
       {** Get frame type (from TAiFrame2004)
           @return(frame type) }
     function GetTyp(): AInt32;
@@ -222,7 +221,7 @@ type //** Фрейм
     function ToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
         const StrMsg: string; Params: array of const): Boolean;
   public
-    constructor Create(Source: AiSourceObject2005 = 0; Id: TAId = 0);
+    constructor Create(Source: AiSourceObject = 0; Id: TAId = 0);
   public
     property ConnectCount: AInt32 read GetConnectCount;
     property Connects: TAiConnectsObject read GetConnects;
@@ -347,7 +346,7 @@ begin
   Result := 0;
 end;
 
-constructor TAiFrameObject.Create(Source: AiSourceObject2005; Id: TAId);
+constructor TAiFrameObject.Create(Source: AiSourceObject; Id: TAId);
 begin
   inherited Create;
   FConnects := nil;
@@ -474,7 +473,7 @@ begin
   Result := 0;
 end;
 
-function TAiFrameObject.GetSource(): AiSourceObject2005;
+function TAiFrameObject.GetSource(): AiSourceObject;
 begin
   Result := FSource;
 end;

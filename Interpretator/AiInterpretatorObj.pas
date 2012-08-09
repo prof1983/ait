@@ -1,9 +1,8 @@
 {**
-@Abstract(AiInterpretator)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(11.07.2012)
-@LastMod(12.07.2012)
-@Version(0.5)
+@Abstract AiInterpretator
+@Author Prof1983 <prof1983@ya.ru>
+@Created 11.07.2012
+@LastMod 09.08.2012
 }
 unit AiInterpretatorObj;
 
@@ -92,7 +91,7 @@ end;
 
 function TAiInterpretatorObject.Initialize(): AError;
 var
-  Source: AiSourceObject2005;
+  Source: AiSourceObject;
 begin
   Source := GetSource;
   if not(Assigned(FCode)) then

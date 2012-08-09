@@ -1,9 +1,8 @@
 {**
-@Abstract(AiTask)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(07.06.2012)
-@LastMod(09.06.2012)
-@Version(0.5)
+@Abstract AiTask
+@Author Prof1983 <prof1983@ya.ru>
+@Created 07.06.2012
+@LastMod 09.08.2012
 }
 unit AiTaskObj;
 
@@ -102,12 +101,12 @@ end;
 
 function TAiTaskObject.Initialize(): TError;
 var
-  Source: TAiSourceObject2005;
+  Source: TAiSourceObject;
 begin
   Result := inherited Initialize;
   if not(Assigned(FMethods)) then
   begin
-    Source := TObject(GetSource) as TAiSourceObject2005;
+    Source := TObject(GetSource) as TAiSourceObject;
     FMethods := TAiMethodsObject.Create(Source.GetId(), 0);
     if Assigned(Source) then
       {Source.NewFreim(FMethods);}

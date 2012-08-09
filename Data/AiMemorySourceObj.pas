@@ -47,9 +47,6 @@ type
     procedure Free(); override;
   end;
 
-  // БЗ в памяти (тип 2)
-  TAiSourceMemory2 = TAiMemorySourceObject;
-
 implementation
 
 { TAiMemorySourceObject }
@@ -311,7 +308,7 @@ function TAiMemorySourceObject.SetFreim2(Id: AId; Freim: TAiFrameObject): TError
 var
   F2: TAiFrameObject;
   I: UInt32;
-  Source: AiSourceObject2005;
+  Source: AiSourceObject;
 begin
   {Result := inherited SetFreim(Id, Freim);}
   {if Result <> 0 then Exit;}

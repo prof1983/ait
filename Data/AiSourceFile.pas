@@ -1,11 +1,8 @@
 ﻿{**
-@Abstract(Источник)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(14.02.2006)
-@LastMod(09.06.2012)
-@Version(0.5)
-
-0.0.0.1 - 14.02.2006 - From Prof_AI_Class
+@Abstract Источник
+@Author Prof1983 <prof1983@ya.ru>
+@Created 14.02.2006
+@LastMod 09.08.2012
 }
 unit AiSourceFile;
 
@@ -51,9 +48,7 @@ type {258}
     constructor Create(const FileName, Path: string);
   end;
 
-  TAiSourceFile = TAiSourceFileObject;
-  TAiSourceFile20050915 = TAiSourceFileObject;
-  TAISourceFileCashe = TAiSourceFileObject;
+  //TAiSourceFile = TAiSourceFileObject;
 
 implementation
 

@@ -16,7 +16,7 @@ uses
 type
   TAiRecSource = record
     Id: TAId;
-    Source: AiSourceObject2005;
+    Source: AiSourceObject;
   end;
 
 type
@@ -80,7 +80,7 @@ type
     function GetName(): string;
     function GetNextFreeFreimId(): TAId; virtual;
     function GetOpened(): Boolean;
-    function GetParent(Index: UInt32): AiSourceObject2005;
+    function GetParent(Index: UInt32): AiSourceObject;
     function GetParentId(Index: UInt32): TAId;
     function GetParentObj(Index: UInt32): TAiSourceObject;
       // Произвести инициализацию с установкой параметров
@@ -128,7 +128,7 @@ type
   end;
 
   // Recovered
-  TAiSource2004 = class
+  TAiSource2004 = class(TAiSourceObject)
   public
     function Count(): AInt32;
     function CountFreim_Get(): AInt;
@@ -145,7 +145,6 @@ type
 
   TAiSource = TAiSourceObject;
   TAiSource2005 = TAiSourceObject;
-  TAiSourceObject2005 = TAiSourceObject;
 
 const // Сообщения -------------------------------------------------------------
   stCheckFreimsStart  = 'Проверка базовых фреймов в БЗ';
@@ -498,7 +497,7 @@ end;
 
 function TAiSourceObject.GetId(): AiSourceObject;
 begin
-  Result := AiSourceObject2005(Self);
+  Result := AiSourceObject(Self);
 end;
 
 function TAiSourceObject.GetItemID(Index: Integer): TAId;
@@ -527,7 +526,7 @@ begin
   Result := FName;
 end;}
 
-function TAiSourceObject.GetParent(Index: UInt32): AiSourceObject2005;
+function TAiSourceObject.GetParent(Index: UInt32): AiSourceObject;
 begin
   if (Index >= UInt32(Length(FParents))) then
   begin

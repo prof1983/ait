@@ -1,8 +1,8 @@
 ﻿{**
-@Abstract(Главная форма для агента чат-бот)
-@Author(Prof1983 <prof1983@ya.ru>)
-@Created(24.03.2005)
-@LastMod(13.07.2012)
+@Abstract Главная форма для агента чат-бот
+@Author Prof1983 <prof1983@ya.ru>
+@Created 24.03.2005
+@LastMod 09.08.2012
 }
 unit AiChatForm;
 
@@ -34,7 +34,7 @@ type
     function GetOutput: String;
     function SetInput(Value: String): TError;
   public
-    constructor Create(Source: AiSourceObject2005; Id: AId = 0);
+    constructor Create(Source: AiSourceObject; Id: AId = 0);
     procedure Free; override;
   end;
 
@@ -104,7 +104,7 @@ end;
 
 { TAiFormChat }
 
-constructor TAiFormChat.Create(Source: AiSourceObject2005; Id: AId = 0);
+constructor TAiFormChat.Create(Source: AiSourceObject; Id: AId = 0);
 begin
   inherited Create(Source, Id);
   {FDialog := TListString.Create;

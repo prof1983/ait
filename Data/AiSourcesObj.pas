@@ -1,12 +1,8 @@
 ﻿{**
-@Abstract(Источники)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(22.09.2005)
-@LastMod(08.06.2012)
-@Version(0.5)
-
-0.0.0.2 - 07.01.2006 - Coments
-0.0.0.1 - 22.09.2005
+@Abstract Источники
+@Author Prof1983 <prof1983@ya.ru>
+@Created 22.09.2005
+@LastMod 09.08.2012
 }
 unit AiSourcesObj;
 
@@ -18,7 +14,7 @@ uses
 
 type
   {** Источники }
-  TAiSources2006 = class(TAiSourceObject2005)
+  TAiSources2006 = class(TAiSourceObject)
   private
     FSources: array of TAiRecSource;
   public
@@ -38,21 +34,21 @@ type
   private
     FSources: array of TAiRecSource;
   public
-    function AddSource(Value: AiSourceObject2005): AInt32;
+    function AddSource(Value: AiSourceObject): AInt32;
     function Clear(): TError; override;
     function DeleteSource(Index: Int32): TError;
     procedure Free(); override;
     function FreeSource(Index: Int32): TError;
     function GetCountFreims(): UInt64; override;
     function GetCountSources(): UInt32;
-    function GetSource(Index: UInt32): TAiSourceObject2005;
+    function GetSource(Index: UInt32): TAiSourceObject;
   end;
 
 implementation
 
 { TAiSources20050915 }
 
-function TAiSources20050915.AddSource(Value: AiSourceObject2005): Int32;
+function TAiSources20050915.AddSource(Value: AiSourceObject): Int32;
 begin
   Result := -1;
   if (Value = 0) then Exit;
@@ -68,7 +64,7 @@ var
 begin
   for I := 0 to High(FSources) do
     if Assigned(TObject(FSources[I].Source)) then
-      (TObject(FSources[I].Source) as TAiSourceObject2005).Free();
+      (TObject(FSources[I].Source) as TAiSourceObject).Free();
   SetLength(FSources, 0);
   Result := inherited Clear;
 end;
@@ -80,7 +76,7 @@ begin
   Result := 1;
   if (Index < 0) or (Index >= Length(FSources)) then Exit;
   if Assigned(TObject(FSources[Index].Source)) then
-    (TObject(FSources[Index].Source) as TAiSourceObject2005).Free();
+    (TObject(FSources[Index].Source) as TAiSourceObject).Free();
   for I := Index to High(FSources) - 1 do FSources[I] := FSources[I + 1];
   SetLength(FSources, High(FSources));
   Result := 0;
@@ -98,7 +94,7 @@ begin
   if (Index < 0) or (Index >= Length(FSources)) then Exit;
   if Assigned(TObject(FSources[Index].Source)) then
   begin
-    (TObject(FSources[Index].Source) as TAiSourceObject2005).Free();
+    (TObject(FSources[Index].Source) as TAiSourceObject).Free();
     FSources[Index].Source := 0;
   end;
   Result := 0;
@@ -112,7 +108,7 @@ begin
   for I := 0 to High(FSources) do
   begin
     if Assigned(TObject(FSources[I].Source)) then
-      Result := Result + (TObject(FSources[I].Source) as TAiSourceObject2005).GetCountFreims();
+      Result := Result + (TObject(FSources[I].Source) as TAiSourceObject).GetCountFreims();
   end;
 end;
 
@@ -121,12 +117,12 @@ begin
   Result := Length(FSources);
 end;
 
-function TAiSources20050915.GetSource(Index: UInt32): TAiSourceObject2005;
+function TAiSources20050915.GetSource(Index: UInt32): TAiSourceObject;
 begin
   if (Index >= UInt32(Length(FSources))) then
     Result := nil
   else
-    Result := TObject(FSources[Index].Source) as TAiSourceObject2005;
+    Result := TObject(FSources[Index].Source) as TAiSourceObject;
 end;
 
 { TAiSources2006 }

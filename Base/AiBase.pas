@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовые константы и типы для ИР)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(19.03.2008)
-@LastMod(09.06.2012)
-@Version(0.5)
+@Abstract Базовые константы и типы для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 19.03.2008
+@LastMod 09.08.2012
 }
 unit AiBase;
 
@@ -15,8 +14,8 @@ uses
 const
   AMajorVersion = 0;
   AMinorVersion = 0;
-  AReleaseVersion = 5;
-  AVersionStr = '0.0.5';
+  AReleaseVersion = 6;
+  AVersionStr = '0.0.6';
 
 type
   {**
@@ -43,9 +42,7 @@ type
   AiSource1 = type AInt; // IAiSource1
   AiSource2 = type AInt; // IAiSource2
   AiSourceObject = type Integer; // TAiSourceObject
-  // TODO: Delete
-  AiSourceObject2005 = type Integer; // TAiSource2005
-  AiSource2005 = AiSourceObject2005;
+  AiSource2005 = AiSourceObject;
   AiSource20050819 = type Integer; // TAiSource20050819
 
 const

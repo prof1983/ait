@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(AiMethod)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(17.06.2007)
-@LastMod(27.06.2012)
-@Version(0.5)
+@Abstract AiMethod
+@Author Prof1983 <prof1983@ya.ru>
+@Created 17.06.2007
+@LastMod 09.08.2012
 }
 unit AiMethodObj;
 
@@ -37,7 +36,7 @@ type // Метод
     FInput: TAId;
     FOutput: TAId;
   public
-    constructor Create(Source: AiSourceObject2005; Id: TAId);
+    constructor Create(Source: AiSourceObject; Id: TAId);
   public
     function Load(): AError; override;
     function Run(): AError;
@@ -60,7 +59,7 @@ implementation
 
 { TAiMethodObject }
 
-constructor TAiMethodObject.Create(Source: AiSourceObject2005; Id: TAId);
+constructor TAiMethodObject.Create(Source: AiSourceObject; Id: TAId);
 begin
   inherited Create(Source, Id);
   {Prototype := frType;}

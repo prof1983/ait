@@ -1,9 +1,8 @@
 {**
-@Abstract(AiXmlParam)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(21.06.2012)
-@LastMod(21.06.2012)
-@Version(0.5)
+@Abstract AiXmlParam
+@Author Prof1983 <prof1983@ya.ru>
+@Created 21.06.2012
+@LastMod 09.08.2012
 }
 unit AiXmlParamObj;
 
@@ -76,7 +75,7 @@ begin
   if not(Assigned(Source)) then Exit;
   FParams[Index] := TAIXmlParam(Source.GetFreim(FParamsId[Index]));
   if not(Assigned(FParams[Index])) then begin
-    FParams[Index] := TAIXmlParam.Create(AiSourceObject2005(Source), FParamsId[Index]);
+    FParams[Index] := TAIXmlParam.Create(AiSourceObject(Source), FParamsId[Index]);
   end;
   Result := FParams[Index];
 end;
