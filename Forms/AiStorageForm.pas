@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Главная форма EntityStorage)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(06.07.2007)
-@LastMod(03.07.2012)
-@Version(0.5)
+@Abstract Главная форма EntityStorage
+@Author Prof1983 <prof1983@ya.ru>
+@Created 06.07.2007
+@LastMod 17.08.2012
 
 Главная форма программы EntityStorage.
 В верхней части окна место для меню и основные кнопки быстрого вызова команд.
@@ -15,12 +14,6 @@
 Проторип внешнего вида окна:
 - 1С 7.7 (http://www.1c.ru/)
 - SAS Base (http://www.sas.com/)
-
-История изменений:
-0.0.0.4 - 07.07.2007 - Добавил EntityForm, EntityTypeForm
-0.0.0.3 - 06.07.2007 - Добавил Pool, OpenPool, Settings
-0.0.0.2 - 06.07.2007 - Отредактировал Actions
-0.0.0.1 - 06.07.2007 - Создал на основе AssistantForm
 }
 unit AiStorageForm;
 
@@ -327,8 +320,8 @@ uses
   Buttons, Classes, ComCtrls, Controls, Dialogs, ExtCtrls, Graphics, Grids, Forms,
   ImgList, Menus, Messages, StdActns, StdCtrls, SysUtils, ToolWin, Variants,
   Windows, XPStyleActnCtrls,
-  ACommandComboBoxControl, AIteratorIntf, ALogRichEdit,
-  AiBase, AiBaseTypes, AiFilePoolImpl, AiEntityForm, AiEntityGroup,
+  ACommandComboBoxControl, AIteratorIntf, ALogRichEdit, ASystemData, ASystemUtils,
+  AiBase, AiBaseTypes, AiConsts, AiFilePoolImpl, AiEntityForm, AiEntityGroup,
   AiEntityStoragePool, AiEntityStorageSettings, AiEntityStorageSettingsLoader, AiEntityTypeForm,
   fAbout1;
 
@@ -632,7 +625,12 @@ begin
   // Инициализируем настройки программы
   FSettings := TEntityStorageSettings.Create();
   FSettings.Title := Caption;
-  TEntityStorageSettingsLoader.Load(FSettings, ExtractFilePath(ParamStr(0)) + 'EntityStorage.' + FILE_EXT_INI);
+
+  FExePath := ExtractFilePath(ParamStr(0));
+  FConfigPath := NormalizePath2(ExpandFileName(FExePath + AiConfigDir));
+  FDataPath := NormalizePath2(ExpandFileName(FExePath + AiDataDir));
+
+  TEntityStorageSettingsLoader.Load(FSettings, FConfigPath  + 'EntityStorage.' + FILE_EXT_INI);
   if FSettings.Title <> '' then
     Caption := FSettings.Title;
 
@@ -644,7 +642,7 @@ begin
   // Инициализируем объект работы с сущностями
   FPool := TAIFilePool.Create();
   FPool.OnAddToLog := AddToLog;
-  OpenPool(ExtractFilePath(ParamStr(0)) + 'EntityStorage.' + FILE_EXT_POOL, True);
+  OpenPool(FDataPath + 'EntityStorage.' + FILE_EXT_POOL, True);
 
   RefreshGroupTreeView();
 
