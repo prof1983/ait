@@ -1,8 +1,8 @@
 ﻿{**
-@Abstract(AI Агент чат-бот)
-@Author(Prof1983 <prof1983@ya.ru>)
-@Created(04.09.2005)
-@LastMod(13.07.2012)
+@Abstract AI Агент чат-бот
+@Author Prof1983 <prof1983@ya.ru>
+@Created 04.09.2005
+@LastMod 17.08.2012
 }
 unit AiAgentChat;
 
@@ -189,7 +189,7 @@ begin
     FForm.ConfigureLoad;
     FForm.Initialize;
     FFormCreated := True;
-    FForm.EventNewText.Connect(FormNewText);
+    FForm.EventNewText.ConnectA(FormNewText);
   end else FFormCreated := False;
 
   {SetTitle('AgentChat');
@@ -323,7 +323,7 @@ procedure TAiAgentChat.SetFormChat(Value: TFormChat);
 begin
   // Удаление реакции на событие из предыдущей формы
   if Assigned(FForm) then begin
-    FForm.EventNewText.Disconnect(FormNewText)
+    FForm.EventNewText.DisconnectA(FormNewText)
   end;
 
   // Задание новой формы
@@ -331,7 +331,7 @@ begin
 
   // Создание реакции на событие
   if Assigned(FForm) then begin
-    FForm.EventNewText.Connect(FormNewText);
+    FForm.EventNewText.ConnectA(FormNewText);
   end;
 end;
 

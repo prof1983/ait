@@ -2,7 +2,7 @@
 @Abstract Главная форма для агента чат-бот
 @Author Prof1983 <prof1983@ya.ru>
 @Created 24.03.2005
-@LastMod 09.08.2012
+@LastMod 17.08.2012
 }
 unit AiChatForm;
 
@@ -49,12 +49,13 @@ type
     procedure EditInKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
   private
-    FEventNewText: TEvent;
+    FEventNewText: TAEvent;
   public
     //AIForm: TAIFormChat;
     constructor Create(AOwner: TComponent = nil); override;
-    property EventNewText: TEvent read FEventNewText;
     procedure Free; override;
+  public
+    property EventNewText: TAEvent read FEventNewText;
   end;
 
 implementation
@@ -93,7 +94,7 @@ end;
 constructor TFormChat.Create(AOwner: TComponent = nil);
 begin
   inherited Create(AOwner);
-  FEventNewText := TEvent.Create('NewText');
+  FEventNewText := TAEvent.Create(0, 'NewText');
 end;
 
 procedure TFormChat.Free;
