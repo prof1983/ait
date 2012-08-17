@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Алгоритм обхода препятствий)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(21.10.2005)
-@LastMod(04.05.2012)
-@Version(0.5)
+@Abstract Алгоритм обхода препятствий
+@Author Prof1983 <prof1983@ya.ru>
+@Created 21.10.2005
+@LastMod 17.08.2012
 
 Предлагаемый алгоритм обхода препятствий - это, так называемый, обобщенный алгоритм Дейкстры. В англоязычной литературе он называется алгоритмом A*.
 
@@ -414,7 +413,7 @@ end;
 procedure TFormPath.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
  Memo1.Lines.Add('Выход и автосохранение статистики');
- Memo1.Lines.SaveToFile('Autosave.sts');
+ //Memo1.Lines.SaveToFile('Autosave.sts');
 end;
 
 procedure TFormPath.SvStatButtonClick(Sender: TObject);
