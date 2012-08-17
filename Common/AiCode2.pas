@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Выполняемый код на языке AR)
-@Author(Prof1983 <prof1983@ya.ru>)
-@Created(31.10.2006)
-@LastMod(18.07.2012)
-@Version(0.5)
+@Abstract Выполняемый код на языке AR
+@Author Prof1983 <prof1983@ya.ru>
+@Created 31.10.2006
+@LastMod 17.08.2012
 }
 unit AiCode2;
 
@@ -22,7 +21,7 @@ type //** @abstract(Выполняемый код на языке AR)
   private
     function GetDataEx1(): IAIDataEx1;
   protected
-    function Get_Data(): IAIData; override; safecall;
+    function Get_Data(): IAiData2; override; safecall;
   protected
     procedure DoCreate(); override; safecall;
     procedure DoDestroy(); override; safecall;
@@ -58,7 +57,7 @@ begin
   Result := FDataEx1;
 end;
 
-function TAICode.Get_Data(): IAIData;
+function TAICode.Get_Data(): IAiData2;
 var
   xd: TProfXmlDocument;
   SelfFreim: IAIFreim;
@@ -69,7 +68,7 @@ begin
   try
     SelfFreim := IAIFreim(Self);
     Data := TAIData.Create(SelfFreim, dtXml);
-    xd := TProfXmlDocument.Create1('', 'frame'); //('arcode.xml', 'frame');
+    xd := TProfXmlDocument.Create('', 'frame'); //('arcode.xml', 'frame');
     xd.Initialize();
     Data.XmlDocument := xd.Controller;
     Data.XmlNode := xd.Controller.DocumentElement;
