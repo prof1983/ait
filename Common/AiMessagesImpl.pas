@@ -1,11 +1,8 @@
 ﻿{**
-@Abstract(Конвеер сообщений)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(04.11.2005)
-@LastMod(04.07.2012)
-@Version(0.5)
-
-24.02.2012 - Объединил AiMessages.pas и AiMessagesImpl.pas
+@Abstract Конвеер сообщений
+@Author Prof1983 <prof1983@ya.ru>
+@Created 04.11.2005
+@LastMod 12.11.2012
 }
 unit AiMessagesImpl;
 
@@ -15,11 +12,8 @@ uses
   ABase, AObjectImpl, AMessageObj, AMessagesObj, ATypes,
   AiTypes;
 
-type
-  TAIMessage = TProfMessage3;
-
-type //** Сообщение
-  TAIMessageRec = ATypes.TProfMessageRec;
+//type
+  //TAiMessage = ATypes.TAMessageObj;
 
 type //** Конвеер сообщений
   TAIMessages = class(TProfObject)
@@ -80,7 +74,7 @@ end;
 function TAIMessages.FindMsgAnswer(AConnectionId: UInt64; AIdent: Integer; AComId: UInt64;
     AComName: String; var AMsg: TAIMessageRec): Boolean;
 var
-  Msg: TProfMessage3;
+  Msg: TAMessageObj;
 begin
   if FMessages.FindMsgAnswer(AConnectionId, AIdent, AComId, AComName, Msg) then
   begin

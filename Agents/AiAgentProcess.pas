@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Процесс выполнения команд для агентов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(20.03.2007)
-@LastMod(29.06.2012)
-@Version(0.5)
+@Abstract Процесс выполнения команд для агентов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 20.03.2007
+@LastMod 12.11.2012
 }
 unit AiAgentProcess;
 
@@ -11,7 +10,8 @@ interface
 
 uses
   SysUtils,
-  AiCommandsImpl, AiInterpretatorThread, AiMessagesImpl, AiProcessImpl, AiTaskImpl, AiTaskListImpl;
+  AiCommandsImpl, AiInterpretatorThread, AiMessagesImpl, AiProcessImpl,
+  AiTaskImpl, AiTaskListImpl, AiTypes;
 
 type //** Подпроцесс выполнения команд для агентов
   TAgentThread = class(TInterpretatorThread)

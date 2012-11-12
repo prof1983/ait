@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(ACL Message)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(20.03.2007)
-@LastMod(26.04.2012)
-@Version(0.5)
+@Abstract ACL Message
+@Author Prof1983 <prof1983@ya.ru>
+@Created 20.03.2007
+@LastMod 12.11.2012
 
 Структура ACL сообщения (http://grouper.ieee.org/groups/ifets/russian/depository/v7_i2/pdf/3.pdf)
 Performative - Тип сообщения
@@ -20,9 +19,6 @@ Reply-with   - Строка, идентифицирующая сообщение
 In-reply-to  - Строка, идентифицирующая сообщение соответствует параметру
                reply-with при ответе на сообщение
 Reply-by     - Время, к которому необходимо получить ответ
-
-История версий:
-0.0.1.0 - 21.06.2007 - Избавился от зависимости с ProfMessage
 }
 unit AclMessageImpl;
 
@@ -76,7 +72,7 @@ type
     @version $Date: 2006-03-27 12:57:34 +0200 (lun, 27 mar 2006) $ $Revision: 5875 $
     @see <a href=http://www.fipa.org/specs/fipa00061/XC00061D.html>FIPA Spec</a>
   }
-  TAclMessage = class(TInterfacedObject, IAclMessage) //(TProfMessage3, IAclMessage) //(Cloneable, Serializable
+  TAclMessage = class(TInterfacedObject, IAclMessage)
   private
     // Explicitly set for compatibility between standard and micro version
     //private static final long serialVersionUID=3945353187608998130L;

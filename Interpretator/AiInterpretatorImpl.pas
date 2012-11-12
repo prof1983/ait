@@ -1,11 +1,8 @@
 ﻿{**
-@Abstract(Интерпретатор кода на языке AR)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(04.10.2006)
-@LastMod(11.07.2012)
-@Version(0.5)
-
-0.0.5.9 - 12.03.2012 - Объединил AiInterpretator2 и AiInterpretator4
+@Abstract Интерпретатор кода на языке AR
+@Author Prof1983 <prof1983@ya.ru>
+@Created 04.10.2006
+@LastMod 12.11.2012
 }
 unit AiInterpretatorImpl;
 
@@ -572,7 +569,7 @@ type
     property Code1: IArlCode read GetCode1 write SetCode1;
   end;
 
-  TAiInterpretator3 = TAiInterpretator;
+  //TAiInterpretator3 = TAiInterpretator;
 
 const
   INT_RUN_OK = 0;

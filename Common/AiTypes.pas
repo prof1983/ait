@@ -1,11 +1,8 @@
 ﻿{**
-@Abstract(Базовые типы для AI)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(20.03.2006)
-@LastMod(04.06.2012)
-@Version(0.5)
-
-[*] 25.04.2012 - Added Prof_AI.pas (15.05.2005)
+@Abstract Базовые типы для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 20.03.2006
+@LastMod 12.11.2012
 }
 unit AiTypes;
 
@@ -123,6 +120,9 @@ const
 
 type // Тип сообщения
   TAiMsgType = TMessageType;
+
+type //** Сообщение
+  TAiMessageRec = ATypes.TProfMessageRec;
 
 // ---
 
