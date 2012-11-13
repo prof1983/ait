@@ -1,9 +1,8 @@
 {**
-@Abstract(AiChatReasoner)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(02.05.2007)
-@LastMod(30.05.2012)
-@Version(0.5)
+@Abstract AiChatReasoner
+@Author Prof1983 <prof1983@ya.ru>
+@Created 02.05.2007
+@LastMod 13.11.2012
 }
 unit AiChatReasoner;
 
@@ -13,7 +12,7 @@ uses
   AObjectImpl;
 
 type
-  TAiChatReasoner = TProfObject;
+  TAiChatReasoner = TAObject;
 
 implementation
 

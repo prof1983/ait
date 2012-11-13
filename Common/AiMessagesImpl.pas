@@ -2,7 +2,7 @@
 @Abstract Конвеер сообщений
 @Author Prof1983 <prof1983@ya.ru>
 @Created 04.11.2005
-@LastMod 12.11.2012
+@LastMod 13.11.2012
 }
 unit AiMessagesImpl;
 
@@ -16,7 +16,7 @@ uses
   //TAiMessage = ATypes.TAMessageObj;
 
 type //** Конвеер сообщений
-  TAIMessages = class(TProfObject)
+  TAIMessages = class(TAObject)
   private
     FMessages: TAMessages;
   protected
