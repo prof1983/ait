@@ -1,12 +1,8 @@
 ﻿{**
-@Abstract(Класс для сохранения заданий в XML файл)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(06.07.2007)
-@LastMod(05.05.2012)
-@Version(0.5)
-
-История версий:
-0.0.0.1 - 06.07.2007 - Создан на основе Saver
+@Abstract Класс для сохранения заданий в XML файл
+@Author Prof1983 <prof1983@ya.ru>
+@Created 06.07.2007
+@LastMod 14.11.2012
 }
 unit AiTaskSaver;
 
@@ -15,14 +11,14 @@ interface
 uses
   SysUtils, Variants,
   MSXML24_TLB,
-  AiTask;
+  ATaskObj;
 
 type //** @abstract(Класс для сохранения заданий в XML файл)
   TTaskSaver = class
   public
     class function CreateRoot(XmlDocument: IXMLDOMDocument2;
         RootName, NameSpace, Encoding: string): Boolean;
-    class function Save(Tasks: TTasks; FileName: WideString): Boolean;
+    class function Save(Tasks: TATasks; FileName: WideString): Boolean;
   end;
 
 implementation
@@ -98,7 +94,7 @@ begin
   end;
 end;
 
-class function TTaskSaver.Save(Tasks: TTasks; FileName: WideString): Boolean;
+class function TTaskSaver.Save(Tasks: TATasks; FileName: WideString): Boolean;
 var
   document: IXMLDOMDocument2;
   de: IXMLDOMElement;

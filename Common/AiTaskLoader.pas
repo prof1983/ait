@@ -1,12 +1,8 @@
 ﻿{**
-@Abstract(Класс для загрузки заданий из XML файла)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(06.07.2007)
-@LastMod(05.05.2012)
-@Version(0.5)
-
-История версий:
-0.0.0.1 - 06.07.2007 - Создал на основе Loader.pas
+@Abstract Класс для загрузки заданий из XML файла
+@Author Prof1983 <prof1983@ya.ru>
+@Created 06.07.2007
+@LastMod 14.11.2012
 }
 unit AiTaskLoader;
 
@@ -15,13 +11,13 @@ interface
 uses
   SysUtils,
   MSXML24_TLB,
-  AiTask;
+  ATaskObj;
 
 type //** @abstract(Класс для загрузки заданий из XML файла)
   TTaskLoader = class
   public
     class function GetChildNodeByName(Node: IXMLDOMNode; NodeName: WideString): IXMLDOMNode;
-    class function Load(var Tasks: TTasks; FileName: WideString): Boolean;
+    class function Load(var Tasks: TATasks; FileName: WideString): Boolean;
   end;
 
 implementation
@@ -44,7 +40,7 @@ begin
     end;
 end;
 
-class function TTaskLoader.Load(var Tasks: TTasks; FileName: WideString): Boolean;
+class function TTaskLoader.Load(var Tasks: TATasks; FileName: WideString): Boolean;
 var
   document: IXMLDOMDocument;
   de: IXMLDOMElement;
@@ -84,7 +80,7 @@ begin
 
                 n := Length(Tasks);
                 SetLength(Tasks, n + 1);
-                Tasks[n] := TTask.Create();
+                Tasks[n] := TATask.Create();
                 Tasks[n].Title := taskTitle;
                 if Assigned(commentNode) then
                   Tasks[n].Comment := commentNode.text;
