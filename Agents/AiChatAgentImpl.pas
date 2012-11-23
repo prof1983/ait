@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Агент чат-бот)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(02.05.2007)
-@LastMod(27.06.2012)
-@Version(0.5)
+@Abstract Агент чат-бот
+@Author Prof1983 <prof1983@ya.ru>
+@Created 02.05.2007
+@LastMod 23.11.2012
 }
 unit AiChatAgentImpl;
 
@@ -11,7 +10,7 @@ interface
 
 uses
   Classes,
-  ATypes,
+  ABase,
   AiAgentImpl, AiChatKnowledgeBaseImpl, AiChatReasoner;
 
 type //** Агент чат-бот
@@ -27,9 +26,9 @@ type //** Агент чат-бот
     //** Добавить сообщение
     function AddMessageStr(const Msg: WideString): Integer; override;
     //** Финализировать
-    function Finalize(): TProfError; override;
+    function Finalize(): AError; override;
     //** Инициализировать
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
     //** Запускает процесс выполнения команд
     function Start(): WordBool; virtual; safecall;
     //** Останавливает процесс выполнения команд
@@ -65,14 +64,14 @@ begin
   FReasoner := TAIChatReasoner.Create();
 end;
 
-function TAIChatAgent.Finalize(): TProfError;
+function TAIChatAgent.Finalize(): AError;
 begin
   FKnowledgeBase.Close();
   FKnowledgeBase.Finalize();
   inherited Finalize();
 end;
 
-function TAIChatAgent.Initialize(): TProfError;
+function TAIChatAgent.Initialize(): AError;
 begin
   SendStrMessageToCore('Инициализация агента ChatAgent');
   inherited Initialize();

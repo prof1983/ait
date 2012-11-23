@@ -1,11 +1,8 @@
 ﻿{**
-@Abstract(Базовый тип данных для AI)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(26.04.2005)
-@LastMod(29.06.2012)
-@Version(0.5)
-
-02.05.2012 - Added from Prof_AI_Base.pas
+@Abstract Базовый тип данных для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 26.04.2005
+@LastMod 23.11.2012
 }
 unit AiDataObj;
 
@@ -58,35 +55,35 @@ type //** @abstract(Базовый тип данных для AI)
     function GetXml(): TProfXml;
     function GetXml1(): TProfXmlNode2;
     function LoadFromFileN(const FileName: WideString): AError; virtual;
-    function LoadFromXml(Xml: TProfXml): TError;
+    function LoadFromXml(Xml: TProfXml): AError;
     function Read(var A: TArrayByte; Count: UInt64): UInt64; virtual;
     function ReadId(var Value: TAId): AError; virtual;
-    function ReadInt08(var Value: Int08): TError; virtual;
-    function ReadInt16(var Value: Int16): TError; virtual;
-    function ReadInt32(var Value: Int32): TError; virtual;
-    function ReadInt64(var Value: Int64): TError; virtual;
-    function ReadUInt08(var Value: UInt08): TError; virtual;
-    function ReadUInt16(var Value: UInt16): TError; virtual;
-    function ReadUInt32(var Value: UInt32): TError; virtual;
-    function ReadUInt64(var Value: UInt64): TError; virtual;
-    function SaveToFile(F: AStreamObj.TProfFile): TError;
+    function ReadInt08(var Value: AInt08): AError; virtual;
+    function ReadInt16(var Value: Int16): AError; virtual;
+    function ReadInt32(var Value: Int32): AError; virtual;
+    function ReadInt64(var Value: Int64): AError; virtual;
+    function ReadUInt08(var Value: AUInt08): AError; virtual;
+    function ReadUInt16(var Value: UInt16): AError; virtual;
+    function ReadUInt32(var Value: UInt32): AError; virtual;
+    function ReadUInt64(var Value: UInt64): AError; virtual;
+    function SaveToFile(F: AStreamObj.TProfFile): AError;
     function SaveToFileN(const FileName: WideString): AError; virtual;
-    function SaveToXml(Xml: TProfXml): TError; virtual;
+    function SaveToXml(Xml: TProfXml): AError; virtual;
     //function SaveToXml(Xml: IProfNode): WordBool; virtual;
-    function SetOpened(Value: Boolean): TError;
-    function SetStream(Value: AStreamObj.TProfStream): TError;
-    function SetType(Value: TAiDataType): TError;
-    function SetXml(Value: TProfXmlNode2): TError;
+    function SetOpened(Value: Boolean): AError;
+    function SetStream(Value: AStreamObj.TProfStream): AError;
+    function SetType(Value: TAiDataType): AError;
+    function SetXml(Value: TProfXmlNode2): AError;
     function Write(A: TArrayByte; Count: UInt64): UInt64; virtual;
     function WriteId(Value: TAId): AError; virtual;
-    function WriteInt08(Value: Int08): TError; virtual;
-    function WriteInt16(Value: Int16): TError; virtual;
-    function WriteInt32(Value: Int32): TError; virtual;
-    function WriteInt64(Value: Int64): TError; virtual;
-    function WriteUInt08(Value: UInt08): TError; virtual;
-    function WriteUInt16(Value: UInt16): TError; virtual;
-    function WriteUInt32(Value: UInt32): TError; virtual;
-    function WriteUInt64(Value: UInt64): TError; virtual;
+    function WriteInt08(Value: AInt08): AError; virtual;
+    function WriteInt16(Value: Int16): AError; virtual;
+    function WriteInt32(Value: Int32): AError; virtual;
+    function WriteInt64(Value: Int64): AError; virtual;
+    function WriteUInt08(Value: AUInt08): AError; virtual;
+    function WriteUInt16(Value: UInt16): AError; virtual;
+    function WriteUInt32(Value: UInt32): AError; virtual;
+    function WriteUInt64(Value: UInt64): AError; virtual;
   public
     property DataType: TAiDataType read Get_DataType write Set_DataType;
     //property DataTypeEnum: AIDataTypeEnum read Get_DataType write Set_DataType;
@@ -330,7 +327,7 @@ begin
   Result := ProfStreamMemory_LoadFromFileN(FileName);
 end;
 
-function TAiDataObject.LoadFromXml(Xml: TProfXml): TError;
+function TAiDataObject.LoadFromXml(Xml: TProfXml): AError;
 begin
   if not(Assigned(FXml)) then
     FXml := TProfXml.Create;
@@ -378,7 +375,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.ReadInt08(var Value: Int08): TError;
+function TAiDataObject.ReadInt08(var Value: AInt08): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadInt08(Value)
@@ -386,7 +383,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.ReadInt16(var Value: Int16): TError;
+function TAiDataObject.ReadInt16(var Value: Int16): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadInt16(Value)
@@ -394,7 +391,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.ReadInt32(var Value: Int32): TError;
+function TAiDataObject.ReadInt32(var Value: Int32): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadInt32(Value)
@@ -402,7 +399,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.ReadInt64(var Value: Int64): TError;
+function TAiDataObject.ReadInt64(var Value: Int64): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadInt64(Value)
@@ -410,7 +407,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.ReadUInt08(var Value: UInt08): TError;
+function TAiDataObject.ReadUInt08(var Value: AUInt08): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadUInt08(Value)
@@ -418,7 +415,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.ReadUInt16(var Value: UInt16): TError;
+function TAiDataObject.ReadUInt16(var Value: UInt16): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadUInt16(Value)
@@ -426,7 +423,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.ReadUInt32(var Value: UInt32): TError;
+function TAiDataObject.ReadUInt32(var Value: UInt32): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadUInt32(Value)
@@ -434,7 +431,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.ReadUInt64(var Value: UInt64): TError;
+function TAiDataObject.ReadUInt64(var Value: UInt64): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.ReadUInt64(Value)
@@ -442,7 +439,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.SaveToFile(F: AStreamObj.TProfFile): TError;
+function TAiDataObject.SaveToFile(F: AStreamObj.TProfFile): AError;
 begin
   if Assigned(FStream) then
     Result := AStream_SaveToFile(FStream, F)
@@ -455,7 +452,7 @@ begin
   Result := -1;
 end;
 
-function TAiDataObject.SaveToXml(Xml: TProfXml): TError;
+function TAiDataObject.SaveToXml(Xml: TProfXml): AError;
 begin
   Result := -1;
 end;
@@ -467,7 +464,7 @@ begin
   Result := Xml.AddFromXml(FXml);
 end;}
 
-function TAiDataObject.SetOpened(Value: Boolean): TError;
+function TAiDataObject.SetOpened(Value: Boolean): AError;
 begin
   Result := -1;
   if (FDataType = dtNone) then Exit;
@@ -475,20 +472,20 @@ begin
   Result := 0;
 end;
 
-function TAiDataObject.SetStream(Value: AStreamObj.TProfStream): TError;
+function TAiDataObject.SetStream(Value: AStreamObj.TProfStream): AError;
 begin
   FStream := Value;
   FDataType := dtStream;
   Result := 0;
 end;
 
-function TAiDataObject.SetType(Value: TAiDataType): TError;
+function TAiDataObject.SetType(Value: TAiDataType): AError;
 begin
   FDataType := Value;
   Result := 0;
 end;
 
-function TAiDataObject.SetXml(Value: TProfXmlNode2): TError;
+function TAiDataObject.SetXml(Value: TProfXmlNode2): AError;
 begin
   FXml2006 := Value;
   FDataType := dtXml;
@@ -548,7 +545,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.WriteInt08(Value: Int08): TError;
+function TAiDataObject.WriteInt08(Value: AInt08): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteInt08(Value)
@@ -556,7 +553,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.WriteInt16(Value: Int16): TError;
+function TAiDataObject.WriteInt16(Value: Int16): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteInt16(Value)
@@ -564,7 +561,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.WriteInt32(Value: Int32): TError;
+function TAiDataObject.WriteInt32(Value: Int32): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteInt32(Value)
@@ -572,7 +569,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.WriteInt64(Value: Int64): TError;
+function TAiDataObject.WriteInt64(Value: Int64): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteInt64(Value)
@@ -580,7 +577,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.WriteUInt08(Value: UInt08): TError;
+function TAiDataObject.WriteUInt08(Value: AUInt08): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteUInt08(Value)
@@ -588,7 +585,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.WriteUInt16(Value: UInt16): TError;
+function TAiDataObject.WriteUInt16(Value: UInt16): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteUInt16(Value)
@@ -596,7 +593,7 @@ begin
     Result := -1;
 end;
 
-function TAiDataObject.WriteUInt32(Value: UInt32): TError;
+function TAiDataObject.WriteUInt32(Value: UInt32): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteUInt32(Value)
@@ -604,7 +601,7 @@ begin
     Result := 1;
 end;
 
-function TAiDataObject.WriteUInt64(Value: UInt64): TError;
+function TAiDataObject.WriteUInt64(Value: UInt64): AError;
 begin
   if Assigned(FStream) and (FDataType = dtStream) then
     Result := FStream.WriteUInt64(Value)

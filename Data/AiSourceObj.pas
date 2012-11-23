@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 09.08.2012
+@LastMod 23.11.2012
 }
 unit AiSourceObj;
 
@@ -55,7 +55,7 @@ type
         const AStrMsg: WideString): Integer; virtual;
     //** Проверяет и создает базовые фреймы Prof_AI_GLobals.AIFreims
     function CheckFreims(): Boolean;
-    function Clear(): TError; virtual;
+    function Clear(): AError; virtual;
     function Close(): AError; virtual;
     function ConnectAdd(Id, Con: TAId): AInt32; virtual; deprecated; // Delete
     function ConnectCount(Id: TAId): AError; virtual; deprecated; // Delete
@@ -63,9 +63,9 @@ type
     function ConnectDeleteI(Id: TAId; Index: UInt32): AError; virtual; deprecated; // Delete
     function ConnectGet(Id: TAId; Index: UInt32): TAId; virtual; deprecated; // Delete
     function ConnectIndexGet(Id, Con: TAId): AInt32; virtual; deprecated; // Delete
-    function DataClear(Id: TAId): TError; virtual; deprecated; // Use Clear()
+    function DataClear(Id: TAId): AError; virtual; deprecated; // Use Clear()
     function DataSize(Id: TAId): AUInt64; virtual; // deprecated
-    function Finalize(): TProfError; virtual;
+    function Finalize(): AError; virtual;
     function FreimFree(Id: TAId): Boolean; virtual; // deprecated
     function GetActive(): Boolean;
     function GetCountFreims(): UInt64; virtual;
@@ -84,18 +84,18 @@ type
     function GetParentId(Index: UInt32): TAId;
     function GetParentObj(Index: UInt32): TAiSourceObject;
       // Произвести инициализацию с установкой параметров
-    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
+    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError; virtual;
     function Initialize(): AError; virtual;
-    function LoadFromFile(F: TFileProfKB; Path: String): TError; deprecated 'Make function';
+    function LoadFromFile(F: TFileProfKB; Path: String): AError; deprecated 'Make function';
     function LoadFromFileN(Path, FileName: String): Boolean; virtual;
-    function LoadFromFileXml(FileName: String): TError;
+    function LoadFromFileXml(FileName: String): AError;
     function LoadFromRecF64(Rec: TAiFreimRecF64): WordBool;
       //** Создает новый фрейм
     function NewFreim(Typ: TAId; Id: TAId = 0): TAId; virtual;
       //** Создает новый фрейм
     function NewFreim2(Frame: TAiFrameObject): TAId; virtual;
-    function Open(): TError; virtual;
-    function SaveToFile(F: TFileProfKB; Path: String): TError;
+    function Open(): AError; virtual;
+    function SaveToFile(F: TFileProfKB; Path: String): AError;
     function SaveToFileN(FileName, Path: String): Boolean;
     function SaveToFileXml(FileName: String): Boolean;
       //** Сделать выборку по типу
@@ -176,7 +176,7 @@ begin
 //  Result := False;
 end;
 
-function LoadSourceFromFileN2005(Source: TAiSource2005; FileName, Path: String): TError;
+function LoadSourceFromFileN2005(Source: TAiSource2005; FileName, Path: String): AError;
 begin
   Result := -1;
 end;
@@ -222,7 +222,7 @@ begin
   Result := 0;*)
 end;
 
-function SaveSourceToFileN2005(Source: TAiSource2005; FileName, Path: String): TError;
+function SaveSourceToFileN2005(Source: TAiSource2005; FileName, Path: String): AError;
 begin
   Result := -1;
 end;
@@ -331,7 +331,7 @@ begin
   Result := False;
 end;
 
-function TAiSourceObject.Clear(): TError;
+function TAiSourceObject.Clear(): AError;
 begin
   SetLength(FParents, 0);
   FOpened := False;
@@ -407,7 +407,7 @@ begin
   Result := True;
 end;
 
-function TAiSourceObject.Finalize(): TProfError;
+function TAiSourceObject.Finalize(): AError;
 begin
   Close();
   //Result := inherited Finalize;
@@ -583,7 +583,7 @@ begin
   Result := nil;
 end;}
 
-function TAiSourceObject.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError;
+function TAiSourceObject.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError;
 begin
   FConfig := Config;
   FLog := Log;
@@ -601,7 +601,7 @@ begin
   Open();
 end;
 
-function TAiSourceObject.LoadFromFile(F: TFileProfKB; Path: String): TError;
+function TAiSourceObject.LoadFromFile(F: TFileProfKB; Path: String): AError;
 begin
   Close;
   Result := 1;
@@ -646,7 +646,7 @@ begin
   HProf.Version2 := 4;}*)
 end;
 
-function TAiSourceObject.LoadFromFileXml(FileName: String): TError;
+function TAiSourceObject.LoadFromFileXml(FileName: String): AError;
 {var
   //Freim: TAiFrame2005;
   I: Int32;
@@ -691,13 +691,13 @@ begin
   //AddToLog(lgDataBase, ltError, stNotOverrideA, ['NewFreimType']);
 end;
 
-function TAiSourceObject.Open(): TError;
+function TAiSourceObject.Open(): AError;
 begin
   FOpened := True;
   Result := 0;
 end;
 
-function TAiSourceObject.SaveToFile(F: TFileProfKB; Path: String): TError;
+function TAiSourceObject.SaveToFile(F: TFileProfKB; Path: String): AError;
 begin
   Result := 1;
   if (not(Assigned(F))) or (Path = '') then Exit;

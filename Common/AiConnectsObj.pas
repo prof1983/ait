@@ -2,7 +2,7 @@
 @Abstract AiConnects
 @Author Prof1983 <prof1983@ya.ru>
 @Created 12.03.2012
-@LastMod 09.08.2012
+@LastMod 23.11.2012
 }
 unit AiConnectsObj;
 
@@ -12,7 +12,7 @@ interface
 
 uses
   XmlIntf,
-  AStreamObj, ATypes, AXmlObj, AXmlUtils,
+  ABase, AStreamObj, AXmlObj, AXmlUtils,
   AiBase, AiTypes;
 
 type //** Связи
@@ -26,11 +26,11 @@ type //** Связи
       //** Добавить связь
     function AddConnect(Connect: TAId): Integer; virtual;
       //** Очистить
-    function Clear(): TError; virtual;
+    function Clear(): AError; virtual;
       //** Удалить связь по идентификатору
-    function DeleteConnect(Con: TAId): TError; virtual;
+    function DeleteConnect(Con: TAId): AError; virtual;
       //** Удалить связь по индексу
-    function DeleteConnectByIndex(Index: Integer): TError; virtual;
+    function DeleteConnectByIndex(Index: Integer): AError; virtual;
       //** Возвращает идентификатор связи по индексу
     function GetConnect(Index: Integer): TAId; virtual;
       //** Возвращает индекс связи по идентификатору
@@ -40,35 +40,35 @@ type //** Связи
       //** Возвращает идентификатор фрейма-владельца
     function GetFreimId(): TAId;
       //** Загрузить из файла
-    function LoadFromFile(const FileName: WideString): TError; virtual;
+    function LoadFromFile(const FileName: WideString): AError; virtual;
       //** Загрузить из файла
-    function LoadFromFileN(const FileName: String): TError; virtual;
+    function LoadFromFileN(const FileName: String): AError; virtual;
       //** Загрузить список связей из XML (20050911)
-    function LoadFromXml(Xml: TProfXml): TError; virtual;
+    function LoadFromXml(Xml: TProfXml): AError; virtual;
       //** Загрузить список связей из XML
-    function LoadFromXml20050819(Xml: IXmlNode): TError; virtual;
+    function LoadFromXml20050819(Xml: IXmlNode): AError; virtual;
       //** Загрузить список связей из XML
     //function LoadFromXml(const AXml: IXmlNode): WordBool; virtual;
     //function LoadFromXml1(const AXml: TProfXmlNode1): WordBool; virtual;
       //** Сохранить в файл
     function SaveToFile(const FileName: WideString): WordBool; virtual;
       //** Сохранить в файл
-    function SaveToFile2005(F: AStreamObj.TProfFile): TError; virtual;
+    function SaveToFile2005(F: AStreamObj.TProfFile): AError; virtual;
       //** Сохранить в файл
-    function SaveToFile20050911(F: AStreamObj.TProfFile): TError; virtual; deprecated; // Use SaveToFile2005()
+    function SaveToFile20050911(F: AStreamObj.TProfFile): AError; virtual; deprecated; // Use SaveToFile2005()
       //** Сохранить в файл
-    function SaveToFileN(FileName: String): TError; virtual;
+    function SaveToFileN(FileName: String): AError; virtual;
       //** Сохранить список связей в XML (20050911)
-    function SaveToXml(Xml: TProfXml): TError; virtual;
+    function SaveToXml(Xml: TProfXml): AError; virtual;
       //** Сохранить список связей в XML
     //function SaveToXml(const AXml: IXmlNode): WordBool; virtual;
     //function SaveToXml1(const AXml: TProfXmlNode1): WordBool; virtual;
       //** Сохранить список связей в XML
-    function SaveToXml20050819(Xml: IXmlNode): TError; virtual;
+    function SaveToXml20050819(Xml: IXmlNode): AError; virtual;
       //** Задает Id связанного фрейма
     procedure SetConnect(Index: Integer; Value: TAId); virtual;
       //** Задать Id связанного фрейма
-    function SetConnectA(Index: Integer; Value: TAId): TError; virtual;
+    function SetConnectA(Index: Integer; Value: TAId): AError; virtual;
       //** Задает идентификатор фрейма-владельца
     procedure SetFreimId(Value: TAId);
   public
@@ -93,18 +93,18 @@ begin
   FConnects[Result] := Connect;
 end;
 
-function TAiConnectsObject.Clear(): TError;
+function TAiConnectsObject.Clear(): AError;
 begin
   SetLength(FConnects, 0);
   Result := 0;
 end;
 
-function TAiConnectsObject.DeleteConnect(Con: TAIID): TError;
+function TAiConnectsObject.DeleteConnect(Con: TAIID): AError;
 begin
   Result := -1;
 end;
 
-function TAiConnectsObject.DeleteConnectByIndex(Index: Integer): TError;
+function TAiConnectsObject.DeleteConnectByIndex(Index: Integer): AError;
 begin
   Result := -1;
 end;
@@ -140,17 +140,17 @@ begin
   Result := FOwnerID;
 end;
 
-function TAiConnectsObject.LoadFromFile(const FileName: WideString): TError;
+function TAiConnectsObject.LoadFromFile(const FileName: WideString): AError;
 begin
   Result := -1;
 end;
 
-function TAiConnectsObject.LoadFromFileN(const FileName: String): TError;
+function TAiConnectsObject.LoadFromFileN(const FileName: String): AError;
 begin
   Result := 1;
 end;
 
-function TAiConnectsObject.LoadFromXml(Xml: TProfXml): TError;
+function TAiConnectsObject.LoadFromXml(Xml: TProfXml): AError;
 var
   Count: UInt32;
   I: Int32;
@@ -238,7 +238,7 @@ begin
   Result := True;
 end;*)
 
-function TAiConnectsObject.LoadFromXml20050819(Xml: IXmlNode): TError;
+function TAiConnectsObject.LoadFromXml20050819(Xml: IXmlNode): AError;
 var
   Count: UInt32;
   I: Int32;
@@ -272,22 +272,22 @@ begin
   Result := False;
 end;
 
-function TAiConnectsObject.SaveToFile2005(F: AStreamObj.TProfFile): TError;
+function TAiConnectsObject.SaveToFile2005(F: AStreamObj.TProfFile): AError;
 begin
   Result := 1;
 end;
 
-function TAiConnectsObject.SaveToFile20050911(F: AStreamObj.TProfFile): TError;
+function TAiConnectsObject.SaveToFile20050911(F: AStreamObj.TProfFile): AError;
 begin
   Result := SaveToFile2005(F);
 end;
 
-function TAiConnectsObject.SaveToFileN(FileName: String): TError;
+function TAiConnectsObject.SaveToFileN(FileName: String): AError;
 begin
   Result := 1;
 end;
 
-function TAiConnectsObject.SaveToXml(Xml: TProfXml): TError;
+function TAiConnectsObject.SaveToXml(Xml: TProfXml): AError;
 var
   Count: UInt32;
   I: Int32;
@@ -340,7 +340,7 @@ begin
   Result := True;
 end;*)
 
-function TAiConnectsObject.SaveToXml20050819(Xml: IXmlNode): TError;
+function TAiConnectsObject.SaveToXml20050819(Xml: IXmlNode): AError;
 var
   Count: UInt32;
   I: Int32;
@@ -365,7 +365,7 @@ begin
   // ...
 end;
 
-function TAiConnectsObject.SetConnectA(Index: Integer; Value: TAId): TError;
+function TAiConnectsObject.SetConnectA(Index: Integer; Value: TAId): AError;
 begin
   Result := -1;
 end;

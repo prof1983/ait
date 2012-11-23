@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Типы для AI)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(18.06.2004)
-@LastMod(04.06.2012)
-@Version(0.5)
+@Abstract Типы для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 18.06.2004
+@LastMod 23.11.2012
 
 A - для записи в файл
 B - для памяти
@@ -24,7 +23,6 @@ uses
 type
   TError = Boolean;
   UInt032 = UInt32;
-  Char008 = Char08;
   UInt008 = UInt08;
   UInt064 = UInt64;
   Int032 = Int32;
@@ -336,7 +334,7 @@ type
     DTCreate: TDateTime064;     {Время создания}
     DTChange: TDateTime064;     {Время последнего изменения}
     Reserved: UInt032;          {Зарезервировано}
-    Data: array[0..1023] of Char008; {Данные фрейма}
+    Data: array[0..1023] of AChar; {Данные фрейма}
     Connect: array[0..378] of THandle064; {Связи с другими фреймами}
   end;
 
@@ -555,10 +553,6 @@ type
   TAIDataType = record {ф-тип фрейма}
     Name: String;
   end;
-  {TAIDataTypeR = packed record
-    NameLength: UInt032;
-    Name: array[1..NameLength] of Char008;
-  end;}
 
   TAIDataUrlParam = record {Url параметр (136)}
     Name: String;

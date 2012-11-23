@@ -1,16 +1,15 @@
 ﻿{**
-@Abstract(Правило)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(17.03.2005)
-@LastMod(27.06.2012)
-@Version(0.5)
+@Abstract Правило
+@Author Prof1983 <prof1983@ya.ru>
+@Created 17.03.2005
+@LastMod 23.11.2012
 }
 unit AiRule;
 
 interface
 
 uses
-  ATypes,
+  ABase,
   AiBase, AiFrameImpl;
 
 type
@@ -36,7 +35,7 @@ type
   public
     procedure Free(); override;
     //property Params: TAIListParams read FParams write FParams;
-    function Initialize(): TProfError; override; //safecall;
+    function Initialize(): AError; override;
     //** Вычисление правила
     procedure Run();
   end;
@@ -88,7 +87,7 @@ begin
   Result := 0;
 end;
 
-function TAIRule.Initialize(): TProfError;
+function TAIRule.Initialize(): AError;
 //var
 //  Config1: TConfigNode;
 //  Id: TAI_Id;

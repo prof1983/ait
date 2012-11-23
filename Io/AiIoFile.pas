@@ -1,16 +1,8 @@
 ﻿{**
-@Abstract(Io)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(03.04.2005)
-@LastMod(08.06.2012)
-@Version(0.5)
-
-0.0.0.6 - 03.04.2005
-0.0.0.5 - 17.03.2005 - TFileProf
-0.0.0.4 - 31.05.2004 -
-0.0.0.3 - 19.05.2004 -
-0.0.0.2 - 27.01.2004 - Ident=2 - архив
-0.0.0.1 - 09.01.2004 - Сознан тип: TFileProfHeader
+@Abstract Io
+@Author Prof1983 <prof1983@ya.ru>
+@Created 03.04.2005
+@LastMod 23.11.2012
 }
 unit AiIoFile;
 
@@ -18,7 +10,7 @@ interface
 
 uses
   Classes,
-  ABaseUtils3, AIoTypes, AStreamObj, ATypes;
+  ABase, ABaseUtils3, AIoTypes, AStreamObj, ATypes;
 
 type
   UInt032 = UInt32;
@@ -76,12 +68,11 @@ type
   private
     FHeader: TFileProfHeader;
   public
-    function HeaderSet(var Header: TFileProfHeader; Ident, Version1,
-      Version2: UInt32): TError;
-    function HeaderWrite(const Header: TFileProfHeader): TError;
-    function HeaderRead(var Header: TFileProfHeader): TError;
+    function HeaderSet(var Header: TFileProfHeader; Ident, Version1, Version2: UInt32): AError;
+    function HeaderWrite(const Header: TFileProfHeader): AError;
+    function HeaderRead(var Header: TFileProfHeader): AError;
     function Open(FileName: String; Mode: TProfFileOpenMode): Boolean; override;
-    function OpenCreate(FileName: String; Header: TFileProfHeader): TError;
+    function OpenCreate(FileName: String; Header: TFileProfHeader): AError;
   public
     property Header: TFileProfHeader read FHeader;
   end;
@@ -270,9 +261,9 @@ end;*)
 
 {TFileProf}
 
-function TFileProf.HeaderRead(var Header: TFileProfHeader): TError;
+function TFileProf.HeaderRead(var Header: TFileProfHeader): AError;
 var
-  B: UInt08;
+  B: AUInt08;
   Stream: TProfStream;
 begin
   Result := 1;
@@ -290,8 +281,7 @@ begin
   Result := 0;
 end;
 
-function TFileProf.HeaderSet(var Header: TFileProfHeader; Ident, Version1,
-  Version2: UInt32): TError;
+function TFileProf.HeaderSet(var Header: TFileProfHeader; Ident, Version1, Version2: UInt32): AError;
 begin
   {Result := 1;}
   HeaderClear(Header);
@@ -308,7 +298,7 @@ begin
   Result := 0;
 end;
 
-function TFileProf.HeaderWrite(const Header: TFileProfHeader): TError;
+function TFileProf.HeaderWrite(const Header: TFileProfHeader): AError;
 {var
   Stream: TFileStream;}
 begin
@@ -345,7 +335,7 @@ begin
   Result := True;
 end;
 
-function TFileProf.OpenCreate(FileName: String; Header: TFileProfHeader): TError;
+function TFileProf.OpenCreate(FileName: String; Header: TFileProfHeader): AError;
 begin
   FHeader := Header;
   Result := inherited OpenCreate(FileName);

@@ -2,7 +2,7 @@
 @Abstract Базовые типы для AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 26.04.2006
-@LastMod 09.08.2012
+@LastMod 23.11.2012
 
 Prototype: org.framerd.OID
 Каждый фрейм является некоторой сущностью.
@@ -119,17 +119,17 @@ type //** Фрейм
       //** Очистить объект
     function Clear(): WordBool; virtual; safecall;
       //** Финализировать. Разорвать связь объекта с источником.
-    function Finalize(): TProfError; virtual;
+    function Finalize(): AError; virtual;
       //** Освободить
     procedure Free(); virtual;
       //** Произвести инициализацию. Установить связь с источником.
-    function Initialize(): TProfError; virtual;
+    function Initialize(): AError; virtual;
       //** Загрузить из источника
     function Load(): TAIError; virtual; safecall;
       //** Загрузить из AIData
     function LoadFromData(Data: IAIData): TAIError; virtual; safecall;
       //** Загрузить из файла
-    function LoadFromFile(const AFileName: WideString): TProfError; virtual; safecall;
+    function LoadFromFile(const AFileName: WideString): AError; virtual; safecall;
       //** Зарегистрировать тип фрейма в источнике
     function Regist(): Boolean; virtual; safecall;
       //** Сохранить в источник
@@ -257,21 +257,21 @@ type //** Фрейм
     //** Очистить объект
     function Clear(): WordBool; virtual; safecall;
     // Загрузить конфигурации
-    function ConfigureLoad(AConfig: IProfNode): TProfError; {override;} safecall;
+    function ConfigureLoad(AConfig: IProfNode): AError; {override;} safecall;
     // Сохранить конфигурации
-    function ConfigureSave(AConfig: IProfNode): TProfError; {override;} safecall;
+    function ConfigureSave(AConfig: IProfNode): AError; {override;} safecall;
     //** Финализировать. Разорвать связь объекта с источником.
-    function Finalize(): TProfError; override; //safecall;
+    function Finalize(): AError; override;
     //** Освободить
     procedure Free(); override;
     //** Произвести инициализацию. Установить связь с источником.
-    function Initialize(): TProfError; override; //safecall;
+    function Initialize(): AError; override;
     //** Загрузить из источника
     function Load(): TAIError; virtual; safecall;
     //** Загрузить из AIData
     function LoadFromData(Data: IAIData): TAIError; virtual; safecall;
     //** Загрузить из файла
-    function LoadFromFile(const AFileName: WideString): TProfError; virtual; safecall;
+    function LoadFromFile(const AFileName: WideString): AError; virtual; safecall;
     //** Зарегистрировать тип фрейма в источнике
     function Regist(): Boolean; virtual; safecall;
     //** Сохранить в источник
@@ -367,9 +367,9 @@ type //** Фрейм
       //** Сохранить конфигурации
     //function ConfigureSave: WordBool; override;
       //** Финализировать. Разорвать связь объекта с источником.
-    function Finalize(): TProfError; override;
+    function Finalize(): AError; override;
       //** Произвести инициализацию. Установить связь с источником.
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
       //** Новый слот
     function NewSlot(Name: WideString): IAiSlot;
       //** Зарегистрировать тип фрейма в источнике
@@ -478,7 +478,7 @@ procedure TAiFrame.DoDestroy();
 begin
 end;
 
-function TAiFrame.Finalize(): TProfError;
+function TAiFrame.Finalize(): AError;
 begin
   if not(Assigned(FPool)) then
   begin
@@ -643,7 +643,7 @@ begin
   Result := FSource;
 end;
 
-function TAiFrame.Initialize(): TProfError;
+function TAiFrame.Initialize(): AError;
 begin
   Result := 0;
   if FInitialized then Exit;
@@ -666,7 +666,7 @@ begin
   Result := -1;
 end;
 
-function TAiFrame.LoadFromFile(const AFileName: WideString): TProfError;
+function TAiFrame.LoadFromFile(const AFileName: WideString): AError;
 begin
   Result := -1; //False;
 end;
@@ -803,12 +803,12 @@ begin
   Result := True;
 end;
 
-function TAiFrame1.ConfigureLoad(AConfig: IProfNode): TProfError;
+function TAiFrame1.ConfigureLoad(AConfig: IProfNode): AError;
 begin
   Result := 0;
 end;
 
-function TAiFrame1.ConfigureSave(AConfig: IProfNode): TProfError;
+function TAiFrame1.ConfigureSave(AConfig: IProfNode): AError;
 begin
   Result := 0;
 end;
@@ -830,7 +830,7 @@ begin
   inherited DoDestroy();
 end;
 
-function TAiFrame1.Finalize(): TProfError;
+function TAiFrame1.Finalize(): AError;
 begin
   if not(Assigned(FPool)) then
   begin
@@ -982,7 +982,7 @@ begin
   Result := 0;
 end;
 
-function TAiFrame1.Initialize(): TProfError;
+function TAiFrame1.Initialize(): AError;
 begin
   Result := 0;
   if FInitialized then Exit;
@@ -1006,7 +1006,7 @@ begin
   Result := -1;
 end;
 
-function TAiFrame1.LoadFromFile(const AFileName: WideString): TProfError;
+function TAiFrame1.LoadFromFile(const AFileName: WideString): AError;
 begin
   Result := -1; //False;
 end;
@@ -1143,7 +1143,7 @@ begin
   DoCreate();
 end;
 
-function TAiFrame2007.Finalize(): TProfError;
+function TAiFrame2007.Finalize(): AError;
 begin
   if (FSource = 0) then
   begin
@@ -1287,7 +1287,7 @@ begin
   Result := True;}
 end;
 
-function TAiFrame2007.Initialize(): TProfError;
+function TAiFrame2007.Initialize(): AError;
 begin
   Result := 0;
   if FInitialized then Exit;

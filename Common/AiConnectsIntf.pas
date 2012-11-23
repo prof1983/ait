@@ -1,9 +1,8 @@
 {**
-@Abstract(AiConnects interface)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(08.06.2012)
-@LastMod(08.06.2012)
-@Version(0.5)
+@Abstract AiConnects interface
+@Author Prof1983 <prof1983@ya.ru>
+@Created 08.06.2012
+@LastMod 23.11.2012
 }
 unit AiConnectsIntf;
 
@@ -11,7 +10,7 @@ interface
 
 uses
   XmlIntf,
-  ATypes, AiBase;
+  ABase, AiBase;
 
 type
   {** Интерфейс для работы со связями фрейма }
@@ -25,22 +24,22 @@ type
       {** Задать Id связанного фрейма }
     procedure SetConnect(AIndex: Integer; Value: TAId);
       {** Задать Id связанного фрейма }
-    function SetConnectA(Index: Integer; Value: TAId): TError;
+    function SetConnectA(Index: Integer; Value: TAId): AError;
       {** Задать Id фрейма-владельца }
     procedure SetFreimId(Id: TAId);
 
       {** Добавить связь }
     function AddConnect(Connect: TAId): Integer;
       {** Очистить список связей }
-    function Clear(): TError;
+    function Clear(): AError;
       {** Удалить связь по Id }
-    function DeleteConnect(Id: TAId): TError;
+    function DeleteConnect(Id: TAId): AError;
       {** Удалить связь по индексу }
-    function DeleteConnectByIndex(Index: Integer): TError;
+    function DeleteConnectByIndex(Index: Integer): AError;
       {** Получить индекс связи по Id }
     function GetConnectIndex(Id: TAId): Integer;
       {** Загрузить список связей из файла }
-    function LoadFromFile(const FileName: WideString): TError;
+    function LoadFromFile(const FileName: WideString): AError;
       {** Загрузить список связей из XML }
     function LoadFromXml(const AXml: IXmlNode): WordBool;
       {** Сохранить список связей в файл }

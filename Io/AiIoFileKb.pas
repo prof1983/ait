@@ -1,14 +1,8 @@
 ﻿{**
-@Abstract(БЗ фреймов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(17.03.2005)
-@LastMod(04.06.2012)
-@Version(0.5)
-
-0.0.0.4 - 14.02.2006 - Coments
-0.0.0.3 - 15.12.2005
-0.0.0.2 - 03.04.2005
-0.0.0.1 - 17.03.2005
+@Abstract БЗ фреймов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 17.03.2005
+@LastMod 23.11.2012
 }
 unit AiIoFileKb;
 
@@ -54,9 +48,9 @@ type
     FHeaderKB: TFileProfKBHeader;
     FHeaderKb3: TFileProfKbHeader3;
     FPath: String;
-    function HeaderKBRead(var Header: TFileProfKBHeader): TError;
-    function HeaderKbRead3(var Header: TFileProfKbHeader3): TError;
-    function HeaderKBWrite(const Header: TFileProfKBHeader): TError;
+    function HeaderKBRead(var Header: TFileProfKBHeader): AError;
+    function HeaderKbRead3(var Header: TFileProfKbHeader3): AError;
+    function HeaderKBWrite(const Header: TFileProfKBHeader): AError;
   public
     constructor Create;
     function FreimNew(Typ: TAId): TAId;
@@ -68,10 +62,10 @@ type
     function FreimWriteNext(const Rec: TAiFreimRecF64): AError;
     function GetHeaderKB: TFileProfKBHeader;
     function GetPath: String;
-    function HeaderSet(var Header: TFileProfHeader): TError;
+    function HeaderSet(var Header: TFileProfHeader): AError;
     function Open(FileName: String; Path: String = ''): Boolean;
-    function Open2(const FileName, Path: APascalString): TError;
-    function OpenCreate(FileName: String; Path: String = ''): TError;
+    function Open2(const FileName, Path: APascalString): AError;
+    function OpenCreate(FileName: String; Path: String = ''): AError;
   end;
 
 procedure ArrayByteToHeaderKB(
@@ -224,7 +218,7 @@ var
   {A: TArrayByte;}
   {Stream: TFileStream;}
   I64: UInt64;
-  Fl: Float64;
+  Fl: AFloat64;
 begin
   {Result := 1;}
 
@@ -251,7 +245,7 @@ var
   {A: TArrayByte;}
   {Stream: TFileStream;}
   I64: UInt64;
-  Fl: Float64;
+  Fl: AFloat64;
 begin
   {Result := 1;}
 
@@ -305,7 +299,7 @@ begin
     Result := -1;
 end;
 
-function TFileProfKB.FreimWriteNext(const Rec: TAIFreimRecF64): TError;
+function TFileProfKB.FreimWriteNext(const Rec: TAIFreimRecF64): AError;
 var
   Stream: TFileStream;
 begin
@@ -330,7 +324,7 @@ begin
   Result := FPath;
 end;
 
-function TFileProfKB.HeaderKBRead(var Header: TFileProfKBHeader): TError;
+function TFileProfKB.HeaderKBRead(var Header: TFileProfKBHeader): AError;
 begin
   Result := 1;
   HeaderKBClear(Header);
@@ -344,7 +338,7 @@ begin
   Result := 0;
 end;
 
-function TFileProfKB.HeaderKbRead3(var Header: TFileProfKbHeader3): TError;
+function TFileProfKB.HeaderKbRead3(var Header: TFileProfKbHeader3): AError;
 begin
   Result := 1;
   HeaderKbClear3(Header);
@@ -358,7 +352,7 @@ begin
   Result := 0;
 end;
 
-function TFileProfKB.HeaderKBWrite(const Header: TFileProfKBHeader): TError;
+function TFileProfKB.HeaderKBWrite(const Header: TFileProfKBHeader): AError;
 var
   Stream: TFileStream;
 begin
@@ -375,7 +369,7 @@ begin
   Result := 0;}
 end;
 
-function TFileProfKB.HeaderSet(var Header: TFileProfHeader): TError;
+function TFileProfKB.HeaderSet(var Header: TFileProfHeader): AError;
 begin
   Result := inherited HeaderSet(Header, 1, 2, 4);
 end;
@@ -417,7 +411,7 @@ begin
   Result := True;
 end;
 
-function TFileProfKB.Open2(const FileName, Path: APascalString): TError;
+function TFileProfKB.Open2(const FileName, Path: APascalString): AError;
 begin
   if Open(FileName, Path) then
     Result := 0
@@ -425,7 +419,7 @@ begin
     Result := -1;
 end;
 
-function TFileProfKB.OpenCreate(FileName: String; Path: String = ''): TError;
+function TFileProfKB.OpenCreate(FileName: String; Path: String = ''): AError;
 var
   I: Int32;
   Header: TFileProfHeader;

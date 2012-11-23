@@ -1,9 +1,8 @@
 {**
-@Abstract(AiMemoControl)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(04.05.2007)
-@LastMod(27.06.2012)
-@Version(0.5)
+@Abstract AiMemoControl
+@Author Prof1983 <prof1983@ya.ru>
+@Created 04.05.2007
+@LastMod 23.11.2012
 }
 unit AiMemoControl;
 
@@ -14,7 +13,7 @@ uses
   AclMessageIntf;
 
 type
-  TAiMemoControl = class(TProfMemoControl)
+  TAiMemoControl = class(TAMemoControl)
   private
     //FOnSendMessageA: TProcMessageA;
   protected

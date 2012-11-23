@@ -2,7 +2,7 @@
 @Abstract Базовые типы для AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 26.04.2006
-@LastMod 09.08.2012
+@LastMod 23.11.2012
 
 Prototype: org.framerd.OID
 Каждый фрейм является некоторой сущностью.
@@ -120,11 +120,11 @@ type //** Фрейм
       //** Очистить объект
     function Clear(): AError; virtual;
       //** Загрузить конфигурации
-    function ConfigureLoad(Config: TConfig; Prefix: String): TError; virtual;
+    function ConfigureLoad(Config: TConfig; Prefix: String): AError; virtual;
       //** Загрузить конфигурации
     function ConfigureLoad1(): Boolean; virtual;
       //** Сохранить конфигурации
-    function ConfigureSave(Config: TConfig; Prefix: String): TError; virtual;
+    function ConfigureSave(Config: TConfig; Prefix: String): AError; virtual;
       //** Сохранить конфигурации
     function ConfigureSave1(): Boolean; virtual;
       {** Adds association connect to frame
@@ -134,7 +134,7 @@ type //** Фрейм
           @return(association identifier) }
     function ConnectGet(Index: AInt): AInt64;
       //** Финализировать. Разорвать связь объекта с источником.
-    function Finalize(): TProfError; virtual;
+    function Finalize(): AError; virtual;
       //** Free
     procedure Free(); virtual;
     //function GetConfig(): IProfNode; safecall;
@@ -169,18 +169,18 @@ type //** Фрейм
       //** Возвращает фрейм в виде XML строки
     function GetXml(): WideString; virtual;
       //** Производит инициализацию с установкой параметров
-    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError; virtual;
+    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError; virtual;
       //** Произвести инициализацию. Установить связь с источником.
-    function Initialize(): TProfError; virtual;
+    function Initialize(): AError; virtual;
     {**
       Load from source
       Загрузить из источника
     }
-    function Load(): TProfError; virtual;
+    function Load(): AError; virtual;
       //** Загрузить из AIData
     function LoadFromData(Data: TAiDataObject): TAiError; virtual;
       //** Загрузить из файла
-    function LoadFromFile(const AFileName: WideString): TProfError; virtual;
+    function LoadFromFile(const AFileName: WideString): AError; virtual;
       //** Load from TAiFreimRecF64 struct
     function LoadFromRecF64(Rec: TAiFreimRecF64): AError;
       //** Load from TProfXml object
@@ -195,7 +195,7 @@ type //** Фрейм
       Save to source
       Сохранить в источник
     }
-    function Save(): TProfError; virtual;
+    function Save(): AError; virtual;
       //** Сохранить в файл
     function SaveToFile(const AFileName: WideString): WordBool; virtual;
       //** Save to TAiFreimRecF64 struct
@@ -312,7 +312,7 @@ begin
   Result := 0;
 end;
 
-function TAiFrameObject.ConfigureLoad(Config: TConfig; Prefix: String): TError;
+function TAiFrameObject.ConfigureLoad(Config: TConfig; Prefix: String): AError;
 begin
   Result := 1;
   if not(Assigned(Config)) then Exit;
@@ -324,7 +324,7 @@ begin
   Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
 end;
 
-function TAiFrameObject.ConfigureSave(Config: TConfig; Prefix: String): TError;
+function TAiFrameObject.ConfigureSave(Config: TConfig; Prefix: String): AError;
 begin
   Result := 1;
   if not(Assigned(Config)) then Exit;
@@ -371,7 +371,7 @@ begin
   FFreimType := 0;
 end;
 
-function TAiFrameObject.Finalize(): TProfError;
+function TAiFrameObject.Finalize(): AError;
 begin
   if (FSource <> 0) then
   begin
@@ -577,7 +577,7 @@ begin
   Result := IAISource(FSource);
 end;}
 
-function TAiFrameObject.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): TError;
+function TAiFrameObject.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError;
 begin
   FConfig := Config;
   FLog := Log;
@@ -586,7 +586,7 @@ begin
   Result := Initialize;
 end;
 
-function TAiFrameObject.Initialize(): TProfError;
+function TAiFrameObject.Initialize(): AError;
 begin
   if FInitialized then
   begin
@@ -597,7 +597,7 @@ begin
   Result := Load();
 end;
 
-function TAiFrameObject.Load(): TProfError;
+function TAiFrameObject.Load(): AError;
 begin
   if (LoadFromData(GetData()) >= 0) then
   begin
@@ -632,7 +632,7 @@ begin
   Result := -1;
 end;
 
-function TAiFrameObject.LoadFromFile(const AFileName: WideString): TProfError;
+function TAiFrameObject.LoadFromFile(const AFileName: WideString): AError;
 begin
   Result := -1; //False;
 end;
@@ -720,7 +720,7 @@ begin
   Result := 0;
 end;
 
-function TAiFrameObject.Save(): TProfError;
+function TAiFrameObject.Save(): AError;
 begin
   if (FInitialized) and (FSource <> 0) and (FId > 0) then
   begin

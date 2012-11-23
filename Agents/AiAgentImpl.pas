@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовый класс для агента)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(22.09.2005)
-@LastMod(28.06.2012)
-@Version(0.5)
+@Abstract Базовый класс для агента
+@Author Prof1983 <prof1983@ya.ru>
+@Created 22.09.2005
+@LastMod 23.11.2012
 
 Агент - это модуль, который имеет свой подпроцесс выполнения команд (Thread).
 
@@ -17,7 +16,7 @@ unit AiAgentImpl;
 interface
 
 uses
-  AConsts2, ATypes,
+  ABase, AConsts2, ATypes,
   AclMessageIntf,
   AiAgentIntf, AiAgentProcess, AiBase, AiBaseTypes, AiInterpretatorIntf, AiMessagesImpl, AiModuleImpl;
 
@@ -122,11 +121,11 @@ type // Базовый класс для агента
     function Stop(): WordBool; virtual; safecall;
   public
       // Финализирует
-    function Finalize(): TProfError; override;
+    function Finalize(): AError; override;
       // Скрыть видимые окна. Должен быть переопределен.
     //function Hide(): WordBool; virtual; safecall;
       // Инициализирует
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
       // Приостанавливает процесс выполнения команд
     function Pause(): Boolean; virtual; safecall;
       // Показывает окно агента. Должен быть переопределен.
@@ -186,7 +185,7 @@ begin
   end;
 end;
 
-function TAiAgent.Finalize(): TProfError;
+function TAiAgent.Finalize(): AError;
 begin
   Result := inherited Finalize();
 
@@ -270,7 +269,7 @@ begin
   AddToLog(lgGeneral, ltError, stNotOverride+' '+ClassName+'.Hide');
 end;}
 
-function TAiAgent.Initialize(): TProfError;
+function TAiAgent.Initialize(): AError;
 //var
 //  Config1: IProfXmlNode;
 //  Log1: ILogNode;

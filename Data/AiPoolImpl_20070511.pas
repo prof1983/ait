@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовый класс для источника фреймов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(22.09.2005)
-@LastMod(13.06.2012)
-@Version(0.5)
+@Abstract Базовый класс для источника фреймов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 22.09.2005
+@LastMod 23.11.2012
 }
 unit AiPoolImpl_20070511;
 
@@ -13,7 +12,7 @@ interface
 
 uses
   SysUtils,
-  AConsts2, ATypes,
+  ABase, AConsts2, ATypes,
   AiBase, AiBaseTypes, AiDataIntf, AiFrameIntf, AiFrameListIntf, AiModuleImpl, AiFramePoolIntf;
 
 type //** Запись для источника фреймов
@@ -72,13 +71,13 @@ type //** Базовый класс для источника фреймов
     //** Проверяет и создает базовые фреймы AIFreims
     function CheckFreims(): Boolean;
     //** Финализировать
-    function Finalize(): TProfError; override; //safecall;
+    function Finalize(): AError; override;
     //** Освободить объект
     procedure Free(); override;
     //** Инициализировать
-    function Initialize(): TProfError; override; //safecall;
+    function Initialize(): AError; override;
     //** Загрузить данные из данных фрейма
-    function Load(): TProfError; override; safecall;
+    function Load(): AError; override; safecall;
     function ToString(): WideString; virtual; safecall;
   public // IAiFramePool
     //** Закрыть источник
@@ -106,7 +105,7 @@ type //** Базовый класс для источника фреймов
     //** Создает и регистрирует новый тип фрейма Если AStructure задан, то AName игнорируется
     //function NewFreimType(const AName: WideString; AStruct: PStructFreimType = nil): TAIID; virtual;
     //** Открыть источник
-    function Open(): TProfError; virtual; safecall;
+    function Open(): AError; virtual; safecall;
   public
     //** Начальный идентификатор для этого пула (источника) фреймов
     property Base: TAIID read FBase write FBase;
@@ -195,7 +194,7 @@ begin
   FName := 'Source';
 end;
 
-function TAIFramePool.Finalize(): TProfError;
+function TAIFramePool.Finalize(): AError;
 begin
   Result := inherited Finalize();
 end;
@@ -307,12 +306,12 @@ begin
   Inc(FNextFreeFreimID);
 end;
 
-function TAIFramePool.Initialize(): TProfError;
+function TAIFramePool.Initialize(): AError;
 begin
   Result := inherited Initialize();
 end;
 
-function TAIFramePool.Load(): TProfError;
+function TAIFramePool.Load(): AError;
 begin
   LoadFromData(FData);
 end;
@@ -345,7 +344,7 @@ begin
   // ...
 end;
 
-function TAIFramePool.Open(): TProfError;
+function TAIFramePool.Open(): AError;
 begin
   Result := -1;
 end;
