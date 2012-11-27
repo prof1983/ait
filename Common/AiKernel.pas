@@ -2,7 +2,7 @@
 @Abstract AiKernel lib client
 @Author Prof1983 <prof1983@ya.ru>
 @Created 19.06.2012
-@LastMod 09.08.2012
+@LastMod 27.11.2012
 }
 unit AiKernel;
 
@@ -40,13 +40,14 @@ function AiKernel_Boot(): AError;
 var
   Lib: ALibrary;
 begin
-  Lib := Library_Open(AiKernelLib, 0);
+  Lib := ALibrary_OpenP(AiKernelLib, 0);
   if (Lib = 0) then
   begin
     Result := -1;
     Exit;
   end;
-  _AiKernel_Init := Library_GetProcAddress(Lib, 'AiKernel_Init');
+  _AiKernel_Init := ALibrary_GetProcAddressP(Lib, 'AiKernel_Init');
+  Result := 0;
 end;
 
 function AiKernel_Init(): AError;
