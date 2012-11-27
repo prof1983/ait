@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 23.11.2012
+@LastMod 27.11.2012
 }
 unit AiSourceObj;
 
@@ -185,7 +185,7 @@ function SaveSourceToFileN(Source: TAISource; FileName, Path: String): Boolean;
 {var
   Count: UInt64;
   F: TFileProfKB;
-  Freim: TAiFrame2005;
+  Freim: TAiFrameObject;
   Id: Int32;
   Index: Int32;
   Rec: TAIFreimRec;}
@@ -628,7 +628,7 @@ begin
   if Result <> 0 then Exit;
 
   Count := F.GetHeaderKB.CountF;
-  Freim := TAiFrame2005.Create(nil, 0);
+  Freim := TAiFrameObject.Create(nil, 0);
   for I := 0 to Count - 1 do begin
     F.FreimRead(I, Rec);
     SetFreimRec(Rec.Id, Freim);
@@ -648,7 +648,7 @@ end;
 
 function TAiSourceObject.LoadFromFileXml(FileName: String): AError;
 {var
-  //Freim: TAiFrame2005;
+  //Freim: TAiFrameObject;
   I: Int32;
   Id: TAI_Id;
   {Xml: TMyXml;}
@@ -656,7 +656,7 @@ begin
   (*Xml := TMyXml.Create;
   Result := Xml.LoadFromFileText(FileName);
   for I := 0 to Xml.GetCountParams - 1 do begin
-    Freim := TAiFrame2005.Create;
+    Freim := TAiFrameObject.Create;
     Freim.LoadFromXml(Xml.GetParam(I));
     Id := Freim.GetId;
     if Id = 0 then begin
@@ -741,7 +741,7 @@ end;
 function TAiSourceObject.SaveToFileXml(FileName: String): Boolean;
 {var
   Count: Int32;
-  Freim: TAiFrame2005;
+  Freim: TAiFrameObject;
   I: Int32;
   //Node: TProfXmlNode;
   //Xml: TProfXmlDocument;}
@@ -754,7 +754,7 @@ begin
     Xml.DocumentElement..NodeName := 'Freims';
     Count := GetCountFreims;
     for I := 0 to Count - 1 do begin
-      Freim := TAiFrame2005(GetFreim(GetItemId(I)));
+      Freim := TAiFrameObject(GetFreim(GetItemId(I)));
       if Assigned(Freim) then begin
         Node := Xml.DocumentElement.NewNode('Freim');
         Node.Xml := Freim.Xml;

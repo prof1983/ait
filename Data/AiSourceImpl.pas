@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовый класс для источника фреймов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(22.09.2005)
-@LastMod(03.07.2012)
-@Version(0.5)
+@Abstract Базовый класс для источника фреймов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 22.09.2005
+@LastMod 27.11.2012
 }
 unit AiSourceImpl;
 
@@ -96,7 +95,6 @@ type //** Базовый класс для источника фреймов
     //** ID фреймов родительских БЗ
     property ParentsID[Index: Integer]: TAIID read GetParentID write SetParentID;
   end;
-  TAISource3 = TAISource;
 
 const // Сообщения -------------------------------------------------------------
   stCheckFreimsStart  = 'Проверка базовых фреймов в БЗ';
@@ -240,10 +238,10 @@ function TAISource.Get_FrameDataByID(ID: TAIID): IAIData;
 {var
   Freim: TAI_Freim;}
 begin
-  {Result := TAI_Data.Create(Id);}
+  {Result := TAiDataObject.Create(Id);}
   {Freim := GetFreim(Id);
   if not(Assigned(Freim)) then begin
-    Result := TAI_Data.Create(nil, dtNone, AddToLogProf);
+    Result := TAiDataObject.Create(nil, dtNone, AddToLogProf);
     Exit;
   end;
   Result := Freim.GetData;}

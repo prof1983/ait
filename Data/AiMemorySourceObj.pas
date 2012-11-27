@@ -2,7 +2,7 @@
 @Abstract Источник знаний в памяти
 @Author Prof1983 <prof1983@ya.ru>
 @Created 25.01.2006
-@LastMod 09.08.2012
+@LastMod 27.11.2012
 }
 unit AiMemorySourceObj;
 
@@ -199,7 +199,7 @@ end;
 function TAiMemorySourceObject.LoadFromConfig(Config: TConfig; Prefix: String): TError;
 var
   Count: Int32;
-  //Freim: TAiFrame2005;
+  //Freim: TAiFrameObject;
   I: Int32;
   Id: AId;
   S: String;

@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Базовый класс для источника фреймов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(22.09.2005)
-@LastMod(08.06.2012)
-@Version(0.5)
+@Abstract Базовый класс для источника фреймов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 22.09.2005
+@LastMod 27.11.2012
 }
 unit AiFramePoolObj;
 
@@ -269,10 +268,10 @@ function TAiFramePoolObject.Get_FrameDataByID(ID: TAId): TAiDataObject;
 {var
   Freim: TAI_Freim;}
 begin
-  {Result := TAI_Data.Create(Id);}
+  {Result := TAiDataObject.Create(Id);}
   {Freim := GetFreim(Id);
   if not(Assigned(Freim)) then begin
-    Result := TAI_Data.Create(nil, dtNone, AddToLogProf);
+    Result := TAiDataObject.Create(nil, dtNone, AddToLogProf);
     Exit;
   end;
   Result := Freim.GetData;}

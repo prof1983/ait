@@ -2,7 +2,7 @@
 @Abstract Базовые типы для AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 26.04.2006
-@LastMod 23.11.2012
+@LastMod 27.11.2012
 
 Prototype: org.framerd.OID
 Каждый фрейм является некоторой сущностью.
@@ -54,11 +54,11 @@ type //** Фрейм
       //** Данные - объект источника. Если источника нет - локальный объект
     FData: TAiDataObject;
       //** Дата создания
-    FDateCreate: TDateTime; //FDateTimeCreate: TDateTime;
+    FDateCreate: TDateTime;
       //** Дата изменения
     FDateModify: TDateTime;
       //** Тип фрейма
-    FFreimType: TAId; //FType: TAI_Id;
+    FFreimType: TAId;
       //** Класс логирования (deprecated)
     FLog: TLog;
       //** Функция добавления в log (deprecated)
@@ -266,11 +266,7 @@ type //** Фрейм
   end;
   TAiFrame = TAiFrameObject;
 
-  //TAiFrame2004 = TAiFrameObject;
-  //TAiFrame2005 = TAiFrameObject;
-  //TAiFreimObject = TAiFrameObject;
   //TAiFreim = TAiFrameObject;
-  //TAI_Freim = TAiFrameObject;
 
 implementation
 
@@ -669,18 +665,6 @@ begin
   FType := cStrToUInt64(Xml.GetParamValueByName('Type'));
   Result := 0;
 end;}
-{function TAIFreim.LoadFromXml(Xml: IXmlNode): WordBool;
-begin
-  Result := False;
-  if not(Assigned(Xml)) then Exit;
-  Clear();
-  FID := TProfXmlNode.ReadInt64Def(Xml, 'ID');
-  FDateTimeCreate := TProfXmlNode.ReadDateTimeDef(Xml, 'DateTimeCreate');
-  FFreimType := TProfXmlNode.ReadInt64Def(Xml, 'Type');
-  GetConnects.LoadFromXml(TProfXmlNode.GetNodeByNameA(Xml, 'Connects'));
-  //GetData.LoadFromXml(Xml.GetNodeByName('Data'));
-  Result := True;
-end;}
 {function TAiFreimObject.LoadFromXml(Xml: IXmlNode): WordBool;
 var
   Connects: IXmlNode;
@@ -775,20 +759,6 @@ begin
     Xml.NewParam('Type', cUInt64ToStr(FType));
   {end;}
   Result := 0;
-end;*)
-(*function TAiFrameObject.SaveToXml(Xml: IXmlNode): WordBool;
-{var
-  con: TAiConnects;}
-begin
-  {Result := Assigned(Xml);
-  if not(Result) then Exit;
-  TProfXmlNode.WriteIntegerA(Xml, 'ID', FID);
-  TProfXmlNode.WriteDateTimeA(Xml, 'DateTimeCreate', FDateTimeCreate);
-  TProfXmlNode.WriteIntegerA(Xml, 'Type', FFreimType);
-  con := Connects;
-  if Assigned(con) then
-    con.SaveToXml(TProfXmlNode.GetNodeByNameA(Xml, 'Connects'));
-  //Data.SaveToXml(Xml.GetNodeByName('Data'));}
 end;*)
 {function TAiFreimObject.SaveToXml(Xml: IXmlNode): WordBool;
 var

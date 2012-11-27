@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника фреймов
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 23.11.2012
+@LastMod 27.11.2012
 }
 unit AiPoolImpl_20070511;
 
@@ -66,7 +66,7 @@ type //** Базовый класс для источника фреймов
     function Get_FrameDateTimeCreate(ID: TAIID): TDateTime; virtual;
     function Get_ItemID(Index: Integer): TAIID; virtual;
   protected
-    procedure DoCreate(); override; safecall;
+    procedure DoCreate(); override;
   public
     //** Проверяет и создает базовые фреймы AIFreims
     function CheckFreims(): Boolean;
@@ -119,7 +119,6 @@ type //** Базовый класс для источника фреймов
     property ParentsID[Index: Integer]: TAIID read GetParentID write SetParentID;
   end;
   //TAIPool = TAIFramePool;
-  //TAISource3 = TAIPool; // TODO: Удалить
 
 const // Сообщения -------------------------------------------------------------
   stCheckFreimsStart  = 'Проверка базовых фреймов в БЗ';
@@ -284,10 +283,10 @@ function TAIFramePool.Get_FrameDataByID(ID: TAIID): IAIData;
 {var
   Freim: TAI_Freim;}
 begin
-  {Result := TAI_Data.Create(Id);}
+  {Result := TAiDataObject.Create(Id);}
   {Freim := GetFreim(Id);
   if not(Assigned(Freim)) then begin
-    Result := TAI_Data.Create(nil, dtNone, AddToLogProf);
+    Result := TAiDataObject.Create(nil, dtNone, AddToLogProf);
     Exit;
   end;
   Result := Freim.GetData;}

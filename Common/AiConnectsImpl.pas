@@ -2,7 +2,7 @@
 @Abstract AiConnects
 @Author Prof1983 <prof1983@ya.ru>
 @Created 12.03.2012
-@LastMod 09.08.2012
+@LastMod 27.11.2012
 }
 unit AiConnectsImpl;
 
@@ -17,7 +17,7 @@ type //** Связи
   TAIConnects = class(TInterfacedObject, IAiConnects)
   protected
       //** Связи
-    FConnects: array of TAiId{TAIFrameRec};
+    FConnects: array of TAiId;
       //** Фрейм-владелец
     //FOwner: TAIFreim;
       //** ID фрейма владельца - Кому принадлежит список связей

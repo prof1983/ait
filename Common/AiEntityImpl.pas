@@ -1,23 +1,18 @@
 ﻿{**
-@Abstract(Сущность - базовый класс для представления знаний)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(11.05.2007)
-@LastMod(20.06.2012)
-@Version(0.5)
+@Abstract Сущность - базовый класс для представления знаний
+@Author Prof1983 <prof1983@ya.ru>
+@Created 11.05.2007
+@LastMod 27.11.2012
 
 Эта сущность для хранения в ОЗУ в виде объекта.
 Создается для использования. После использования удаляется.
 
-Прототипы:
+Prototypes:
   aterm.ATerm
   aterm.ATermAppl
   org.framerd.FDType
   javax.swing.text.html.parser.Entity
   org.semanticweb.owl.model.OwlEntity
-
-История версий:
-0.0.2.1 - 04.07.2007
-0.0.2.0 - 01.06.2007 - Полностью переделал из прототипа AiEntityImpl
 }
 unit AiEntityImpl;
 
@@ -59,7 +54,6 @@ begin
   end;
   // Сохранить текущую сущность в БЗ
   Result := (FPool.CommitEntity(Self) >= 0);
-  Result := True;
 end;
 
 constructor TAiEntity.Create();
@@ -106,7 +100,6 @@ begin
     Exit;
   end;
   Result := (FPool.UpdateEntity(Self) >= 0);
-  Result := True;
 end;
 
 end.

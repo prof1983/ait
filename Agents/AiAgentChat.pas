@@ -2,7 +2,7 @@
 @Abstract AI Агент чат-бот
 @Author Prof1983 <prof1983@ya.ru>
 @Created 04.09.2005
-@LastMod 17.08.2012
+@LastMod 27.11.2012
 }
 unit AiAgentChat;
 
@@ -246,7 +246,7 @@ end;
 
 function TAiAgentChat.Load(): AError;
 {var
-  Data: TAI_Data;
+  Data: TAiDataObject;
   Stream: TProfStream;
   Xml: TProfXmlNode;}
 var
@@ -285,7 +285,7 @@ end;
 
 function TAiAgentChat.Save(): AError;
 (*var
-  Data: TAI_Data;
+  Data: TAiDataObject;
   Stream: TProfStream;
   Xml: TProfXmlNode;*)
 var
