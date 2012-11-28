@@ -2,7 +2,7 @@
 @Abstract Базовый тип данных для AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 26.04.2005
-@LastMod 27.11.2012
+@LastMod 28.11.2012
 }
 unit AiDataObj;
 
@@ -163,7 +163,9 @@ begin
   if not(Assigned(FStream)) then
     FStream := TProfStreamAdapter.Create(TMemoryStream.Create());
   if (FStream is TProfStreamAdapter) then
-    Result := TProfStreamAdapter(FStream).Stream;
+    Result := TProfStreamAdapter(FStream).Stream
+  else
+    Result := nil;
 end;
 
 function TAiDataObject.GetStreamMy(): AStreamObj.TProfStream;

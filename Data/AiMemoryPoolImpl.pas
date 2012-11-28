@@ -1,14 +1,8 @@
 ﻿{**
-@Abstract(Источник знаний)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(23.05.2007)
-@LastMod(20.06.2012)
-@Version(0.5)
-
-История версий:
-0.0.2.1 - 28.06.2007
-0.0.2.0 - 01.06.2007 - Добавил GetIterator(), GetCount(), TAIMemoryPoolIterator, Open(), Close(), Contains()
-0.0.1.1 - 31.05.2007 - Переименован AIMemoryPool -> AIMemoryPoolImpl
+@Abstract Источник знаний
+@Author Prof1983 <prof1983@ya.ru>
+@Created 23.05.2007
+@LastMod 28.11.2012
 }
 unit AiMemoryPoolImpl;
 
@@ -93,6 +87,7 @@ type //** Итератор для MemoryPool
 function TAiMemoryPool.Close(): AError;
 begin
   FIsOpened := False;
+  Result := 0;
 end;
 
 function TAiMemoryPool.Contains(ID: TAId): Boolean;
