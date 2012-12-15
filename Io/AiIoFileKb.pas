@@ -2,7 +2,7 @@
 @Abstract БЗ фреймов
 @Author Prof1983 <prof1983@ya.ru>
 @Created 17.03.2005
-@LastMod 23.11.2012
+@LastMod 15.12.2012
 }
 unit AiIoFileKb;
 
@@ -326,7 +326,6 @@ end;
 
 function TFileProfKB.HeaderKBRead(var Header: TFileProfKBHeader): AError;
 begin
-  Result := 1;
   HeaderKBClear(Header);
   Self.Seek(SizeOf(TFileProfHeader));
   Self.ReadUInt64(Header.CountF);
@@ -340,7 +339,6 @@ end;
 
 function TFileProfKB.HeaderKbRead3(var Header: TFileProfKbHeader3): AError;
 begin
-  Result := 1;
   HeaderKbClear3(Header);
   Self.Seek(SizeOf(TFileProfHeader));
   Self.ReadUInt64(Header.CountF);
