@@ -1,20 +1,10 @@
 ﻿{**
-@Abstract(БЗ фреймов v. 0.1)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(15.03.2005)
-@LastMod(19.06.2012)
-@Version(0.5)
+@Abstract БЗ фреймов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 15.03.2005
+@LastMod 15.12.2012
 
 Функции доступа к файлу БЗ (идентификаторы фреймов - 64 бита)
-
-0.0.0.3 - 04.04.2005 - Добавлен модуль Prof_KB_File_1 0.0.0.3
-0.0.0.2 - 03.04.2005
-0.0.0.1 - 15.03.2005
-
-Prof_KB_File_1
-0.0.0.3 - 03.04.2005
-0.0.0.2 - 29.03.2005 - Добавлен модуль UAI_File 0.0.0.2
-0.0.0.1 - 15.03.2005
 }
 unit AiKbFile;
 
@@ -22,7 +12,7 @@ interface
 
 uses
   Classes,
-  ABase2, ABaseUtils2, AIoTypes, AStreamObj, ATypes,
+  ABase, ABase2, ABaseUtils2, AIoTypes, AStreamObj, ATypes,
   AiBase, AiKbObj, AiTypes;
 
 type
@@ -35,20 +25,20 @@ type
   TFileConnect = class(TMyFile)
   public
     function CRead(Index: UInt32): TAI_Id;
-    function CWrite(Index: UInt32; Value: TAI_Id): TError;
+    function CWrite(Index: UInt32; Value: TAI_Id): AError;
     function Open(Path: String; Id: TAI_Id): Boolean;
-    function Open2(Path: String; Id: TAI_Id): TError;
+    function Open2(Path: String; Id: TAI_Id): AError;
   end;
 
   TFileData = class(TMyFile)
   public
-    function Delete(Path: String; Id: TAI_Id): TError;
+    function Delete(Path: String; Id: TAI_Id): AError;
     function Open(Path: String; Id: TAI_Id): Boolean;
-    function Open2(Path: String; Id: TAI_Id): TError;
+    function Open2(Path: String; Id: TAI_Id): AError;
   end;
 
 { Закрытие БЗ }
-function KBClose(): TError;
+function KBClose(): AError;
 
 {Добавление связи}
 function KBConnectAdd(
@@ -65,13 +55,13 @@ function KBConnectCount(
 function KBConnectDelete(
   Id: TAI_Id64;             {in}{Идентификатор фрейма}
   Con: TAI_Id64             {in}{Идентификатор связи}
-  ): TError;                    {0-ошибок нет, иначе произошла ошибка}
+  ): AError;                    {0-ошибок нет, иначе произошла ошибка}
 
 {Удаляет связь}
 function KBConnectDeleteI(
   Id: TAI_Id64;             {in}{Идентификатор фрейма}
   Index: UInt32                 {in}{Индекс связи}
-  ): TError;                    {0-ошибок нет, иначе произошла ошибка}
+  ): AError;                    {0-ошибок нет, иначе произошла ошибка}
 
 {Возвращает связь}
 function KBConnectGet(
@@ -88,7 +78,7 @@ function KBConnectIndexGet(
 {Очищает данные}
 function KBDataClear(
   Id: TAI_Id64              {in}{Идентификатор фрейма}
-  ): TError;                    {}
+  ): AError;
 
 {Читает данные}
 function KBDataRead(
@@ -133,13 +123,13 @@ function KBFreimCount(): UInt64;
 {Освобождает занятый фрейм}
 function KBFreimFree(
   Id: TAI_Id64                  {in}{Идентификатор фрейма}
-  ): TError;
+  ): AError;
 
 {Возвращает фрейм как структуру TAIFreimRec64}
 function KBFreimRecF64Get(
   Id: TAI_Id64;                 {in}{Идентификатор фрейма}
   var Freim: TAIFreimRec        {out}{Структура}
-  ): TError;                    {0-ошибок нет, иначе произошла ошибка}
+  ): AError;                    {0-ошибок нет, иначе произошла ошибка}
 
 {Создает новый фрейм}
 function KBFreimNew(
@@ -149,7 +139,7 @@ function KBFreimNew(
 {Сохранить изменения фрейма}
 function KBFreimSave(
   Id: TAI_Id64              {in}{Идентификатор фрейма}
-  ): TError;                    {0-ошибок нет, иначе произошла ошибка}
+  ): AError;                    {0-ошибок нет, иначе произошла ошибка}
 
 { Возвращяет файл БЗ (KbFileGet) }
 function KbGetFile(): TAiKbFile;
@@ -159,14 +149,14 @@ function KBOpen(
   FileName: String;             {in}{Имя файла записей. Файл Prof.KB v.0.1}
   Path: String;                 {in}{Путь для расположения дополнительных файлов БЗ}
   CasheCount: UInt32 = 1024     {in}{Размер внутреннего кеша для ускорения чтения}
-  ): TError;                    {0-ошибок нет, иначе произошла ошибка}
+  ): AError;                    {0-ошибок нет, иначе произошла ошибка}
 
 {Создает БЗ}
 function KBOpenCreate(
   FileName: String;             {in}{Имя файла записей. Файл Prof.KB v.0.1}
   Path: String;                 {in}{Путь для расположения дополнительных файлов БЗ}
   CasheCount: UInt32 = 1024     {in}{Размер внутреннего кеша для ускорения чтения}
-  ): TError;                    {0-ошибок нет, иначе произошла ошибка}
+  ): AError;                    {0-ошибок нет, иначе произошла ошибка}
 
 (*function KBSave: TError; {Сохраняет БЗ}*)
 
@@ -185,7 +175,7 @@ function KBTypeGet(
 function KBTypeSet(
   Id: TAI_Id64;             {in}{Идентификатор фрейма}
   Typ: TAI_Id64             {in}{Новый тип}
-  ): TError;                    {0-ошибок нет, иначе произошла ошибка}
+  ): AError;                    {0-ошибок нет, иначе произошла ошибка}
 
 implementation
 
@@ -391,7 +381,7 @@ end;*)
 
 {}
 
-function KBClose: TError;
+function KBClose(): AError;
 begin
   Result := 0;
   {if FFile = 0 then begin Result := 3; Exit; end;
@@ -433,7 +423,7 @@ begin
   Result := KB.ConnectCount(Id);
 end;
 
-function KBConnectDelete(Id: TAI_Id64; Con: TAI_Id64): TError;
+function KBConnectDelete(Id: TAI_Id64; Con: TAI_Id64): AError;
 {var
   I: UInt032;
   I2: UInt032;}
@@ -452,7 +442,7 @@ begin
   Result := KB.ConnectDelete(Id, Con);
 end;
 
-function KBConnectDeleteI(Id: TAI_Id64; Index: UInt32): TError;
+function KBConnectDeleteI(Id: TAI_Id64; Index: UInt32): AError;
 {var
   I: UInt32;
   Con: TAIFreimId64;}
@@ -503,7 +493,7 @@ begin
   Result := KB.ConnectIndexGet(Id, Connect);
 end;
 
-function KBDataClear(Id: TAI_Id64): TError;
+function KBDataClear(Id: TAI_Id64): AError;
 {var
   Ind: Int032;}
 begin
@@ -605,7 +595,7 @@ begin
   Result := KB.FreimCount;
 end;
 
-function KBFreimFree(Id: TAI_Id64): TError;
+function KBFreimFree(Id: TAI_Id64): AError;
 {var
   Ind: Int032;}
 begin
@@ -617,7 +607,7 @@ begin
   if not(Assigned(KB)) then Exit;
 end;
 
-function KBFreimRecF64Get(Id: TAI_Id64; var Freim: TAIFreimRec): TError;
+function KBFreimRecF64Get(Id: TAI_Id64; var Freim: TAIFreimRec): AError;
 begin
   {Result := 0;
   FreimRecF64Clear(Freim);
@@ -636,7 +626,7 @@ begin
   Result := KB.FreimNew(Typ);
 end;
 
-function KBFreimSave(Id: TAI_Id64): TError;
+function KBFreimSave(Id: TAI_Id64): AError;
 begin
   {Result := kbSave;}
   Result := 0;
@@ -648,7 +638,7 @@ begin
   Result := Kb;
 end;
 
-function KBOpen(FileName, Path: String; CasheCount: UInt32 = 1024): TError;
+function KBOpen(FileName, Path: String; CasheCount: UInt32 = 1024): AError;
 {var
   I: Int032;}
 begin
@@ -675,7 +665,7 @@ begin
   end;
 end;
 
-function KBOpenCreate(FileName, Path: String; CasheCount: UInt32 = 1024): TError;
+function KBOpenCreate(FileName, Path: String; CasheCount: UInt32 = 1024): AError;
 {var
   I: Int032;}
 begin
@@ -702,7 +692,7 @@ begin
   end;
 end;
 
-function KBSave: TError;
+function KBSave(): AError;
 begin
   {Result := _Save;}
   Result := 0;
@@ -734,7 +724,7 @@ begin
   Result := KB.FreimTypeGet(Id);
 end;
 
-function KBTypeSet(Id, Typ: TAI_Id64): TError;
+function KBTypeSet(Id, Typ: TAI_Id64): AError;
 {var
   Ind: Int32;}
 begin
@@ -756,7 +746,7 @@ begin
   if GetStream.ReadUInt64(UInt64(Result)) <> 0 then Result := 0;
 end;
 
-function TFileConnect.CWrite(Index: UInt32; Value: TAI_Id): TError;
+function TFileConnect.CWrite(Index: UInt32; Value: TAI_Id): AError;
 begin
   Seek(Index * SizeOf(TAI_Id64));
   if GetStream.WriteUInt64(UInt64(Value)) <> 0 then
@@ -770,7 +760,7 @@ begin
   Result := inherited Open(Path + 'c' + cUInt64ToStr(Id) + '.prof', Prof_fmOpenReadWrite);
 end;
 
-function TFileConnect.Open2(Path: String; Id: TAI_Id): TError;
+function TFileConnect.Open2(Path: String; Id: TAI_Id): AError;
 begin
   if (inherited Open(Path + 'c' + cUInt64ToStr(Id) + '.prof', Prof_fmOpenReadWrite)) then
     Result := 0
@@ -780,7 +770,7 @@ end;
 
 {TFileData}
 
-function TFileData.Delete(Path: String; Id: TAI_Id): TError;
+function TFileData.Delete(Path: String; Id: TAI_Id): AError;
 begin
   if inherited FileDelete(Path + 'c' + cUInt64ToStr(Id) + '.prof') then
     Result := 0
@@ -793,7 +783,7 @@ begin
   Result := inherited Open(Path + 'd' + cUInt64ToStr(Id) + '.prof', Prof_fmOpenReadWrite);
 end;
 
-function TFileData.Open2(Path: String; Id: TAI_Id): TError;
+function TFileData.Open2(Path: String; Id: TAI_Id): AError;
 begin
   if (inherited Open(Path + 'd' + cUInt64ToStr(Id) + '.prof', Prof_fmOpenReadWrite)) then
     Result := 0

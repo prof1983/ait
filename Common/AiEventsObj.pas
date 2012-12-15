@@ -2,7 +2,7 @@
 @Abstract События для объекта AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 11.10.2006
-@LastMod 09.08.2012
+@LastMod 15.12.2012
 }
 unit AiEventsObj;
 
@@ -40,9 +40,9 @@ type
     function GetItem2(Index: UInt32): TAiProc2006;
     function Run(const AMsg: WideString): WordBool;
     function Run2(Sender: AId): AError;
-    function Sign(Proc: TAiProc): TError;
+    function Sign(Proc: TAiProc): AError;
     function Sign2(Proc: TAiProc2006): AError;
-    function UnSign(Proc: TAiProc): TError;
+    function UnSign(Proc: TAiProc): AError;
     function UnSign2(Proc: TAiProc2006): AError;
   end;
 
@@ -112,7 +112,7 @@ begin
   Result := 0;
 end;
 
-function TAiEvent.Sign(Proc: TAIProc): TError;
+function TAiEvent.Sign(Proc: TAIProc): AError;
 {Подписка на событие}
 var
   I: Int32;
@@ -141,7 +141,7 @@ begin
   Result := 0;
 end;
 
-function TAiEvent.UnSign(Proc: TAIProc): TError;
+function TAiEvent.UnSign(Proc: TAIProc): AError;
 {Отписка от события}
 {var
   I: Int32;}
