@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Агент следящий за работой сети)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(04.11.2005)
-@LastMod(04.07.2012)
-@Version(0.5)
+@Abstract Агент следящий за работой сети
+@Author Prof1983 <prof1983@ya.ru>
+@Created 04.11.2005
+@LastMod 15.12.2012
 }
 unit AiNetworkAgent;
 
@@ -27,8 +26,7 @@ type //** Агент следящий за работой сети
     //FTcpIPConnectionModule
     function GetIsNetwork(): WordBool;
   public
-    function Finalize(): TProfError; override;
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
   public
     {**
       Подключен ли компьютер к сети
@@ -45,11 +43,6 @@ implementation
 
 { TAINetworkAgent }
 
-function TAINetworkAgent.Finalize(): TProfError;
-begin
-  Result := inherited Finalize();
-end;
-
 function TAINetworkAgent.GetIsNetwork(): WordBool;
 begin
   Result := (GetSystemMetrics(SM_NETWORK) and $01 = $01);
@@ -59,7 +52,7 @@ begin
     ShowMessage('Computer is not attached to a network!');}
 end;
 
-function TAINetworkAgent.Initialize(): TProfError;
+function TAINetworkAgent.Initialize(): AError;
 begin
   Result := inherited Initialize();
 

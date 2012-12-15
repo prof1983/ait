@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Источник знаний в памяти)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(25.01.2006)
-@LastMod(10.07.2012)
-@Version(0.5)
+@Abstract Источник знаний в памяти
+@Author Prof1983 <prof1983@ya.ru>
+@Created 25.01.2006
+@LastMod 15.12.2012
 }
 unit AiMemorySource2;
 
@@ -23,12 +22,10 @@ type //** @abstract(Источник знаний в памяти)
     function Get_FrameById(Id: AId): IAiFrame; override;
   public
     function Clear(): WordBool; override;
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
     // Загрузить данные из XML
 //    function LoadFromXml(Config: IXmlNode): WordBool; override;
 //    function NewFreim(Typ: TAI_Id; Id: TAI_Id = 0): TAI_Id; override;
-//    function NewFreimType(const AName: WideString; AStruct: PStructFreimType = nil): TAI_ID; override;
-//    function ConfigureLoad(AConfig: IXmlNode = nil): WordBool; override; safecall;
   public
     constructor Create();
     procedure Free(); override;
@@ -46,15 +43,6 @@ begin
   for I := 0 to High(FItems) do if Assigned(FItems[I]) then FItems[I].Free;
   SetLength(FItems, 0);
 end;
-
-{function TAISourceMemory.ConfigureLoad(AConfig: IXmlNode = nil): WordBool;
-begin
-  AddToLog(lgDataBase, ltInformation, stConfigureLoadStart, []);
-  Result := inherited ConfigureLoad;
-  if not(Result) then Exit;
-
-  AddToLog(lgDataBase, ltInformation, stConfigureLoadOk, []);
-end;}
 
 constructor TAiSourceMemory.Create();
 var
@@ -91,23 +79,7 @@ begin
     Result := nil;
 end;
 
-{function TAISourceMemory.GetItem(Index: UInt32): IAIFreim;
-begin
-  if Index >= UInt32(Length(FItems)) then
-    Result := nil
-  else
-    Result := FItems[Index];
-end;}
-
-{function TAISourceMemory.GetItemId(Index: Integer): TAI_ID;
-begin
-  if (Index >= Length(FItems)) or not(Assigned(FItems[Index])) then
-    Result := 0
-  else
-    Result := FItems[Index].FreimID;
-end;}
-
-function TAiSourceMemory.Initialize(): TProfError;
+function TAiSourceMemory.Initialize(): AError;
 begin
   AddToLog(lgGeneral, ltInformation, stInitialize_Start);
   Result := inherited Initialize();
@@ -174,11 +146,5 @@ begin
   SetLength(FItems, Result + 1);
   FItems[Result] := nil;}
 end;*)
-
-{function TAISourceMemory.NewFreimType(const AName: WideString; AStruct: PStructFreimType): TAI_ID;
-begin
-  Result := NewFreim(1);
-  // ...
-end;}
 
 end.

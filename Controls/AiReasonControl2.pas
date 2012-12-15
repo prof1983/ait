@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Контрол для наблюдения за заданиями ИР)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(31.10.2006)
-@LastMod(03.05.2012)
-@Version(0.5)
+@Abstract Контрол для наблюдения за заданиями ИР
+@Author Prof1983 <prof1983@ya.ru>
+@Created 31.10.2006
+@LastMod 15.12.2012
 }
 unit AiReasonControl2;
 
@@ -31,7 +30,7 @@ type //** Контрол для наблюдения за заданиями И�
     Progress3: TProgressBar;
   protected
       //** Срабатывает при инициализации
-    function DoInitialize(): TProfError; override; safecall;
+    function DoInitialize(): AError; override; safecall;
       //** Срабатывает при получении сообщения
     function DoMessage(const Msg: WideString): Integer; //override; safecall;
       //** Срабатывает при необходимости изменении ProgressBar
@@ -49,7 +48,7 @@ implementation
 
 { TReasonControl2 }
 
-function TReasonControl2.DoInitialize(): TProfError;
+function TReasonControl2.DoInitialize(): AError;
 begin
   Result := inherited DoInitialize();
   if not(Assigned(FControl)) then Exit;

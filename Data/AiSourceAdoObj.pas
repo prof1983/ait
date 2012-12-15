@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Источник знаний из БД ADO)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(14.09.2005)
-@LastMod(03.07.2012)
-@Version(0.5)
+@Abstract Источник знаний из БД ADO
+@Author Prof1983 <prof1983@ya.ru>
+@Created 14.09.2005
+@LastMod 15.12.2012
 
 Структура описана в aiSourceAdoStruct.pas Необходимые фреймы описаны в aiGlobals.pas
 }
@@ -54,9 +53,9 @@ type //** @abstract(БЗ ADO)
   public
     function Close(): AError; override;
     constructor Create(ADBFileName: WideString = ''; AAddToLog: TAddToLogProc = nil);
-    function Finalize(): TProfError; override;
+    function Finalize(): AError; override;
     procedure Free(); override;
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
   public
     property DataModule: TProfDataModule read FDataModule;
     property DBFileName: String read GetDBFileName write SetDBFileName;
@@ -226,7 +225,7 @@ begin
   AddToLog(lgDataBase, ltInformation, stCreateOk);
 end;
 
-function TAISourceAdo.Finalize: TProfError;
+function TAISourceAdo.Finalize(): AError;
 begin
   Result := inherited Finalize;
   AddToLog(lgDataBase, ltInformation, stFinalizeOk);
@@ -285,7 +284,7 @@ begin
   Result := FTableFreims;
 end;
 
-function TAISourceAdo.Initialize: TProfError;
+function TAISourceAdo.Initialize(): AError;
 begin
   Result := inherited Initialize;
   FDataModule.DBFileName := FDBFileName;

@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Контрол работы с заданиями)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(27.10.2006)
-@LastMod(28.04.2012)
-@Version(0.5)
+@Abstract Контрол работы с заданиями
+@Author Prof1983 <prof1983@ya.ru>
+@Created 27.10.2006
+@LastMod 15.12.2012
 }
 unit AiTasksControl2;
 
@@ -20,8 +19,7 @@ type //** @abstract(Контрол работы с заданиями)
   protected
     procedure DoTaskAdd(const ATask: WideString);
   public
-    function Finalize(): TProfError; override;
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
   end;
 
 implementation
@@ -32,14 +30,7 @@ procedure TAITasksControl.DoTaskAdd(const ATask: WideString);
 begin
 end;
 
-function TAITasksControl.Finalize(): TProfError;
-begin
-  // Отсоединение от объекта работы с заданиями
-  //FTasks := nil;
-  Result := inherited Finalize();
-end;
-
-function TAITasksControl.Initialize(): TProfError;
+function TAITasksControl.Initialize(): AError;
 begin
   Result := inherited Initialize();
   // Присоединение к объекту работы с заданиями

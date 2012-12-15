@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Форма управления действиями)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(09.11.2005)
-@LastMod(12.07.2012)
-@Version(0.5)
+@Abstract Форма управления действиями
+@Author Prof1983 <prof1983@ya.ru>
+@Created 09.11.2005
+@LastMod 15.12.2012
 }
 unit AiAgentActions;
 
@@ -24,8 +23,8 @@ type
   protected
     //procedure DoDestroy(); override;
   public
-    function Finalize(): TProfError; override;
-    function Initialize(): TProfError; override;
+    function Finalize(): AError; override;
+    function Initialize(): AError; override;
   public
     property ActionCount: Integer read GetActionCount;
     property ActionIDs[Index: Integer]: Integer read GetActionID;
@@ -41,7 +40,7 @@ begin
   inherited DoDestroy();
 end;}
 
-function TAIAgentActions.Finalize(): TProfError;
+function TAIAgentActions.Finalize(): AError;
 begin
   if Assigned(FForm) and (FCreated) then
   begin
@@ -66,7 +65,7 @@ begin
     Result := FActions[Index];
 end;
 
-function TAIAgentActions.Initialize(): TProfError;
+function TAIAgentActions.Initialize(): AError;
 var
   ConfigForm: IProfNode;
 begin

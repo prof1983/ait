@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника фреймов
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 27.11.2012
+@LastMod 15.12.2012
 }
 unit AiFramePoolObj;
 
@@ -109,7 +109,7 @@ type
     //** Создает и регистрирует новый тип фрейма Если AStructure задан, то AName игнорируется
     //function NewFreimType(const AName: WideString; AStruct: PStructFreimType = nil): TAIID; virtual;
     //** Открыть источник
-    function Open(): TProfError; virtual;
+    function Open(): AError; virtual;
   public
     //** Начальный идентификатор для этого пула (источника) фреймов
     property Base: TAIID read FBase write FBase;
@@ -318,7 +318,7 @@ begin
   // ...
 end;
 
-function TAiFramePoolObject.Open(): TProfError;
+function TAiFramePoolObject.Open(): AError;
 begin
   Result := -1;
 end;

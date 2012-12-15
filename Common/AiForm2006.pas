@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Форма - окошко Windows)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(07.01.2006)
-@LastMod(28.06.2012)
-@Version(0.5)
+@Abstract Форма - окошко Windows
+@Author Prof1983 <prof1983@ya.ru>
+@Created 07.01.2006
+@LastMod 15.12.2012
 }
 unit AiForm2006;
 
@@ -25,7 +24,7 @@ type
   public
     function AssignedForm(): Boolean;
     function Hide(): AError; virtual;
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
     function Show(): AError; virtual;
   public
     property Form: TForm read GetForm write SetForm;
@@ -60,7 +59,7 @@ begin
   Result := 0;
 end;
 
-function TAiForm.Initialize(): TProfError;
+function TAiForm.Initialize(): AError;
 begin
   Result := inherited Initialize();
   GetForm;

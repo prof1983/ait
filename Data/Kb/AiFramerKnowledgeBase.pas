@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(База знаний на основе БД фреймов FramerD)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(25.04.2007)
-@LastMod(27.06.2012)
-@Version(0.5)
+@Abstract База знаний на основе БД фреймов FramerD
+@Author Prof1983 <prof1983@ya.ru>
+@Created 25.04.2007
+@LastMod 15.12.2012
 
 FramerD - это распределенная БД фреймов. Главный объект там ODB (Object Data Base).
 Я переимевал в FramerODB
@@ -33,7 +32,7 @@ type // База знаний на основе БД фреймов FramerD
   protected
     procedure DoCreate();
   public
-    function Initialize(): TProfError;
+    function Initialize(): AError;
   end;
 
 implementation
@@ -45,7 +44,7 @@ begin
   //FFramerODB := TFramerODB.Create();
 end;
 
-function TFramerKnowlegeBase.Initialize(): TProfError;
+function TFramerKnowlegeBase.Initialize(): AError;
 begin
   //FFramerODB.UsePoolA('FramerD.db');
 end;

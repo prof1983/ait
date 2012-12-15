@@ -1,12 +1,8 @@
 ﻿{**
-@Abstarct(Агент модели)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(02.11.2005)
-@LastMod(04.07.2012)
-@Version(0.5)
-
-0.0.0.2 - 03.02.2006
-0.0.0.1 - 02.11.2005
+@Abstarct Агент модели
+@Author Prof1983 <prof1983@ya.ru>
+@Created 02.11.2005
+@LastMod 15.12.2012
 }
 unit AiModel;
 
@@ -80,7 +76,7 @@ type
     function GetName: String;
     function GetSensors: TAISensors;
     function GetWidth: UInt32;
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
     function SetBody(Value: TAIBody): TError;
     function SetDrives(Value: TAIModelDrives): TError;
     function SetHeight(Value: UInt32): TError;
@@ -367,7 +363,7 @@ begin
   Result := FBody.GetWidth;
 end;
 
-function TAIModel.Initialize(): TProfError;
+function TAIModel.Initialize(): AError;
 var
   Source: TAISource;
 begin

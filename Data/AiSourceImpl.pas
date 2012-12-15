@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника фреймов
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 27.11.2012
+@LastMod 15.12.2012
 }
 unit AiSourceImpl;
 
@@ -78,7 +78,7 @@ type //** Базовый класс для источника фреймов
     //** Освободить объект
     procedure Free(); override;
     //** Открыть источник
-    function Open(): TProfError; virtual; safecall;
+    function Open(): AError; virtual; safecall;
   public
     //** Новый фрейм
     function NewFrame(Typ: TAIID; ID: TAIID = 0): TAIID; virtual; safecall;
@@ -297,7 +297,7 @@ begin
   //AddToLog(lgDataBase, ltError, stNotOverrideA, ['NewFreimType']);
 end;}
 
-function TAISource.Open(): TProfError;
+function TAISource.Open(): AError;
 begin
   Result := -1;
 end;

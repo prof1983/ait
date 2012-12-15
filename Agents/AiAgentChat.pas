@@ -2,7 +2,7 @@
 @Abstract AI Агент чат-бот
 @Author Prof1983 <prof1983@ya.ru>
 @Created 04.09.2005
-@LastMod 27.11.2012
+@LastMod 15.12.2012
 }
 unit AiAgentChat;
 
@@ -39,13 +39,13 @@ type
     procedure SetFormChat(Value: TFormChat);
   public
     function AssignedForm(): Boolean;
-    function Finalize(): TProfError; override;
+    function Finalize(): AError; override;
     function GetAgentWordId(): TAId;
     function GetForm(): TFormChat;
     //function GetFormAi(): TAiFormChat;
     function GetModuleTextId(): AId;
     function Hide(): WordBool; virtual;
-    function Initialize(): TProfError; override;
+    function Initialize(): AError; override;
     function Load(): AError; //override;
     function Save(): AError; //override;
     function Show(): AError; virtual;
@@ -93,7 +93,7 @@ begin
   {Выделение идентивикатора для объекта}*)
 end;
 
-function TAiAgentChat.Finalize(): TProfError;
+function TAiAgentChat.Finalize(): AError;
 begin
   Result := inherited Finalize();
 
@@ -168,7 +168,7 @@ begin
   FForm.Hide;
 end;
 
-function TAiAgentChat.Initialize(): TProfError;
+function TAiAgentChat.Initialize(): AError;
 var
   ConfigForm: IProfXmlNode;
   ConfigSource: IProfXmlNode;
