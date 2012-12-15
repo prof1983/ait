@@ -2,16 +2,10 @@
 @Abstract Типы для AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 18.06.2004
-@LastMod 23.11.2012
+@LastMod 15.12.2012
 
 A - для записи в файл
 B - для памяти
-
-0.0.0.5 - 03.02.2006 - Globals
-0.0.0.4 - 31.08.2004 - TFileAIHeader
-0.0.0.3 - 20.08.2004 - TAIData36
-0.0.0.2 - 04.08.2004 -
-0.0.0.1 - 18.06.2004 -
 }
 unit AiBase0;
 
@@ -22,10 +16,10 @@ uses
 
 type
   TError = Boolean;
-  UInt032 = UInt32;
-  UInt008 = UInt08;
-  UInt064 = UInt64;
-  Int032 = Int32;
+  UInt032 = AUInt32;
+  UInt008 = AUInt08;
+  UInt064 = AUInt64;
+  Int032 = AInt32;
 
 const
   AssociationUseLength = 3;     // Число записей использований в теле ассоциации

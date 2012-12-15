@@ -2,14 +2,14 @@
 @Abstract AiTask
 @Author Prof1983 <prof1983@ya.ru>
 @Created 07.06.2012
-@LastMod 09.08.2012
+@LastMod 15.12.2012
 }
 unit AiTaskObj;
 
 interface
 
 uses
-  ABaseUtils2, ATypes, AXmlObj,
+  ABase, ABaseUtils2, ATypes, AXmlObj,
   AiBase, AiFrameObj, AiMethodsObj;
 
 type
@@ -34,17 +34,17 @@ type
     function GetText(): String;
     function GetTimeImplementation(): UInt64;
     function GetTitle(): String;
-    function Initialize(): TError; override;
-    function LoadFromXml(Xml: TProfXml): TError; override;
-    function SetComent(Value: String): TError;
-    function SetDateTimeEnd(Value: TDateTime): TError;
-    function SetDateTimeStart(Value: TDateTime): TError;
-    function SetMethods(Value: TAiMethodsObject): TError;
-    function SetName(Value: String): TError;
-    function SetPriority(Value: UInt32): TError;
-    function SetText(Value: String): TError;
-    function SetTimeImplementation(Value: UInt64): TError;
-    function SetTitle(Value: String): TError;
+    function Initialize(): AError; override;
+    function LoadFromXml(Xml: TProfXml): AError; override;
+    function SetComent(Value: String): AError;
+    function SetDateTimeEnd(Value: TDateTime): AError;
+    function SetDateTimeStart(Value: TDateTime): AError;
+    function SetMethods(Value: TAiMethodsObject): AError;
+    function SetName(Value: String): AError;
+    function SetPriority(Value: UInt32): AError;
+    function SetText(Value: String): AError;
+    function SetTimeImplementation(Value: UInt64): AError;
+    function SetTitle(Value: String): AError;
   end;
 
 implementation
@@ -99,7 +99,7 @@ begin
   Result := FTitle;
 end;
 
-function TAiTaskObject.Initialize(): TError;
+function TAiTaskObject.Initialize(): AError;
 var
   Source: TAiSourceObject;
 begin
@@ -115,7 +115,7 @@ begin
   FMethods.Initialize;
 end;
 
-function TAiTaskObject.LoadFromXml(Xml: TProfXml): TError;
+function TAiTaskObject.LoadFromXml(Xml: TProfXml): AError;
 begin
   Result := inherited LoadFromXml(Xml);
   Xml.ReadParamValueByName('Coment', FComent);
@@ -125,55 +125,55 @@ begin
   {...}
 end;
 
-function TAiTaskObject.SetComent(Value: String): TError;
+function TAiTaskObject.SetComent(Value: String): AError;
 begin
   FComent := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetDateTimeEnd(Value: TDateTime): TError;
+function TAiTaskObject.SetDateTimeEnd(Value: TDateTime): AError;
 begin
   FDTEnd := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetDateTimeStart(Value: TDateTime): TError;
+function TAiTaskObject.SetDateTimeStart(Value: TDateTime): AError;
 begin
   FDTStart := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetMethods(Value: TAiMethodsObject): TError;
+function TAiTaskObject.SetMethods(Value: TAiMethodsObject): AError;
 begin
   FMethods := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetName(Value: String): TError;
+function TAiTaskObject.SetName(Value: String): AError;
 begin
   FName := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetPriority(Value: UInt32): TError;
+function TAiTaskObject.SetPriority(Value: UInt32): AError;
 begin
   FPriority := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetText(Value: String): TError;
+function TAiTaskObject.SetText(Value: String): AError;
 begin
   FText := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetTimeImplementation(Value: UInt64): TError;
+function TAiTaskObject.SetTimeImplementation(Value: UInt64): AError;
 begin
   FTimeImplementation := Value;
   Result := 0;
 end;
 
-function TAiTaskObject.SetTitle(Value: String): TError;
+function TAiTaskObject.SetTitle(Value: String): AError;
 begin
   FTitle := Value;
   Result := 0;
