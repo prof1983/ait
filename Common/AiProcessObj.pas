@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Процесс выполнения команд для агентов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(07.01.2006)
-@LastMod(04.07.2012)
-@Version(0.5)
+@Abstract Процесс выполнения команд для агентов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 07.01.2006
+@LastMod 17.12.2012
 }
 unit AiProcessObj;
 
@@ -11,6 +10,7 @@ interface
 
 uses
   Classes,
+  ABase,
   ATypes,
   AiFrameObj;
 
@@ -24,7 +24,7 @@ type
     FThread: TThread;
   public
     function GetThread(): TThread;
-    function SetThread(Value: TThread): TError;
+    function SetThread(Value: TThread): AError;
   end;
 
   //TAiProcess = TAiProcessObject;
@@ -39,7 +39,7 @@ begin
   Result := FThread;
 end;
 
-function TAiProcessObject.SetThread(Value: TThread): TError;
+function TAiProcessObject.SetThread(Value: TThread): AError;
 begin
   if Assigned(FThread) then
     FThread.Terminate;

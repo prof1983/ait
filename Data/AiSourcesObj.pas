@@ -2,7 +2,7 @@
 @Abstract Источники
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 09.08.2012
+@LastMod 17.12.2012
 }
 unit AiSourcesObj;
 
@@ -19,9 +19,9 @@ type
     FSources: array of TAiRecSource;
   public
     function AddSource(Value: TAiSourceObject): Int32;
-    function Clear(): TError; override;
+    function Clear(): AError; override;
     function DeleteSource(Index: Int32): AError;
-    procedure Free; virtual;
+    procedure Free(); override;
     function FreeSource(Index: Int32): AError;
     function GetCountFreims: UInt64; override;
     function GetCountSources: UInt32;
@@ -35,10 +35,10 @@ type
     FSources: array of TAiRecSource;
   public
     function AddSource(Value: AiSourceObject): AInt32;
-    function Clear(): TError; override;
-    function DeleteSource(Index: Int32): TError;
+    function Clear(): AError; override;
+    function DeleteSource(Index: Int32): AError;
     procedure Free(); override;
-    function FreeSource(Index: Int32): TError;
+    function FreeSource(Index: Int32): AError;
     function GetCountFreims(): UInt64; override;
     function GetCountSources(): UInt32;
     function GetSource(Index: UInt32): TAiSourceObject;
@@ -58,7 +58,7 @@ begin
   FSources[Result].Source := Value;
 end;
 
-function TAiSources20050915.Clear: TError;
+function TAiSources20050915.Clear(): AError;
 var
   I: Int32;
 begin
@@ -69,7 +69,7 @@ begin
   Result := inherited Clear;
 end;
 
-function TAiSources20050915.DeleteSource(Index: Int32): TError;
+function TAiSources20050915.DeleteSource(Index: Int32): AError;
 var
   I: Int32;
 begin
@@ -88,7 +88,7 @@ begin
   inherited Free;
 end;
 
-function TAiSources20050915.FreeSource(Index: Int32): TError;
+function TAiSources20050915.FreeSource(Index: Int32): AError;
 begin
   Result := 1;
   if (Index < 0) or (Index >= Length(FSources)) then Exit;
@@ -137,7 +137,7 @@ begin
   FSources[Result].Source := Value.GetId;
 end;
 
-function TAiSources2006.Clear(): TError;
+function TAiSources2006.Clear(): AError;
 var
   I: Int32;
 begin

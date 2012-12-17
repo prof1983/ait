@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Агенты)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(22.09.2005)
-@LastMod(12.07.2012)
-@Version(0.5)
+@Abstract Агенты
+@Author Prof1983 <prof1983@ya.ru>
+@Created 22.09.2005
+@LastMod 17.12.2012
 }
 unit AiAgentsObj;
 
@@ -30,12 +29,12 @@ type
     FAgentsName: array of String;
   public
     function AddAgent(Value: TAiAgentObject): Int32;
-    function ConfigureLoad(Config: TConfig; Prefix: String): TError;
+    function ConfigureLoad(Config: TConfig; Prefix: String): AError;
     function ConfigureLoad1(): Boolean; {override;}
-    function ConfigureSave(Config: TConfig; Prefix: String): TError; {override;}
+    function ConfigureSave(Config: TConfig; Prefix: String): AError; {override;}
     function ConfigureSave1(): Boolean; {override;}
-    function DeleteAgent(Index: Int32): TError;
-    function FreeAgent(Index: Int32): TError;
+    function DeleteAgent(Index: Int32): AError;
+    function FreeAgent(Index: Int32): AError;
     function GetAgent(Index: UInt32): TAiAgentObject;
     function GetAgentById(Id: AId): TAiAgentObject;
     function GetAgentName(Index: Int32): String;
@@ -112,7 +111,7 @@ begin
   FAgents[Result].Agent := Value;
 end;
 
-function TAiAgents2006.ConfigureLoad(Config: TConfig; Prefix: String): TError;
+function TAiAgents2006.ConfigureLoad(Config: TConfig; Prefix: String): AError;
 var
   Agent: TAiAgentObject;
   AName: String; {Префикс для чтения имени и Id агента из конфигураций}
@@ -180,7 +179,7 @@ begin
   Result := True;
 end;
 
-function TAiAgents2006.ConfigureSave(Config: TConfig; Prefix: String): TError;
+function TAiAgents2006.ConfigureSave(Config: TConfig; Prefix: String): AError;
 var
   AName: String;
   I: Int32;
@@ -226,7 +225,7 @@ begin
   end;
 end;
 
-function TAiAgents2006.DeleteAgent(Index: Int32): TError;
+function TAiAgents2006.DeleteAgent(Index: Int32): AError;
 var
   I: Int32;
 begin
@@ -251,7 +250,7 @@ begin
   inherited Free;
 end;
 
-function TAiAgents2006.FreeAgent(Index: Int32): TError;
+function TAiAgents2006.FreeAgent(Index: Int32): AError;
 begin
   Result := 1;
   if (Index < 0) or (Index >= Length(FAgents)) then Exit;
