@@ -2,14 +2,14 @@
 @Abstract Форма управления действиями
 @Author Prof1983 <prof1983@ya.ru>
 @Created 09.11.2005
-@LastMod 15.12.2012
+@LastMod 17.12.2012
 }
 unit AiAgentActions;
 
 interface
 
 uses
-  ANodeIntf, ATypes,
+  ABase, ANodeIntf, ATypes,
   AiAgentObj, AiActionsForm;
 
 type
