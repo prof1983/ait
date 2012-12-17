@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Контрол фреймов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(06.11.2006)
-@LastMod(28.04.2012)
-@Version(0.5)
+@Abstract Контрол фреймов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 06.11.2006
+@LastMod 17.12.2012
 }
 unit AiFramesControl2;
 
@@ -15,7 +14,7 @@ uses
   AiKbCode, AiKbFrame;
 
 type //** @abstract(Контрол фреймов)
-  TAIFramesControl = class(TProfControl)
+  TAIFramesControl = class(TAControl)
   private
     FTreeView: TTreeView;
     FMemo: TMemo;
