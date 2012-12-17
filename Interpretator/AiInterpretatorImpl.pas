@@ -2,7 +2,7 @@
 @Abstract Интерпретатор кода на языке AR
 @Author Prof1983 <prof1983@ya.ru>
 @Created 04.10.2006
-@LastMod 12.11.2012
+@LastMod 17.12.2012
 }
 unit AiInterpretatorImpl;
 
@@ -550,9 +550,9 @@ type
     procedure SetCode1(Value: IArlCode);
   protected
       //** Срабатывает при создании
-    procedure DoCreate(); override; safecall;
+    procedure DoCreate(); override;
       //** Срабатывает при уничтожении
-    procedure DoDestroy(); override; safecall;
+    procedure DoDestroy(); override;
   public
     function Run(): Integer; safecall;
       {** Выполняет указанный код }

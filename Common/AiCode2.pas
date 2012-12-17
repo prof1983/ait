@@ -23,8 +23,8 @@ type //** @abstract(Выполняемый код на языке AR)
   protected
     function Get_Data(): IAiData2; override; safecall;
   protected
-    procedure DoCreate(); override; safecall;
-    procedure DoDestroy(); override; safecall;
+    procedure DoCreate(); override;
+    procedure DoDestroy(); override;
   public
     property DataEx1: IAIDataEx1 read GetDataEx1;
     property Lines: TStringList read FLines;
