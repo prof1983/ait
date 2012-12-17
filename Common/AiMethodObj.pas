@@ -2,7 +2,7 @@
 @Abstract AiMethod
 @Author Prof1983 <prof1983@ya.ru>
 @Created 17.06.2007
-@LastMod 09.08.2012
+@LastMod 17.12.2012
 }
 unit AiMethodObj;
 
@@ -115,7 +115,7 @@ begin
     {IComand(Comands[I], Comand);}
     {...}
   end;*)
-  //Result := 1;
+  Result := -1;
 end;
 
 function TAiMethodObject.Save(): AError;

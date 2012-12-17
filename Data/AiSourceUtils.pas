@@ -2,7 +2,7 @@
 @Abstract AiSource functions
 @Author Prof1983 <prof1983@ya.ru>
 @Created 21.06.2012
-@LastMod 21.06.2012
+@LastMod 17.12.2012
 }
 unit AiSourceUtils;
 
@@ -27,9 +27,15 @@ begin
     Exit;
   end;
 
-  if (TObject(FSource) is TAiSourceObject) then
+  if not(TObject(FSource) is TAiSourceObject) then
   begin
+    Result := nil;
+    Exit;
+  end;
+  try
     Result := TAiSource2005(FSource).Freims[Id];
+  except
+    Result := nil;
   end;
 end;
 

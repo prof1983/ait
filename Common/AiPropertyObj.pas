@@ -1,9 +1,8 @@
 {**
-@Abstract(Параметр для интерпретации кода, для правил в логическом выводе)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(07.06.2006)
-@LastMod(21.06.2012)
-@Version(0.5)
+@Abstract Параметр для интерпретации кода, для правил в логическом выводе
+@Author Prof1983 <prof1983@ya.ru>
+@Created 07.06.2006
+@LastMod 17.12.2012
 }
 unit AiPropertyObj;
 
@@ -128,7 +127,7 @@ end;
 
 function TAiPropertys.GetParam(Index: Integer): TAiProperty;
 begin
-  if Index >= UInt32(Length(FParams)) then
+  if (Index >= Length(FParams)) then
     Result := nil
   else
     Result := FParams[Index];

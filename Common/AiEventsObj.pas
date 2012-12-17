@@ -2,7 +2,7 @@
 @Abstract События для объекта AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 11.10.2006
-@LastMod 15.12.2012
+@LastMod 17.12.2012
 }
 unit AiEventsObj;
 
@@ -47,16 +47,10 @@ type
   end;
 
   {** События }
-  TAiEvents = class(TAiFrameObject)
-  private
-    FEvents: array of TAiEvent;
-  end;
+  TAiEvents = TAiFrameObject;
 
   {** Исключительные события }
-  TAiExceptions = class(TAiFrameObject)
-  private
-    FExceptions: array of TAiEvent;
-  end;
+  TAiExceptions = TAiFrameObject;
 
 implementation
 
@@ -97,7 +91,7 @@ begin
   begin
     FItems[I](AMsg);
   end;
-  //Result := 0;
+  Result := True;
 end;
 
 function TAiEvent.Run2(Sender: AId): AError;
@@ -117,12 +111,15 @@ function TAiEvent.Sign(Proc: TAIProc): AError;
 var
   I: Int32;
 begin
-  //Result := 1;
-  if not(Assigned(Proc)) then Exit;
+  if not(Assigned(Proc)) then
+  begin
+    Result := -2;
+    Exit;
+  end;
   I := Length(FItems);
   SetLength(FItems, I + 1);
   FItems[I] := Proc;
-  //Result := 0;
+  Result := 0;
 end;
 
 function TAiEvent.Sign2(Proc: TAiProc2006): AError;
@@ -146,7 +143,7 @@ function TAiEvent.UnSign(Proc: TAIProc): AError;
 {var
   I: Int32;}
 begin
-  //Result := 1;
+  Result := -1;
   {if not(Assigned(Proc)) then Exit;
   for I := 0 to High(FItems) do begin
     if Proc = FItems[I] then begin
@@ -174,22 +171,23 @@ begin
 end;
 
 // TEventAI --------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
 function TEventAI.Connect(Proc: TAIProc): WordBool;
 begin
   // ...
+  Result := False;
 end;
 
-// -----------------------------------------------------------------------------
 function TEventAI.Disconnect(Proc: TAIProc): WordBool;
 begin
   // ...
+  Result := False;
 end;
 
-// -----------------------------------------------------------------------------
 function TEventAI.Run(const AMsg: WideString): WordBool;
 begin
   // ...
+  Result := False;
 end;
 
 end.

@@ -1,9 +1,8 @@
 {**
-@Abstract(AiNamedFrameObj)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(21.11.2011)
-@LastMod(26.06.2012)
-@Version(0.5)
+@Abstract AiNamedFrameObj
+@Author Prof1983 <prof1983@ya.ru>
+@Created 21.11.2011
+@LastMod 17.12.2012
 }
 unit AiNamedFrameObj;
 
@@ -25,7 +24,7 @@ type
   public
     //function LoadFromXml(Xml: IXmlNode): WordBool; override; deprecated; // Use AiNamedFrame_LoadFromXml()
     //function SaveToXml(Xml: IXmlNode): WordBool; override; deprecated; // Use AiNamedFrame_SaveToXml()
-  published
+  public
     {** Описание фрейма }
     property Description: WideString read FDescription write FDescription;
     {** Короткое название фрейма }

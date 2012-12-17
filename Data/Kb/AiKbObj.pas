@@ -1,9 +1,8 @@
 {**
-@Abstract(Ai knowledge base object)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(04.06.2012)
-@LastMod(12.07.2012)
-@Version(0.5)
+@Abstract Ai knowledge base object
+@Author Prof1983 <prof1983@ya.ru>
+@Created 04.06.2012
+@LastMod 17.12.2012
 }
 unit AiKbObj;
 
@@ -93,14 +92,15 @@ type
     function SetFreim2(Id: TAId; Freim: TAiFrameObject): AError; override;
     function Initialize(): AError; override;
     function GetFreimCashe(Id: TAId): TAiFrameObject;
-    function NewFreim(Freim: TAiFrameObject): TAId; {override;}
+    function NewFreim(Freim: TAiFrameObject): TAId; deprecated; // Use NewFreim2()
+    function NewFreim2(Freim: TAiFrameObject): TAId; {override;}
   public
     function GetCountFreims(): UInt64; override;
     function GetFreeIndexCashe(): AUInt32;
     function GetItem(Index: AUInt32): TAiFrameObject;
     function SaveToFile(FileName, Path: String): AError;
     procedure SetArbitrary(Value: Boolean);
-    function Open(): AError;
+    function Open(): AError; override;
   public
     constructor Create();
     procedure Free();
@@ -159,20 +159,11 @@ begin
 end;
 
 function TAiKb.LoadFromFileN(FileName, Path: String): AError;
-var
-  F: TFileProfKB;
 begin
-  F := TFileProfKB.Create;
-  if not(F.Open(FileName, Path)) then
-  begin
-    Result := -1;
-    Exit;
-  end;
-  Result := 0;
-  {Result := inherited LoadFromFileN(F, Path);}
-  {Count := F.GetHeaderKB.CountF;
-  for I := 0 to Count - 1 do}
-  Result := 1;
+  if inherited LoadFromFileN(Path, FileName) then
+    Result := 0
+  else
+    Result := -2;
 end;
 
 function TAiKb.SaveToFileN(FileName, Path: String): AError;
@@ -605,7 +596,6 @@ begin
     Result := -1;
     Exit;
   end;
-  Result := 0;
   {}
   SetLength(FItems, F.GetHeaderKB.CountF);
   for I := 0 to High(FItems) do FItems[I] := nil;
@@ -752,6 +742,11 @@ end;
 
 function TAiKbMemory2.NewFreim(Freim: TAiFrameObject): TAId;
 begin
+  Result := NewFreim2(Freim);
+end;
+
+function TAiKbMemory2.NewFreim2(Freim: TAiFrameObject): TAId;
+begin
   {Result := NewFreimLocal(Freim);
   if Result > 0 then Exit;
   Result := NewFreimExternal(Freim);}
@@ -760,8 +755,7 @@ end;
 
 function TAiKbMemory2.Open(): AError;
 begin
-  {Result := inherited Open;}
-  Result := 0;
+  Result := inherited Open();
   SetLength(FItems, 1);
   FItems[0] := TAiFrameObject.Create(0, 0);
 end;
