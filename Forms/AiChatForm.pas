@@ -2,7 +2,7 @@
 @Abstract Главная форма для агента чат-бот
 @Author Prof1983 <prof1983@ya.ru>
 @Created 24.03.2005
-@LastMod 17.08.2012
+@LastMod 17.12.2012
 }
 unit AiChatForm;
 
@@ -32,7 +32,7 @@ type
     function GetListIn: TArrayString;
     function GetListOut: TArrayString;
     function GetOutput: String;
-    function SetInput(Value: String): TError;
+    function SetInput(Value: String): AError;
   public
     constructor Create(Source: AiSourceObject; Id: AId = 0);
     procedure Free; override;
@@ -172,7 +172,7 @@ begin
   ArrayStringAdd(FListIn, Value);
 end;
 
-function TAiFormChat.SetInput(Value: String): TError;
+function TAiFormChat.SetInput(Value: String): AError;
 begin
   FInput := Value;
   ListInAdd(FInput);
