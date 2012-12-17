@@ -25,13 +25,11 @@ type
     function Close(): AError; override;
     function GetParent(Index: AUInt32): TAIKB;
     function GetParentId(Index: AUInt32): TAId;
-    function LoadFromFileN(FileName, Path: String): AError;
-    function SaveToFileN(FileName, Path: String): AError; virtual;
+    function SaveToFileN(const FileName, Path: String): AError; override;
     procedure SetParent(Index: UInt32; Value: TAIKB);
     procedure SetParentId(Index: AUInt32; Value: TAId);
   public
     constructor Create();
-    procedure Free();
   end;
 
   TAiKbFile = class(TAIKB)
@@ -58,7 +56,8 @@ type
   public
     function GetFile(): TFileProfKB;
     function GetPath(): String;
-    function Open(FileName, Path: String): AError;
+    function Open(FileName, Path: String): AError; deprecated; // Use Open2()
+    function Open2(const FileName, Path: String): AError;
     function OpenCreate(FileName, Path: String): AError;
   end;
 
@@ -74,10 +73,10 @@ type
     function Initialize(): AError; override;
     function NewFreim(Frame: TAiFrameObject): AId; deprecated; // Use NewFreim2()
     function NewFreim2(Frame: TAiFrameObject): AId; override;
-    function LoadFromFileN(FileName, Path: String): AError;
+    function LoadFromFileN(const FileName, Path: String): AError; override;
   public
     constructor Create();
-    procedure Free();
+    procedure Free(); override;
   end;
 
   TAiKbMemory2 = class(TAiKb)
@@ -93,7 +92,7 @@ type
     function Initialize(): AError; override;
     function GetFreimCashe(Id: TAId): TAiFrameObject;
     function NewFreim(Freim: TAiFrameObject): TAId; deprecated; // Use NewFreim2()
-    function NewFreim2(Freim: TAiFrameObject): TAId; {override;}
+    function NewFreim2(Freim: TAiFrameObject): TAId; override;
   public
     function GetCountFreims(): UInt64; override;
     function GetFreeIndexCashe(): AUInt32;
@@ -103,7 +102,7 @@ type
     function Open(): AError; override;
   public
     constructor Create();
-    procedure Free();
+    procedure Free(); override;
   end;
 
 implementation
@@ -129,13 +128,6 @@ begin
   FSelect := TKBSelect.Create(Source, 0);}
 end;
 
-procedure TAiKb.Free;
-begin
-  {FSearch.Free;
-  FSelect.Free;}
-  inherited Free;
-end;
-
 function TAiKb.GetParent(Index: UInt32): TAIKB;
 begin
   if Index >= UInt32(Length(FParents)) then
@@ -158,15 +150,7 @@ begin
     Result := FParentsId[Index];
 end;
 
-function TAiKb.LoadFromFileN(FileName, Path: String): AError;
-begin
-  if inherited LoadFromFileN(Path, FileName) then
-    Result := 0
-  else
-    Result := -2;
-end;
-
-function TAiKb.SaveToFileN(FileName, Path: String): AError;
+function TAiKb.SaveToFileN(const FileName, Path: String): AError;
 var
   Count: UInt64;
   F: TFileProfKB;
@@ -514,6 +498,11 @@ end;
 
 function TAiKbFile.Open(FileName, Path: String): AError;
 begin
+  Result := Open2(FileName, Path);
+end;
+
+function TAiKbFile.Open2(const FileName, Path: String): AError;
+begin
   Close;
   FF := TFileProfKB.Create;
   if FF.Open(FileName) then
@@ -585,7 +574,7 @@ begin
   Result := 0;
 end;
 
-function TAiKbMemory.LoadFromFileN(FileName, Path: String): AError;
+function TAiKbMemory.LoadFromFileN(const FileName, Path: String): AError;
 var
   I: Int32;
   F: TFileProfKB;

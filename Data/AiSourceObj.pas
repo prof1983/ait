@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 27.11.2012
+@LastMod 17.12.2012
 }
 unit AiSourceObj;
 
@@ -87,7 +87,7 @@ type
     function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError; virtual;
     function Initialize(): AError; virtual;
     function LoadFromFile(F: TFileProfKB; Path: String): AError; deprecated 'Make function';
-    function LoadFromFileN(Path, FileName: String): Boolean; virtual;
+    function LoadFromFileN(const FileName, Path: String): AError; virtual;
     function LoadFromFileXml(FileName: String): AError;
     function LoadFromRecF64(Rec: TAiFreimRecF64): WordBool;
       //** Создает новый фрейм
@@ -96,7 +96,7 @@ type
     function NewFreim2(Frame: TAiFrameObject): TAId; virtual;
     function Open(): AError; virtual;
     function SaveToFile(F: TFileProfKB; Path: String): AError;
-    function SaveToFileN(FileName, Path: String): Boolean;
+    function SaveToFileN(const FileName, Path: String): AError; virtual;
     function SaveToFileXml(FileName: String): Boolean;
       //** Сделать выборку по типу
     function Select(AType: TAId): TAiSelect; virtual;
@@ -610,18 +610,22 @@ begin
   Result := 0;
 end;
 
-function TAiSourceObject.LoadFromFileN(Path, FileName: String): Boolean;
-{var
-  Count: UInt32;
+function TAiSourceObject.LoadFromFileN(const FileName, Path: String): AError;
+var
+  {Count: UInt32;
   I: Int32;
   F: TFileProfKB;
   Freim: TAiFrameObject;
   Rec: TAIFreimRec;
   S: String;}
+  FileName1: String;
 begin
   if (ExtractFilePath(FileName) = '') then
-    FileName := Path + FileName;
-  Result := LoadSourceFromFileN(Self, FileName, Path);
+    FileName1 := Path + FileName;
+  if LoadSourceFromFileN(Self, FileName1, Path) then
+    Result := 0
+  else
+    Result := -1;
 
   (*F := TFileProfKB.Create;
   Result := F.Open(FileName, Path);
@@ -705,13 +709,16 @@ begin
   Result := 0;
 end;
 
-function TAiSourceObject.SaveToFileN(FileName, Path: String): Boolean;
+function TAiSourceObject.SaveToFileN(const FileName, Path: String): AError;
 {var
   F: TFileProfKB;
   I: Int32;
   RecF: TAIFreimRecF64;}
 begin
-  Result := SaveSourceToFileN(Self, FileName, Path);
+  if SaveSourceToFileN(Self, FileName, Path) then
+    Result := 0
+  else
+    Result := -1;
   (*F := TFileProfKB.Create;
   F.OpenCreate(FileName);
   if not(FArbitrary) then begin
