@@ -2,7 +2,7 @@
 @Abstarct Агент модели
 @Author Prof1983 <prof1983@ya.ru>
 @Created 02.11.2005
-@LastMod 15.12.2012
+@LastMod 17.12.2012
 }
 unit AiModel;
 
@@ -43,10 +43,10 @@ type
   public
     function GetName: String;
     function GetSpeed: Int32;
-    function SetName(Value: String): TError;
-    function SetSpeed(Value: Int32): TError;
-    function Step: TError; virtual;
-    function Stop: TError;
+    function SetName(Value: String): AError;
+    function SetSpeed(Value: Int32): AError;
+    function Step(): AError; virtual;
+    function Stop(): AError;
   end;
 
   TAIModelDrives = class(TAiFrameObject)
@@ -58,7 +58,7 @@ type
     function GetCountDrives: UInt32;
     function GetDrive(Index: UInt32): TAIModelDrive;
     function NewDrive: TAIModelDrive;
-    function Step: TError;
+    function Step(): AError;
   end;
 
   //** Модель машинки
@@ -77,13 +77,13 @@ type
     function GetSensors: TAISensors;
     function GetWidth: UInt32;
     function Initialize(): AError; override;
-    function SetBody(Value: TAIBody): TError;
-    function SetDrives(Value: TAIModelDrives): TError;
-    function SetHeight(Value: UInt32): TError;
-    function SetName(Value: String): TError;
-    function SetSensors(Value: TAISensors): TError;
-    function SetWidth(Value: UInt32): TError;
-    function Step: TError; virtual;
+    function SetBody(Value: TAiBody): AError;
+    function SetDrives(Value: TAiModelDrives): AError;
+    function SetHeight(Value: UInt32): AError;
+    function SetName(Value: String): AError;
+    function SetSensors(Value: TAiSensors): AError;
+    function SetWidth(Value: UInt32): AError;
+    function Step(): AError; virtual;
   end;
 
 type
@@ -109,7 +109,7 @@ type
     property SY1: TAISensorButton read FSY1;
     property SY2: TAISensorButton read FSY2;
     procedure Stop;
-    function Step: TError; override;
+    function Step(): AError; override;
   end;
 
 type //** Агент-модель - для расположения на сцене
@@ -129,7 +129,7 @@ type //** Агент-модель - для расположения на сце�
     property Mobile: TAIModelMobile read FMobile;
     {property Process: TAIProcess read FProcess;}
     property Scene: TAISceneMobile read FScene;
-    function Step: TError;
+    function Step(): AError;
   end;
 
 implementation
@@ -189,7 +189,7 @@ begin
   end;
 end;}
 
-function TAIAgentModel2.Step: TError;
+function TAIAgentModel2.Step(): AError;
 begin
   Result := FScene.Step;
 end;
@@ -227,7 +227,7 @@ begin
   Drives.Add(FDriveRight);}
 end;
 
-function TAIModelMobile.Step{(var ResX: Int32; var ResY: Int32)}: TError;
+function TAIModelMobile.Step{(var ResX: Int32; var ResY: Int32)}: AError;
 {var
   DXSpeed: Int32;
   DYSpeed: Int32;
@@ -387,43 +387,43 @@ begin
   FDrives.Initialize;
 end;
 
-function TAIModel.SetBody(Value: TAIBody): TError;
+function TAIModel.SetBody(Value: TAiBody): AError;
 begin
   FBody := Value;
   Result := 0;
 end;
 
-function TAIModel.SetDrives(Value: TAIModelDrives): TError;
+function TAIModel.SetDrives(Value: TAiModelDrives): AError;
 begin
   FDrives := Value;
   Result := 0;
 end;
 
-function TAIModel.SetHeight(Value: UInt32): TError;
+function TAIModel.SetHeight(Value: UInt32): AError;
 begin
   FBody.SetHeight(Value);
   Result := 0;
 end;
 
-function TAIModel.SetName(Value: String): TError;
+function TAIModel.SetName(Value: String): AError;
 begin
   FName := Value;
   Result := 0;
 end;
 
-function TAIModel.SetSensors(Value: TAISensors): TError;
+function TAIModel.SetSensors(Value: TAiSensors): AError;
 begin
   FSensors := Value;
   Result := 0;
 end;
 
-function TAIModel.SetWidth(Value: UInt32): TError;
+function TAIModel.SetWidth(Value: UInt32): AError;
 begin
   FBody.SetWidth(Value);
   Result := 0;
 end;
 
-function TAIModel.Step: TError;
+function TAIModel.Step(): AError;
 begin
   Result := FDrives.Step;
 end;
@@ -440,24 +440,24 @@ begin
   Result := FSpeed;
 end;
 
-function TAIModelDrive.SetName(Value: String): TError;
+function TAIModelDrive.SetName(Value: String): AError;
 begin
   FName := Value;
   Result := 0;
 end;
 
-function TAIModelDrive.SetSpeed(Value: Int32): TError;
+function TAIModelDrive.SetSpeed(Value: Int32): AError;
 begin
   FSpeed := Value;
   Result := 0;
 end;
 
-function TAIModelDrive.Step: TError;
+function TAIModelDrive.Step(): AError;
 begin
   Result := 0;
 end;
 
-function TAIModelDrive.Stop: TError;
+function TAIModelDrive.Stop(): AError;
 begin
   FSpeed := 0;
   Result := 0;
@@ -501,7 +501,7 @@ begin
   Result := FItems[I];
 end;
 
-function TAIModelDrives.Step: TError;
+function TAIModelDrives.Step(): AError;
 var
   I: Int32;
 begin

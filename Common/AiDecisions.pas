@@ -1,15 +1,14 @@
 ﻿{**
-@Abstract()
-@Author(Prof1983 prof1983@ya.ru)
-@Created(24.05.2012)
-@LastMod(04.07.2012)
-@Version(0.5)
+@Author Prof1983 <prof1983@ya.ru>
+@Created 24.05.2012
+@LastMod 17.12.2012
 }
 unit AiDecisions;
 
 interface
 
 uses
+  ABase,
   ATypes,
   AiBase, AiDependences, AiFrameObj, AiSourceObj;
 
@@ -23,7 +22,7 @@ type
     constructor Create(Source: AiSource2005; Id: TAId);
     procedure Free(); override;
     function GetDependences(): TAiDependences2006;
-    function SetDependences(Value: TAiDependences2006): TError;
+    function SetDependences(Value: TAiDependences2006): AError;
   end;
 
   // Решения, связанные между собой
@@ -58,7 +57,7 @@ begin
   Result := FDependences;
 end;
 
-function TAiDecision2006.SetDependences(Value: TAiDependences2006): TError;
+function TAiDecision2006.SetDependences(Value: TAiDependences2006): AError;
 begin
   FDependences := Value;
   //Result := 0;
