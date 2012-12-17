@@ -2,7 +2,7 @@
 @Abstract Источник знаний в памяти
 @Author Prof1983 <prof1983@ya.ru>
 @Created 25.01.2006
-@LastMod 27.11.2012
+@LastMod 17.12.2012
 }
 unit AiMemorySourceObj;
 
@@ -30,7 +30,7 @@ type
   public
     procedure SetArbitrary(Value: Boolean);
   public
-    function Clear(): TError; override;
+    function Clear(): AError; override;
     function GetCountFreims(): UInt64; override;
     function GetCountItems(): AUInt32;
     function GetFreeIndexCashe(): UInt32;
@@ -38,10 +38,10 @@ type
     function GetFreimCashe(Id: AId): TAiFrameObject;
     function GetItem(Index: AUInt32): TAiFrameObject;
     function GetItemId(Index: AInt): AId; override;
-    function LoadFromConfig(Config: TConfig; Prefix: String): TError;
+    function LoadFromConfig(Config: TConfig; Prefix: String): AError;
     function NewFreim(Typ: AId; Id: AId = 0): AId; override;
-    function Open(): TError; override;
-    function SetFreim2(Id: AId; Freim: TAiFrameObject): TError; override;
+    function Open(): AError; override;
+    function SetFreim2(Id: AId; Freim: TAiFrameObject): AError; override;
   public
     constructor Create();
     procedure Free(); override;
@@ -51,7 +51,7 @@ implementation
 
 { TAiMemorySourceObject }
 
-function TAiMemorySourceObject.Clear(): TError;
+function TAiMemorySourceObject.Clear(): AError;
 var
   I: Int32;
 begin
@@ -196,7 +196,7 @@ begin
     Result := FItems[Index].GetId;
 end;
 
-function TAiMemorySourceObject.LoadFromConfig(Config: TConfig; Prefix: String): TError;
+function TAiMemorySourceObject.LoadFromConfig(Config: TConfig; Prefix: String): AError;
 var
   Count: Int32;
   //Freim: TAiFrameObject;
@@ -256,7 +256,7 @@ begin
   FItems[Result] := nil;*)
 end;
 
-function TAiMemorySourceObject.Open(): TError;
+function TAiMemorySourceObject.Open(): AError;
 begin
   {Result := inherited Open;}
   Result := 0;
@@ -304,7 +304,7 @@ begin
     FArbitrary := Value;
 end;
 
-function TAiMemorySourceObject.SetFreim2(Id: AId; Freim: TAiFrameObject): TError;
+function TAiMemorySourceObject.SetFreim2(Id: AId; Freim: TAiFrameObject): AError;
 var
   F2: TAiFrameObject;
   I: UInt32;
