@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника фреймов
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 15.12.2012
+@LastMod 17.12.2012
 }
 unit AiSourceImpl;
 
@@ -10,6 +10,7 @@ interface
 
 uses
   SysUtils,
+  ABase,
   AConsts2, ATypes,
   AiBase, AiDataIntf, AiFrameIntf, AiModuleImpl, AiSourceIntf;
 

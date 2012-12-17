@@ -2,13 +2,14 @@
 @Abstract Контрол работы с заданиями
 @Author Prof1983 <prof1983@ya.ru>
 @Created 27.10.2006
-@LastMod 15.12.2012
+@LastMod 17.12.2012
 }
 unit AiTasksControl2;
 
 interface
 
 uses
+  ABase,
   AMessagesMemoControl, ATypes;
 
 type //** @abstract(Контрол работы с заданиями)
