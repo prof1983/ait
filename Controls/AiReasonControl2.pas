@@ -2,16 +2,15 @@
 @Abstract Контрол для наблюдения за заданиями ИР
 @Author Prof1983 <prof1983@ya.ru>
 @Created 31.10.2006
-@LastMod 15.12.2012
+@LastMod 18.12.2012
 }
 unit AiReasonControl2;
-
-// TODO: Объединить с AiReasonControl.pas
 
 interface
 
 uses
   Classes, ComCtrls, Controls, ExtCtrls, StdCtrls,
+  ABase,
   AMessagesControl, ATypes,
   AiReasonAgentImpl, AiTaskImpl, AiTaskListImpl;
 
