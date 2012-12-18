@@ -2,7 +2,7 @@
 @Abstract Главный Агент реализации разума
 @Author Prof1983 <prof1983@ya.ru>
 @Created 30.10.2006
-@LastMod 12.11.2012
+@LastMod 18.12.2012
 }
 unit AiReasonAgentImpl;
 
@@ -30,7 +30,7 @@ type //** Главный Агент реализации разума
   private // События
     //FOnTaskAdd: TProcMessage;
   protected
-    procedure DoCreate(); override; safecall;
+    procedure DoCreate(); override;
     function DoStart(): WordBool; override; safecall;
   public
     function Finalize(): AError; override;

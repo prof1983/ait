@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Процесс выполнения команд агента реализации локального разума)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(01.04.2007)
-@LastMod(28.06.2012)
-@Version(0.5)
+@Abstract Процесс выполнения команд агента реализации локального разума
+@Author Prof1983 <prof1983@ya.ru>
+@Created 01.04.2007
+@LastMod 18.12.2012
 }
 unit AiReasonProcess;
 
@@ -36,7 +35,7 @@ type // Процесс выполнения команд агента реали
     procedure SetGlobalTasks(const Value: TAiGlobalTaskList);
   protected
     //** Срабатывает при создании
-    procedure DoCreate(); override; safecall;
+    procedure DoCreate(); override;
   public
     //** Список глобальных заданий
     property GlobalTasks: TAiGlobalTaskList read GetGlobalTasks write SetGlobalTasks;
