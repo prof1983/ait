@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Окно редактирования задания)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(15.05.2005)
-@LastMod(08.06.2012)
-@Version(0.5)
+@Abstract Окно редактирования задания
+@Author Prof1983 <prof1983@ya.ru>
+@Created 15.05.2005
+@LastMod 18.12.2012
 }
 unit AiTaskForm;
 
@@ -12,8 +11,10 @@ interface
 uses
   Classes, Controls, ComCtrls, Dialogs, Graphics, Forms, Messages, StdCtrls,
   SysUtils, Variants, Windows,
-  ABaseUtils2, ATypes,
-  AiBase; {AiGlobals;}
+  ABase,
+  ABaseUtils2,
+  ATypes,
+  AiBase;
 
 type
   TFormTask = class(TForm)
@@ -41,7 +42,7 @@ type
   private
     FMethods: array of TAiId;
   public
-    function Clear: TError;
+    function Clear(): AError;
     procedure DisableEnd;
     procedure DisableStart;
     procedure EnableEnd;
@@ -56,14 +57,14 @@ type
     function GetTaskText: String;
     function GetTaskTimeInplementation: UInt64;
     function GetTaskTitle: String;
-    function SetTaskComent(Value: String): TError;
-    function SetTaskDateTimeEnd(Value: TDateTime): TError;
-    function SetTaskDateTimeStart(Value: TDateTime): TError;
-    function SetTaskName(Value: String): TError;
-    function SetTaskPriority(Value: UInt32): TError;
-    function SetTaskText(Value: String): TError;
-    function SetTaskTimeImplementation(Value: UInt64): TError;
-    function SetTaskTitle(Value: String): TError;
+    function SetTaskComent(Value: String): AError;
+    function SetTaskDateTimeEnd(Value: TDateTime): AError;
+    function SetTaskDateTimeStart(Value: TDateTime): AError;
+    function SetTaskName(Value: String): AError;
+    function SetTaskPriority(Value: UInt32): AError;
+    function SetTaskText(Value: String): AError;
+    function SetTaskTimeImplementation(Value: UInt64): AError;
+    function SetTaskTitle(Value: String): AError;
   end;
 
 var
@@ -75,7 +76,7 @@ implementation
 
 { TFormTask }
 
-function TFormTask.Clear: TError;
+function TFormTask.Clear(): AError;
 begin
   EditName.Text := '';
   EditTitle.Text := '';
@@ -170,31 +171,31 @@ begin
   Result := EditTitle.Text;
 end;
 
-function TFormTask.SetTaskComent(Value: String): TError;
+function TFormTask.SetTaskComent(Value: String): AError;
 begin
   MemoComent.Text := Value;
   Result := 0;
 end;
 
-function TFormTask.SetTaskDateTimeEnd(Value: TDateTime): TError;
+function TFormTask.SetTaskDateTimeEnd(Value: TDateTime): AError;
 begin
   DateTimePickerEnd.DateTime := Value;
   Result := 0;
 end;
 
-function TFormTask.SetTaskDateTimeStart(Value: TDateTime): TError;
+function TFormTask.SetTaskDateTimeStart(Value: TDateTime): AError;
 begin
   DateTimePickerStart.DateTime := Value;
   Result := 0;
 end;
 
-function TFormTask.SetTaskName(Value: String): TError;
+function TFormTask.SetTaskName(Value: String): AError;
 begin
   EditName.Text := Value;
   Result := 0;
 end;
 
-function TFormTask.SetTaskPriority(Value: UInt32): TError;
+function TFormTask.SetTaskPriority(Value: UInt32): AError;
 begin
   Result := 1;
   if Value > 4 then Exit;
@@ -202,19 +203,19 @@ begin
   Result := 0;
 end;
 
-function TFormTask.SetTaskText(Value: String): TError;
+function TFormTask.SetTaskText(Value: String): AError;
 begin
   EditText.Text := Value;
   Result := 0;
 end;
 
-function TFormTask.SetTaskTimeImplementation(Value: UInt64): TError;
+function TFormTask.SetTaskTimeImplementation(Value: UInt64): AError;
 begin
   EditTimeImplementation.Text := cUInt64ToStr(Value);
   Result := 0;
 end;
 
-function TFormTask.SetTaskTitle(Value: String): TError;
+function TFormTask.SetTaskTitle(Value: String): AError;
 begin
   EditTitle.Text := Value;
   Result := 0;
