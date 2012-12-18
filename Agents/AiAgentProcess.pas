@@ -2,7 +2,7 @@
 @Abstract Процесс выполнения команд для агентов
 @Author Prof1983 <prof1983@ya.ru>
 @Created 20.03.2007
-@LastMod 12.11.2012
+@LastMod 18.12.2012
 }
 unit AiAgentProcess;
 
@@ -44,7 +44,7 @@ type //** Процесс выполнения команд для агентов
     procedure SetMessages(Value: TAiMessages);
   protected
     //** Срабатывает при создании
-    procedure DoCreate(); override; safecall;
+    procedure DoCreate(); override;
   public
     //** Конвеер сообщений
     property Messages: TAIMessages read GetMessages write SetMessages;

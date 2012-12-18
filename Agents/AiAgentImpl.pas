@@ -2,7 +2,7 @@
 @Abstract Базовый класс для агента
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 23.11.2012
+@LastMod 18.12.2012
 
 Агент - это модуль, который имеет свой подпроцесс выполнения команд (Thread).
 
@@ -102,7 +102,7 @@ type // Базовый класс для агента
     procedure SetInterpretator(Value: IAiInterpretator); safecall;
   protected
       //** Срабатывает при создании
-    procedure DoCreate(); override; safecall;
+    procedure DoCreate(); override;
       //** Срабатывает при вызове метода Start
     function DoStart(): WordBool; virtual; safecall;
     {**

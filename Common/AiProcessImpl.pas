@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Процесс выполнения команд для агентов)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(07.01.2006)
-@LastMod(29.06.2012)
-@Version(0.5)
+@Abstract Процесс выполнения команд для агентов
+@Author Prof1983 <prof1983@ya.ru>
+@Created 07.01.2006
+@LastMod 18.12.2012
 }
 unit AiProcessImpl;
 
@@ -33,7 +32,7 @@ type //** Процесс выполнения какого-либо метода
     procedure SetThread(Value: TInterpretatorThread);
   protected
       //** Срабатывает при создании
-    procedure DoCreate(); override; safecall;
+    procedure DoCreate(); override;
       //** Срабатывает при поступлении сообщения
     //function SendMessage(const Msg: WideString): Integer; override; safecall;
   public

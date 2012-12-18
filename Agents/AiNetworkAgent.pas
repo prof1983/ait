@@ -2,7 +2,7 @@
 @Abstract Агент следящий за работой сети
 @Author Prof1983 <prof1983@ya.ru>
 @Created 04.11.2005
-@LastMod 15.12.2012
+@LastMod 18.12.2012
 }
 unit AiNetworkAgent;
 
@@ -15,6 +15,7 @@ interface
 
 uses
   SysUtils, Windows,
+  ABase,
   ATypes,
   AiAgentImpl, AiModuleImpl;
 
