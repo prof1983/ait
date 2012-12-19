@@ -1,11 +1,8 @@
 ﻿{**
-@Abstract(AiConnectionsFile)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(02.05.2012)
-@LastMod(09.06.2012)
-@Version(0.5)
-
-02.05.2012 - From Prof_AI_Base.pas
+@Abstract AiConnectionsFile
+@Author Prof1983 <prof1983@ya.ru>
+@Created 02.05.2012
+@LastMod 09.06.2012
 }
 unit AiConnectsFile;
 

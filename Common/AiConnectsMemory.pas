@@ -1,11 +1,8 @@
 ﻿{**
-@Anstract(Базовый типы для AI)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(03.05.2012)
-@LastMod(09.06.2012)
-@Version(0.5)
-
-03.05.2012 - From Prof_AI_Base.pas
+@Anstract Базовый типы для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 03.05.2012
+@LastMod 09.06.2012
 }
 unit AiConnectsMemory;
 

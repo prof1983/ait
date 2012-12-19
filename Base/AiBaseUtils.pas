@@ -1,11 +1,8 @@
 ﻿{**
-@Abstract(Базовые типы для AI)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(26.04.2005)
-@LastMod(15.05.2012)
-@Version(0.5)
-
-15.05.2012 - Created from AiBaseObj2006.pas, Prof_AI_Base.pas, Prof_AI_20050819.pas
+@Abstract Базовые типы для AI
+@Author Prof1983 <prof1983@ya.ru>
+@Created 26.04.2005
+@LastMod 15.05.2012
 }
 unit AiBaseUtils;
 

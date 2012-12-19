@@ -179,9 +179,6 @@ function KBTypeSet(
 
 implementation
 
-{uses
-  Prof_AI_Base;}
-
 var
   (*FCount: UInt64;               {Колличество фреймов в БЗ}
   FFile: THandle = 0;           {Идентификатор файла записей}

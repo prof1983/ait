@@ -1,23 +1,16 @@
 {**
-@Abstract(Окно управления списком заданий)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(15.05.2005)
-@LastMod(08.06.2012)
-@Version(0.5)
+@Abstract Окно управления списком заданий
+@Author Prof1983 <prof1983@ya.ru>
+@Created 15.05.2005
+@LastMod 19.12.2012
 }
 unit AiTasksForm1;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, {Variants,} Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls,
+  Classes, Controls, Dialogs, ExtCtrls, Graphics, Forms, Messages, StdCtrls, SysUtils, Windows,
   ABase, AiFrameObj, AiListObj;
-  {Prof_,
-  Prof_AI,
-  Prof_AI_Base,
-  Prof_AI_Class,
-  Prof_Base;}
 
 type
   TFormTasks = class;
