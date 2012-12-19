@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Подпроцесс выполнения кода на языке AR)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(12.03.2007)
-@LastMod(29.06.2012)
-@Version(0.5)
+@Abstract Подпроцесс выполнения кода на языке AR
+@Author Prof1983 <prof1983@ya.ru>
+@Created 12.03.2007
+@LastMod 19.12.2012
 
 Подпроцесс выполнения кода работает с TInterpretator.
 Работа подпроцесса осуществляется следующим образом:
@@ -23,7 +22,7 @@ uses
   AiInterpretatorIntf;
 
 type //** Подпроцесс выполнения кода на языке AR
-  TInterpretatorThread = class(TProfThread)
+  TInterpretatorThread = class(TAThread)
   private
     //FClasses: TXmlNodeList;
     //FObjects: TXmlNodeList;
