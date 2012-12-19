@@ -2,7 +2,7 @@
 @Abstract Ai knowledge base object
 @Author Prof1983 <prof1983@ya.ru>
 @Created 04.06.2012
-@LastMod 17.12.2012
+@LastMod 19.12.2012
 }
 unit AiKbObj;
 
@@ -56,7 +56,6 @@ type
   public
     function GetFile(): TFileProfKB;
     function GetPath(): String;
-    function Open(FileName, Path: String): AError; deprecated; // Use Open2()
     function Open2(const FileName, Path: String): AError;
     function OpenCreate(FileName, Path: String): AError;
   end;
@@ -71,7 +70,6 @@ type
     function GetCountFreims(): UInt64; override;
     function GetCountItems(): AUInt32;
     function Initialize(): AError; override;
-    function NewFreim(Frame: TAiFrameObject): AId; deprecated; // Use NewFreim2()
     function NewFreim2(Frame: TAiFrameObject): AId; override;
     function LoadFromFileN(const FileName, Path: String): AError; override;
   public
@@ -91,7 +89,6 @@ type
     function SetFreim2(Id: TAId; Freim: TAiFrameObject): AError; override;
     function Initialize(): AError; override;
     function GetFreimCashe(Id: TAId): TAiFrameObject;
-    function NewFreim(Freim: TAiFrameObject): TAId; deprecated; // Use NewFreim2()
     function NewFreim2(Freim: TAiFrameObject): TAId; override;
   public
     function GetCountFreims(): UInt64; override;
@@ -496,11 +493,6 @@ begin
   Result := FPath;
 end;
 
-function TAiKbFile.Open(FileName, Path: String): AError;
-begin
-  Result := Open2(FileName, Path);
-end;
-
 function TAiKbFile.Open2(const FileName, Path: String): AError;
 begin
   Close;
@@ -518,7 +510,7 @@ begin
   Close;
   Result := SaveToFileN(FileName, Path);
   if Result <> 0 then Exit;
-  Result := Open(FileName, Path);
+  Result := Open2(FileName, Path);
 end;
 
 { TAiKbMemory }
@@ -596,11 +588,6 @@ begin
   F.Close;
   F.Free;
   Result := 0;
-end;
-
-function TAiKbMemory.NewFreim(Frame: TAiFrameObject): AId;
-begin
-  Result := NewFreim2(Frame);
 end;
 
 function TAiKbMemory.NewFreim2(Frame: TAiFrameObject): AId;
@@ -727,11 +714,6 @@ begin
   Result := inherited Initialize;
   {Инициализация базовых фреймов}
   {...}
-end;
-
-function TAiKbMemory2.NewFreim(Freim: TAiFrameObject): TAId;
-begin
-  Result := NewFreim2(Freim);
 end;
 
 function TAiKbMemory2.NewFreim2(Freim: TAiFrameObject): TAId;

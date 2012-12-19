@@ -2,7 +2,7 @@
 @Abstract AiXmlParam
 @Author Prof1983 <prof1983@ya.ru>
 @Created 21.06.2012
-@LastMod 09.08.2012
+@LastMod 19.12.2012
 }
 unit AiXmlParamObj;
 
@@ -94,7 +94,7 @@ end;
 function TAiXmlParamObject.NewParam(Name, Value: String): TAiXmlParamObject;
 var
   I: Int32;
-  Source: AiSourceObj.TAiSource2005;
+  //Source: AiSourceObj.TAiSource2005;
 begin
   Result := TAIXmlParam.Create;
   {Source := GetSource;
