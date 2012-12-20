@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(AiNamedFrame)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(21.11.2011)
-@LastMod(13.06.2012)
-@Version(0.5)
+@Abstract AiNamedFrame
+@Author Prof1983 <prof1983@ya.ru>
+@Created 21.11.2011
+@LastMod 20.12.2012
 }
 unit AiNamedFrameImpl;
 
@@ -21,7 +20,7 @@ type //** Фрейм с названием, заголовком и описан
     FName: WideString;
       //** Заголовок для отображени
     FTitle: WideString;
-  published
+  public
       //** Описание фрейма
     property Description: WideString read FDescription write FDescription;
       //** Короткое название фрейма

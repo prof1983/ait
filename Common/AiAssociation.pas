@@ -30,7 +30,7 @@ type //** Ассоциация
     function GetFreim2Id(): AId;
     function GetReliance(): Integer;
     function GetWeight(): Integer;
-  published
+  public
     property AssociationType: TAIAssociationType read FAssociationType write FAssociationType;
     property Freim1Id: AId read FFreim1Id write FFreim1Id;
     property Freim2Id: AId read FFreim2Id write FFreim2Id;
@@ -57,6 +57,7 @@ begin
   Source := TAISource(GetSource);
   if not(Assigned(Source)) then Exit;
   Result := TAIFreim(Source.GetFreim(FFreim1Id));}
+  Result := nil;
 end;
 
 function TAIAssociation.GetFreim1Id(): AId;
@@ -72,6 +73,7 @@ begin
   Source := TAISource(GetSource);
   if not(Assigned(Source)) then Exit;
   Result := TAIFreim(Source.GetFreim(FFreim2ID));}
+  Result := nil;
 end;
 
 function TAIAssociation.GetFreim2Id(): AId;
