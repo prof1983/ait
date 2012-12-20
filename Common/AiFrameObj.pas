@@ -2,7 +2,7 @@
 @Abstract Базовые типы для AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 26.04.2006
-@LastMod 27.11.2012
+@LastMod 20.12.2012
 
 Prototype: org.framerd.OID
 Каждый фрейм является некоторой сущностью.
@@ -13,7 +13,10 @@ interface
 
 uses
   SysUtils,
-  ABase, ABaseUtils2, AConfigObj, ALogObj, ATypes, AXmlObj,
+  ABase,
+  ABaseUtils2,
+  ALogObj,
+  ATypes,
   AiBase, AiBaseTypes, AiConnectsObj, AiDataObj, AiTypes;
 
 type
@@ -48,7 +51,7 @@ type //** Фрейм
     FInitialized: Boolean;
   protected
       //** Класс конфигураций (deprecated)
-    FConfig: TConfig;
+    FConfig: AConfig;
       //** Связи - объект источника. Если источника нет - локальный объект (deprecated)
     FConnects: TAiConnectsObject;
       //** Данные - объект источника. Если источника нет - локальный объект
@@ -120,11 +123,11 @@ type //** Фрейм
       //** Очистить объект
     function Clear(): AError; virtual;
       //** Загрузить конфигурации
-    function ConfigureLoad(Config: TConfig; Prefix: String): AError; virtual;
+    function ConfigureLoad(Config: AConfig; const Prefix: APascalString): AError; virtual;
       //** Загрузить конфигурации
     function ConfigureLoad1(): Boolean; virtual;
       //** Сохранить конфигурации
-    function ConfigureSave(Config: TConfig; Prefix: String): AError; virtual;
+    function ConfigureSave(Config: AConfig; const Prefix: APascalString): AError; virtual;
       //** Сохранить конфигурации
     function ConfigureSave1(): Boolean; virtual;
       {** Adds association connect to frame
@@ -169,7 +172,8 @@ type //** Фрейм
       //** Возвращает фрейм в виде XML строки
     function GetXml(): WideString; virtual;
       //** Производит инициализацию с установкой параметров
-    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError; virtual;
+    function Init(const Path: APascalString; Log: TLog;
+        Config: AConfig; const Prefix: APascalString): AError; virtual;
       //** Произвести инициализацию. Установить связь с источником.
     function Initialize(): AError; virtual;
     {**
@@ -184,7 +188,7 @@ type //** Фрейм
       //** Load from TAiFreimRecF64 struct
     function LoadFromRecF64(Rec: TAiFreimRecF64): AError;
       //** Load from TProfXml object
-    function LoadFromXml(Xml: TProfXml): AError; virtual;
+    //function LoadFromXml(Xml: TProfXml): AError; virtual;
       {** Get slot by name (from TAiFrame2004)
           @return(slot) }
     function P(const Name: APascalString): TAiSlot2004;
@@ -201,7 +205,7 @@ type //** Фрейм
       //** Save to TAiFreimRecF64 struct
     function SaveToRecF64(var Rec: TAiFreimRecF64): AError;
       //** Сохранить список связей в XML
-    function SaveToXml(Xml: TProfXml): AError; virtual;
+    //function SaveToXml(Xml: TProfXml): AError; virtual;
       //** Задать дату и время создания фрейма
     procedure SetDateTimeCreate(Value: TDateTime);
       //** Set date and time frame created
@@ -266,8 +270,6 @@ type //** Фрейм
   end;
   TAiFrame = TAiFrameObject;
 
-  //TAiFreim = TAiFrameObject;
-
 implementation
 
 uses
@@ -308,10 +310,13 @@ begin
   Result := 0;
 end;
 
-function TAiFrameObject.ConfigureLoad(Config: TConfig; Prefix: String): AError;
+function TAiFrameObject.ConfigureLoad(Config: AConfig; const Prefix: APascalString): AError;
 begin
-  Result := 1;
-  if not(Assigned(Config)) then Exit;
+  if (Config = 0) then
+  begin
+    Result := -1;
+    Exit;
+  end;
   Result := 0;
 end;
 
@@ -320,10 +325,13 @@ begin
   Result := (ConfigureSave(Self.FConfig, Self.FPrefix) >= 0);
 end;
 
-function TAiFrameObject.ConfigureSave(Config: TConfig; Prefix: String): AError;
+function TAiFrameObject.ConfigureSave(Config: AConfig; const Prefix: APascalString): AError;
 begin
-  Result := 1;
-  if not(Assigned(Config)) then Exit;
+  if (Config = 0) then
+  begin
+    Result := -1;
+    Exit;
+  end;
   Result := 0;
 end;
 
@@ -573,7 +581,8 @@ begin
   Result := IAISource(FSource);
 end;}
 
-function TAiFrameObject.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError;
+function TAiFrameObject.Init(const Path: APascalString; Log: TLog;
+    Config: AConfig; const Prefix: APascalString): AError;
 begin
   FConfig := Config;
   FLog := Log;
@@ -618,7 +627,7 @@ begin
   end;
   FDateCreate := (TObject(FSource) as TAiSourceObject).GetFreimDateTimeCreate(FId);
   if (FDateCreate = 0) then
-    FDateCreate := dtNow();
+    FDateCreate := SysUtils.Now();
   FFreimType := (TObject(FSource) as TAiSourceObject).GetFreimType(FId);
   Result := 0;
 end;
@@ -641,6 +650,7 @@ begin
   Result := 0;
 end;
 
+(*
 function TAiFrameObject.LoadFromXml(Xml: TProfXml): AError;
 begin
   Result := 1;
@@ -688,6 +698,7 @@ begin
   TProfXmlNode.ReadStringA(Xml, 'Name', FName);
   TProfXmlNode.ReadStringA(Xml, 'Title', FTitle);
 end;}
+*)
 
 function TAiFrameObject.P(const Name: APascalString): TAiSlot2004;
 begin
@@ -734,6 +745,7 @@ begin
   Result := 0;
 end;
 
+(*
 function TAiFrameObject.SaveToXml(Xml: TProfXml): AError;
 begin
   Result := -1;
@@ -747,19 +759,6 @@ begin
   Result := 0;
   }
 end;
-(*function TAI_Freim.SaveToXml(Xml: TMyXml): TError;
-begin
-  Result := 1;
-  if not(Assigned(Xml)) then Exit;
-  {with Xml.NewParam('Freim', '') do begin}
-    GetConnects.SaveToXml(Xml.NewParam('Connects', ''));
-    GetData.SaveToXml(Xml.NewParam('Data', ''));
-    Xml.NewParam('DateTimeCreate', cDateTimeToStr(FDateTimeCreate));
-    Xml.NewParam('Id', cUInt64ToStr(FId));
-    Xml.NewParam('Type', cUInt64ToStr(FType));
-  {end;}
-  Result := 0;
-end;*)
 {function TAiFreimObject.SaveToXml(Xml: IXmlNode): WordBool;
 var
   Connects: IXmlNode;
@@ -781,6 +780,7 @@ begin
   TProfXmlNode.WriteStringA(Xml, 'Name', FName);
   TProfXmlNode.WriteStringA(Xml, 'Title', FTitle);
 end;}
+*)
 
 procedure TAiFrameObject.SetDateTimeCreate(Value: TDateTime);
 begin

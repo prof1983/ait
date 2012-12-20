@@ -2,7 +2,7 @@
 @Abstract Io
 @Author Prof1983 <prof1983@ya.ru>
 @Created 03.04.2005
-@LastMod 23.11.2012
+@LastMod 20.12.2012
 }
 unit AiIoFile;
 
@@ -10,7 +10,11 @@ interface
 
 uses
   Classes,
-  ABase, ABaseUtils3, AIoTypes, AStreamObj, ATypes;
+  ABase,
+  ABaseUtils2,
+  AIoTypes,
+  AStreamObj,
+  ATypes;
 
 type
   UInt032 = UInt32;
@@ -25,13 +29,6 @@ type
     Version1S: String;
     Version2S: String;
   end;
-
-  (*TFileProfHeader = packed record {16}
-    Prof: array[0..3] of Char; {='Prof'}
-    Ident: UInt032;            {Идентификатор - тип файла}
-    Version1: UInt032;         {Версия типа файла}
-    Version2: UInt032;         {Версия файла}
-  end;*)
 
   TFileProfHeader = packed record {16}
     Prof: array[0..3] of Byte; {=Char'Prof'}
@@ -114,7 +111,24 @@ procedure HeaderToArrayByte(
 
 implementation
 
+function ArrayByteCopy(const Source: TArrayByte; Offset, Count: UInt32): TArrayByte;
+var
+  I: Int32;
+  L: Int32;
+begin
+  L := MinInt32(Length(Source) - Offset, Count);
+  SetLength(Result, L);
+  for I := 0 to L - 1 do
+    Result[I] := Source[I + Offset];
+end;
+
 procedure ArrayByteToHeader(const A: TArrayByte; var Header: TFileProfHeader);
+
+  function cArrayByteToUInt32(const A: TArrayByte): UInt32;
+  begin
+    Result := 0;
+  end;
+
 begin
   Header.Prof[0] := A[0];
   Header.Prof[1] := A[1];

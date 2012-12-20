@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Ассоциативная связь)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(23.09.2006)
-@LastMod(26.06.2012)
-@Version(0.5)
+@Abstract Ассоциативная связь
+@Author Prof1983 <prof1983@ya.ru>
+@Created 23.09.2006
+@LastMod 20.12.2012
 }
 unit AiAssociation;
 
@@ -14,7 +13,7 @@ uses
   AiFrameImpl, AiTypes;
 
 type //** Ассоциация
-  TAIAssociation = class(TAiFrame2007)
+  TAIAssociation = class(TAiFrame)
   private
     {** Идентификатор ассоциируемого фрейма 1 }
     FFreim1Id: AId;
@@ -25,9 +24,9 @@ type //** Ассоциация
     FReliance: Integer;             // Уверенность
   public
     function GetAssociationType(): TAIAssociationType;
-    function GetFreim1(): TAiFrame2007;
+    function GetFreim1(): TAiFrame;
     function GetFreim1Id(): AId;
-    function GetFreim2(): TAiFrame2007;
+    function GetFreim2(): TAiFrame;
     function GetFreim2Id(): AId;
     function GetReliance(): Integer;
     function GetWeight(): Integer;
@@ -50,7 +49,7 @@ begin
   Result := FAssociationType;
 end;
 
-function TAIAssociation.GetFreim1: TAiFrame2007;
+function TAIAssociation.GetFreim1(): TAiFrame;
 {var
   Source: TAISource;}
 begin
@@ -65,7 +64,7 @@ begin
   Result := FFreim1Id;
 end;
 
-function TAIAssociation.GetFreim2: TAiFrame2007;
+function TAIAssociation.GetFreim2(): TAiFrame;
 {var
   Source: TAISource;}
 begin

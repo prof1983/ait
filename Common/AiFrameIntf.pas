@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Фрейм)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(20.06.2007)
-@LastMod(28.06.2012)
-@Version(0.5)
+@Abstract Фрейм
+@Author Prof1983 <prof1983@ya.ru>
+@Created 20.06.2007
+@LastMod 20.12.2012
 
 Prototype: FramerD.OID
 
@@ -12,12 +11,6 @@ Prototype: FramerD.OID
 Слот не может быть записан в фрейме 2 раза.
 Не может быть 2 слота с одинаковыми именами. (?)
 Каждый фрейм является некоторой сущностью. (?)
-
-История версий:
-0.0.5.5 - 09.07.2011
-[+] Добавил: Каждый фрейм является некоторой сущностью.
-[*] Переименовал AIFrame -> AIFrameIntf
-0.0.0.1 - 20.06.2007 - Перенес из AIFrameImpl
 }
 unit AiFrameIntf;
 

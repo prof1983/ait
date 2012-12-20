@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(Действия)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(07.06.2006)
-@LastMod(04.05.2012)
-@Version(0.5)
+@Abstract Действия
+@Author Prof1983 <prof1983@ya.ru>
+@Created 07.06.2006
+@LastMod 20.12.2012
 }
 unit AiAction;
 
@@ -22,7 +21,7 @@ type //** Действие
   end;
 
 type //** Действия, связанные между собой. Одновременные действия.
-  TAIActions = class(TAiFrame2007) // 145
+  TAIActions = class(TAiFrame)
   private
     FActions: array of TAIAction;
     FAssociations: array of TAIAssociation;

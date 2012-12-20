@@ -2,7 +2,7 @@
 @Abstract Базовый класс для источника
 @Author Prof1983 <prof1983@ya.ru>
 @Created 22.09.2005
-@LastMod 17.12.2012
+@LastMod 20.12.2012
 }
 unit AiSourceObj;
 
@@ -10,7 +10,9 @@ interface
 
 uses
   SysUtils,
-  ABase, AConfigObj, ALogObj, ATypes,
+  ABase,
+  ALogObj,
+  ATypes,
   AiBase, AiConnectsObj, AiDataObj, AiFrameObj, AiIoFileKb, AiKbMain, AiSelectObj, AiTypes;
 
 type
@@ -23,7 +25,7 @@ type
   //** @abstract(Источник фреймов) // 256
   TAiSourceObject = class
   protected
-    FConfig: TConfig;
+    FConfig: AConfig;
     FLog: TLog;
     FPath: string;
     FPrefix: string;
@@ -84,7 +86,8 @@ type
     function GetParentId(Index: UInt32): TAId;
     function GetParentObj(Index: UInt32): TAiSourceObject;
       // Произвести инициализацию с установкой параметров
-    function Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError; virtual;
+    function Init(const Path: APascalString; Log: TLog;
+        Config: AConfig; const Prefix: APascalString): AError; virtual;
     function Initialize(): AError; virtual;
     function LoadFromFile(F: TFileProfKB; Path: String): AError; deprecated 'Make function';
     function LoadFromFileN(const FileName, Path: String): AError; virtual;
@@ -583,7 +586,8 @@ begin
   Result := nil;
 end;}
 
-function TAiSourceObject.Init(Path: String; Log: TLog; Config: TConfig; Prefix: String): AError;
+function TAiSourceObject.Init(const Path: APascalString; Log: TLog;
+    Config: AConfig; const Prefix: APascalString): AError;
 begin
   FConfig := Config;
   FLog := Log;

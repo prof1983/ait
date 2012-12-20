@@ -2,7 +2,7 @@
 @Abstract БЗ фреймов
 @Author Prof1983 <prof1983@ya.ru>
 @Created 17.03.2005
-@LastMod 15.12.2012
+@LastMod 20.12.2012
 }
 unit AiIoFileKb;
 
@@ -10,7 +10,11 @@ interface
 
 uses
   Classes,
-  ABase, ABaseUtils3, AIoTypes, ATypes,
+  SysUtils,
+  ABase,
+  ABaseUtils2,
+  AIoTypes,
+  ATypes,
   AiBaseUtils, AiIoFile, AiTypes;
 
 type
@@ -73,10 +77,7 @@ procedure ArrayByteToHeaderKB(
   var Header: TFileProfKBHeader
   );
 
-(*procedure IOFileProfKBClose(
-  Handle: THandle
-  );
-
+(*
 function IOFileProfKBCreate(
   FileName: String
   ): THandle;*)
@@ -91,6 +92,24 @@ implementation
 
 {Procedures and Functions}
 
+function cUInt64ToArrayByte(Value: UInt64): TArrayByte;
+begin
+  SetLength(Result, 8);
+end;
+
+function ArrayByteInsert(var A: TArrayByte; const Source: TArrayByte; Offset: UInt32): UInt32;
+var
+  I: Int32;
+  L: Int32;
+begin
+  Result := 0;
+  L := MinInt32(Length(A) - Offset, Length(Source));
+  if L <= 0 then Exit;
+  Result := L;
+  for I := 0 to L do
+    A[I+Offset] := Source[I];
+end;
+
 procedure ArrayByteToHeaderKB(const A: TArrayByte; var Header: TFileProfKBHeader);
 begin
   Header.CountF := 0;
@@ -101,11 +120,17 @@ begin
   Header.Reserved2 := 0;
 end;
 
-(*procedure IOFileProfKBClose(Handle: THandle);
+function DateTimeNow: TDateTime;
 begin
-  IOFileProfClose(Handle);
+  Result := SysUtils.Now();
 end;
 
+function Float64ToDateTime64(Value: AFloat64): TDateTime;
+begin
+  Result := Value;
+end;
+
+(*
 function IOFileProfKBCreate(FileName: String): THandle;
 var
   Header: TFileProfKBHeader;
@@ -137,11 +162,7 @@ begin
     IOFileWrite(Result, Freim, SizeOf(Freim));
   end;
 end;
-
-{function IOFileProfKBOpen(FileName: String; Mode: TFileOpenMode): THandle;
-begin
-  IOFileProfOpen
-end;}*)
+*)
 
 procedure HeaderKBClear(var Header: TFileProfKBHeader);
 begin
@@ -233,7 +254,7 @@ begin
 
   ReadUInt64(I64); Rec.Id := I64;
   ReadUInt64(I64); Rec.Typ := I64;
-  ReadFloat64(Fl); Rec.DTCreate := cFloat64ToDateTime64(Fl);
+  ReadFloat64(Fl); Rec.DTCreate := Float64ToDateTime64(Fl);
   ReadUInt64(Rec.DataSize);
   ReadUInt64(Rec.ConnectCount);
 
@@ -260,7 +281,7 @@ begin
 
   ReadUInt64(I64); Rec.Id := I64;
   ReadUInt64(I64); Rec.Typ := I64;
-  ReadFloat64(Fl); Rec.DTCreate := cFloat64ToDateTime64(Fl);
+  ReadFloat64(Fl); Rec.DTCreate := Float64ToDateTime64(Fl);
   ReadUInt64(Rec.DataSize);
   ReadUInt64(Rec.ConnectCount);
 

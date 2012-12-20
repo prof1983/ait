@@ -1,8 +1,8 @@
 ﻿{**
-@Abstract(Агент в системе AR)
-@Author(Prof1983 <prof1983@ya.ru>)
-@Created(13.11.2007)
-@LastMod(13.07.2012)
+@Abstract Агент в системе AR
+@Author Prof1983 <prof1983@ya.ru>
+@Created 13.11.2007
+@LastMod 20.12.2012
 
 Агент - это отдельная программа или отдельный подпроцесс.
 Агент - это служба/демон.
@@ -19,8 +19,10 @@ unit AiAgentObj;
 interface
 
 uses
-  Forms, SysUtils,
-  ABase, AConfigObj, ALogObj, ATypes,
+  SysUtils,
+  ABase,
+  ALogObj,
+  ATypes,
   AiAgentBase, AiProcessObj;
 
 type
@@ -53,7 +55,7 @@ type
       //** Запущен ли агент
     FActive: Boolean;
       //** Главное окно
-    FFormMain: TForm;
+    //FFormMain: TForm;
       //** Имя агента короткое
     FName: String;
       //** Отображаемое название агента длиное
@@ -77,7 +79,7 @@ type
   public
     function AddToLog(LogGroup: TLogGroupMessage; LogType: TLogTypeMessage;
         const StrMsg: WideString): AInt; virtual;
-    function Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; AFormMain: TForm): AError; virtual;
+    function Init(): AError; virtual; deprecated 'Use Initialize()';
     function Run(): AError; virtual;
     function SetProcess(Value: TAiProcessObject): AError;
     function SetStatus(Value: TAiAgentStatus): AError;
@@ -95,7 +97,7 @@ type
       //** Останавливает выполнение агента
     function Stop(): AError; virtual;
   public
-    constructor Create({Source: AiSourceObject; Id: AId = 0});
+    constructor Create();
     procedure Free(); virtual;
   public
     property Id: AId read FId write FId;
@@ -105,7 +107,6 @@ type
   end;
 
   //TAiAgent = TAiAgentObject;
-  //TArAgent = TAiAgenObjectt
 
 implementation
 
@@ -120,9 +121,9 @@ begin
     Result := 0;
 end;
 
-constructor TAiAgentObject.Create({Source: AiSourceObject; Id: AId = 0});
+constructor TAiAgentObject.Create();
 begin
-  inherited Create({Source, Id});
+  inherited Create();
   FStatus := AgentStatusStoped;
 end;
 
@@ -189,15 +190,14 @@ begin
   Result := FVisible;
 end;
 
-function TAiAgentObject.Init(APath: String; ALog: TLog; AConfig: TConfig; APrefix: String; AFormMain: TForm): AError;
+function TAiAgentObject.Init(): AError;
 begin
-  FActive := True;
-  FFormMain := AFormMain;
-  Result := 0; //inherited Init(APath, ALog, AConfig, APrefix);
+  Result := Initialize();
 end;
 
 function TAiAgentObject.Initialize(): AError;
 begin
+  FActive := True;
   FInitialized := True;
   Result := 0;
 end;

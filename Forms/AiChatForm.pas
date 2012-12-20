@@ -2,7 +2,7 @@
 @Abstract Главная форма для агента чат-бот
 @Author Prof1983 <prof1983@ya.ru>
 @Created 24.03.2005
-@LastMod 17.12.2012
+@LastMod 20.12.2012
 }
 unit AiChatForm;
 
@@ -167,9 +167,12 @@ begin
 end;
 
 procedure TAiFormChat.ListInAdd(Value: String);
+var
+  I: AInt;
 begin
-  {FListIn.Add(Value);}
-  ArrayStringAdd(FListIn, Value);
+  I := Length(FListIn);
+  SetLength(FListIn, I + 1);
+  FListIn[I] := Value;
 end;
 
 function TAiFormChat.SetInput(Value: String): AError;

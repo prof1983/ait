@@ -1,9 +1,8 @@
 ﻿{**
-@Abstract(AiSceneMobile)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(11.03.2012)
-@LastMod(04.07.2012)
-@Version(0.5)
+@Abstract AiSceneMobile
+@Author Prof1983 <prof1983@ya.ru>
+@Created 11.03.2012
+@LastMod 20.12.2012
 }
 unit AiSceneMobile;
 
@@ -26,6 +25,16 @@ type //** Сцена действия для модели машинки TAIMode
   end;
 
 implementation
+
+function cSingleToInt32(Value: Single): Int32;
+begin
+  Result := Round(Value);
+end;
+
+function cSingleToUInt32(Value: Single): UInt32;
+begin
+  Result := Round(Value);
+end;
 
 { TAiSceneMobile }
 

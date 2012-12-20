@@ -2,7 +2,7 @@
 @Abstract Источник знаний из БД ADO
 @Author Prof1983 <prof1983@ya.ru>
 @Created 14.09.2005
-@LastMod 15.12.2012
+@LastMod 20.12.2012
 
 Структура описана в aiSourceAdoStruct.pas Необходимые фреймы описаны в aiGlobals.pas
 }
@@ -25,7 +25,6 @@ type //** @abstract(БЗ ADO)
     FTableConnects: TAdoTable;
     FTableFreims: TAdoTable;
   protected
-    //FConnects: array of TAI_ConnectsFileCashe;
     FDBFileName: WideString;
     FNextId: Integer;
   public
