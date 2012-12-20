@@ -66,19 +66,11 @@ type //** Фрейм
     //** Установить тип
     procedure Set_FrameType(Value: TAIID); safecall;
     procedure Set_Source2(const Value: AiSource2); safecall;
-  protected // IAiFreim
-    function Get_Connects(): IAiConnects; safecall;
-    function Get_FreimName(): WideString; safecall; deprecated 'Use Get_FrameName()';
-    function Get_FreimType(): TAIID; safecall; deprecated 'Use Get_FrameType()';
-    function Get_Source1(): AiSource1; safecall;
-    procedure Set_FreimType(Value: TAiId); safecall; deprecated 'Use Set_FrameType()';
-    procedure Set_Source1(const Value: AiSource1); safecall;
   protected
-    function Get_IsReadOnly(): WordBool; deprecated;
     {** Возвращает источник }
     function Get_Pool(): IAiFramePool; deprecated;
     {** Установить источник. Только если не инициализирован. }
-    procedure Set_Pool(const Value: IAiFramePool); deprecated
+    procedure Set_Pool(const Value: IAiFramePool); deprecated;
   public // IAiFrame
       {** Добавляет слот }
     function AddSlot(Slot: IAiSlot): Integer;
@@ -194,8 +186,6 @@ type //** Фрейм
     //property FreimType: TAId read GetFreimType write SetFreimType;
     //** ID фрейма
     property ID: TAIID read Get_FrameID write Set_FrameID;
-    //** Только для чтения?
-    property IsReadOnly: WordBool read Get_IsReadOnly;
     //** Пул (Источник) фрейма
     property Pool: IAIFramePool read Get_Pool write Set_Pool;
       //** Слот по индексу
@@ -220,16 +210,18 @@ type //** Фрейм
     property Xml: WideString read GetXml write SetXml;
   end;
 
+  {$ifdef UseOldFrameIntf}
 type // Фрейм
   TAIFreim = class(TAiFrame, IAIFreim)
   protected // IAiFreim
     function Get_Connects(): IAiConnects; safecall;
-    function Get_FreimName(): WideString; safecall;
-    function Get_FreimType(): TAId; safecall;
+    function Get_FreimName(): WideString; safecall; deprecated 'Use Get_FrameName()';
+    function Get_FreimType(): TAId; safecall; deprecated 'Use Get_FrameType()';
     function Get_Source1(): AiSource1; safecall;
-    procedure Set_FreimType(Value: TAId); safecall;
+    procedure Set_FreimType(Value: TAId); safecall; deprecated 'Use Set_FrameType()';
     procedure Set_Source1(const Value: AiSource1); safecall;
   end;
+  {$endif}
 
 implementation
 
@@ -458,11 +450,6 @@ begin
   Result := True;}
 end;
 
-function TAiFrame.Get_Connects(): IAiConnects;
-begin
-  Result := FConnects;
-end;
-
 function TAiFrame.Get_Data(): IAiData2;
 begin
   {if not(Assigned(FData)) then
@@ -504,16 +491,6 @@ end;
 function TAiFrame.Get_FrameType(): AId;
 begin
   Result := Self.FFrameType;
-end;
-
-function TAiFrame.Get_FreimName(): WideString;
-begin
-  Result := Get_FrameName();
-end;
-
-function TAiFrame.Get_FreimType(): AId;
-begin
-  Result := Get_FrameType();
 end;
 
 function TAiFrame.Get_Pool(): IAIFramePool;
@@ -698,11 +675,6 @@ begin
   Self.FFrameType := Value;
 end;
 
-procedure TAiFrame.Set_FreimType(Value: TAiId);
-begin
-  Set_FrameType(Value);
-end;
-
 procedure TAiFrame.Set_Source2(const Value: AiSource2);
 begin
   FSource := Value;
@@ -715,6 +687,7 @@ end;
 
 { TAiFreim }
 
+{$ifdef UseOldFrameIntf}
 function TAIFreim.Get_Connects(): IAiConnects;
 begin
   Result := FConnects;
@@ -744,6 +717,7 @@ procedure TAIFreim.Set_Source1(const Value: AiSource1);
 begin
   //FSource := IAiSource1(Value);
 end;
+{$endif}
 
 { TAIFreimNamed }
 

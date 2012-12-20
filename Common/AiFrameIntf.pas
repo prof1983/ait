@@ -53,6 +53,7 @@ type
     property Source2: AiSource2 read Get_Source2;
   end;
 
+  {$ifdef UseOldFrameIntf}
   IAiFreim = interface(IAiFrame)
     function Get_Connects: IAiConnects; safecall;
     function Get_FreimName: WideString; safecall;
@@ -67,6 +68,7 @@ type
     property Name: WideString read Get_FreimName;
     property Source: AiSource1 read Get_Source1 write Set_Source1;
   end;
+  {$endif}
 
   // Аналог - org.framerd.FDType
   IAiValue = IAiSlotList;

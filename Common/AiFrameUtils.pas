@@ -1,9 +1,8 @@
 {**
-@Abstract(AiFrame functions)
-@Author(Prof1983 prof1983@ya.ru)
-@Created(21.06.2012)
-@LastMod(26.06.2012)
-@Version(0.5)
+@Abstract AiFrame functions
+@Author Prof1983 <prof1983@ya.ru>
+@Created 21.06.2012
+@LastMod 20.12.2012
 }
 unit AiFrameUtils;
 
@@ -44,7 +43,7 @@ uses
 
 // --- Private ---
 
-function _AiFrame_LoadFromXml(Frame: {AiFrameImpl.}TAiFreim; Xml: IXmlNode): AError;
+function _AiFrame_LoadFromXml(Frame: {AiFrameImpl.}TAiFrame; Xml: IXmlNode): AError;
 var
   Connects: IXmlNode;
   Id: AInt64;
@@ -69,7 +68,7 @@ begin
   Result := 0;
 end;
 
-function _AiFrame_SaveToXml(Frame: TAiFreim; Xml: IXmlNode): AError;
+function _AiFrame_SaveToXml(Frame: TAiFrame; Xml: IXmlNode): AError;
 var
   Connects: IXmlNode;
 begin
@@ -130,16 +129,16 @@ end;
 
 function AiFrame_LoadFromXml(Frame: TObject; Xml: IXmlNode): AError;
 begin
-  if (Frame is TAiFreim) then
-    Result := _AiFrame_LoadFromXml(TAiFreim(Frame), Xml)
+  if (Frame is TAiFrame) then
+    Result := _AiFrame_LoadFromXml(TAiFrame(Frame), Xml)
   else
     Result := -3;
 end;
 
 function AiFrame_SaveToXml(Frame: TObject; Xml: IXmlNode): AError;
 begin
-  if (Frame is TAiFreim) then
-    Result := _AiFrame_SaveToXml(TAiFreim(Frame), Xml)
+  if (Frame is TAiFrame) then
+    Result := _AiFrame_SaveToXml(TAiFrame(Frame), Xml)
   else
     Result := -3;
 end;
@@ -150,8 +149,8 @@ function AiNamedFrame_LoadFromXml(Frame: TObject; Xml: IXmlNode): AError;
 begin
   if (Frame is TAiNamedFrameObject) then
     Result := _AiNamedFrame_LoadFromXml(TAiNamedFrameObject(Frame), Xml)
-  else if (Frame is {AiFrameImpl.}TAiFreim) then
-    Result := _AiFrame_LoadFromXml({AiFrameImpl.}TAiFreim(Frame), Xml)
+  else if (Frame is {AiFrameImpl.}TAiFrame) then
+    Result := _AiFrame_LoadFromXml({AiFrameImpl.}TAiFrame(Frame), Xml)
   else
     Result := -3;
 end;
