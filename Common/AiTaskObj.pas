@@ -2,7 +2,7 @@
 @Abstract AiTask
 @Author Prof1983 <prof1983@ya.ru>
 @Created 07.06.2012
-@LastMod 15.12.2012
+@LastMod 20.12.2012
 }
 unit AiTaskObj;
 
@@ -35,7 +35,7 @@ type
     function GetTimeImplementation(): UInt64;
     function GetTitle(): String;
     function Initialize(): AError; override;
-    function LoadFromXml(Xml: TProfXml): AError; override;
+    //function LoadFromXml(Xml: TProfXml): AError; override;
     function SetComent(Value: String): AError;
     function SetDateTimeEnd(Value: TDateTime): AError;
     function SetDateTimeStart(Value: TDateTime): AError;
@@ -115,6 +115,7 @@ begin
   FMethods.Initialize;
 end;
 
+(*
 function TAiTaskObject.LoadFromXml(Xml: TProfXml): AError;
 begin
   Result := inherited LoadFromXml(Xml);
@@ -124,6 +125,7 @@ begin
   {FMethods}
   {...}
 end;
+*)
 
 function TAiTaskObject.SetComent(Value: String): AError;
 begin
