@@ -2,15 +2,20 @@
 @Abstract Базовый тип данных для AI
 @Author Prof1983 <prof1983@ya.ru>
 @Created 26.04.2005
-@LastMod 28.11.2012
+@LastMod 20.12.2012
 }
 unit AiDataObj;
+
+{$ifndef NoAiDataXml}
+  {$define UseXml}
+{$endif}
 
 interface
 
 uses
   Classes,
-  ABase, AStreamObj, ATypes, AXmlNodeImpl, AXmlObj,
+  ABase, AStreamObj, ATypes,
+  {$ifdef UseXml}AXmlNodeImpl, AXmlObj,{$endif}
   AiBase, AiTypes;
 
 type //** @abstract(Базовый тип данных для AI)
@@ -26,10 +31,12 @@ type //** @abstract(Базовый тип данных для AI)
     FText: WideString;
       //** Тип даных
     FDataType: TAiDataType;
+    {$ifdef UseXml}
       //** Данные в виде XML
     FXml: TProfXml;
       // В виде параметров. Id=0 Source=nil
     FXml2006: TProfXmlNode2;
+    {$endif}
   protected
     function Get_DataType(): TAiDataType;
     function Get_Opened(): WordBool;
@@ -47,10 +54,14 @@ type //** @abstract(Базовый тип данных для AI)
     function GetStream(): TStream; virtual;
     function GetStreamMy(): AStreamObj.TProfStream; virtual;
     function GetType(): TAiDataType;
+    {$ifdef UseXml}
     function GetXml(): TProfXml;
     function GetXml1(): TProfXmlNode2;
+    {$endif}
     function LoadFromFileN(const FileName: WideString): AError; virtual;
+    {$ifdef UseXml}
     function LoadFromXml(Xml: TProfXml): AError;
+    {$endif}
     function Read(var A: TArrayByte; Count: UInt64): UInt64; virtual;
     function ReadId(var Value: TAId): AError; virtual;
     function ReadInt08(var Value: AInt08): AError; virtual;
@@ -63,12 +74,16 @@ type //** @abstract(Базовый тип данных для AI)
     function ReadUInt64(var Value: UInt64): AError; virtual;
     function SaveToFile(F: AStreamObj.TProfFile): AError;
     function SaveToFileN(const FileName: WideString): AError; virtual;
+    {$ifdef UseXml}
     function SaveToXml(Xml: TProfXml): AError; virtual;
     //function SaveToXml(Xml: IProfNode): WordBool; virtual;
+    {$endif}
     function SetOpened(Value: Boolean): AError;
     function SetStream(Value: AStreamObj.TProfStream): AError;
     function SetType(Value: TAiDataType): AError;
+    {$ifdef UseXml}
     function SetXml(Value: TProfXmlNode2): AError;
+    {$endif}
     function Write(A: TArrayByte; Count: UInt64): UInt64; virtual;
     function WriteId(Value: TAId): AError; virtual;
     function WriteInt08(Value: AInt08): AError; virtual;
@@ -87,51 +102,18 @@ type //** @abstract(Базовый тип данных для AI)
 
   TAiData = TAiDataObject;
 
-  (*TAI_DataStream = class(TAiDataObject)
-  private
-    FStream: TMyStream;        // В виде потока байтов
-  public
-    function Clear: TError; override;
-    function GetSize: UInt64;
-    function GetStream: TMyStream;
-    function LoadFromFileN(FileName: String): TError;
-    function Read(var A: TArrayByte; Count: UInt64): UInt64; virtual;
-    function ReadId(var Value: TAI_Id): TError; virtual;
-    function ReadInt08(var Value: Int08): TError; virtual;
-    function ReadInt16(var Value: Int16): TError; virtual;
-    function ReadInt32(var Value: Int32): TError; virtual;
-    function ReadInt64(var Value: Int64): TError; virtual;
-    function ReadStr(var S: String): TError;
-    function ReadUInt08(var Value: UInt08): TError; virtual;
-    function ReadUInt16(var Value: UInt16): TError; virtual;
-    function ReadUInt32(var Value: UInt32): TError; virtual;
-    function ReadUInt64(var Value: UInt64): TError; virtual;
-    function SaveToFile(F: TMyFile): TError; virtual;
-    function SaveToFileN(FileName: String): TError; virtual;
-    function SetStream(Value: TMyStream): TError;
-    function Write(A: TArrayByte; Count: UInt64): UInt64; virtual;
-    function WriteId(Value: TAI_Id): TError; virtual;
-    function WriteInt08(Value: Int08): TError; virtual;
-    function WriteInt16(Value: Int16): TError; virtual;
-    function WriteInt32(Value: Int32): TError; virtual;
-    function WriteInt64(Value: Int64): TError; virtual;
-    function WriteStr(S: String): TError;
-    function WriteUInt08(Value: UInt08): TError; virtual;
-    function WriteUInt16(Value: UInt16): TError; virtual;
-    function WriteUInt32(Value: UInt32): TError; virtual;
-    function WriteUInt64(Value: UInt64): TError; virtual;
-  end;*)
-
 implementation
 
 { TAiDataObject }
 
 function TAiDataObject.Clear(): AError;
 begin
+  FDataType := dtNone;
   FOpened := False;
   FStream := nil;
+  {$ifdef UseXml}
   FXml := nil;
-  FDataType := dtNone;
+  {$endif}
   Result := 0;
 end;
 
@@ -142,7 +124,9 @@ begin
   FOpened := False;
   FDataType := Typ;
   FStream := nil;
+  {$ifdef UseXml}
   FXml := nil;
+  {$endif}
 end;
 
 function TAiDataObject.GetOpened(): Boolean;
@@ -180,17 +164,21 @@ begin
   Result := FDataType;
 end;
 
+{$ifdef UseXml}
 function TAiDataObject.GetXml(): TProfXml;
 begin
   Result := FXml;
 end;
+{$endif}
 
+{$ifdef UseXml}
 function TAiDataObject.GetXml1(): TProfXmlNode2;
 begin
   {if not(Assigned(FXml)) then
     FXml := TMyXml.Create();}
   Result := FXml2006;
 end;
+{$endif}
 
 function TAiDataObject.Get_DataType(): TAiDataType;
 begin
@@ -220,16 +208,6 @@ begin
   end;}
 end;
 
-{function TAIData.Get_Xml(): IProfNode;
-begin
-  Result := FXml;
-end;}
-
-{function TAIData.Get_XmlDocument(): IXmlDocument;
-begin
-  Result := FXmlDocument;
-end;}
-
 function TAiDataObject.LoadFromFileN(const FileName: WideString): AError;
 var
   Stream: TProfStream;
@@ -241,6 +219,7 @@ begin
   Result := ProfStreamMemory_LoadFromFileN(FileName);
 end;
 
+{$ifdef UseXml}
 function TAiDataObject.LoadFromXml(Xml: TProfXml): AError;
 begin
   if not(Assigned(FXml)) then
@@ -265,6 +244,7 @@ begin
   //Result := FXml.LoadFromXml(Xml);
   Result := False;
 end;}
+{$endif}
 
 function TAiDataObject.Read(var A: TArrayByte; Count: UInt64): UInt64;
 begin
@@ -366,6 +346,7 @@ begin
   Result := -1;
 end;
 
+{$ifdef UseXml}
 function TAiDataObject.SaveToXml(Xml: TProfXml): AError;
 begin
   Result := -1;
@@ -377,6 +358,7 @@ begin
   if not(Assigned(FXml)) or (FType <> dtXml) then Exit;
   Result := Xml.AddFromXml(FXml);
 end;}
+{$endif}
 
 function TAiDataObject.SetOpened(Value: Boolean): AError;
 begin
@@ -399,12 +381,14 @@ begin
   Result := 0;
 end;
 
+{$ifdef UseXml}
 function TAiDataObject.SetXml(Value: TProfXmlNode2): AError;
 begin
   FXml2006 := Value;
   FDataType := dtXml;
   Result := 0;
 end;
+{$endif}
 
 procedure TAIDataObject.Set_DataType(Value: TAiDataType);
 begin
@@ -429,17 +413,6 @@ begin
   except
   end;}
 end;
-
-{procedure TAiDataObject.Set_Xml(Value: IProfNode);
-begin
-  FXml := Value;
-  FDataType := dtXml;
-end;}
-
-{procedure TAiDataObject.Set_XmlDocument(Value: IXmlDocument);
-begin
-  FXmlDocument := Value;
-end;}
 
 function TAiDataObject.Write(A: TArrayByte; Count: UInt64): UInt64;
 begin
@@ -522,243 +495,5 @@ begin
   else
     Result := -1;
 end;
-
-{ TAIDataStream }
-
-(*function TAI_DataStream.Clear: TError;
-begin
-  FStream := nil;
-  Result := inherited Clear;
-end;
-
-function TAI_DataStream.GetSize: UInt64;
-begin
-  if (FType = dtStream) and Assigned(FStream) then
-    Result := FStream.GetSize
-  else
-    Result := 0;
-end;
-
-function TAI_DataStream.GetStream: TMyStream;
-begin
-  Result := FStream;
-end;
-
-function TAI_DataStream.LoadFromFileN(FileName: String): TError;
-begin
-  SetType(dtStream);
-  GetStream.Clear;
-  Result := GetStream.LoadFromFileN(FileName);
-end;
-
-function TAI_DataStream.Read(var A: TArrayByte; Count: UInt64): UInt64;
-begin
-  Result := 0;
-  if (Count = 0) or (Length(A) = 0) or not(Assigned(FStream)) then Exit;
-  if FType <> dtStream then Exit;
-  if Length(A) < Count then Count := Length(A);
-  Result := FStream.Read(A, Count);
-end;
-
-function TAI_DataStream.ReadId(var Value: TAI_Id): TError;
-var
-  V: UInt64;
-begin
-  if Assigned(FStream) and (FType = dtStream) then begin
-    Result := FStream.ReadUInt64(V);
-    Value := V;
-  end else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadInt08(var Value: Int08): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadInt08(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadInt16(var Value: Int16): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadInt16(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadInt32(var Value: Int32): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadInt32(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadInt64(var Value: Int64): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadInt64(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadStr(var S: String): TError;
-var
-  C: UInt16;
-  Count: UInt32;
-  I: Int32;
-begin
-  Result := 1;
-  if not(Assigned(FStream)) or (FType <> dtStream) then Exit;
-  ReadUInt32(Count);
-  SetLength(S, Count);
-  for I := 1 to Count do begin
-    ReadUInt16(C);
-    S[I] := Chr(C);
-  end;
-end;
-
-function TAI_DataStream.ReadUInt08(var Value: UInt08): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadUInt08(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadUInt16(var Value: UInt16): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadUInt16(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadUInt32(var Value: UInt32): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadUInt32(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.ReadUInt64(var Value: UInt64): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.ReadUInt64(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.SaveToFile(F: TMyFile): TError;
-begin
-  if Assigned(FStream) then
-    Result := FStream.SaveToFile(F)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.SaveToFileN(FileName: String): TError;
-begin
-  Result := 1;
-end;
-
-function TAI_DataStream.SetStream(Value: TMyStream): TError;
-begin
-  FStream := Value;
-  Result := 0;
-end;
-
-function TAI_DataStream.Write(A: TArrayByte; Count: UInt64): UInt64;
-begin
-  Result := 0;
-  if (Count = 0) or (Length(A) = 0) or not(Assigned(FStream)) then Exit;
-  if FType <> dtStream then Exit;
-  if Length(A) < Count then Count := Length(A);
-  Result := FStream.Write(A, Count);
-end;
-
-function TAI_DataStream.WriteId(Value: TAI_Id): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteUInt64(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteInt08(Value: Int08): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteInt08(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteInt16(Value: Int16): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteInt16(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteInt32(Value: Int32): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteInt32(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteInt64(Value: Int64): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteInt64(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteStr(S: String): TError;
-var
-  A: TArrayByte;
-  Count: UInt32;
-begin
-  WriteUInt32(Count);
-  A := cStrToArrayByte(S);
-  Write(A, Count);
-end;
-
-function TAI_DataStream.WriteUInt08(Value: UInt08): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteUInt08(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteUInt16(Value: UInt16): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteUInt16(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteUInt32(Value: UInt32): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteUInt32(Value)
-  else
-    Result := 1;
-end;
-
-function TAI_DataStream.WriteUInt64(Value: UInt64): TError;
-begin
-  if Assigned(FStream) and (FType = dtStream) then
-    Result := FStream.WriteUInt64(Value)
-  else
-    Result := 1;
-end;*)
 
 end.
